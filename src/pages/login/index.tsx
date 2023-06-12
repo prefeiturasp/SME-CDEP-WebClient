@@ -30,6 +30,7 @@ const Login = () => {
       .autenticar(values)
       .then((resposta) => {
         if (resposta?.data?.token) {
+          window.clarity('identify', values?.login);
           dispatch(setDadosLogin(resposta.data));
         }
       })
