@@ -1,22 +1,29 @@
 import { produce } from 'immer';
-import { SetToken, typeSetToken } from './actions';
 
-export interface AuthProps {
-  token: string;
-}
+import { SetDadosLogin, SetDeslogar, typeSetDadosLogin } from './actions';
+import { UsuarioAutenticacaoRetornoDto } from '~/core/dto/usuario-autenticacao-retorno-dto';
 
-const initialValues = {
+const initialValues: UsuarioAutenticacaoRetornoDto = {
+  dataHoraExpiracao: '',
   token: '',
+  usuarioLogin: '',
+  usuarioNome: '',
+  email: '',
+  perfil: '',
+  perfilNome: '',
+  autenticado: false,
 };
 
-const auth = (state: AuthProps = initialValues, action: SetToken) => {
+const auth = (
+  state: UsuarioAutenticacaoRetornoDto = initialValues,
+  action: SetDadosLogin | SetDeslogar,
+) => {
   return produce(state, (draft) => {
     switch (action.type) {
-      case typeSetToken:
-        draft.token = action.payload;
-        break;
+      case typeSetDadosLogin:
+        return { ...draft, ...action.payload };
       default:
-        break;
+        return draft;
     }
   });
 };
