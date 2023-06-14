@@ -25,13 +25,30 @@ const Login = () => {
   const login = useWatch('login', form);
   const senha = useWatch('senha', form);
 
+  const autenticarCDEP = (loginValidado: string) => {
+    autenticacaoService
+      .listarPerfisUsuario(loginValidado)
+      .then((resposta) => {
+        if (resposta?.data?.autenticado) {
+          window.clarity('identify', loginValidado);
+          dispatch(setDadosLogin(resposta.data));
+        }
+      })
+      .catch((erro: AxiosError) => {
+        if (erro?.response?.status === 401) {
+          setErroGeral('Login ou senha incorretos');
+        } else {
+          setErroGeral('Falha ao tentar autenticar no servidor');
+        }
+      });
+  };
+
   const onFinish = (values: AutenticacaoDto) => {
     autenticacaoService
       .autenticar(values)
       .then((resposta) => {
-        if (resposta?.data?.token) {
-          window.clarity('identify', values?.login);
-          dispatch(setDadosLogin(resposta.data));
+        if (resposta?.data?.login) {
+          autenticarCDEP(resposta.data.login);
         }
       })
       .catch((erro: AxiosError) => {
