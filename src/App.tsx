@@ -9,6 +9,12 @@ import 'antd/dist/reset.css';
 
 import GlobalStyle from '~/core/styles/global';
 
+declare global {
+  interface Window {
+    clarity: (identify: string, value: any) => void;
+  }
+}
+
 const App = () => {
   return (
     <ConfigProvider theme={CDEPTheme}>
