@@ -1,4 +1,4 @@
-import { UsuarioAutenticacaoRetornoDto } from '~/core/dto/usuario-autenticacao-retorno-dto';
+import { RetornoPerfilUsuarioDTO } from '~/core/dto/retorno-perfil-usuario-dto';
 
 export const typeSetDeslogar = '@auth/setDeslogar';
 export const typeSetDadosLogin = '@auth/setDadosLogin';
@@ -9,7 +9,7 @@ export interface SetDeslogar {
 
 export interface SetDadosLogin {
   type: typeof typeSetDadosLogin;
-  payload: UsuarioAutenticacaoRetornoDto;
+  payload: RetornoPerfilUsuarioDTO;
 }
 
 export const setDeslogar = (): SetDeslogar => {
@@ -18,7 +18,7 @@ export const setDeslogar = (): SetDeslogar => {
   };
 };
 
-export const setDadosLogin = (payload: UsuarioAutenticacaoRetornoDto): SetDadosLogin => {
+export const setDadosLogin = (payload: RetornoPerfilUsuarioDTO): SetDadosLogin => {
   return {
     type: typeSetDadosLogin,
     payload,

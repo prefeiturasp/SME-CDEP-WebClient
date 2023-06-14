@@ -1,21 +1,20 @@
 import { produce } from 'immer';
 
+import { RetornoPerfilUsuarioDTO } from '~/core/dto/retorno-perfil-usuario-dto';
 import { SetDadosLogin, SetDeslogar, typeSetDadosLogin } from './actions';
-import { UsuarioAutenticacaoRetornoDto } from '~/core/dto/usuario-autenticacao-retorno-dto';
 
-const initialValues: UsuarioAutenticacaoRetornoDto = {
+const initialValues: RetornoPerfilUsuarioDTO = {
+  usuarioNome: '',
+  usuarioLogin: '',
   dataHoraExpiracao: '',
   token: '',
-  usuarioLogin: '',
-  usuarioNome: '',
   email: '',
-  perfil: '',
-  perfilNome: '',
   autenticado: false,
+  perfilUsuario: [],
 };
 
 const auth = (
-  state: UsuarioAutenticacaoRetornoDto = initialValues,
+  state: RetornoPerfilUsuarioDTO = initialValues,
   action: SetDadosLogin | SetDeslogar,
 ) => {
   return produce(state, (draft) => {
