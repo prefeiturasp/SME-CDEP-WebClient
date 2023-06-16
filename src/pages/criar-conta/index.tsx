@@ -14,8 +14,11 @@ import { UsuarioExternoDTO } from '~/core/dto/usuario-externo-dto';
 import { ROUTES } from '~/core/enum/routes';
 import usuarioService from '~/core/services/usuario-service';
 import { ErroGeralLogin } from '../login/style';
+import { useAppDispatch } from '~/core/hooks/use-redux';
+import { setSpinning } from '~/core/redux/modules/spin/actions';
 
 const CriarConta = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [form] = useForm();
@@ -30,10 +33,18 @@ const CriarConta = () => {
     },
   };
 
-  const validarExibirErros = (erro: AxiosError<string>) =>
-    setErroGeral(erro?.response?.data || ERRO_CADASTRO_USUARIO);
+  const validarExibirErros = (erro: AxiosError<any>) => {
+    const dataErro = erro?.response?.data;
+
+    if (typeof dataErro === 'string') {
+      setErroGeral(erro?.response?.data);
+    } else {
+      setErroGeral(ERRO_CADASTRO_USUARIO);
+    }
+  };
 
   const onFinish = (values: UsuarioExternoDTO) => {
+    dispatch(setSpinning(true));
     usuarioService
       .cadastrarUsuarioExterno(values)
       .then((resposta) => {
@@ -41,7 +52,8 @@ const CriarConta = () => {
           navigate(ROUTES.LOGIN);
         }
       })
-      .catch(validarExibirErros);
+      .catch(validarExibirErros)
+      .finally(() => dispatch(setSpinning(false)));
   };
 
   const onClickCancelar = () => navigate(ROUTES.LOGIN);

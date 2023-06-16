@@ -13,6 +13,7 @@ import { AutenticacaoDTO } from '~/core/dto/autenticacao-dto';
 import { ValidateErrorEntity } from '~/core/dto/validate-error-entity';
 import { ROUTES } from '~/core/enum/routes';
 import { setDadosLogin } from '~/core/redux/modules/auth/actions';
+import { setSpinning } from '~/core/redux/modules/spin/actions';
 import { ErroGeralLogin } from './style';
 
 const Login = () => {
@@ -42,6 +43,7 @@ const Login = () => {
   };
 
   const autenticarCDEP = (loginValidado: string) => {
+    dispatch(setSpinning(true));
     autenticacaoService
       .listarPerfisUsuario(loginValidado)
       .then((resposta) => {
@@ -50,10 +52,12 @@ const Login = () => {
           dispatch(setDadosLogin(resposta.data));
         }
       })
-      .catch(validarExibirErros);
+      .catch(validarExibirErros)
+      .finally(() => dispatch(setSpinning(false)));
   };
 
   const onFinish = (values: AutenticacaoDTO) => {
+    dispatch(setSpinning(true));
     autenticacaoService
       .autenticar(values)
       .then((resposta) => {
@@ -61,7 +65,8 @@ const Login = () => {
           autenticarCDEP(resposta.data.login);
         }
       })
-      .catch(validarExibirErros);
+      .catch(validarExibirErros)
+      .finally(() => dispatch(setSpinning(false)));
   };
 
   const onFinishFailed = ({ values }: ValidateErrorEntity<AutenticacaoDTO>) => {
