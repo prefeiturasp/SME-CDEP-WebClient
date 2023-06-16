@@ -1,19 +1,23 @@
-import { Routes, Route, Navigate, BrowserRouter } from 'react-router-dom';
 import { createElement } from 'react';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
-import Login from '~/pages/login';
 import { ROUTES } from '~/core/enum/routes';
-import PagNotFound from '~/pages/404';
 import { useAppSelector } from '~/core/hooks/use-redux';
-import Auth from './config/auth';
-import Principal from '~/pages/principal/index';
-import MeusDados from '~/pages/meus-dados';
+import PagNotFound from '~/pages/404';
+import CriarConta from '~/pages/criar-conta';
+import Home from '~/pages/home';
 import Inicial from '~/pages/inicial';
+import Login from '~/pages/login';
+import MeusDados from '~/pages/meus-dados';
+import Principal from '~/pages/principal/index';
+import Auth from './config/auth';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
 
+  const homePage = createElement(Home);
   const loginPage = createElement(Login);
+  const criarContaPage = createElement(CriarConta);
   const pagNotFound = createElement(PagNotFound);
   const principalPage = createElement(Principal);
   const iniciallPage = createElement(Inicial);
@@ -37,7 +41,10 @@ const RoutesConfig = () => {
       ) : (
         <Routes>
           <Route path='*' element={<Navigate to={ROUTES.LOGIN} />} />
-          <Route path={ROUTES.LOGIN} element={loginPage} />
+          <Route element={homePage}>
+            <Route path={ROUTES.LOGIN} element={loginPage} />
+            <Route path={ROUTES.CRIAR_CONTA} element={criarContaPage} />
+          </Route>
         </Routes>
       )}
     </BrowserRouter>
