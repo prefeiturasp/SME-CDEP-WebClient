@@ -141,7 +141,7 @@ const CriarConta = () => {
             </Form.Item>
           </Col>
           <Col span={24}>
-            <Form.Item label='Tipo' name='tipo' rules={[{ required: true }]}>
+            <Form.Item label='Tipo' name='tipoUsuario' rules={[{ required: true }]}>
               <Select
                 placeholder='Selecione o tipo'
                 options={LISTA_TIPO_USUARIO}
