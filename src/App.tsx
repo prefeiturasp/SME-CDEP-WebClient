@@ -8,6 +8,7 @@ import Routes from './routes';
 import 'antd/dist/reset.css';
 
 import GlobalStyle from '~/core/styles/global';
+import Spin from './components/cdep/spin';
 
 declare global {
   interface Window {
@@ -22,7 +23,9 @@ const App = () => {
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <GlobalStyle />
-            <Routes />
+            <Spin>
+              <Routes />
+            </Spin>
           </PersistGate>
         </Provider>
       </ThemeProviders>
