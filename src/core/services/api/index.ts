@@ -13,7 +13,7 @@ import { store } from '../../redux';
 import autenticacaoService, { URL_AUTENTICACAO_REVALIDAR } from '../autenticacao-service';
 
 const config: AxiosRequestConfig = {
-  baseURL: import.meta.env.VITE_SME_SERAP_ACOMPANHAMENTO_API,
+  baseURL: import.meta.env.VITE_SME_CDEP_API,
 };
 
 const api = axios.create({

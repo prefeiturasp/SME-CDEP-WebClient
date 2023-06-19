@@ -10,4 +10,10 @@ export const CDEPTheme: ThemeConfig = {
     controlHeight: 38,
     colorError: Colors.ERROR,
   },
+  components: {
+    Button: {
+      colorText: Colors.BLUE_CDEP,
+      colorBorder: Colors.BLUE_CDEP,
+    },
+  },
 };
