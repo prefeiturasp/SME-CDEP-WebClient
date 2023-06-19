@@ -6,9 +6,10 @@ type SenhaCadastroProps = {
   label: string;
   name: string;
   confirmarSenha?: boolean;
+  id: string;
 };
 
-const SenhaCadastro: React.FC<SenhaCadastroProps> = ({ label, name, confirmarSenha }) => {
+const SenhaCadastro: React.FC<SenhaCadastroProps> = ({ label, name, confirmarSenha, id }) => {
   const getValueFromEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
     `${e?.target?.value}`.trim();
 
@@ -50,7 +51,7 @@ const SenhaCadastro: React.FC<SenhaCadastroProps> = ({ label, name, confirmarSen
       rules={rules}
       dependencies={confirmarSenha ? ['senha'] : []}
     >
-      <Input.Password autoComplete='off' placeholder='Informe a senha' maxLength={12} />
+      <Input.Password autoComplete='off' placeholder='Informe a senha' maxLength={12} id={id} />
     </Form.Item>
   );
 };
