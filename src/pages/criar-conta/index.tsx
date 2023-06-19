@@ -81,7 +81,7 @@ const CriarConta = () => {
           </Col>
           <Col span={24}>
             <Form.Item label='E-mail' name='email' rules={[{ required: true, type: 'email' }]}>
-              <Input placeholder='Informe o e-mail' />
+              <Input placeholder='Informe o e-mail' autoComplete='off' />
             </Form.Item>
           </Col>
           <Col span={24}>
