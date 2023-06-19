@@ -47,14 +47,18 @@ pipeline {
                             }
                     }
                     withCredentials([file(credentialsId: "${kubeconfig}", variable: 'config')]){
+                            sh('if [ -f '+"$home"+'/.kube/config ];then rm -f '+"$home"+'/.kube/config; fi')
                             sh('cp $config '+"$home"+'/.kube/config')
-                            sh 'kubectl rollout restart deploymentsme-cdep-frontend -n sme-cdep'
+                            sh 'kubectl rollout restart deployment sme-cdep-frontend -n sme-cdep'
                             sh('rm -f '+"$home"+'/.kube/config')
                     }
                 }
             }           
         }    
     }
+  post {
+    always { sh('if [ -f '+"$home"+'/.kube/config ];then rm -f '+"$home"+'/.kube/config; fi')}
+  }
 }
 
 def getKubeconf(branchName) {
