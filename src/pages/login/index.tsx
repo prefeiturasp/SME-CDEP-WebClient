@@ -8,7 +8,9 @@ import autenticacaoService from '~/core/services/autenticacao-service';
 
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { ERRO_LOGIN } from '~/core/constat/mensagens';
+import { CDEP_BUTTON_ACESSAR, CDEP_BUTTON_CRIAR_CONTA } from '~/core/constats/ids/button/intex';
+import { CDEP_INPUT_LOGIN, CDEP_INPUT_SENHA } from '~/core/constats/ids/input';
+import { ERRO_LOGIN } from '~/core/constats/mensagens';
 import { AutenticacaoDTO } from '~/core/dto/autenticacao-dto';
 import { ValidateErrorEntity } from '~/core/dto/validate-error-entity';
 import { ROUTES } from '~/core/enum/routes';
@@ -96,7 +98,7 @@ const Login = () => {
               hasFeedback={!login}
               rules={[{ required: true }, { min: 5 }]}
             >
-              <Input placeholder='Informe o login' suffix={<span />} />
+              <Input placeholder='Informe o login' suffix={<span />} id={CDEP_INPUT_LOGIN} />
             </Form.Item>
           </Col>
 
@@ -107,14 +109,24 @@ const Login = () => {
               hasFeedback={!senha}
               rules={[{ required: true }, { min: 4 }]}
             >
-              <Input.Password autoComplete='off' placeholder='Informe a senha' />
+              <Input.Password
+                autoComplete='off'
+                placeholder='Informe a senha'
+                id={CDEP_INPUT_SENHA}
+              />
             </Form.Item>
           </Col>
         </Row>
 
         <Row justify='center' gutter={[0, 40]} style={{ marginTop: '20px' }}>
           <Col span={24}>
-            <Button type='primary' block htmlType='submit' style={{ fontWeight: 700 }}>
+            <Button
+              type='primary'
+              block
+              htmlType='submit'
+              style={{ fontWeight: 700 }}
+              id={CDEP_BUTTON_ACESSAR}
+            >
               Acessar
             </Button>
           </Col>
@@ -125,6 +137,7 @@ const Login = () => {
               block
               style={{ fontWeight: 700 }}
               onClick={() => onClickCriarConta()}
+              id={CDEP_BUTTON_CRIAR_CONTA}
             >
               Crie a sua conta
             </Button>
