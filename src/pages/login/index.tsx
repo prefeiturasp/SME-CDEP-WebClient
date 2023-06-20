@@ -8,21 +8,26 @@ import autenticacaoService from '~/core/services/autenticacao-service';
 
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
+import ErroGeralLogin from '~/components/cdep/erro-geral-login';
 import { CDEP_BUTTON_ACESSAR, CDEP_BUTTON_CRIAR_CONTA } from '~/core/constats/ids/button/intex';
 import { CDEP_INPUT_LOGIN, CDEP_INPUT_SENHA } from '~/core/constats/ids/input';
-import { ERRO_LOGIN } from '~/core/constats/mensagens';
+import {
+  ERRO_INFORMAR_USUARIO_SENHA,
+  ERRO_LOGIN,
+  ERRO_LOGIN_SENHA_INCORRETOS,
+} from '~/core/constats/mensagens';
 import { AutenticacaoDTO } from '~/core/dto/autenticacao-dto';
+import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 import { ValidateErrorEntity } from '~/core/dto/validate-error-entity';
 import { ROUTES } from '~/core/enum/routes';
 import { setDadosLogin } from '~/core/redux/modules/auth/actions';
 import { setSpinning } from '~/core/redux/modules/spin/actions';
-import { ErroGeralLogin } from './style';
 
 const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-  const [erroGeral, setErroGeral] = useState('');
+  const [erroGeral, setErroGeral] = useState<string[]>();
 
   const [form] = useForm();
 
@@ -36,12 +41,25 @@ const Login = () => {
     },
   };
 
-  const validarExibirErros = (erro: AxiosError<string>) => {
+  const validarExibirErros = (erro: AxiosError<RetornoBaseDTO>) => {
     if (erro?.response?.status === 401) {
-      setErroGeral('Login ou senha incorretos');
-    } else {
-      setErroGeral(erro?.response?.data || ERRO_LOGIN);
+      setErroGeral([ERRO_LOGIN_SENHA_INCORRETOS]);
+      return;
     }
+
+    const dataErro = erro?.response?.data;
+
+    if (typeof dataErro === 'string') {
+      setErroGeral([dataErro]);
+      return;
+    }
+
+    if (dataErro?.mensagens?.length) {
+      setErroGeral(dataErro.mensagens);
+      return;
+    }
+
+    setErroGeral([ERRO_LOGIN]);
   };
 
   const autenticarCDEP = (loginValidado: string) => {
@@ -73,7 +91,7 @@ const Login = () => {
 
   const onFinishFailed = ({ values }: ValidateErrorEntity<AutenticacaoDTO>) => {
     if (!values?.login && !values?.senha) {
-      setErroGeral('Você precisa informar um usuário e senha para acessar o sistema');
+      setErroGeral([ERRO_INFORMAR_USUARIO_SENHA]);
     }
   };
 
@@ -145,7 +163,7 @@ const Login = () => {
 
           {erroGeral ? (
             <Col span={24}>
-              <ErroGeralLogin>{erroGeral}</ErroGeralLogin>
+              <ErroGeralLogin erros={erroGeral} />
             </Col>
           ) : (
             <></>
