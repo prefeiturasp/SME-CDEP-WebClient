@@ -1,21 +1,14 @@
-import { Button, Col, Form, Input, InputNumber, Row, Select } from 'antd';
+import { Button, Col, Form, Input, Row, Select } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import ErroGeralLogin from '~/components/cdep/erro-geral-login';
 import InputCEP from '~/components/cdep/input/cep';
 import InputCPF from '~/components/cdep/input/cpf';
 import SenhaCadastro from '~/components/cdep/input/senha-cadastro';
 import InputTelefone from '~/components/cdep/input/telefone';
-import { LISTA_TIPO_USUARIO } from '~/core/constats/lista-tipo-usuario';
-import { LISTA_UF } from '~/core/constats/lista-uf';
-import { ERRO_CADASTRO_USUARIO } from '~/core/constats/mensagens';
-import { UsuarioExternoDTO } from '~/core/dto/usuario-externo-dto';
-import { ROUTES } from '~/core/enum/routes';
-import usuarioService from '~/core/services/usuario-service';
-import { ErroGeralLogin } from '../login/style';
-import { useAppDispatch } from '~/core/hooks/use-redux';
-import { setSpinning } from '~/core/redux/modules/spin/actions';
+import { CDEP_BUTTON_CADASTRAR, CDEP_BUTTON_CANCELAR } from '~/core/constats/ids/button/intex';
 import {
   CDEP_INPUT_BAIRRO,
   CDEP_INPUT_CEP,
@@ -31,15 +24,22 @@ import {
   CDEP_INPUT_TELEFONE,
 } from '~/core/constats/ids/input';
 import { CDEP_SELECT_TIPO_USUARIO, CDEP_SELECT_UF } from '~/core/constats/ids/select';
-import { CDEP_BUTTON_CADASTRAR, CDEP_BUTTON_CANCELAR } from '~/core/constats/ids/button/intex';
-
+import { LISTA_TIPO_USUARIO } from '~/core/constats/lista-tipo-usuario';
+import { LISTA_UF } from '~/core/constats/lista-uf';
+import { ERRO_CADASTRO_USUARIO } from '~/core/constats/mensagens';
+import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
+import { UsuarioExternoDTO } from '~/core/dto/usuario-externo-dto';
+import { ROUTES } from '~/core/enum/routes';
+import { useAppDispatch } from '~/core/hooks/use-redux';
+import { setSpinning } from '~/core/redux/modules/spin/actions';
+import usuarioService from '~/core/services/usuario-service';
 const CriarConta = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [form] = useForm();
 
-  const [erroGeral, setErroGeral] = useState('');
+  const [erroGeral, setErroGeral] = useState<string[]>();
 
   const validateMessages = {
     types: { email: 'Não é um e-mail válido' },
@@ -49,14 +49,20 @@ const CriarConta = () => {
     },
   };
 
-  const validarExibirErros = (erro: AxiosError<any>) => {
+  const validarExibirErros = (erro: AxiosError<RetornoBaseDTO>) => {
     const dataErro = erro?.response?.data;
 
     if (typeof dataErro === 'string') {
-      setErroGeral(erro?.response?.data);
-    } else {
-      setErroGeral(ERRO_CADASTRO_USUARIO);
+      setErroGeral([dataErro]);
+      return;
     }
+
+    if (dataErro?.mensagens?.length) {
+      setErroGeral(dataErro.mensagens);
+      return;
+    }
+
+    setErroGeral([ERRO_CADASTRO_USUARIO]);
   };
 
   const onFinish = (values: UsuarioExternoDTO) => {
@@ -89,7 +95,11 @@ const CriarConta = () => {
           </Col>
           <Col span={24}>
             <Form.Item label='Nome completo' name='nome' rules={[{ required: true }]}>
-              <Input placeholder='Informe o nome completo' id={CDEP_INPUT_NOME_COMPLETO} />
+              <Input
+                placeholder='Informe o nome completo'
+                id={CDEP_INPUT_NOME_COMPLETO}
+                maxLength={100}
+              />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -97,34 +107,43 @@ const CriarConta = () => {
           </Col>
           <Col span={24}>
             <Form.Item label='E-mail' name='email' rules={[{ required: true, type: 'email' }]}>
-              <Input placeholder='Informe o e-mail' autoComplete='off' id={CDEP_INPUT_EMAIL} />
+              <Input
+                placeholder='Informe o e-mail'
+                autoComplete='off'
+                id={CDEP_INPUT_EMAIL}
+                maxLength={100}
+              />
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item label='Endereço' name='endereco' rules={[{ required: true }]}>
-              <Input placeholder='Informe a rua/avenida' id={CDEP_INPUT_ENDERECO} />
+              <Input placeholder='Informe a rua/avenida' id={CDEP_INPUT_ENDERECO} maxLength={100} />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label='Número' name='numero' rules={[{ required: true }]}>
-              <InputNumber
-                style={{ width: '100%' }}
-                placeholder='Informe o nº'
-                controls={false}
-                type='number'
-                min={0}
-                id={CDEP_INPUT_NUMERO}
-              />
+            <Form.Item
+              label='Número'
+              name='numero'
+              rules={[{ required: true }]}
+              getValueFromEvent={(e: React.ChangeEvent<HTMLInputElement>) =>
+                `${e?.target?.value}`.replace(/\D/g, '')
+              }
+            >
+              <Input placeholder='Informe o nº' id={CDEP_INPUT_NUMERO} maxLength={9} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item label='Complemento' name='complemento'>
-              <Input placeholder='Informe o complemento' id={CDEP_INPUT_COMPLEMENTO} />
+              <Input
+                placeholder='Informe o complemento'
+                id={CDEP_INPUT_COMPLEMENTO}
+                maxLength={100}
+              />
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item label='Bairro' name='bairro' rules={[{ required: true }]}>
-              <Input placeholder='Informe o bairro' id={CDEP_INPUT_BAIRRO} />
+              <Input placeholder='Informe o bairro' id={CDEP_INPUT_BAIRRO} maxLength={100} />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -132,7 +151,7 @@ const CriarConta = () => {
           </Col>
           <Col span={24}>
             <Form.Item label='Cidade' name='cidade' rules={[{ required: true }]}>
-              <Input placeholder='Informe a cidade' id={CDEP_INPUT_CIDADE} />
+              <Input placeholder='Informe a cidade' id={CDEP_INPUT_CIDADE} maxLength={100} />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -189,7 +208,7 @@ const CriarConta = () => {
 
           {erroGeral ? (
             <Col span={24}>
-              <ErroGeralLogin>{erroGeral}</ErroGeralLogin>
+              <ErroGeralLogin erros={erroGeral} />
             </Col>
           ) : (
             <></>
