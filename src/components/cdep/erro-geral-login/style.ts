@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { Colors } from '~/core/styles/colors';
 
-export const ErroGeralLogin = styled.h2`
+export const ContainerErroGeralLogin = styled.div`
   font-family: Roboto;
   font-size: 14px;
   font-weight: bold;
@@ -12,7 +12,10 @@ export const ErroGeralLogin = styled.h2`
   color: ${Colors.ERROR};
   border-radius: 4px;
   border: solid 2px ${Colors.ERROR};
-  padding: 1rem;
   text-align: center;
   margin-bottom: 24px;
+
+  p {
+    margin: 0.5em;
+  }
 `;
