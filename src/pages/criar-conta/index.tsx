@@ -117,7 +117,7 @@ const CriarConta = () => {
           </Col>
           <Col span={24}>
             <Form.Item label='Endereço' name='endereco' rules={[{ required: true }]}>
-              <Input placeholder='Informe a rua/avenida' id={CDEP_INPUT_ENDERECO} maxLength={100} />
+              <Input placeholder='Informe a rua/avenida' id={CDEP_INPUT_ENDERECO} maxLength={200} />
             </Form.Item>
           </Col>
           <Col span={12}>
@@ -137,13 +137,13 @@ const CriarConta = () => {
               <Input
                 placeholder='Informe o complemento'
                 id={CDEP_INPUT_COMPLEMENTO}
-                maxLength={100}
+                maxLength={20}
               />
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item label='Bairro' name='bairro' rules={[{ required: true }]}>
-              <Input placeholder='Informe o bairro' id={CDEP_INPUT_BAIRRO} maxLength={100} />
+              <Input placeholder='Informe o bairro' id={CDEP_INPUT_BAIRRO} maxLength={200} />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -151,7 +151,7 @@ const CriarConta = () => {
           </Col>
           <Col span={24}>
             <Form.Item label='Cidade' name='cidade' rules={[{ required: true }]}>
-              <Input placeholder='Informe a cidade' id={CDEP_INPUT_CIDADE} maxLength={100} />
+              <Input placeholder='Informe a cidade' id={CDEP_INPUT_CIDADE} maxLength={50} />
             </Form.Item>
           </Col>
           <Col span={12}>
