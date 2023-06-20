@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, InputNumber, Row, Select } from 'antd';
+import { Button, Col, Form, Input, Row, Select } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { AxiosError } from 'axios';
 import { useState } from 'react';
@@ -95,7 +95,11 @@ const CriarConta = () => {
           </Col>
           <Col span={24}>
             <Form.Item label='Nome completo' name='nome' rules={[{ required: true }]}>
-              <Input placeholder='Informe o nome completo' id={CDEP_INPUT_NOME_COMPLETO} />
+              <Input
+                placeholder='Informe o nome completo'
+                id={CDEP_INPUT_NOME_COMPLETO}
+                maxLength={100}
+              />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -103,34 +107,43 @@ const CriarConta = () => {
           </Col>
           <Col span={24}>
             <Form.Item label='E-mail' name='email' rules={[{ required: true, type: 'email' }]}>
-              <Input placeholder='Informe o e-mail' autoComplete='off' id={CDEP_INPUT_EMAIL} />
+              <Input
+                placeholder='Informe o e-mail'
+                autoComplete='off'
+                id={CDEP_INPUT_EMAIL}
+                maxLength={100}
+              />
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item label='Endereço' name='endereco' rules={[{ required: true }]}>
-              <Input placeholder='Informe a rua/avenida' id={CDEP_INPUT_ENDERECO} />
+              <Input placeholder='Informe a rua/avenida' id={CDEP_INPUT_ENDERECO} maxLength={100} />
             </Form.Item>
           </Col>
           <Col span={12}>
-            <Form.Item label='Número' name='numero' rules={[{ required: true }]}>
-              <InputNumber
-                style={{ width: '100%' }}
-                placeholder='Informe o nº'
-                controls={false}
-                type='number'
-                min={0}
-                id={CDEP_INPUT_NUMERO}
-              />
+            <Form.Item
+              label='Número'
+              name='numero'
+              rules={[{ required: true }]}
+              getValueFromEvent={(e: React.ChangeEvent<HTMLInputElement>) =>
+                `${e?.target?.value}`.replace(/\D/g, '')
+              }
+            >
+              <Input placeholder='Informe o nº' id={CDEP_INPUT_NUMERO} maxLength={9} />
             </Form.Item>
           </Col>
           <Col span={12}>
             <Form.Item label='Complemento' name='complemento'>
-              <Input placeholder='Informe o complemento' id={CDEP_INPUT_COMPLEMENTO} />
+              <Input
+                placeholder='Informe o complemento'
+                id={CDEP_INPUT_COMPLEMENTO}
+                maxLength={100}
+              />
             </Form.Item>
           </Col>
           <Col span={24}>
             <Form.Item label='Bairro' name='bairro' rules={[{ required: true }]}>
-              <Input placeholder='Informe o bairro' id={CDEP_INPUT_BAIRRO} />
+              <Input placeholder='Informe o bairro' id={CDEP_INPUT_BAIRRO} maxLength={100} />
             </Form.Item>
           </Col>
           <Col span={24}>
@@ -138,7 +151,7 @@ const CriarConta = () => {
           </Col>
           <Col span={24}>
             <Form.Item label='Cidade' name='cidade' rules={[{ required: true }]}>
-              <Input placeholder='Informe a cidade' id={CDEP_INPUT_CIDADE} />
+              <Input placeholder='Informe a cidade' id={CDEP_INPUT_CIDADE} maxLength={100} />
             </Form.Item>
           </Col>
           <Col span={12}>

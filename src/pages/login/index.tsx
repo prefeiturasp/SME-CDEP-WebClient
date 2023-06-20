@@ -116,7 +116,12 @@ const Login = () => {
               hasFeedback={!login}
               rules={[{ required: true }, { min: 5 }]}
             >
-              <Input placeholder='Informe o login' suffix={<span />} id={CDEP_INPUT_LOGIN} />
+              <Input
+                placeholder='Informe o login'
+                suffix={<span />}
+                maxLength={100}
+                id={CDEP_INPUT_LOGIN}
+              />
             </Form.Item>
           </Col>
 
@@ -130,6 +135,7 @@ const Login = () => {
               <Input.Password
                 autoComplete='off'
                 placeholder='Informe a senha'
+                maxLength={100}
                 id={CDEP_INPUT_SENHA}
               />
             </Form.Item>
