@@ -1,15 +1,32 @@
 import { Form, Input } from 'antd';
-import { Rule } from 'antd/es/form';
+import { FormItemProps, Rule } from 'antd/es/form';
+import { PasswordProps } from 'antd/es/input';
 import React from 'react';
 
 type SenhaCadastroProps = {
-  label: string;
-  name: string;
+  // label: string;
+  // name: string;
   confirmarSenha?: boolean;
-  id: string;
+  // id: string;
+  // required?: boolean;
+  // styleFormItem?: React.CSSProperties;
+  // disabled?: boolean;
+
+  inputProps: PasswordProps;
+  formItemProps?: FormItemProps;
 };
 
-const SenhaCadastro: React.FC<SenhaCadastroProps> = ({ label, name, confirmarSenha, id }) => {
+const SenhaCadastro: React.FC<SenhaCadastroProps> = ({
+  // label,
+  // name,
+  confirmarSenha,
+  inputProps,
+  formItemProps,
+  // id,
+  // required = true,
+  // disabled = false,
+  // styleFormItem,
+}) => {
   const getValueFromEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
     `${e?.target?.value}`.trim();
 
@@ -46,12 +63,19 @@ const SenhaCadastro: React.FC<SenhaCadastroProps> = ({ label, name, confirmarSen
   return (
     <Form.Item
       getValueFromEvent={getValueFromEvent}
-      label={label}
-      name={name}
       rules={rules}
       dependencies={confirmarSenha ? ['senha'] : []}
+      label='Senha'
+      name='senha'
+      {...formItemProps}
     >
-      <Input.Password autoComplete='off' placeholder='Informe a senha' maxLength={12} id={id} />
+      <Input.Password
+        autoComplete='off'
+        placeholder='Informe a senha'
+        maxLength={12}
+        id='INPUT_SENHA'
+        {...inputProps}
+      />
     </Form.Item>
   );
 };

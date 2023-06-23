@@ -8,18 +8,14 @@ import Sider from '~/components/lib/sider';
 const { Content } = Layout;
 
 const Principal: React.FC = () => (
-  <Layout hasSider>
+  <Layout hasSider style={{ minHeight: '100vh' }}>
     <Sider />
-    <Layout style={{ marginLeft: '72px' }}>
+    <Layout style={{ marginLeft: '88px' }}>
       <Header />
-      <Layout style={{ padding: '0px 32px 0px 32px' }}>
-        <Layout style={{ height: 'calc(100vh - 72px)' }}>
-          <Content>
-            <Outlet />
-          </Content>
-          <Footer />
-        </Layout>
-      </Layout>
+      <Content style={{ margin: '16px 32px' }}>
+        <Outlet />
+      </Content>
+      <Footer />
     </Layout>
   </Layout>
 );
