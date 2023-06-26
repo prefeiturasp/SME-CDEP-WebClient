@@ -1,6 +1,6 @@
 import { Button, Col, Form, Row, Space, Typography } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
@@ -30,7 +30,11 @@ import {
   CDEP_INPUT_TELEFONE,
 } from '~/core/constats/ids/input';
 import { CDEP_SELECT_UF } from '~/core/constats/ids/select';
+import { DadosUsuarioDTO } from '~/core/dto/dados-usuario-dto';
 import { ROUTES } from '~/core/enum/routes';
+import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
+import { setSpinning } from '~/core/redux/modules/spin/actions';
+import usuarioService from '~/core/services/usuario-service';
 
 export const DadosPerfil = styled.div`
   color: #a4a4a4;
@@ -54,9 +58,37 @@ export const DadosPerfil = styled.div`
 
 const MeusDados: React.FC = () => {
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [form] = useForm();
 
+  const auth = useAppSelector((store) => store.auth);
+  const usuarioLogin = auth?.usuarioLogin;
+  const perfilUsuario = auth?.perfilUsuario;
+  const usuarioNome = auth?.usuarioNome;
+
+  // TODO
+  const perfilUsuarioPrincipal = perfilUsuario?.length ? perfilUsuario[0]?.perfilNome : '';
+
+  const [meusDados, setMeusDados] = useState<DadosUsuarioDTO>();
+
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
+
+  const obterDados = useCallback(() => {
+    dispatch(setSpinning(true));
+    usuarioService
+      .obterMeusDados(usuarioLogin)
+      .then((resposta) => {
+        if (resposta?.status === 200) {
+          setMeusDados(resposta.data);
+        }
+      })
+      .catch(() => alert('erro ao obter meus dados'))
+      .finally(() => dispatch(setSpinning(false)));
+  }, [usuarioLogin, dispatch]);
+
+  useEffect(() => {
+    obterDados();
+  }, [obterDados]);
 
   return (
     <>
@@ -76,14 +108,14 @@ const MeusDados: React.FC = () => {
               </DadosPerfil>
             </Space>
             <Space direction='vertical' align='center' style={{ width: '100%' }}>
-              <Typography.Text strong>TODO NOME</Typography.Text>
-              <Typography.Text>Perfil: TODO</Typography.Text>
-              <Typography.Text>RF: TODO</Typography.Text>
-              <Typography.Text>CPF: TODO</Typography.Text>
+              <Typography.Text strong>{usuarioNome}</Typography.Text>
+              <Typography.Text>Perfil: {perfilUsuarioPrincipal} </Typography.Text>
+              <Typography.Text>RF:{meusDados?.login}</Typography.Text>
+              <Typography.Text>CPF: {meusDados?.cpf}</Typography.Text>
             </Space>
           </Col>
           <Col xs={24} md={12}>
-            <Form form={form} layout='vertical' autoComplete='off'>
+            <Form form={form} layout='vertical' autoComplete='off' initialValues={meusDados}>
               <Row gutter={16}>
                 <Col span={24}>
                   <Row wrap={false} align='middle'>
