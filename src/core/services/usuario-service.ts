@@ -11,7 +11,11 @@ const cadastrarUsuarioExterno = (dados: UsuarioExternoDTO): Promise<AxiosRespons
 const obterMeusDados = (login: string): Promise<AxiosResponse<DadosUsuarioDTO>> =>
   api.get(`${URL_DEFAULT}/${login}`);
 
+const alterarEmail = (login: string, email: string): Promise<AxiosResponse<boolean>> =>
+  api.put(`${URL_DEFAULT}/email`, { login, email });
+
 export default {
   cadastrarUsuarioExterno,
   obterMeusDados,
+  alterarEmail,
 };

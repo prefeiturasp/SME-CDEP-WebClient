@@ -6,7 +6,7 @@ export type DadosUsuarioDTO = {
   telefone: string;
   endereco: string;
   numero: string;
-  complemento: string;
+  complemento?: string;
   bairro: string;
   cep: string;
   cidade: string;

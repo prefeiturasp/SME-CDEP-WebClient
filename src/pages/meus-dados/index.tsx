@@ -35,6 +35,7 @@ import { ROUTES } from '~/core/enum/routes';
 import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
 import { setSpinning } from '~/core/redux/modules/spin/actions';
 import usuarioService from '~/core/services/usuario-service';
+import ModalEditEmail from './components/modal-edit-email';
 
 export const DadosPerfil = styled.div`
   color: #a4a4a4;
@@ -126,7 +127,10 @@ const MeusDados: React.FC = () => {
                         required: false,
                       }}
                     />
-                    <Button>Editar</Button>
+                    <ModalEditEmail
+                      initialValues={form.getFieldsValue()}
+                      updateFields={(values) => form.setFieldValue('email', values?.email)}
+                    />
                   </Row>
                 </Col>
                 <Col span={24}>

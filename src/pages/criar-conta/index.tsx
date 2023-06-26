@@ -48,7 +48,6 @@ const CriarConta = () => {
   const [erroGeral, setErroGeral] = useState<string[]>();
 
   const validateMessages = {
-    types: { email: 'Não é um e-mail válido' },
     required: 'Campo obrigatório',
     string: {
       range: 'Deve ter entre ${min} e ${max} caracteres',
