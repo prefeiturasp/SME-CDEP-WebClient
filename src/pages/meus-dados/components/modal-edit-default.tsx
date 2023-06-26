@@ -54,9 +54,12 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
         onCancel={handleCancel}
         centered
         destroyOnClose
-        cancelButtonProps={{ loading: loading }}
+        cancelButtonProps={{ disabled: loading }}
+        okButtonProps={{ disabled: loading }}
+        closable={!loading}
+        maskClosable={!loading}
+        keyboard={!loading}
         okText='Confirmar'
-        confirmLoading={loading}
       >
         <Spin spinning={loading}>{children}</Spin>
       </Modal>
