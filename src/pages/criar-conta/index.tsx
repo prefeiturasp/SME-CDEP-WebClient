@@ -150,7 +150,7 @@ const CriarConta = () => {
             <SenhaCadastro
               formItemProps={{ label: 'Confirmar senha', name: 'confirmarSenha' }}
               inputProps={{ id: CDEP_INPUT_CONFIRMAR_SENHA }}
-              confirmarSenha
+              confirmarSenha={{ fieldName: 'senha' }}
             />
           </Col>
         </Row>

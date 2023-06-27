@@ -36,6 +36,9 @@ import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
 import { setSpinning } from '~/core/redux/modules/spin/actions';
 import usuarioService from '~/core/services/usuario-service';
 import ModalEditEmail from './components/modal-edit-email';
+import ModalEditTelefone from './components/modal-edit-telefone';
+import ModalEditEndereco from './components/modal-edit-endereco';
+import ModalEditNovaSenha from './components/modal-edit-nova-senha';
 
 export const DadosPerfil = styled.div`
   color: #a4a4a4;
@@ -67,7 +70,6 @@ const MeusDados: React.FC = () => {
   const perfilUsuario = auth?.perfilUsuario;
   const usuarioNome = auth?.usuarioNome;
 
-  // TODO
   const perfilUsuarioPrincipal = perfilUsuario?.length ? perfilUsuario[0]?.perfilNome : '';
 
   const [meusDados, setMeusDados] = useState<DadosUsuarioDTO>();
@@ -80,12 +82,13 @@ const MeusDados: React.FC = () => {
       .obterMeusDados(usuarioLogin)
       .then((resposta) => {
         if (resposta?.status === 200) {
-          setMeusDados(resposta.data);
+          setMeusDados({ ...resposta.data });
+          form.setFieldsValue(resposta.data);
         }
       })
       .catch(() => alert('erro ao obter meus dados'))
       .finally(() => dispatch(setSpinning(false)));
-  }, [usuarioLogin, dispatch]);
+  }, [usuarioLogin, form, dispatch]);
 
   useEffect(() => {
     obterDados();
@@ -116,7 +119,7 @@ const MeusDados: React.FC = () => {
             </Space>
           </Col>
           <Col xs={24} md={12}>
-            <Form form={form} layout='vertical' autoComplete='off' initialValues={meusDados}>
+            <Form form={form} layout='vertical' autoComplete='off'>
               <Row gutter={16}>
                 <Col span={24}>
                   <Row wrap={false} align='middle'>
@@ -136,13 +139,16 @@ const MeusDados: React.FC = () => {
                 <Col span={24}>
                   <Row wrap={false} align='middle'>
                     <SenhaCadastro
-                      inputProps={{ id: CDEP_INPUT_SENHA, disabled: true }}
+                      inputProps={{
+                        id: CDEP_INPUT_SENHA,
+                        disabled: true,
+                      }}
                       formItemProps={{
                         style: { width: '100%', marginRight: '8px' },
                         required: false,
                       }}
                     />
-                    <Button>Editar</Button>
+                    <ModalEditNovaSenha />
                   </Row>
                 </Col>
                 <Col span={24}>
@@ -154,7 +160,10 @@ const MeusDados: React.FC = () => {
                         required: false,
                       }}
                     />
-                    <Button>Editar</Button>
+                    <ModalEditTelefone
+                      initialValues={form.getFieldsValue()}
+                      updateFields={(values) => form.setFieldValue('telefone', values?.telefone)}
+                    />
                   </Row>
                 </Col>
                 <Col span={24}>
@@ -166,7 +175,18 @@ const MeusDados: React.FC = () => {
                         required: false,
                       }}
                     />
-                    <Button>Editar</Button>
+                    <ModalEditEndereco
+                      initialValues={form.getFieldsValue()}
+                      updateFields={(values) => {
+                        form.setFieldValue('endereco', values?.endereco);
+                        form.setFieldValue('numero', values?.numero);
+                        form.setFieldValue('complemento', values?.complemento);
+                        form.setFieldValue('bairro', values?.bairro);
+                        form.setFieldValue('cep', values?.cep);
+                        form.setFieldValue('cidade', values?.cidade);
+                        form.setFieldValue('estado', values?.estado);
+                      }}
+                    />
                   </Row>
                 </Col>
                 <Col span={12}>

@@ -1,12 +1,12 @@
 import { TipoUsuario } from '../enum/tipo-usuario-enum';
 
 export interface UsuarioExternoDTO {
-  login: string;
+  cpf: string;
   email: string;
   nome: string;
   telefone: string;
   endereco: string;
-  complemento: string;
+  complemento?: string;
   numero: string | number;
   cidade: string;
   estado: string;
@@ -14,4 +14,5 @@ export interface UsuarioExternoDTO {
   senha: string;
   confirmarSenha: string;
   tipoUsuario: TipoUsuario;
+  bairro: string;
 }

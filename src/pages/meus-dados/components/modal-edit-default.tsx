@@ -1,19 +1,25 @@
-import { Button, Spin } from 'antd';
+import { Button, Modal as ModalAntd, Spin } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import { AxiosResponse } from 'axios';
 import React, { PropsWithChildren, useState } from 'react';
 import Modal from '~/components/lib/modal';
-import { DadosUsuarioDTO } from '~/core/dto/dados-usuario-dto';
-import { Modal as ModalAntd } from 'antd';
+import { EnderecoUsuarioExternoDTO } from '~/core/dto/endereco-usuario-externo-dto';
+import { SenhaNovaDTO } from '~/core/dto/senha-nova-dto';
 import { Colors } from '~/core/styles/colors';
 
 const { confirm } = ModalAntd;
 
+type ModalEditDefaultServiceProps = {
+  email: string;
+  telefone: string;
+} & EnderecoUsuarioExternoDTO &
+  SenhaNovaDTO;
+
 type ModalEditDefaultProps = {
-  service: (values: DadosUsuarioDTO) => Promise<AxiosResponse<boolean>>;
-  updateFields: (value: DadosUsuarioDTO) => void;
+  service: (values: ModalEditDefaultServiceProps) => Promise<AxiosResponse<boolean>>;
+  updateFields?: (values: ModalEditDefaultServiceProps) => void;
   title: string;
-  form: FormInstance<DadosUsuarioDTO>;
+  form: FormInstance<ModalEditDefaultServiceProps>;
 } & PropsWithChildren;
 
 const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
@@ -33,7 +39,7 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
 
     service(form.getFieldsValue())
       .then((resposta) => {
-        if (resposta?.status === 200 && resposta?.data) {
+        if (resposta?.status === 200 && resposta?.data && updateFields) {
           updateFields(form.getFieldsValue());
         }
       })
@@ -92,7 +98,7 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
         keyboard={!loading}
         okText='Confirmar'
       >
-        <Spin spinning={loading}>{children}</Spin>
+        <Spin spinning={loading}>{open ? children : <></>}</Spin>
       </Modal>
     </>
   );

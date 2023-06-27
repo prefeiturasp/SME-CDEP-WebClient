@@ -1,18 +1,18 @@
 import { Form } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React from 'react';
-import InputEmail from '~/components/cdep/input/email';
-import { CDEP_INPUT_EMAIL } from '~/core/constats/ids/input';
+import InputTelefone from '~/components/cdep/input/telefone';
+import { CDEP_INPUT_TELEFONE } from '~/core/constats/ids/input';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import usuarioService from '~/core/services/usuario-service';
 import ModalEditDefault from './modal-edit-default';
 
-type ModalEditEmailProps = {
-  initialValues: { email: string };
-  updateFields: (values: { email: string }) => void;
+type ModalEditTelefoneProps = {
+  initialValues: { telefone: string };
+  updateFields: (value: { telefone: string }) => void;
 };
 
-const ModalEditEmail: React.FC<ModalEditEmailProps> = ({ updateFields, initialValues }) => {
+const ModalEditTelefone: React.FC<ModalEditTelefoneProps> = ({ updateFields, initialValues }) => {
   const [form] = useForm();
   const auth = useAppSelector((store) => store.auth);
   const usuarioLogin = auth?.usuarioLogin;
@@ -21,14 +21,14 @@ const ModalEditEmail: React.FC<ModalEditEmailProps> = ({ updateFields, initialVa
     required: 'Campo obrigatório',
   };
 
-  const alterarEmail = (values: { email: string }) =>
-    usuarioService.alterarEmail(usuarioLogin, values?.email);
+  const alterar = (values: { telefone: string }) =>
+    usuarioService.alterarTelefone(usuarioLogin, values?.telefone);
 
   return (
     <ModalEditDefault
       form={form}
-      title='Editar e-mail'
-      service={alterarEmail}
+      title='Editar telefone'
+      service={alterar}
       updateFields={updateFields}
     >
       <Form
@@ -38,10 +38,10 @@ const ModalEditEmail: React.FC<ModalEditEmailProps> = ({ updateFields, initialVa
         initialValues={initialValues}
         validateMessages={validateMessages}
       >
-        <InputEmail inputProps={{ id: CDEP_INPUT_EMAIL }} />
+        <InputTelefone inputProps={{ id: CDEP_INPUT_TELEFONE }} />
       </Form>
     </ModalEditDefault>
   );
 };
 
-export default ModalEditEmail;
+export default ModalEditTelefone;
