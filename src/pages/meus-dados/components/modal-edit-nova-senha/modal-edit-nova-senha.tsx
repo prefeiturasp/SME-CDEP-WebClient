@@ -7,7 +7,7 @@ import {
   CDEP_INPUT_CONFIRMAR_SENHA,
   CDEP_INPUT_SENHA,
   CDEP_INPUT_SENHA_ATUAL,
-} from '~/core/constats/ids/input';
+} from '~/core/constants/ids/input';
 import { SenhaNovaDTO } from '~/core/dto/senha-nova-dto';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import usuarioService from '~/core/services/usuario-service';

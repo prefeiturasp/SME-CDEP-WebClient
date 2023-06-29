@@ -15,7 +15,7 @@ import InputEstado from '~/components/cdep/input/estado';
 import InputNumero from '~/components/cdep/input/numero';
 import SenhaCadastro from '~/components/cdep/input/senha-cadastro';
 import InputTelefone from '~/components/cdep/input/telefone';
-import { CDEP_BUTTON_CADASTRAR, CDEP_BUTTON_CANCELAR } from '~/core/constats/ids/button/intex';
+import { CDEP_BUTTON_CADASTRAR, CDEP_BUTTON_CANCELAR } from '~/core/constants/ids/button/intex';
 import {
   CDEP_INPUT_BAIRRO,
   CDEP_INPUT_CEP,
@@ -29,10 +29,10 @@ import {
   CDEP_INPUT_NUMERO,
   CDEP_INPUT_SENHA,
   CDEP_INPUT_TELEFONE,
-} from '~/core/constats/ids/input';
-import { CDEP_SELECT_TIPO_USUARIO, CDEP_SELECT_UF } from '~/core/constats/ids/select';
-import { LISTA_TIPO_USUARIO } from '~/core/constats/lista-tipo-usuario';
-import { ERRO_CADASTRO_USUARIO } from '~/core/constats/mensagens';
+} from '~/core/constants/ids/input';
+import { CDEP_SELECT_TIPO_USUARIO, CDEP_SELECT_UF } from '~/core/constants/ids/select';
+import { LISTA_TIPO_USUARIO } from '~/core/constants/lista-tipo-usuario';
+import { ERRO_CADASTRO_USUARIO } from '~/core/constants/mensagens';
 import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 import { UsuarioExternoDTO } from '~/core/dto/usuario-externo-dto';
 import { ROUTES } from '~/core/enum/routes';

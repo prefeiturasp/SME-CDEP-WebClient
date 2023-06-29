@@ -2,7 +2,7 @@ import { Form } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React from 'react';
 import InputEmail from '~/components/cdep/input/email';
-import { CDEP_INPUT_EMAIL } from '~/core/constats/ids/input';
+import { CDEP_INPUT_EMAIL } from '~/core/constants/ids/input';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import usuarioService from '~/core/services/usuario-service';
 import ModalEditDefault from '../modal-edit-default';
