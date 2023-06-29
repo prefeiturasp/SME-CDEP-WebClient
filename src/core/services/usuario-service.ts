@@ -14,10 +14,10 @@ const obterMeusDados = (login: string): Promise<AxiosResponse<DadosUsuarioDTO>> 
   api.get(`${URL_DEFAULT}/${login}`);
 
 const alterarEmail = (login: string, email: string): Promise<AxiosResponse<boolean>> =>
-  api.put(`${URL_DEFAULT}/${login}/email?email=${email}`);
+  api.put(`${URL_DEFAULT}/${login}/email`, { email });
 
 const alterarTelefone = (login: string, telefone: string): Promise<AxiosResponse<boolean>> =>
-  api.put(`${URL_DEFAULT}/${login}/telefone?telefone=${telefone}`);
+  api.put(`${URL_DEFAULT}/${login}/telefone`, { telefone });
 
 const alterarEndereco = (
   login: string,

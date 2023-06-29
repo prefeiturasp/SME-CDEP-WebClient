@@ -5,16 +5,22 @@ import InputEmail from '~/components/cdep/input/email';
 import { CDEP_INPUT_EMAIL } from '~/core/constats/ids/input';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import usuarioService from '~/core/services/usuario-service';
-import ModalEditDefault from './modal-edit-default';
+import ModalEditDefault from '../modal-edit-default';
 
 type ModalEditEmailProps = {
   initialValues: { email: string };
   updateFields: (values: { email: string }) => void;
+  closeModal: () => void;
 };
 
-const ModalEditEmail: React.FC<ModalEditEmailProps> = ({ updateFields, initialValues }) => {
+const ModalEditEmail: React.FC<ModalEditEmailProps> = ({
+  updateFields,
+  initialValues,
+  closeModal,
+}) => {
   const [form] = useForm();
   const auth = useAppSelector((store) => store.auth);
+
   const usuarioLogin = auth?.usuarioLogin;
 
   const validateMessages = {
@@ -30,6 +36,8 @@ const ModalEditEmail: React.FC<ModalEditEmailProps> = ({ updateFields, initialVa
       title='Editar e-mail'
       service={alterarEmail}
       updateFields={updateFields}
+      mensagemConfirmarCancelar='Você não salvou o novo e-mail, deseja descartar a alteração?'
+      closeModal={closeModal}
     >
       <Form
         form={form}

@@ -5,16 +5,22 @@ import InputTelefone from '~/components/cdep/input/telefone';
 import { CDEP_INPUT_TELEFONE } from '~/core/constats/ids/input';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import usuarioService from '~/core/services/usuario-service';
-import ModalEditDefault from './modal-edit-default';
+import ModalEditDefault from '../modal-edit-default';
 
 type ModalEditTelefoneProps = {
   initialValues: { telefone: string };
   updateFields: (value: { telefone: string }) => void;
+  closeModal: () => void;
 };
 
-const ModalEditTelefone: React.FC<ModalEditTelefoneProps> = ({ updateFields, initialValues }) => {
+const ModalEditTelefone: React.FC<ModalEditTelefoneProps> = ({
+  updateFields,
+  initialValues,
+  closeModal,
+}) => {
   const [form] = useForm();
   const auth = useAppSelector((store) => store.auth);
+
   const usuarioLogin = auth?.usuarioLogin;
 
   const validateMessages = {
@@ -30,6 +36,8 @@ const ModalEditTelefone: React.FC<ModalEditTelefoneProps> = ({ updateFields, ini
       title='Editar telefone'
       service={alterar}
       updateFields={updateFields}
+      mensagemConfirmarCancelar='Você não salvou o telefone, deseja descartar a alteração?'
+      closeModal={closeModal}
     >
       <Form
         form={form}

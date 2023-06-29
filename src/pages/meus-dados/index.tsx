@@ -1,5 +1,6 @@
-import { Button, Col, Form, Row, Space, Typography } from 'antd';
+import { Col, Form, Row, Space, Typography } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import { HttpStatusCode } from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -32,13 +33,14 @@ import {
 import { CDEP_SELECT_UF } from '~/core/constats/ids/select';
 import { DadosUsuarioDTO } from '~/core/dto/dados-usuario-dto';
 import { ROUTES } from '~/core/enum/routes';
+import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
 import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
 import { setSpinning } from '~/core/redux/modules/spin/actions';
 import usuarioService from '~/core/services/usuario-service';
-import ModalEditEmail from './components/modal-edit-email';
-import ModalEditTelefone from './components/modal-edit-telefone';
-import ModalEditEndereco from './components/modal-edit-endereco';
-import ModalEditNovaSenha from './components/modal-edit-nova-senha';
+import ModalEditEmailButton from './components/modal-edit-email/modal-edit-email-button';
+import ModalEditEnderecoButton from './components/modal-edit-endereco/modal-edit-endereco-button';
+import ModalEditNovaSenhaButton from './components/modal-edit-nova-senha/modal-edit-nova-senha-button';
+import ModalEditTelefoneButton from './components/modal-edit-telefone/modal-edit-telefone-button';
 
 export const DadosPerfil = styled.div`
   color: #a4a4a4;
@@ -66,6 +68,7 @@ const MeusDados: React.FC = () => {
   const [form] = useForm();
 
   const auth = useAppSelector((store) => store.auth);
+
   const usuarioLogin = auth?.usuarioLogin;
   const perfilUsuario = auth?.perfilUsuario;
   const usuarioNome = auth?.usuarioNome;
@@ -74,6 +77,8 @@ const MeusDados: React.FC = () => {
 
   const [meusDados, setMeusDados] = useState<DadosUsuarioDTO>();
 
+  const permiteEdicao = meusDados?.tipo !== TipoUsuario.CORESSO;
+
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
   const obterDados = useCallback(() => {
@@ -81,7 +86,7 @@ const MeusDados: React.FC = () => {
     usuarioService
       .obterMeusDados(usuarioLogin)
       .then((resposta) => {
-        if (resposta?.status === 200) {
+        if (resposta?.status === HttpStatusCode.Ok) {
           setMeusDados({ ...resposta.data });
           form.setFieldsValue(resposta.data);
         }
@@ -93,6 +98,8 @@ const MeusDados: React.FC = () => {
   useEffect(() => {
     obterDados();
   }, [obterDados]);
+
+  if (!meusDados?.login) return <></>;
 
   return (
     <>
@@ -114,7 +121,7 @@ const MeusDados: React.FC = () => {
             <Space direction='vertical' align='center' style={{ width: '100%' }}>
               <Typography.Text strong>{usuarioNome}</Typography.Text>
               <Typography.Text>Perfil: {perfilUsuarioPrincipal} </Typography.Text>
-              <Typography.Text>RF:{meusDados?.login}</Typography.Text>
+              <Typography.Text>Login: {meusDados?.login}</Typography.Text>
               <Typography.Text>CPF: {meusDados?.cpf}</Typography.Text>
             </Space>
           </Col>
@@ -130,10 +137,7 @@ const MeusDados: React.FC = () => {
                         required: false,
                       }}
                     />
-                    <ModalEditEmail
-                      initialValues={form.getFieldsValue()}
-                      updateFields={(values) => form.setFieldValue('email', values?.email)}
-                    />
+                    <ModalEditEmailButton formPreview={form} />
                   </Row>
                 </Col>
                 <Col span={24}>
@@ -144,11 +148,12 @@ const MeusDados: React.FC = () => {
                         disabled: true,
                       }}
                       formItemProps={{
+                        initialValue: '************',
                         style: { width: '100%', marginRight: '8px' },
                         required: false,
                       }}
                     />
-                    <ModalEditNovaSenha />
+                    <ModalEditNovaSenhaButton />
                   </Row>
                 </Col>
                 <Col span={24}>
@@ -160,10 +165,7 @@ const MeusDados: React.FC = () => {
                         required: false,
                       }}
                     />
-                    <ModalEditTelefone
-                      initialValues={form.getFieldsValue()}
-                      updateFields={(values) => form.setFieldValue('telefone', values?.telefone)}
-                    />
+                    <ModalEditTelefoneButton formPreview={form} permiteEdicao={permiteEdicao} />
                   </Row>
                 </Col>
                 <Col span={24}>
@@ -175,18 +177,7 @@ const MeusDados: React.FC = () => {
                         required: false,
                       }}
                     />
-                    <ModalEditEndereco
-                      initialValues={form.getFieldsValue()}
-                      updateFields={(values) => {
-                        form.setFieldValue('endereco', values?.endereco);
-                        form.setFieldValue('numero', values?.numero);
-                        form.setFieldValue('complemento', values?.complemento);
-                        form.setFieldValue('bairro', values?.bairro);
-                        form.setFieldValue('cep', values?.cep);
-                        form.setFieldValue('cidade', values?.cidade);
-                        form.setFieldValue('estado', values?.estado);
-                      }}
-                    />
+                    <ModalEditEnderecoButton formPreview={form} permiteEdicao={permiteEdicao} />
                   </Row>
                 </Col>
                 <Col span={12}>

@@ -1,3 +1,5 @@
+import { TipoUsuario } from '../enum/tipo-usuario-enum';
+
 export type DadosUsuarioDTO = {
   nome: string;
   cpf: string;
@@ -11,4 +13,5 @@ export type DadosUsuarioDTO = {
   cep: string;
   cidade: string;
   estado: string;
+  tipo: TipoUsuario;
 };

@@ -1,4 +1,4 @@
-import { Button, Modal as ModalAntd, Spin } from 'antd';
+import { Modal as ModalAntd, Spin } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import { AxiosResponse } from 'axios';
 import React, { PropsWithChildren, useState } from 'react';
@@ -20,6 +20,9 @@ type ModalEditDefaultProps = {
   updateFields?: (values: ModalEditDefaultServiceProps) => void;
   title: string;
   form: FormInstance<ModalEditDefaultServiceProps>;
+  mensagemConfirmarCancelar: string;
+  permiteEdicao?: boolean;
+  closeModal: () => void;
 } & PropsWithChildren;
 
 const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
@@ -27,12 +30,11 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
   updateFields,
   title,
   form,
+  mensagemConfirmarCancelar,
+  closeModal,
   children,
 }) => {
   const [loading, setLoading] = useState(false);
-  const [open, setOpen] = useState(false);
-
-  const showModal = () => setOpen(true);
 
   const handleOk = () => {
     setLoading(true);
@@ -42,6 +44,7 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
         if (resposta?.status === 200 && resposta?.data && updateFields) {
           updateFields(form.getFieldsValue());
         }
+        closeModal();
       })
       .catch(() => {
         alert('Erro ao alterar dados');
@@ -57,16 +60,16 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
 
   const handleCancel = () => {
     form.resetFields();
-    setOpen(false);
+    closeModal();
   };
 
   const showConfirmCancel = () => {
     if (form.isFieldsTouched()) {
-      // TODO - Componente confirm vai ser criado na próxima sprint!
       confirm({
+        width: 500,
         title: 'Atenção',
         icon: <></>,
-        content: 'Você não salvou, deseja descartar a alteração?',
+        content: mensagemConfirmarCancelar,
         onOk() {
           handleCancel();
         },
@@ -82,25 +85,22 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
   };
 
   return (
-    <>
-      <Button onClick={showModal}>Editar</Button>
-      <Modal
-        open={open}
-        title={title}
-        onOk={validateFields}
-        onCancel={showConfirmCancel}
-        centered
-        destroyOnClose
-        cancelButtonProps={{ disabled: loading }}
-        okButtonProps={{ disabled: loading }}
-        closable={!loading}
-        maskClosable={!loading}
-        keyboard={!loading}
-        okText='Confirmar'
-      >
-        <Spin spinning={loading}>{open ? children : <></>}</Spin>
-      </Modal>
-    </>
+    <Modal
+      open
+      title={title}
+      onOk={validateFields}
+      onCancel={showConfirmCancel}
+      centered
+      destroyOnClose
+      cancelButtonProps={{ disabled: loading }}
+      okButtonProps={{ disabled: loading }}
+      closable={!loading}
+      maskClosable={!loading}
+      keyboard={!loading}
+      okText='Alterar'
+    >
+      <Spin spinning={loading}>{children}</Spin>
+    </Modal>
   );
 };
 

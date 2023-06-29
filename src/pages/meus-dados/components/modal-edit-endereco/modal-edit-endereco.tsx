@@ -20,16 +20,23 @@ import { CDEP_SELECT_UF } from '~/core/constats/ids/select';
 import { EnderecoUsuarioExternoDTO } from '~/core/dto/endereco-usuario-externo-dto';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import usuarioService from '~/core/services/usuario-service';
-import ModalEditDefault from './modal-edit-default';
+import ModalEditDefault from '../modal-edit-default';
 
 type ModalEditEnderecoProps = {
   initialValues: EnderecoUsuarioExternoDTO;
   updateFields: (values: EnderecoUsuarioExternoDTO) => void;
+  closeModal: () => void;
 };
 
-const ModalEditEndereco: React.FC<ModalEditEnderecoProps> = ({ updateFields, initialValues }) => {
+const ModalEditEndereco: React.FC<ModalEditEnderecoProps> = ({
+  updateFields,
+  initialValues,
+  closeModal,
+}) => {
   const [form] = useForm();
+
   const auth = useAppSelector((store) => store.auth);
+
   const usuarioLogin = auth?.usuarioLogin;
 
   const validateMessages = {
@@ -48,6 +55,8 @@ const ModalEditEndereco: React.FC<ModalEditEnderecoProps> = ({ updateFields, ini
       title='Editar endereço'
       service={alterar}
       updateFields={updateFields}
+      mensagemConfirmarCancelar='Você não salvou o endereço, deseja descartar a alteração?'
+      closeModal={closeModal}
     >
       <Form
         form={form}
