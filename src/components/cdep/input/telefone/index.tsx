@@ -1,7 +1,12 @@
-import { Form, Input, InputProps } from 'antd';
+import { Form, FormItemProps, Input, InputProps } from 'antd';
 import React from 'react';
 
-const InputTelefone: React.FC<InputProps> = ({ ...rest }) => {
+type InputTelefoneProps = {
+  inputProps: InputProps;
+  formItemProps?: FormItemProps;
+};
+
+const InputTelefone: React.FC<InputTelefoneProps> = ({ inputProps, formItemProps }) => {
   const removerTudoQueNaoEhDigito = (value: any) => `${value}`.replace(/\D/g, '');
 
   const maskTelefone = (value: string | number | undefined) =>
@@ -37,8 +42,9 @@ const InputTelefone: React.FC<InputProps> = ({ ...rest }) => {
           },
         },
       ]}
+      {...formItemProps}
     >
-      <Input placeholder='(XX) XXXXX-XXXX' maxLength={15} {...rest} />
+      <Input placeholder='(XX) XXXXX-XXXX' maxLength={15} {...inputProps} />
     </Form.Item>
   );
 };

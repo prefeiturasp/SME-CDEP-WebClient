@@ -1,18 +1,17 @@
 import { TipoUsuario } from '../enum/tipo-usuario-enum';
 
-export interface UsuarioExternoDTO {
-  cpf: string;
-  email: string;
+export type DadosUsuarioDTO = {
   nome: string;
+  cpf: string;
+  login: string;
+  email: string;
   telefone: string;
   endereco: string;
+  numero: string;
   complemento?: string;
-  numero: string | number;
+  bairro: string;
+  cep: string;
   cidade: string;
   estado: string;
-  cep: string;
-  senha: string;
-  confirmarSenha: string;
-  tipoUsuario: TipoUsuario;
-  bairro: string;
-}
+  tipo: TipoUsuario;
+};

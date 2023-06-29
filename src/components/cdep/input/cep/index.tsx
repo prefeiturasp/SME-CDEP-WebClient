@@ -1,7 +1,12 @@
-import { Form, Input, InputProps } from 'antd';
+import { Form, FormItemProps, Input, InputProps } from 'antd';
 import React from 'react';
 
-const InputCEP: React.FC<InputProps> = ({ ...rest }) => {
+type InputCEPProps = {
+  inputProps: InputProps;
+  formItemProps?: FormItemProps;
+};
+
+const InputCEP: React.FC<InputCEPProps> = ({ inputProps, formItemProps }) => {
   const removerTudoQueNaoEhDigito = (value: any) => `${value}`.replace(/\D/g, '');
 
   const maskCEP = (value: string | number | undefined) =>
@@ -36,8 +41,9 @@ const InputCEP: React.FC<InputProps> = ({ ...rest }) => {
           },
         },
       ]}
+      {...formItemProps}
     >
-      <Input placeholder='Informe o CEP' maxLength={9} {...rest} />
+      <Input placeholder='Informe o CEP' maxLength={9} {...inputProps} />
     </Form.Item>
   );
 };
