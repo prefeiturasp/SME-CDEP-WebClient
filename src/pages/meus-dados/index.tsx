@@ -18,7 +18,7 @@ import SenhaCadastro from '~/components/cdep/input/senha-cadastro';
 import InputTelefone from '~/components/cdep/input/telefone';
 import CardContent from '~/components/lib/card-content';
 import HeaderPage from '~/components/lib/header-page';
-import { CDEP_BUTTON_VOLTAR } from '~/core/constats/ids/button/intex';
+import { CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import {
   CDEP_INPUT_BAIRRO,
   CDEP_INPUT_CEP,
@@ -29,8 +29,8 @@ import {
   CDEP_INPUT_NUMERO,
   CDEP_INPUT_SENHA,
   CDEP_INPUT_TELEFONE,
-} from '~/core/constats/ids/input';
-import { CDEP_SELECT_UF } from '~/core/constats/ids/select';
+} from '~/core/constants/ids/input';
+import { CDEP_SELECT_UF } from '~/core/constants/ids/select';
 import { DadosUsuarioDTO } from '~/core/dto/dados-usuario-dto';
 import { ROUTES } from '~/core/enum/routes';
 import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';

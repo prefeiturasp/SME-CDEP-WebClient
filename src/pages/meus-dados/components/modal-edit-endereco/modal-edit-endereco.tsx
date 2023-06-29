@@ -15,8 +15,8 @@ import {
   CDEP_INPUT_COMPLEMENTO,
   CDEP_INPUT_ENDERECO,
   CDEP_INPUT_NUMERO,
-} from '~/core/constats/ids/input';
-import { CDEP_SELECT_UF } from '~/core/constats/ids/select';
+} from '~/core/constants/ids/input';
+import { CDEP_SELECT_UF } from '~/core/constants/ids/select';
 import { EnderecoUsuarioExternoDTO } from '~/core/dto/endereco-usuario-externo-dto';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import usuarioService from '~/core/services/usuario-service';

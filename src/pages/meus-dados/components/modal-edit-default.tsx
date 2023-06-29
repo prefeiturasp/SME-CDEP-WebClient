@@ -1,8 +1,12 @@
 import { Modal as ModalAntd, Spin } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, HttpStatusCode } from 'axios';
 import React, { PropsWithChildren, useState } from 'react';
 import Modal from '~/components/lib/modal';
+import {
+  CDEP_BUTTON_MODAL_ALTERAR,
+  CDEP_BUTTON_MODAL_CANCELAR,
+} from '~/core/constants/ids/button/intex';
 import { EnderecoUsuarioExternoDTO } from '~/core/dto/endereco-usuario-externo-dto';
 import { SenhaNovaDTO } from '~/core/dto/senha-nova-dto';
 import { Colors } from '~/core/styles/colors';
@@ -41,7 +45,7 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
 
     service(form.getFieldsValue())
       .then((resposta) => {
-        if (resposta?.status === 200 && resposta?.data && updateFields) {
+        if (resposta?.status === HttpStatusCode.Ok && resposta?.data && updateFields) {
           updateFields(form.getFieldsValue());
         }
         closeModal();
@@ -92,8 +96,8 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
       onCancel={showConfirmCancel}
       centered
       destroyOnClose
-      cancelButtonProps={{ disabled: loading }}
-      okButtonProps={{ disabled: loading }}
+      cancelButtonProps={{ disabled: loading, id: CDEP_BUTTON_MODAL_CANCELAR }}
+      okButtonProps={{ disabled: loading, id: CDEP_BUTTON_MODAL_ALTERAR }}
       closable={!loading}
       maskClosable={!loading}
       keyboard={!loading}

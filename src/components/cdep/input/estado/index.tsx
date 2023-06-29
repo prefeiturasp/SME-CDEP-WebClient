@@ -1,6 +1,6 @@
 import { Form, FormItemProps, Select, SelectProps } from 'antd';
 import React from 'react';
-import { LISTA_UF } from '~/core/constats/lista-uf';
+import { LISTA_UF } from '~/core/constants/lista-uf';
 
 type InputEstadoProps = {
   selectProps: SelectProps;
