@@ -99,8 +99,6 @@ const MeusDados: React.FC = () => {
     obterDados();
   }, [obterDados]);
 
-  if (!meusDados?.login) return <></>;
-
   return (
     <>
       <HeaderPage title='Meus dados'>
