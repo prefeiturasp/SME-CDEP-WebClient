@@ -27,6 +27,9 @@ const alterarEndereco = (
 const alterarSenha = (login: string, dados: SenhaNovaDTO): Promise<AxiosResponse<boolean>> =>
   api.put(`${URL_DEFAULT}/${login}/senha`, dados);
 
+const solicitarRecuperacaoSenha = (login: string): Promise<AxiosResponse<string>> =>
+  api.post(`${URL_DEFAULT}/${login}/solicitar-recuperacao-senha`);
+
 export default {
   cadastrarUsuarioExterno,
   obterMeusDados,
@@ -34,4 +37,5 @@ export default {
   alterarTelefone,
   alterarEndereco,
   alterarSenha,
+  solicitarRecuperacaoSenha,
 };

@@ -10,6 +10,7 @@ import Inicial from '~/pages/inicial';
 import Login from '~/pages/login';
 import MeusDados from '~/pages/meus-dados';
 import Principal from '~/pages/principal/index';
+import RedefinirSenha from '~/pages/redefinir-senha';
 import Auth from './config/auth';
 
 const RoutesConfig = () => {
@@ -22,6 +23,7 @@ const RoutesConfig = () => {
   const principalPage = createElement(Principal);
   const iniciallPage = createElement(Inicial);
   const meusDadosPage = createElement(MeusDados);
+  const redefinirSenhaPage = createElement(RedefinirSenha);
 
   return (
     <BrowserRouter>
@@ -44,6 +46,7 @@ const RoutesConfig = () => {
           <Route element={homePage}>
             <Route path={ROUTES.LOGIN} element={loginPage} />
             <Route path={ROUTES.CRIAR_CONTA} element={criarContaPage} />
+            <Route path={ROUTES.REDEFINIR_SENHA} element={redefinirSenhaPage} />
           </Route>
         </Routes>
       )}
