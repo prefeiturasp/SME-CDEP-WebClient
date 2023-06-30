@@ -9,7 +9,7 @@ const ModalEditNovaSenhaButton: React.FC = () => {
 
   return (
     <>
-      <Button onClick={showModal}>Editar</Button>
+      <Button onClick={showModal}>Alterar</Button>
       {open && <ModalEditNovaSenha closeModal={() => setOpen(false)} />}
     </>
   );
