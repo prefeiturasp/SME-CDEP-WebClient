@@ -9,7 +9,11 @@ import autenticacaoService from '~/core/services/autenticacao-service';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ErroGeralLogin from '~/components/cdep/erro-geral-login';
-import { CDEP_BUTTON_ACESSAR, CDEP_BUTTON_CRIAR_CONTA } from '~/core/constants/ids/button/intex';
+import {
+  CDEP_BUTTON_ACESSAR,
+  CDEP_BUTTON_CRIAR_CONTA,
+  CDEP_BUTTON_ESQUECI_SENHA,
+} from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_LOGIN, CDEP_INPUT_SENHA } from '~/core/constants/ids/input';
 import {
   ERRO_INFORMAR_USUARIO_SENHA,
@@ -163,7 +167,7 @@ const Login = () => {
               block
               style={{ fontSize: 12 }}
               onClick={() => onClickEsqueciSenha()}
-              id={CDEP_BUTTON_CRIAR_CONTA}
+              id={CDEP_BUTTON_ESQUECI_SENHA}
             >
               Esqueci minha senha
             </Button>

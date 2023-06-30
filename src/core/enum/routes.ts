@@ -4,4 +4,5 @@ export enum ROUTES {
   CRIAR_CONTA = '/criar-conta',
   MEUS_DADOS = '/meus-dados',
   REDEFINIR_SENHA = '/redefinir-senha',
+  REDEFINIR_SENHA_TOKEN = '/redefinir-senha/:token',
 }
