@@ -4,11 +4,18 @@ import { AxiosError } from 'axios';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ErroGeralLogin from '~/components/cdep/erro-geral-login';
+import InputBairro from '~/components/cdep/input/bairro';
 import InputCEP from '~/components/cdep/input/cep';
+import InputCidade from '~/components/cdep/input/cidade';
+import InputComplemento from '~/components/cdep/input/complemento';
 import InputCPF from '~/components/cdep/input/cpf';
+import InputEmail from '~/components/cdep/input/email';
+import InputEndereco from '~/components/cdep/input/endereco';
+import InputEstado from '~/components/cdep/input/estado';
+import InputNumero from '~/components/cdep/input/numero';
 import SenhaCadastro from '~/components/cdep/input/senha-cadastro';
 import InputTelefone from '~/components/cdep/input/telefone';
-import { CDEP_BUTTON_CADASTRAR, CDEP_BUTTON_CANCELAR } from '~/core/constats/ids/button/intex';
+import { CDEP_BUTTON_CADASTRAR, CDEP_BUTTON_CANCELAR } from '~/core/constants/ids/button/intex';
 import {
   CDEP_INPUT_BAIRRO,
   CDEP_INPUT_CEP,
@@ -22,11 +29,10 @@ import {
   CDEP_INPUT_NUMERO,
   CDEP_INPUT_SENHA,
   CDEP_INPUT_TELEFONE,
-} from '~/core/constats/ids/input';
-import { CDEP_SELECT_TIPO_USUARIO, CDEP_SELECT_UF } from '~/core/constats/ids/select';
-import { LISTA_TIPO_USUARIO } from '~/core/constats/lista-tipo-usuario';
-import { LISTA_UF } from '~/core/constats/lista-uf';
-import { ERRO_CADASTRO_USUARIO } from '~/core/constats/mensagens';
+} from '~/core/constants/ids/input';
+import { CDEP_SELECT_TIPO_USUARIO, CDEP_SELECT_UF } from '~/core/constants/ids/select';
+import { LISTA_TIPO_USUARIO } from '~/core/constants/lista-tipo-usuario';
+import { ERRO_CADASTRO_USUARIO } from '~/core/constants/mensagens';
 import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 import { UsuarioExternoDTO } from '~/core/dto/usuario-externo-dto';
 import { ROUTES } from '~/core/enum/routes';
@@ -42,7 +48,6 @@ const CriarConta = () => {
   const [erroGeral, setErroGeral] = useState<string[]>();
 
   const validateMessages = {
-    types: { email: 'Não é um e-mail válido' },
     required: 'Campo obrigatório',
     string: {
       range: 'Deve ter entre ${min} e ${max} caracteres',
@@ -103,61 +108,31 @@ const CriarConta = () => {
             </Form.Item>
           </Col>
           <Col span={24}>
-            <InputTelefone id={CDEP_INPUT_TELEFONE} />
+            <InputTelefone inputProps={{ id: CDEP_INPUT_TELEFONE }} />
           </Col>
           <Col span={24}>
-            <Form.Item label='E-mail' name='email' rules={[{ required: true, type: 'email' }]}>
-              <Input
-                placeholder='Informe o e-mail'
-                autoComplete='off'
-                id={CDEP_INPUT_EMAIL}
-                maxLength={100}
-              />
-            </Form.Item>
+            <InputEmail inputProps={{ id: CDEP_INPUT_EMAIL }} />
           </Col>
           <Col span={24}>
-            <Form.Item label='Endereço' name='endereco' rules={[{ required: true }]}>
-              <Input placeholder='Informe a rua/avenida' id={CDEP_INPUT_ENDERECO} maxLength={200} />
-            </Form.Item>
+            <InputEndereco inputProps={{ id: CDEP_INPUT_ENDERECO }} />
           </Col>
           <Col span={12}>
-            <Form.Item
-              label='Número'
-              name='numero'
-              rules={[{ required: true }]}
-              getValueFromEvent={(e: React.ChangeEvent<HTMLInputElement>) =>
-                `${e?.target?.value}`.replace(/\D/g, '')
-              }
-            >
-              <Input placeholder='Informe o nº' id={CDEP_INPUT_NUMERO} maxLength={9} />
-            </Form.Item>
+            <InputNumero inputProps={{ id: CDEP_INPUT_NUMERO }} />
           </Col>
           <Col span={12}>
-            <Form.Item label='Complemento' name='complemento'>
-              <Input
-                placeholder='Informe o complemento'
-                id={CDEP_INPUT_COMPLEMENTO}
-                maxLength={20}
-              />
-            </Form.Item>
+            <InputComplemento inputProps={{ id: CDEP_INPUT_COMPLEMENTO }} />
           </Col>
           <Col span={24}>
-            <Form.Item label='Bairro' name='bairro' rules={[{ required: true }]}>
-              <Input placeholder='Informe o bairro' id={CDEP_INPUT_BAIRRO} maxLength={200} />
-            </Form.Item>
+            <InputBairro inputProps={{ id: CDEP_INPUT_BAIRRO }} />
           </Col>
           <Col span={24}>
-            <InputCEP id={CDEP_INPUT_CEP} />
+            <InputCEP inputProps={{ id: CDEP_INPUT_CEP }} />
           </Col>
           <Col span={24}>
-            <Form.Item label='Cidade' name='cidade' rules={[{ required: true }]}>
-              <Input placeholder='Informe a cidade' id={CDEP_INPUT_CIDADE} maxLength={50} />
-            </Form.Item>
+            <InputCidade inputProps={{ id: CDEP_INPUT_CIDADE }} />
           </Col>
           <Col span={12}>
-            <Form.Item label='UF' name='estado' rules={[{ required: true }]}>
-              <Select placeholder='Informe a UF' options={LISTA_UF} id={CDEP_SELECT_UF} />
-            </Form.Item>
+            <InputEstado selectProps={{ id: CDEP_SELECT_UF }} />
           </Col>
           <Col span={24}>
             <Form.Item label='Tipo' name='tipoUsuario' rules={[{ required: true }]}>
@@ -169,14 +144,13 @@ const CriarConta = () => {
             </Form.Item>
           </Col>
           <Col span={24}>
-            <SenhaCadastro label='Senha' name='senha' id={CDEP_INPUT_SENHA} />
+            <SenhaCadastro inputProps={{ id: CDEP_INPUT_SENHA }} />
           </Col>
           <Col span={24}>
             <SenhaCadastro
-              label='Confirmar senha'
-              name='confirmarSenha'
-              confirmarSenha
-              id={CDEP_INPUT_CONFIRMAR_SENHA}
+              formItemProps={{ label: 'Confirmar senha', name: 'confirmarSenha' }}
+              inputProps={{ id: CDEP_INPUT_CONFIRMAR_SENHA }}
+              confirmarSenha={{ fieldName: 'senha' }}
             />
           </Col>
         </Row>

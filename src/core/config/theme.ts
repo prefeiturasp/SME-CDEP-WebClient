@@ -15,5 +15,11 @@ export const CDEPTheme: ThemeConfig = {
       colorText: Colors.BLUE_CDEP,
       colorBorder: Colors.BLUE_CDEP,
     },
+    Layout: {
+      colorBgLayout: Colors.BACKGROUND_CONTENT,
+    },
+    Form: {
+      paddingXS: 2,
+    },
   },
 };

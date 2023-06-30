@@ -1,15 +1,19 @@
 import { Form, Input } from 'antd';
-import { Rule } from 'antd/es/form';
+import { FormItemProps, Rule } from 'antd/es/form';
+import { PasswordProps } from 'antd/es/input';
 import React from 'react';
 
 type SenhaCadastroProps = {
-  label: string;
-  name: string;
-  confirmarSenha?: boolean;
-  id: string;
+  confirmarSenha?: { fieldName: string };
+  inputProps: PasswordProps;
+  formItemProps?: FormItemProps;
 };
 
-const SenhaCadastro: React.FC<SenhaCadastroProps> = ({ label, name, confirmarSenha, id }) => {
+const SenhaCadastro: React.FC<SenhaCadastroProps> = ({
+  confirmarSenha,
+  inputProps,
+  formItemProps,
+}) => {
   const getValueFromEvent = (e: React.ChangeEvent<HTMLInputElement>) =>
     `${e?.target?.value}`.trim();
 
@@ -33,10 +37,10 @@ const SenhaCadastro: React.FC<SenhaCadastroProps> = ({ label, name, confirmarSen
     },
   ];
 
-  if (confirmarSenha) {
+  if (confirmarSenha?.fieldName) {
     rules.push(({ getFieldValue }) => ({
       validator(_, value) {
-        if (!value || getFieldValue('senha') === value) return Promise.resolve();
+        if (!value || getFieldValue(confirmarSenha.fieldName) === value) return Promise.resolve();
 
         return Promise.reject(new Error('Senhas não correspondem'));
       },
@@ -46,12 +50,19 @@ const SenhaCadastro: React.FC<SenhaCadastroProps> = ({ label, name, confirmarSen
   return (
     <Form.Item
       getValueFromEvent={getValueFromEvent}
-      label={label}
-      name={name}
       rules={rules}
-      dependencies={confirmarSenha ? ['senha'] : []}
+      dependencies={confirmarSenha ? [confirmarSenha.fieldName] : []}
+      label='Senha'
+      name='senha'
+      {...formItemProps}
     >
-      <Input.Password autoComplete='off' placeholder='Informe a senha' maxLength={12} id={id} />
+      <Input.Password
+        autoComplete='off'
+        placeholder='Informe a senha'
+        maxLength={12}
+        id='INPUT_SENHA'
+        {...inputProps}
+      />
     </Form.Item>
   );
 };

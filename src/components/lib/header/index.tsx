@@ -4,17 +4,18 @@ import cdepLogo from '~/assets/cdep-logo.svg';
 import ExitButton from '../exit-button';
 import { store } from '~/core/redux';
 import { setDeslogar } from '~/core/redux/modules/auth/actions';
+import { BoxShadow } from '~/core/styles/colors';
 
 const contentStyle: React.CSSProperties = {
   position: 'sticky',
   top: 0,
-  zIndex: 1,
+  zIndex: 11,
   width: '100%',
   height: '72px',
   display: 'flex',
   alignItems: 'center',
   backgroundColor: '#FFFFFF',
-  boxShadow: '0px 4px 20px rgba(0, 0, 0, 0.05)',
+  boxShadow: BoxShadow.DEFAULT,
 };
 
 const Header: React.FC = () => {

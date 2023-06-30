@@ -1,4 +1,5 @@
 export enum TipoUsuario {
+  CORESSO = 0,
   SERVIDOR_PUBLICO = 1,
   ESTUDANTE = 2,
   PROFESSOR = 3,
