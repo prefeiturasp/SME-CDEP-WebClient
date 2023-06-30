@@ -25,7 +25,7 @@ const ModalEditEnderecoButton: React.FC<ModalEditEnderecoButtonProps> = ({
 
   return (
     <>
-      <Button onClick={showModal}>Editar</Button>
+      <Button onClick={showModal}>Alterar</Button>
       {open && (
         <ModalEditEndereco
           updateFields={updateFields}
