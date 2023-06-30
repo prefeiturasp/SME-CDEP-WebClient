@@ -52,7 +52,7 @@ const ModalEditEndereco: React.FC<ModalEditEnderecoProps> = ({
   return (
     <ModalEditDefault
       form={form}
-      title='Editar endereço'
+      title='Alterar endereço'
       service={alterar}
       updateFields={updateFields}
       mensagemConfirmarCancelar='Você não salvou o endereço, deseja descartar a alteração?'

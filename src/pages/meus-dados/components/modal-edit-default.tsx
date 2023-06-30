@@ -1,4 +1,4 @@
-import { Modal as ModalAntd, Spin } from 'antd';
+import { Modal as ModalAntd, Spin, notification } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import { AxiosResponse, HttpStatusCode } from 'axios';
 import React, { PropsWithChildren, useState } from 'react';
@@ -40,6 +40,22 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
 
+  const openNotificationError = (mensagens: string[]) => {
+    mensagens.forEach((description) => {
+      notification.error({
+        message: 'Erro',
+        description,
+      });
+    });
+  };
+
+  const openNotificationSuccess = () => {
+    notification.success({
+      message: 'Sucesso',
+      description: 'Registro alterado com sucesso!',
+    });
+  };
+
   const handleOk = () => {
     setLoading(true);
 
@@ -47,11 +63,14 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
       .then((resposta) => {
         if (resposta?.status === HttpStatusCode.Ok && resposta?.data && updateFields) {
           updateFields(form.getFieldsValue());
+          openNotificationSuccess();
         }
         closeModal();
       })
-      .catch(() => {
-        alert('Erro ao alterar dados');
+      .catch((erro) => {
+        if (erro?.response?.data?.mensagens?.length) {
+          openNotificationError(erro.response.data.mensagens);
+        }
       })
       .finally(() => setLoading(false));
   };

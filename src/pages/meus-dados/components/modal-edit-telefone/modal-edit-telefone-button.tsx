@@ -24,7 +24,7 @@ const ModalEditTelefoneButton: React.FC<ModalEditTelefoneButtonProps> = ({
 
   return (
     <>
-      <Button onClick={showModal}>Editar</Button>
+      <Button onClick={showModal}>Alterar</Button>
       {open && (
         <ModalEditTelefone
           updateFields={updateFields}
