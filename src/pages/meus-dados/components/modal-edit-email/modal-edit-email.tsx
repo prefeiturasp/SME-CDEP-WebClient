@@ -33,7 +33,7 @@ const ModalEditEmail: React.FC<ModalEditEmailProps> = ({
   return (
     <ModalEditDefault
       form={form}
-      title='Editar e-mail'
+      title='Alterar e-mail'
       service={alterarEmail}
       updateFields={updateFields}
       mensagemConfirmarCancelar='Você não salvou o novo e-mail, deseja descartar a alteração?'

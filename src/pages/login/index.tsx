@@ -9,7 +9,11 @@ import autenticacaoService from '~/core/services/autenticacao-service';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ErroGeralLogin from '~/components/cdep/erro-geral-login';
-import { CDEP_BUTTON_ACESSAR, CDEP_BUTTON_CRIAR_CONTA } from '~/core/constants/ids/button/intex';
+import {
+  CDEP_BUTTON_ACESSAR,
+  CDEP_BUTTON_CRIAR_CONTA,
+  CDEP_BUTTON_ESQUECI_SENHA,
+} from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_LOGIN, CDEP_INPUT_SENHA } from '~/core/constants/ids/input';
 import {
   ERRO_INFORMAR_USUARIO_SENHA,
@@ -97,6 +101,8 @@ const Login = () => {
 
   const onClickCriarConta = () => navigate(ROUTES.CRIAR_CONTA);
 
+  const onClickEsqueciSenha = () => navigate(ROUTES.REDEFINIR_SENHA);
+
   return (
     <Col span={14}>
       <Form
@@ -142,7 +148,7 @@ const Login = () => {
           </Col>
         </Row>
 
-        <Row justify='center' gutter={[0, 40]} style={{ marginTop: '20px' }}>
+        <Row justify='center' gutter={[0, 25]} style={{ marginTop: '20px' }}>
           <Col span={24}>
             <Button
               type='primary'
@@ -152,6 +158,18 @@ const Login = () => {
               id={CDEP_BUTTON_ACESSAR}
             >
               Acessar
+            </Button>
+          </Col>
+
+          <Col span={24}>
+            <Button
+              type='text'
+              block
+              style={{ fontSize: 12 }}
+              onClick={() => onClickEsqueciSenha()}
+              id={CDEP_BUTTON_ESQUECI_SENHA}
+            >
+              Esqueci minha senha
             </Button>
           </Col>
 

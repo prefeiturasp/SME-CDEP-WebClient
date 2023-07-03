@@ -33,7 +33,7 @@ const ModalEditTelefone: React.FC<ModalEditTelefoneProps> = ({
   return (
     <ModalEditDefault
       form={form}
-      title='Editar telefone'
+      title='Alterar telefone'
       service={alterar}
       updateFields={updateFields}
       mensagemConfirmarCancelar='Você não salvou o telefone, deseja descartar a alteração?'
