@@ -40,7 +40,7 @@ const RedefinirSenhaToken = () => {
   const validateMessages = {
     required: 'Campo obrigatório',
     string: {
-      min: 'Deve conter no mínimo ${min} caracteres',
+      range: 'Deve ter entre ${min} e ${max} caracteres',
     },
   };
 
