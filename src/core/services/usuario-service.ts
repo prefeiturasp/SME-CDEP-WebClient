@@ -7,7 +7,7 @@ import { SenhaNovaDTO } from '../dto/senha-nova-dto';
 import { UsuarioExternoDTO } from '../dto/usuario-externo-dto';
 import api from './api';
 
-const URL_DEFAULT = 'v1/usuarios';
+const URL_DEFAULT = 'v1/usuario';
 
 const cadastrarUsuarioExterno = (dados: UsuarioExternoDTO): Promise<AxiosResponse<boolean>> =>
   api.post(URL_DEFAULT, { ...dados });
