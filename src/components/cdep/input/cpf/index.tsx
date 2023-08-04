@@ -1,9 +1,13 @@
-import { Form, Input, InputProps } from 'antd';
+import { Form, FormItemProps, Input, InputProps } from 'antd';
 import React from 'react';
+import { removerTudoQueNaoEhDigito } from '~/core/utils/functions/index';
 
-const InputCPF: React.FC<InputProps> = ({ ...rest }) => {
-  const removerTudoQueNaoEhDigito = (value: any) => `${value}`.replace(/\D/g, '');
+type InputCPFProps = {
+  inputProps: InputProps;
+  formItemProps?: FormItemProps;
+};
 
+const InputCPF: React.FC<InputCPFProps> = ({ inputProps, formItemProps }) => {
   const formatterCPFMask = (value: string | number | undefined) =>
     `${value}`
       .replace(/(\d{3})(\d)/, '$1.$2')
@@ -20,12 +24,13 @@ const InputCPF: React.FC<InputProps> = ({ ...rest }) => {
     <Form.Item
       label='CPF'
       name='cpf'
+      {...formItemProps}
       getValueFromEvent={getValueFromEvent}
       rules={[
         { required: true },
         {
           message: 'Deve conter 11 caracteres',
-          validator: (_, value) => {
+          validator: (_: any, value: string) => {
             const valorValidar = removerTudoQueNaoEhDigito(value);
 
             if (!valorValidar) return Promise.resolve();
@@ -37,7 +42,7 @@ const InputCPF: React.FC<InputProps> = ({ ...rest }) => {
         },
       ]}
     >
-      <Input placeholder='Informe o CPF' {...rest} />
+      <Input placeholder='Informe o CPF' {...inputProps} />
     </Form.Item>
   );
 };
