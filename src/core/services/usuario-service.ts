@@ -15,6 +15,9 @@ const cadastrarUsuarioExterno = (dados: UsuarioExternoDTO): Promise<AxiosRespons
 const obterMeusDados = (login: string): Promise<AxiosResponse<DadosUsuarioDTO>> =>
   api.get(`${URL_DEFAULT}/${login}`);
 
+const validaCPFExistente = (cpf: string): Promise<AxiosResponse<boolean>> =>
+  api.get(`${URL_DEFAULT}/${cpf}/existe`);
+
 const alterarEmail = (login: string, email: string): Promise<AxiosResponse<boolean>> =>
   api.put(`${URL_DEFAULT}/${login}/email`, { email });
 
@@ -41,12 +44,13 @@ const tokenRecuperacaoSenhaEstaValido = (token: string): Promise<AxiosResponse<b
   api.get(`${URL_DEFAULT}/valida-token-recuperacao-senha/${token}`);
 
 export default {
-  cadastrarUsuarioExterno,
-  obterMeusDados,
   alterarEmail,
+  alterarSenha,
+  obterMeusDados,
   alterarTelefone,
   alterarEndereco,
-  alterarSenha,
+  validaCPFExistente,
+  cadastrarUsuarioExterno,
   solicitarRecuperacaoSenha,
   alterarSenhaComTokenRecuperacao,
   tokenRecuperacaoSenhaEstaValido,
