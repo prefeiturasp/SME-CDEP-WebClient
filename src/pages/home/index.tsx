@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 
-import cdepLogo from '~/assets/cdep-logo-titulo.svg';
+import cdepLogo from '~/assets/cdep-logo-horizontal.svg';
 import prefeituraLogo from '~/assets/prefeitura-sp-logo.svg';
 
 import { Outlet } from 'react-router-dom';

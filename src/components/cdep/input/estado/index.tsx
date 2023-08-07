@@ -10,7 +10,7 @@ type InputEstadoProps = {
 const InputEstado: React.FC<InputEstadoProps> = ({ selectProps, formItemProps }) => {
   return (
     <Form.Item label='UF' name='estado' rules={[{ required: true }]} {...formItemProps}>
-      <Select placeholder='Informe a UF' options={LISTA_UF} id='SELECT_UF' {...selectProps} />
+      <Select id='SELECT_UF' {...selectProps} options={LISTA_UF} placeholder='Informe a UF' />
     </Form.Item>
   );
 };
