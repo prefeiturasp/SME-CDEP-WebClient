@@ -30,7 +30,7 @@ import {
   CDEP_INPUT_SENHA,
   CDEP_INPUT_TELEFONE,
 } from '~/core/constants/ids/input';
-import { CDEP_SELECT_UF } from '~/core/constants/ids/select';
+import { CDEP_SELECT_TIPO_USUARIO, CDEP_SELECT_UF } from '~/core/constants/ids/select';
 import { DadosUsuarioDTO } from '~/core/dto/dados-usuario-dto';
 import { ROUTES } from '~/core/enum/routes';
 import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
@@ -41,6 +41,9 @@ import ModalEditEmailButton from './components/modal-edit-email/modal-edit-email
 import ModalEditEnderecoButton from './components/modal-edit-endereco/modal-edit-endereco-button';
 import ModalEditNovaSenhaButton from './components/modal-edit-nova-senha/modal-edit-nova-senha-button';
 import ModalEditTelefoneButton from './components/modal-edit-telefone/modal-edit-telefone-button';
+import { LISTA_TIPO_USUARIO } from '~/core/constants/lista-tipo-usuario';
+import ModalEditTipoUsuarioButton from './components/modal-edit-tipo-usuario/modal-edit-tipo-usuario-button';
+import InputTipoUsuario from '~/components/cdep/input/tipo-usuario';
 
 export const DadosPerfil = styled.div`
   color: #a4a4a4;
@@ -76,6 +79,10 @@ const MeusDados: React.FC = () => {
   const perfilUsuarioPrincipal = perfilUsuario?.length ? perfilUsuario[0]?.perfilNome : '';
 
   const [meusDados, setMeusDados] = useState<DadosUsuarioDTO>();
+
+  const tipoUsuario = LISTA_TIPO_USUARIO.filter(
+    (tipo) => tipo.value === meusDados?.tipo && tipo.label,
+  );
 
   const permiteEdicao = meusDados?.tipo !== TipoUsuario.CORESSO;
 
@@ -218,6 +225,22 @@ const MeusDados: React.FC = () => {
                     selectProps={{ id: CDEP_SELECT_UF, disabled: true }}
                     formItemProps={{ required: false }}
                   />
+                </Col>
+                <Col span={24}>
+                  <Row wrap={false} align='middle'>
+                    <InputTipoUsuario
+                      selectProps={{
+                        disabled: true,
+                        id: CDEP_SELECT_TIPO_USUARIO,
+                        value: tipoUsuario[0]?.label,
+                      }}
+                      formItemProps={{
+                        required: false,
+                        style: { width: '100%', marginRight: '8px' },
+                      }}
+                    />
+                    <ModalEditTipoUsuarioButton formPreview={form} permiteEdicao={permiteEdicao} />
+                  </Row>
                 </Col>
               </Row>
             </Form>

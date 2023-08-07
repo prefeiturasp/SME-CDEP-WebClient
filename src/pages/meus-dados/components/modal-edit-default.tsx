@@ -7,6 +7,7 @@ import {
   CDEP_BUTTON_MODAL_ALTERAR,
   CDEP_BUTTON_MODAL_CANCELAR,
 } from '~/core/constants/ids/button/intex';
+import { DadosUsuarioDTO } from '~/core/dto/dados-usuario-dto';
 import { EnderecoUsuarioExternoDTO } from '~/core/dto/endereco-usuario-externo-dto';
 import { SenhaNovaDTO } from '~/core/dto/senha-nova-dto';
 import { Colors } from '~/core/styles/colors';
@@ -16,7 +17,8 @@ const { confirm } = ModalAntd;
 type ModalEditDefaultServiceProps = {
   email: string;
   telefone: string;
-} & EnderecoUsuarioExternoDTO &
+} & DadosUsuarioDTO &
+  EnderecoUsuarioExternoDTO &
   SenhaNovaDTO;
 
 type ModalEditDefaultProps = {
