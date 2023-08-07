@@ -212,10 +212,10 @@ const CriarConta = () => {
             />
           </Col>
           <Col span={12}>
-            <InputEstado selectProps={{ id: CDEP_SELECT_UF }} estadoValue={obterCEP?.uf} />
+            <InputEstado selectProps={{ id: CDEP_SELECT_UF, value: obterCEP?.uf }} />
           </Col>
           <Col span={24}>
-            <Form.Item label='Tipo' name='tipoUsuario' rules={[{ required: true }]}>
+            <Form.Item label='Tipo' name='tipo' rules={[{ required: true }]}>
               <Select
                 options={LISTA_TIPO_USUARIO}
                 id={CDEP_SELECT_TIPO_USUARIO}

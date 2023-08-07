@@ -21,6 +21,9 @@ const validaCPFExistente = (cpf: string): Promise<AxiosResponse<boolean>> =>
 const alterarEmail = (login: string, email: string): Promise<AxiosResponse<boolean>> =>
   api.put(`${URL_DEFAULT}/${login}/email`, { email });
 
+const alterarTipoUsuario = (login: string, tipo: number): Promise<AxiosResponse<boolean>> =>
+  api.put(`${URL_DEFAULT}/${login}/tipo-usuario`, { tipo });
+
 const alterarTelefone = (login: string, telefone: string): Promise<AxiosResponse<boolean>> =>
   api.put(`${URL_DEFAULT}/${login}/telefone`, { telefone });
 
@@ -49,6 +52,7 @@ export default {
   obterMeusDados,
   alterarTelefone,
   alterarEndereco,
+  alterarTipoUsuario,
   validaCPFExistente,
   cadastrarUsuarioExterno,
   solicitarRecuperacaoSenha,
