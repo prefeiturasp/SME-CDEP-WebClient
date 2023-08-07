@@ -22,7 +22,7 @@ const MenuContainer = styled.div`
 `;
 
 const MenuGroup = styled.div`
-  background-color: ${Colors.BLUE_CDEP};
+  background-color: ${Colors.CDEP_PRIMARY};
   width: 100%;
   height: 60px;
   margin: 4px;
@@ -50,7 +50,7 @@ const Sider: React.FC = () => {
       style={{
         textAlign: 'center',
         color: '#fff',
-        backgroundColor: Colors.BLUE_CDEP_DARK,
+        backgroundColor: Colors.CDEP_DARK_PRIMARY,
         overflow: 'auto',
         height: '100vh',
         position: 'fixed',
@@ -70,7 +70,7 @@ const Sider: React.FC = () => {
           fontSize: '24px',
           width: '100%',
           height: '72px',
-          backgroundColor: Colors.BLUE_CDEP,
+          backgroundColor: Colors.CDEP_PRIMARY,
           color: 'white',
           borderRadius: 0,
         }}
