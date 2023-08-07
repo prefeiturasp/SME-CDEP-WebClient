@@ -123,6 +123,7 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
       maskClosable={!loading}
       keyboard={!loading}
       okText='Alterar'
+      cancelText='Cancelar'
     >
       <Spin spinning={loading}>{children}</Spin>
     </Modal>
