@@ -166,25 +166,36 @@ const MeusDados: React.FC = () => {
                     <ModalEditTelefoneButton formPreview={form} permiteEdicao={permiteEdicao} />
                   </Row>
                 </Col>
-                <Col span={24}>
+                <Col span={8}>
+                  <Row wrap={false} align='middle'>
+                    <InputCEP
+                      inputProps={{ id: CDEP_INPUT_CEP, disabled: true }}
+                      formItemProps={{
+                        required: false,
+                        style: { width: '100%', marginRight: '8px' },
+                      }}
+                    />
+                  </Row>
+                </Col>
+                <Col span={16}>
                   <Row wrap={false} align='middle'>
                     <InputEndereco
                       inputProps={{ id: CDEP_INPUT_ENDERECO, disabled: true }}
                       formItemProps={{
-                        style: { width: '100%', marginRight: '8px' },
                         required: false,
+                        style: { width: '100%', marginRight: '8px' },
                       }}
                     />
                     <ModalEditEnderecoButton formPreview={form} permiteEdicao={permiteEdicao} />
                   </Row>
                 </Col>
-                <Col span={12}>
+                <Col span={8}>
                   <InputNumero
                     inputProps={{ id: CDEP_INPUT_NUMERO, disabled: true }}
                     formItemProps={{ required: false }}
                   />
                 </Col>
-                <Col span={12}>
+                <Col span={16}>
                   <InputComplemento
                     inputProps={{ id: CDEP_INPUT_COMPLEMENTO, disabled: true }}
                     formItemProps={{ required: false }}
@@ -196,19 +207,13 @@ const MeusDados: React.FC = () => {
                     formItemProps={{ required: false }}
                   />
                 </Col>
-                <Col span={24}>
-                  <InputCEP
-                    inputProps={{ id: CDEP_INPUT_CEP, disabled: true }}
-                    formItemProps={{ required: false }}
-                  />
-                </Col>
-                <Col span={24}>
+                <Col span={16}>
                   <InputCidade
                     inputProps={{ id: CDEP_INPUT_CIDADE, disabled: true }}
                     formItemProps={{ required: false }}
                   />
                 </Col>
-                <Col span={12}>
+                <Col span={8}>
                   <InputEstado
                     selectProps={{ id: CDEP_SELECT_UF, disabled: true }}
                     formItemProps={{ required: false }}

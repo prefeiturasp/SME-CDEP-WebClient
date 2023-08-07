@@ -39,15 +39,19 @@ import { ROUTES } from '~/core/enum/routes';
 import { useAppDispatch } from '~/core/hooks/use-redux';
 import { setSpinning } from '~/core/redux/modules/spin/actions';
 import usuarioService from '~/core/services/usuario-service';
+import enderecoService from '~/core/services/endereco-service';
 import { removerTudoQueNaoEhDigito } from '~/core/utils/functions/index';
+import { RetornoCEPDTO } from '~/core/dto/retorno-cep-dto';
 
 const CriarConta = () => {
   const [form] = useForm();
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
+  const [loading, setLoading] = useState<boolean>(false);
   const [erroGeral, setErroGeral] = useState<string[]>();
   const [CPFExistente, setCPFExistente] = useState<string[]>();
+  const [obterCEP, setObterCEP] = useState<RetornoCEPDTO | undefined>();
 
   const validateMessages = {
     required: 'Campo obrigatório',
@@ -73,14 +77,46 @@ const CriarConta = () => {
   };
 
   const validaCPFExistente = (value: string) => {
-    usuarioService.validaCPFExistente(value).catch((erro: AxiosError<RetornoBaseDTO>) => {
-      const dataErro = erro?.response?.data;
+    setLoading(true);
+    usuarioService
+      .validaCPFExistente(value)
+      .catch((erro: AxiosError<RetornoBaseDTO>) => {
+        const dataErro = erro?.response?.data;
 
-      if (dataErro?.mensagens?.length) {
-        setCPFExistente(dataErro.mensagens);
-        return;
-      }
-    });
+        if (dataErro?.mensagens?.length) {
+          setCPFExistente(dataErro.mensagens);
+          return;
+        }
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const getCEP = (value: string) => {
+    setLoading(true);
+    enderecoService
+      .obterDadosCEP(value)
+      .then((resposta) => {
+        const data = resposta.data;
+        const {
+          cep,
+          bairro,
+          uf: estado,
+          complemento,
+          localidade: cidade,
+          logradouro: endereco,
+        } = data;
+
+        setObterCEP({ ...data });
+        form.setFieldsValue({
+          cep,
+          estado,
+          bairro,
+          cidade,
+          endereco,
+          complemento,
+        });
+      })
+      .finally(() => setLoading(false));
   };
 
   const onFinish = (values: UsuarioExternoDTO) => {
@@ -112,7 +148,8 @@ const CriarConta = () => {
             <InputCPF
               formItemProps={{
                 help: CPFExistente,
-                validateStatus: CPFExistente?.length ? 'error' : '',
+                hasFeedback: loading,
+                validateStatus: CPFExistente?.length ? 'error' : loading ? 'validating' : '',
               }}
               inputProps={{
                 id: CDEP_INPUT_CPF,
@@ -139,25 +176,43 @@ const CriarConta = () => {
             <InputEmail inputProps={{ id: CDEP_INPUT_EMAIL }} />
           </Col>
           <Col span={24}>
-            <InputCEP inputProps={{ id: CDEP_INPUT_CEP }} />
+            <InputCEP
+              formItemProps={{
+                hasFeedback: loading,
+                validateStatus: loading ? 'validating' : '',
+              }}
+              inputProps={{
+                id: CDEP_INPUT_CEP,
+                onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
+                  const value = removerTudoQueNaoEhDigito(e.target.value);
+                  value.length === 8 ? getCEP(value) : '';
+                },
+              }}
+            />
           </Col>
           <Col span={24}>
-            <InputEndereco inputProps={{ id: CDEP_INPUT_ENDERECO }} />
+            <InputEndereco
+              inputProps={{ id: CDEP_INPUT_ENDERECO, defaultValue: obterCEP?.localidade }}
+            />
           </Col>
           <Col span={12}>
             <InputNumero inputProps={{ id: CDEP_INPUT_NUMERO }} />
           </Col>
           <Col span={12}>
-            <InputComplemento inputProps={{ id: CDEP_INPUT_COMPLEMENTO }} />
+            <InputComplemento
+              inputProps={{ id: CDEP_INPUT_COMPLEMENTO, defaultValue: obterCEP?.complemento }}
+            />
           </Col>
           <Col span={24}>
-            <InputBairro inputProps={{ id: CDEP_INPUT_BAIRRO }} />
+            <InputBairro inputProps={{ id: CDEP_INPUT_BAIRRO, defaultValue: obterCEP?.bairro }} />
           </Col>
           <Col span={24}>
-            <InputCidade inputProps={{ id: CDEP_INPUT_CIDADE }} />
+            <InputCidade
+              inputProps={{ id: CDEP_INPUT_CIDADE, defaultValue: obterCEP?.localidade }}
+            />
           </Col>
           <Col span={12}>
-            <InputEstado selectProps={{ id: CDEP_SELECT_UF }} />
+            <InputEstado selectProps={{ id: CDEP_SELECT_UF }} estadoValue={obterCEP?.uf} />
           </Col>
           <Col span={24}>
             <Form.Item label='Tipo' name='tipoUsuario' rules={[{ required: true }]}>
