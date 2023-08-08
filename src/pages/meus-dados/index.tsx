@@ -84,8 +84,7 @@ const MeusDados: React.FC = () => {
     (tipo) => tipo.value === meusDados?.tipo && tipo.label,
   );
 
-  const permiteEdicao = meusDados?.tipo !== TipoUsuario.CORESSO;
-  const ocultarCampos = meusDados?.tipo === TipoUsuario.CORESSO;
+  const usuarioCORESSO = meusDados?.tipo === TipoUsuario.CORESSO;
 
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
@@ -162,7 +161,7 @@ const MeusDados: React.FC = () => {
                     <ModalEditNovaSenhaButton />
                   </Row>
                 </Col>
-                {!ocultarCampos && (
+                {!usuarioCORESSO && (
                   <>
                     <Col span={24}>
                       <Row wrap={false} align='middle'>
@@ -173,7 +172,7 @@ const MeusDados: React.FC = () => {
                             required: false,
                           }}
                         />
-                        <ModalEditTelefoneButton formPreview={form} permiteEdicao={permiteEdicao} />
+                        <ModalEditTelefoneButton formPreview={form} />
                       </Row>
                     </Col>
                     <Col span={8}>
@@ -196,7 +195,7 @@ const MeusDados: React.FC = () => {
                             style: { width: '100%', marginRight: '8px' },
                           }}
                         />
-                        <ModalEditEnderecoButton formPreview={form} permiteEdicao={permiteEdicao} />
+                        <ModalEditEnderecoButton formPreview={form} />
                       </Row>
                     </Col>
                     <Col span={8}>
@@ -242,10 +241,7 @@ const MeusDados: React.FC = () => {
                             style: { width: '100%', marginRight: '8px' },
                           }}
                         />
-                        <ModalEditTipoUsuarioButton
-                          formPreview={form}
-                          permiteEdicao={permiteEdicao}
-                        />
+                        <ModalEditTipoUsuarioButton formPreview={form} />
                       </Row>
                     </Col>
                   </>

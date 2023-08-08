@@ -6,18 +6,12 @@ import { EnderecoUsuarioExternoDTO } from '~/core/dto/endereco-usuario-externo-d
 
 type ModalEditEnderecoButtonProps = {
   formPreview: FormInstance;
-  permiteEdicao: boolean;
 };
 
-const ModalEditEnderecoButton: React.FC<ModalEditEnderecoButtonProps> = ({
-  formPreview,
-  permiteEdicao,
-}) => {
+const ModalEditEnderecoButton: React.FC<ModalEditEnderecoButtonProps> = ({ formPreview }) => {
   const [open, setOpen] = useState(false);
 
   const showModal = () => setOpen(true);
-
-  if (!permiteEdicao) return <></>;
 
   const updateFields = (values: EnderecoUsuarioExternoDTO) => {
     formPreview.setFieldsValue({ ...values });
