@@ -101,7 +101,7 @@ const Login = () => {
 
   const onClickCriarConta = () => navigate(ROUTES.CRIAR_CONTA);
 
-  const onClickEsqueciSenha = () => navigate(ROUTES.REDEFINIR_SENHA);
+  const onClickEsqueciSenha = () => navigate(ROUTES.REDEFINIR_SENHA, { state: login });
 
   return (
     <Col span={14}>
