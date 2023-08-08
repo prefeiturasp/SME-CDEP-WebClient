@@ -8,4 +8,8 @@ export default defineConfig({
     chunkSizeWarningLimit: 1600,
     outDir: 'build',
   },
+  server: {
+    host: 'localhost',
+    port: 3000,
+  },
 });

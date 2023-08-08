@@ -1,6 +1,6 @@
 import { Layout, Row } from 'antd';
 import React from 'react';
-import cdepLogo from '~/assets/cdep-logo.svg';
+import cdepLogo from '~/assets/cdep-logo-centralizado.svg';
 import ExitButton from '../exit-button';
 import { store } from '~/core/redux';
 import { setDeslogar } from '~/core/redux/modules/auth/actions';
@@ -21,7 +21,7 @@ const contentStyle: React.CSSProperties = {
 const Header: React.FC = () => {
   return (
     <Layout.Header style={contentStyle}>
-      <img style={{ height: '50px' }} src={cdepLogo} alt='CDEP LOGO' />
+      <img style={{ height: '75px' }} src={cdepLogo} alt='CDEP LOGO' />
       <Row justify='end' style={{ width: '100%' }}>
         <ExitButton
           onClick={() => {
