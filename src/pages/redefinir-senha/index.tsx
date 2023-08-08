@@ -8,7 +8,7 @@ import usuarioService from '~/core/services/usuario-service';
 
 import { IoInformationCircleSharp } from 'react-icons/io5';
 import { AxiosError } from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import ErroGeralLogin from '~/components/cdep/erro-geral-login';
 import { CDEP_BUTTON_CONTINUAR, CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_LOGIN } from '~/core/constants/ids/input';
@@ -19,15 +19,16 @@ import { setSpinning } from '~/core/redux/modules/spin/actions';
 import Modal from '~/components/lib/modal';
 
 const RedefinirSenha = () => {
-  const dispatch = useAppDispatch();
+  const [form] = useForm();
   const navigate = useNavigate();
+  const location = useLocation();
+  const dispatch = useAppDispatch();
 
   const [erroGeral, setErroGeral] = useState<string[]>();
-  const [mensagemRecuperacaoSenha, setMensagemRecuperacaoSenha] = useState<string>();
   const [openModal, setOpenModal] = useState<boolean>(false);
+  const [mensagemRecuperacaoSenha, setMensagemRecuperacaoSenha] = useState<string>();
 
-  const [form] = useForm();
-
+  const usuarioLogin = location.state;
   const login = useWatch('login', form);
 
   const validateMessages = {
@@ -74,10 +75,10 @@ const RedefinirSenha = () => {
       {openModal ? (
         <Modal
           open
-          title='Esqueci minha senha'
           centered
-          destroyOnClose
           footer={null}
+          destroyOnClose
+          title='Esqueci minha senha'
           onCancel={() => setOpenModal(false)}
         >
           <Typography.Text style={{ fontSize: 16 }}>{mensagemRecuperacaoSenha}</Typography.Text>
@@ -88,9 +89,9 @@ const RedefinirSenha = () => {
       <Col span={14}>
         <Form
           form={form}
-          onFinish={onFinish}
           layout='vertical'
           autoComplete='off'
+          onFinish={onFinish}
           validateMessages={validateMessages}
         >
           <Row justify='center' gutter={[0, 30]}>
@@ -101,16 +102,17 @@ const RedefinirSenha = () => {
             </Col>
             <Col span={24}>
               <Form.Item
-                label='Login'
                 name='login'
+                label='Login'
                 hasFeedback={!login}
+                initialValue={usuarioLogin}
                 rules={[{ required: true }, { min: 5 }]}
               >
                 <Input
-                  placeholder='Informe o login'
-                  suffix={<span />}
                   maxLength={100}
+                  suffix={<span />}
                   id={CDEP_INPUT_LOGIN}
+                  placeholder='Informe o login'
                 />
               </Form.Item>
             </Col>
@@ -128,11 +130,12 @@ const RedefinirSenha = () => {
           <Row justify='center' gutter={[0, 25]} style={{ marginTop: '20px' }}>
             <Col span={24}>
               <Button
-                type='primary'
                 block
+                type='primary'
                 htmlType='submit'
-                style={{ fontWeight: 700 }}
+                disabled={!login}
                 id={CDEP_BUTTON_CONTINUAR}
+                style={{ fontWeight: 700 }}
               >
                 Continuar
               </Button>
