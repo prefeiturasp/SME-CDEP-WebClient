@@ -85,6 +85,7 @@ const MeusDados: React.FC = () => {
   );
 
   const permiteEdicao = meusDados?.tipo !== TipoUsuario.CORESSO;
+  const ocultarCampos = meusDados?.tipo === TipoUsuario.CORESSO;
 
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
@@ -161,87 +162,94 @@ const MeusDados: React.FC = () => {
                     <ModalEditNovaSenhaButton />
                   </Row>
                 </Col>
-                <Col span={24}>
-                  <Row wrap={false} align='middle'>
-                    <InputTelefone
-                      inputProps={{ id: CDEP_INPUT_TELEFONE, disabled: true }}
-                      formItemProps={{
-                        style: { width: '100%', marginRight: '8px' },
-                        required: false,
-                      }}
-                    />
-                    <ModalEditTelefoneButton formPreview={form} permiteEdicao={permiteEdicao} />
-                  </Row>
-                </Col>
-                <Col span={8}>
-                  <Row wrap={false} align='middle'>
-                    <InputCEP
-                      inputProps={{ id: CDEP_INPUT_CEP, disabled: true }}
-                      formItemProps={{
-                        required: false,
-                        style: { width: '100%', marginRight: '8px' },
-                      }}
-                    />
-                  </Row>
-                </Col>
-                <Col span={16}>
-                  <Row wrap={false} align='middle'>
-                    <InputEndereco
-                      inputProps={{ id: CDEP_INPUT_ENDERECO, disabled: true }}
-                      formItemProps={{
-                        required: false,
-                        style: { width: '100%', marginRight: '8px' },
-                      }}
-                    />
-                    <ModalEditEnderecoButton formPreview={form} permiteEdicao={permiteEdicao} />
-                  </Row>
-                </Col>
-                <Col span={8}>
-                  <InputNumero
-                    inputProps={{ id: CDEP_INPUT_NUMERO, disabled: true }}
-                    formItemProps={{ required: false }}
-                  />
-                </Col>
-                <Col span={16}>
-                  <InputComplemento
-                    inputProps={{ id: CDEP_INPUT_COMPLEMENTO, disabled: true }}
-                    formItemProps={{ required: false }}
-                  />
-                </Col>
-                <Col span={24}>
-                  <InputBairro
-                    inputProps={{ id: CDEP_INPUT_BAIRRO, disabled: true }}
-                    formItemProps={{ required: false }}
-                  />
-                </Col>
-                <Col span={16}>
-                  <InputCidade
-                    inputProps={{ id: CDEP_INPUT_CIDADE, disabled: true }}
-                    formItemProps={{ required: false }}
-                  />
-                </Col>
-                <Col span={8}>
-                  <InputEstado
-                    selectProps={{ id: CDEP_SELECT_UF, disabled: true }}
-                    formItemProps={{ required: false }}
-                  />
-                </Col>
-                <Col span={24}>
-                  <Row wrap={false} align='middle'>
-                    <InputTipoUsuario
-                      selectProps={{
-                        disabled: true,
-                        id: CDEP_SELECT_TIPO_USUARIO,
-                        value: tipoUsuario[0]?.label,
-                      }}
-                      formItemProps={{
-                        required: false,
-                        style: { width: '100%', marginRight: '8px' },
-                      }}
-                    />
-                    <ModalEditTipoUsuarioButton formPreview={form} permiteEdicao={permiteEdicao} />
-                  </Row>
-                </Col>
+                {!ocultarCampos && (
+                  <>
+                    <Col span={24}>
+                      <Row wrap={false} align='middle'>
+                        <InputTelefone
+                          inputProps={{ id: CDEP_INPUT_TELEFONE, disabled: true }}
+                          formItemProps={{
+                            style: { width: '100%', marginRight: '8px' },
+                            required: false,
+                          }}
+                        />
+                        <ModalEditTelefoneButton formPreview={form} permiteEdicao={permiteEdicao} />
+                      </Row>
+                    </Col>
+                    <Col span={8}>
+                      <Row wrap={false} align='middle'>
+                        <InputCEP
+                          inputProps={{ id: CDEP_INPUT_CEP, disabled: true }}
+                          formItemProps={{
+                            required: false,
+                            style: { width: '100%', marginRight: '8px' },
+                          }}
+                        />
+                      </Row>
+                    </Col>
+                    <Col span={16}>
+                      <Row wrap={false} align='middle'>
+                        <InputEndereco
+                          inputProps={{ id: CDEP_INPUT_ENDERECO, disabled: true }}
+                          formItemProps={{
+                            required: false,
+                            style: { width: '100%', marginRight: '8px' },
+                          }}
+                        />
+                        <ModalEditEnderecoButton formPreview={form} permiteEdicao={permiteEdicao} />
+                      </Row>
+                    </Col>
+                    <Col span={8}>
+                      <InputNumero
+                        inputProps={{ id: CDEP_INPUT_NUMERO, disabled: true }}
+                        formItemProps={{ required: false }}
+                      />
+                    </Col>
+                    <Col span={16}>
+                      <InputComplemento
+                        inputProps={{ id: CDEP_INPUT_COMPLEMENTO, disabled: true }}
+                        formItemProps={{ required: false }}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <InputBairro
+                        inputProps={{ id: CDEP_INPUT_BAIRRO, disabled: true }}
+                        formItemProps={{ required: false }}
+                      />
+                    </Col>
+                    <Col span={16}>
+                      <InputCidade
+                        inputProps={{ id: CDEP_INPUT_CIDADE, disabled: true }}
+                        formItemProps={{ required: false }}
+                      />
+                    </Col>
+                    <Col span={8}>
+                      <InputEstado
+                        selectProps={{ id: CDEP_SELECT_UF, disabled: true }}
+                        formItemProps={{ required: false }}
+                      />
+                    </Col>
+                    <Col span={24}>
+                      <Row wrap={false} align='middle'>
+                        <InputTipoUsuario
+                          selectProps={{
+                            disabled: true,
+                            id: CDEP_SELECT_TIPO_USUARIO,
+                            value: tipoUsuario[0]?.label,
+                          }}
+                          formItemProps={{
+                            required: false,
+                            style: { width: '100%', marginRight: '8px' },
+                          }}
+                        />
+                        <ModalEditTipoUsuarioButton
+                          formPreview={form}
+                          permiteEdicao={permiteEdicao}
+                        />
+                      </Row>
+                    </Col>
+                  </>
+                )}
               </Row>
             </Form>
           </Col>
