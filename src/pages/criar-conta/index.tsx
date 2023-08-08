@@ -77,6 +77,7 @@ const CriarConta = () => {
   };
 
   const validaCPFExistente = (value: string) => {
+    setCPFExistente([]);
     setLoading(true);
     usuarioService
       .validaCPFExistente(value)
