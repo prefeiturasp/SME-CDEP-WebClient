@@ -5,18 +5,12 @@ import ModalEditTipoUsuario from './modal-edit-tipo-usuario';
 
 type ModalEditTipoUsuarioButtonProps = {
   formPreview: FormInstance;
-  permiteEdicao: boolean;
 };
 
-const ModalEditTipoUsuarioButton: React.FC<ModalEditTipoUsuarioButtonProps> = ({
-  formPreview,
-  permiteEdicao,
-}) => {
+const ModalEditTipoUsuarioButton: React.FC<ModalEditTipoUsuarioButtonProps> = ({ formPreview }) => {
   const [open, setOpen] = useState(false);
 
   const showModal = () => setOpen(true);
-
-  if (!permiteEdicao) return <></>;
 
   const updateFields = (values: { tipo: number }) => {
     formPreview.setFieldValue('tipo', values?.tipo);

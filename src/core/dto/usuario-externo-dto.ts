@@ -13,6 +13,6 @@ export interface UsuarioExternoDTO {
   cep: string;
   senha: string;
   confirmarSenha: string;
-  tipoUsuario: TipoUsuario;
+  tipo: TipoUsuario;
   bairro: string;
 }

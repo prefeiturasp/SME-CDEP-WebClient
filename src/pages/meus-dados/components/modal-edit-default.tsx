@@ -98,6 +98,7 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
         onOk() {
           handleCancel();
         },
+        cancelText: 'Cancelar',
         okButtonProps: { type: 'default' },
         cancelButtonProps: {
           type: 'text',
