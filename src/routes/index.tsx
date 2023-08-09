@@ -9,6 +9,11 @@ import Home from '~/pages/home';
 import Inicial from '~/pages/inicial';
 import Login from '~/pages/login';
 import MeusDados from '~/pages/meus-dados';
+import Credito from '~/pages/cadastro/credito';
+import Autor from '~/pages/cadastro/autor';
+import Editora from '~/pages/cadastro/editora';
+import Assunto from '~/pages/cadastro/assunto';
+import SerieColecao from '~/pages/cadastro/serie-colecao';
 import Principal from '~/pages/principal/index';
 import RedefinirSenha from '~/pages/redefinir-senha';
 import RedefinirSenhaToken from '~/pages/redefinir-senha-token';
@@ -24,6 +29,11 @@ const RoutesConfig = () => {
   const principalPage = createElement(Principal);
   const iniciallPage = createElement(Inicial);
   const meusDadosPage = createElement(MeusDados);
+  const credito = createElement(Credito);
+  const autor = createElement(Autor);
+  const editora = createElement(Editora);
+  const assunto = createElement(Assunto);
+  const serieColecao = createElement(SerieColecao);
   const redefinirSenhaPage = createElement(RedefinirSenha);
   const redefinirSenhaTokenPage = createElement(RedefinirSenhaToken);
 
@@ -36,6 +46,11 @@ const RoutesConfig = () => {
               <Route element={<Auth />}>
                 <Route path={ROUTES.PRINCIPAL} element={iniciallPage} />
                 <Route path={ROUTES.MEUS_DADOS} element={meusDadosPage} />
+                <Route path={ROUTES.CREDITO} element={credito} />
+                <Route path={ROUTES.AUTOR} element={autor} />
+                <Route path={ROUTES.EDITORA} element={editora} />
+                <Route path={ROUTES.ASSUNTO} element={assunto} />
+                <Route path={ROUTES.SERIE_COLECAO} element={serieColecao} />
                 <Route path='*' element={pagNotFound} />
                 <Route path={ROUTES.LOGIN} element={<Navigate to={ROUTES.PRINCIPAL} />} />
               </Route>
