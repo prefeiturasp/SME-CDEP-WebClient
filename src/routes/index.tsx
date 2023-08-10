@@ -10,10 +10,15 @@ import Inicial from '~/pages/inicial';
 import Login from '~/pages/login';
 import MeusDados from '~/pages/meus-dados';
 import Credito from '~/pages/cadastro/credito';
+import CreditoNovo from '~/pages/cadastro/credito/novo';
 import Autor from '~/pages/cadastro/autor';
+import AutorNovo from '~/pages/cadastro/autor/novo';
 import Editora from '~/pages/cadastro/editora';
+import EditoraNova from '~/pages/cadastro/editora/novo';
 import Assunto from '~/pages/cadastro/assunto';
+import AssuntoNovo from '~/pages/cadastro/assunto/novo';
 import SerieColecao from '~/pages/cadastro/serie-colecao';
+import SerieColecaoNovo from '~/pages/cadastro/serie-colecao/novo';
 import Principal from '~/pages/principal/index';
 import RedefinirSenha from '~/pages/redefinir-senha';
 import RedefinirSenhaToken from '~/pages/redefinir-senha-token';
@@ -30,10 +35,15 @@ const RoutesConfig = () => {
   const iniciallPage = createElement(Inicial);
   const meusDadosPage = createElement(MeusDados);
   const credito = createElement(Credito);
+  const creditoNovo = createElement(CreditoNovo);
   const autor = createElement(Autor);
+  const autorNovo = createElement(AutorNovo);
   const editora = createElement(Editora);
+  const editoraNova = createElement(EditoraNova);
   const assunto = createElement(Assunto);
+  const assuntoNovo = createElement(AssuntoNovo);
   const serieColecao = createElement(SerieColecao);
+  const serieColecaoNovo = createElement(SerieColecaoNovo);
   const redefinirSenhaPage = createElement(RedefinirSenha);
   const redefinirSenhaTokenPage = createElement(RedefinirSenhaToken);
 
@@ -47,10 +57,15 @@ const RoutesConfig = () => {
                 <Route path={ROUTES.PRINCIPAL} element={iniciallPage} />
                 <Route path={ROUTES.MEUS_DADOS} element={meusDadosPage} />
                 <Route path={ROUTES.CREDITO} element={credito} />
+                <Route path={ROUTES.CREDITO_NOVO} element={creditoNovo} />
                 <Route path={ROUTES.AUTOR} element={autor} />
+                <Route path={ROUTES.AUTOR_NOVO} element={autorNovo} />
                 <Route path={ROUTES.EDITORA} element={editora} />
+                <Route path={ROUTES.EDITORA_NOVO} element={editoraNova} />
                 <Route path={ROUTES.ASSUNTO} element={assunto} />
+                <Route path={ROUTES.ASSUNTO_NOVO} element={assuntoNovo} />
                 <Route path={ROUTES.SERIE_COLECAO} element={serieColecao} />
+                <Route path={ROUTES.SERIE_COLECAO_NOVO} element={serieColecaoNovo} />
                 <Route path='*' element={pagNotFound} />
                 <Route path={ROUTES.LOGIN} element={<Navigate to={ROUTES.PRINCIPAL} />} />
               </Route>
