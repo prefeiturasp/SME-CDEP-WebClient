@@ -46,7 +46,7 @@ const Credito: React.FC = () => {
 
   return (
     <>
-      <BreadcrumbCDEP menu='Cadastros' paginaPai='Crédito' urlPaginaPai={ROUTES.CREDITO} />
+      <BreadcrumbCDEP menu='Cadastros' title='Crédito' urlMainPage={ROUTES.CREDITO} />
       <HeaderPage title='Crédito'>
         <Col span={24}>
           <Row gutter={[8, 8]}>

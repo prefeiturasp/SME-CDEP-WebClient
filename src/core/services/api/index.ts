@@ -2,6 +2,7 @@ import axios, {
   AxiosError,
   AxiosRequestConfig,
   AxiosResponse,
+  HttpStatusCode,
   InternalAxiosRequestConfig,
 } from 'axios';
 
@@ -11,6 +12,8 @@ import { setDeslogar } from '~/core/redux/modules/auth/actions';
 
 import { store } from '../../redux';
 import autenticacaoService, { URL_AUTENTICACAO_REVALIDAR } from '../autenticacao-service';
+import { setSpinning } from '~/core/redux/modules/spin/actions';
+import { notification } from 'antd';
 
 const config: AxiosRequestConfig = {
   baseURL: import.meta.env.VITE_SME_CDEP_API,
@@ -113,7 +116,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => {
-    if (error?.response?.status === 401) {
+    if (error?.response?.status === HttpStatusCode.Unauthorized) {
       deslogarDoSistema();
     }
 
@@ -124,5 +127,52 @@ api.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+// TODO - Criar uma método genérico e as interfaces!
+const openNotificationError = (erro: any) => {
+  if (erro?.response?.data?.mensagens?.length) {
+    const mensagens: string[] = erro?.response?.data?.mensagens;
+
+    mensagens.forEach((description) => {
+      notification.error({
+        message: 'Erro',
+        description,
+      });
+    });
+  }
+};
+
+export const obterRegistro = (url: string, params: any): Promise<AxiosResponse> | AxiosError => {
+  store.dispatch(setSpinning(true));
+  return api
+    .get(url, params)
+    .catch((error) => {
+      openNotificationError(error);
+      return error;
+    })
+    .finally(() => store.dispatch(setSpinning(false)));
+};
+
+export const inserirRegistro = (url: string, params: any): Promise<AxiosResponse> | AxiosError => {
+  store.dispatch(setSpinning(true));
+  return api
+    .post(url, params)
+    .catch((error) => {
+      openNotificationError(error);
+      return error;
+    })
+    .finally(() => store.dispatch(setSpinning(false)));
+};
+
+export const alterarRegistro = (url: string, params: any): Promise<AxiosResponse> | AxiosError => {
+  store.dispatch(setSpinning(true));
+  return api
+    .put(url, params)
+    .catch((error) => {
+      openNotificationError(error);
+      return error;
+    })
+    .finally(() => store.dispatch(setSpinning(false)));
+};
 
 export default api;

@@ -2,20 +2,19 @@ import { HomeOutlined } from '@ant-design/icons';
 import { Breadcrumb } from 'antd';
 import React from 'react';
 
-type BreadcrumbCDEPProps = {
-  menu: string;
-  paginaPai: string;
-  urlPaginaPai: string;
-  paginaFilha?: string;
+export type BreadcrumbCDEPProps = {
+  menu?: string;
+  mainPage?: string;
+  urlMainPage: string;
+  title: string;
 };
 
 const BreadcrumbCDEP: React.FC<BreadcrumbCDEPProps> = ({
-  menu,
-  paginaPai,
-  urlPaginaPai,
-  paginaFilha = '',
+  menu = 'Menu',
+  mainPage = '',
+  urlMainPage,
+  title = 'Nome da Página',
 }) => {
-  const temPaginaFilha = paginaFilha?.length > 0 ? true : false;
   const items = [
     {
       href: '/',
@@ -35,14 +34,14 @@ const BreadcrumbCDEP: React.FC<BreadcrumbCDEPProps> = ({
       ),
     },
     {
-      href: urlPaginaPai,
-      title: <span>{paginaPai}</span>,
+      href: urlMainPage,
+      title: <span>{mainPage}</span>,
     },
   ];
-  if (temPaginaFilha) {
+  if (title) {
     items.push({
       href: '',
-      title: <span>{paginaFilha}</span>,
+      title: <span>{title}</span>,
     });
   }
   return (

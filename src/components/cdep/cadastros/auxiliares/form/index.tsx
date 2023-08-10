@@ -1,47 +1,64 @@
-import { Col, Row, Input, Form, Button } from 'antd';
+import { Button, Col, Form, Input, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { useNavigate } from 'react-router-dom';
+import { HttpStatusCode } from 'axios';
+import React from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
+import { BreadcrumbCDEPProps } from '~/components/cdep/breadcrumb';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import CardContent from '~/components/lib/card-content';
 import HeaderPage from '~/components/lib/header-page';
 import {
-  CDEP_BUTTON_VOLTAR,
   CDEP_BUTTON_CANCELAR,
   CDEP_BUTTON_NOVO,
+  CDEP_BUTTON_VOLTAR,
 } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_NOVO } from '~/core/constants/ids/input';
-import { ROUTES } from '~/core/enum/routes';
-import { useAppDispatch } from '~/core/hooks/use-redux';
-import { setSpinning } from '~/core/redux/modules/spin/actions';
-import PropTypes from 'prop-types';
-type FormularioNovoProps = {
-  rotaVoltar: ROUTES;
-  rotaCancelar: ROUTES;
-  titulo: string;
+import { alterarRegistro, inserirRegistro } from '~/core/services/api';
+
+export type FormPageProps = {
+  title: string;
+  urlBase: string;
 };
 
-const FormularioNovo: React.FC<FormularioNovoProps> = ({ rotaVoltar, rotaCancelar, titulo }) => {
+export type FormConfigCadastros = {
+  breadcrumb: BreadcrumbCDEPProps;
+  page: FormPageProps;
+};
+
+const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcrumb }) => {
   const navigate = useNavigate();
+  const paramsRoute = useParams();
+
+  const id = paramsRoute?.id || 0;
+
   const [form] = useForm();
-  const dispatch = useAppDispatch();
 
-  const onClickVoltar = () => navigate(rotaVoltar);
-  const onClickCancelar = () => {
-    navigate(rotaCancelar);
+  const onClickVoltar = () => navigate(breadcrumb.urlMainPage);
 
-    //OpenModal De Confirmação
-  };
+  const onClickCancelar = () => alert('cancelar');
+
   const validateMessages = {
     required: 'Campo obrigatório',
     string: {
       range: 'Por favor, digite Nome',
     },
   };
-  const onFinish = (values: string) => {
-    dispatch(setSpinning(true));
+
+  const salvar = async (values: any) => {
     console.log(values);
-    dispatch(setSpinning(false));
+
+    let response = null;
+    if (id) {
+      response = await alterarRegistro(`${page.urlBase}/${id}`, values);
+    } else {
+      response = await inserirRegistro(page.urlBase, values);
+    }
+
+    if (response.status === HttpStatusCode.Ok) {
+      alert('sucesso');
+    }
   };
+
   return (
     <>
       <Col>
@@ -49,10 +66,10 @@ const FormularioNovo: React.FC<FormularioNovoProps> = ({ rotaVoltar, rotaCancela
           form={form}
           layout='vertical'
           autoComplete='off'
-          onFinish={onFinish}
+          onFinish={salvar}
           validateMessages={validateMessages}
         >
-          <HeaderPage title={titulo}>
+          <HeaderPage title={page.title}>
             <Col span={24}>
               <Row gutter={[8, 8]}>
                 <Col>
@@ -104,9 +121,5 @@ const FormularioNovo: React.FC<FormularioNovoProps> = ({ rotaVoltar, rotaCancela
     </>
   );
 };
-FormularioNovo.propTypes = {
-  rotaCancelar: PropTypes.any.isRequired,
-  rotaVoltar: PropTypes.any.isRequired,
-  titulo: PropTypes.string.isRequired,
-};
-export default FormularioNovo;
+
+export default FormCadastrosAuxiliares;

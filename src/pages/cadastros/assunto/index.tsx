@@ -43,7 +43,7 @@ const Assunto: React.FC = () => {
   ];
   return (
     <>
-      <BreadcrumbCDEP menu='Cadastros' paginaPai='Assunto' urlPaginaPai={ROUTES.ASSUNTO} />
+      <BreadcrumbCDEP menu='Cadastros' title='Assunto' urlMainPage={ROUTES.ASSUNTO} />
       <HeaderPage title='Assunto'>
         <Col span={24}>
           <Row gutter={[8, 8]}>

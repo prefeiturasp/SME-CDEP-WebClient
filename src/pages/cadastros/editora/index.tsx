@@ -43,7 +43,7 @@ const Editora: React.FC = () => {
   ];
   return (
     <>
-      <BreadcrumbCDEP menu='Cadastros' paginaPai='Editora' urlPaginaPai={ROUTES.CREDITO} />
+      <BreadcrumbCDEP menu='Cadastros' title='Editora' urlMainPage={ROUTES.CREDITO} />
       <HeaderPage title='Editora'>
         <Col span={24}>
           <Row gutter={[8, 8]}>

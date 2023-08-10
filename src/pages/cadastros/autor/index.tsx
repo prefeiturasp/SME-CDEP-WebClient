@@ -43,7 +43,7 @@ const Autor: React.FC = () => {
   ];
   return (
     <>
-      <BreadcrumbCDEP menu='Cadastros' paginaPai='Autor' urlPaginaPai={ROUTES.CREDITO} />
+      <BreadcrumbCDEP menu='Cadastros' title='Autor' urlMainPage={ROUTES.CREDITO} />
       <HeaderPage title='Autor'>
         <Col span={24}>
           <Row gutter={[8, 8]}>

@@ -44,7 +44,7 @@ const SerieColecao: React.FC = () => {
 
   return (
     <>
-      <BreadcrumbCDEP menu='Cadastros' paginaPai='Série/Coleção' urlPaginaPai={ROUTES.CREDITO} />
+      <BreadcrumbCDEP menu='Cadastros' title='Série/Coleção' urlMainPage={ROUTES.CREDITO} />
       <HeaderPage title='Série/Coleção'>
         <Col span={24}>
           <Row gutter={[8, 8]}>

@@ -10,19 +10,15 @@ import Inicial from '~/pages/inicial';
 import Login from '~/pages/login';
 import MeusDados from '~/pages/meus-dados';
 import Credito from '~/pages/cadastros/credito';
-import CreditoNovo from '~/pages/cadastros/credito/novo';
-import Autor from '~/pages/cadastros/autor';
-import AutorNovo from '~/pages/cadastros/autor/novo';
-import Editora from '~/pages/cadastros/editora';
-import EditoraNova from '~/pages/cadastros/editora/novo';
-import Assunto from '~/pages/cadastros/assunto';
-import AssuntoNovo from '~/pages/cadastros/assunto/novo';
-import SerieColecao from '~/pages/cadastros/serie-colecao';
-import SerieColecaoNovo from '~/pages/cadastros/serie-colecao/novo';
 import Principal from '~/pages/principal/index';
 import RedefinirSenha from '~/pages/redefinir-senha';
 import RedefinirSenhaToken from '~/pages/redefinir-senha-token';
 import Auth from './config/auth';
+import FormConfigCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/config';
+import Autor from '~/pages/cadastros/autor';
+import Assunto from '~/pages/cadastros/assunto';
+import Editora from '~/pages/cadastros/editora';
+import SerieColecao from '~/pages/cadastros/serie-colecao';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
@@ -34,16 +30,6 @@ const RoutesConfig = () => {
   const principalPage = createElement(Principal);
   const iniciallPage = createElement(Inicial);
   const meusDadosPage = createElement(MeusDados);
-  const credito = createElement(Credito);
-  const creditoNovo = createElement(CreditoNovo);
-  const autor = createElement(Autor);
-  const autorNovo = createElement(AutorNovo);
-  const editora = createElement(Editora);
-  const editoraNova = createElement(EditoraNova);
-  const assunto = createElement(Assunto);
-  const assuntoNovo = createElement(AssuntoNovo);
-  const serieColecao = createElement(SerieColecao);
-  const serieColecaoNovo = createElement(SerieColecaoNovo);
   const redefinirSenhaPage = createElement(RedefinirSenha);
   const redefinirSenhaTokenPage = createElement(RedefinirSenhaToken);
 
@@ -56,16 +42,38 @@ const RoutesConfig = () => {
               <Route element={<Auth />}>
                 <Route path={ROUTES.PRINCIPAL} element={iniciallPage} />
                 <Route path={ROUTES.MEUS_DADOS} element={meusDadosPage} />
-                <Route path={ROUTES.CREDITO} element={credito} />
-                <Route path={ROUTES.CREDITO_NOVO} element={creditoNovo} />
-                <Route path={ROUTES.AUTOR} element={autor} />
-                <Route path={ROUTES.AUTOR_NOVO} element={autorNovo} />
-                <Route path={ROUTES.EDITORA} element={editora} />
-                <Route path={ROUTES.EDITORA_NOVO} element={editoraNova} />
-                <Route path={ROUTES.ASSUNTO} element={assunto} />
-                <Route path={ROUTES.ASSUNTO_NOVO} element={assuntoNovo} />
-                <Route path={ROUTES.SERIE_COLECAO} element={serieColecao} />
-                <Route path={ROUTES.SERIE_COLECAO_NOVO} element={serieColecaoNovo} />
+
+                <Route path={ROUTES.CREDITO}>
+                  <Route path='' element={<Credito />} />
+                  <Route path={ROUTES.CREDITO_NOVO} element={<FormConfigCadastrosAuxiliares />} />
+                  <Route path={ROUTES.CREDITO_EDITAR} element={<FormConfigCadastrosAuxiliares />} />
+                </Route>
+                <Route path={ROUTES.AUTOR}>
+                  <Route path='' element={<Autor />} />
+                  <Route path={ROUTES.AUTOR_NOVO} element={<FormConfigCadastrosAuxiliares />} />
+                  <Route path={ROUTES.AUTOR_EDITAR} element={<FormConfigCadastrosAuxiliares />} />
+                </Route>
+                <Route path={ROUTES.EDITORA}>
+                  <Route path='' element={<Editora />} />
+                  <Route path={ROUTES.EDITORA_NOVO} element={<FormConfigCadastrosAuxiliares />} />
+                  <Route path={ROUTES.EDITORA_EDITAR} element={<FormConfigCadastrosAuxiliares />} />
+                </Route>
+                <Route path={ROUTES.ASSUNTO}>
+                  <Route path='' element={<Assunto />} />
+                  <Route path={ROUTES.ASSUNTO_NOVO} element={<FormConfigCadastrosAuxiliares />} />
+                  <Route path={ROUTES.ASSUNTO} element={<FormConfigCadastrosAuxiliares />} />
+                </Route>
+                <Route path={ROUTES.SERIE_COLECAO}>
+                  <Route path='' element={<SerieColecao />} />
+                  <Route
+                    path={ROUTES.SERIE_COLECAO_NOVO}
+                    element={<FormConfigCadastrosAuxiliares />}
+                  />
+                  <Route
+                    path={ROUTES.SERIE_COLECAO_EDITAR}
+                    element={<FormConfigCadastrosAuxiliares />}
+                  />
+                </Route>
                 <Route path='*' element={pagNotFound} />
                 <Route path={ROUTES.LOGIN} element={<Navigate to={ROUTES.PRINCIPAL} />} />
               </Route>
