@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Button, Col, Form, Input, Row, Modal, notification } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { HttpStatusCode } from 'axios';
 import React from 'react';
@@ -13,11 +13,23 @@ import {
   CDEP_BUTTON_VOLTAR,
 } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_NOVO } from '~/core/constants/ids/input';
+import {
+  DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA,
+  DESEJA_CANCELAR_ALTERACOES,
+} from '~/core/constants/mensagens';
 import { alterarRegistro, inserirRegistro } from '~/core/services/api';
+import { Colors } from '~/core/styles/colors';
+const { confirm } = Modal;
+
+type FormPageInputsProps = {
+  name: string;
+  placeholder: string;
+};
 
 export type FormPageProps = {
   title: string;
   urlBase: string;
+  inputs: FormPageInputsProps[];
 };
 
 export type FormConfigCadastros = {
@@ -28,14 +40,9 @@ export type FormConfigCadastros = {
 const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcrumb }) => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
-
-  const id = paramsRoute?.id || 0;
-
   const [form] = useForm();
 
-  const onClickVoltar = () => navigate(breadcrumb.urlMainPage);
-
-  const onClickCancelar = () => alert('cancelar');
+  const id = paramsRoute?.id || 0;
 
   const validateMessages = {
     required: 'Campo obrigatório',
@@ -44,9 +51,56 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
     },
   };
 
-  const salvar = async (values: any) => {
-    console.log(values);
+  const onClickVoltar = () => {
+    if (form.isFieldsTouched()) {
+      confirm({
+        width: 500,
+        title: 'Atenção',
+        icon: <></>,
+        content: DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA,
+        onOk() {
+          navigate(breadcrumb.urlMainPage);
+        },
+        cancelText: 'Cancelar',
+        okButtonProps: { type: 'default' },
+        cancelButtonProps: {
+          type: 'text',
+          style: { color: Colors.TEXT },
+        },
+      });
+    } else {
+      navigate(breadcrumb.urlMainPage);
+    }
+  };
 
+  const onClickCancelar = () => {
+    if (form.isFieldsTouched()) {
+      confirm({
+        width: 500,
+        title: 'Atenção',
+        icon: <></>,
+        content: DESEJA_CANCELAR_ALTERACOES,
+        onOk() {
+          form.resetFields();
+        },
+        cancelText: 'Cancelar',
+        okButtonProps: { type: 'default' },
+        cancelButtonProps: {
+          type: 'text',
+          style: { color: Colors.TEXT },
+        },
+      });
+    }
+  };
+
+  const openNotificationSuccess = () => {
+    notification.success({
+      message: 'Sucesso',
+      description: `Registro ${id ? 'alterado' : 'inserido'} com sucesso!`,
+    });
+  };
+
+  const salvar = async (values: any) => {
     let response = null;
     if (id) {
       response = await alterarRegistro(`${page.urlBase}/${id}`, values);
@@ -55,7 +109,8 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
     }
 
     if (response.status === HttpStatusCode.Ok) {
-      alert('sucesso');
+      openNotificationSuccess();
+      navigate(breadcrumb.urlMainPage);
     }
   };
 
@@ -76,15 +131,20 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
                   <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
                 </Col>
                 <Col>
-                  <Button
-                    block
-                    type='default'
-                    id={CDEP_BUTTON_CANCELAR}
-                    onClick={onClickCancelar}
-                    style={{ fontWeight: 700 }}
-                  >
-                    Cancelar
-                  </Button>
+                  <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
+                    {() => (
+                      <Button
+                        block
+                        type='default'
+                        id={CDEP_BUTTON_CANCELAR}
+                        onClick={onClickCancelar}
+                        style={{ fontWeight: 700 }}
+                        disabled={!form.isFieldsTouched()}
+                      >
+                        Cancelar
+                      </Button>
+                    )}
+                  </Form.Item>
                 </Col>
                 <Col>
                   <Button
@@ -100,21 +160,26 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
               </Row>
             </Col>
           </HeaderPage>
+
           <CardContent>
-            <Form.Item
-              label='Nome'
-              name='nome'
-              rules={[{ required: true }]}
-              style={{ fontWeight: 700 }}
-            >
-              <Input
-                type='text'
-                placeholder='Informe o Nome'
-                maxLength={200}
-                showCount
-                id={CDEP_INPUT_NOVO}
-              />
-            </Form.Item>
+            {page.inputs.map((input) => (
+              // TODO - Criar uma função quando tiver mais campos
+              <Form.Item
+                key={input.name}
+                label='Nome'
+                name={input.name}
+                rules={[{ required: true }]}
+                style={{ fontWeight: 700 }}
+              >
+                <Input
+                  type='text'
+                  placeholder={input.placeholder}
+                  maxLength={200}
+                  showCount
+                  id={CDEP_INPUT_NOVO}
+                />
+              </Form.Item>
+            ))}
           </CardContent>
         </Form>
       </Col>
