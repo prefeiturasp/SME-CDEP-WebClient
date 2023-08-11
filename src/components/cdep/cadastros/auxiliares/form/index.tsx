@@ -123,8 +123,8 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
   const salvar = async (values: any) => {
     let response = null;
     if (id) {
-      response = await alterarRegistro(`${page.urlBase}/${id}`, {
-        ...formInitialValues,
+      response = await alterarRegistro(page.urlBase, {
+        id,
         ...values,
       });
     } else {
