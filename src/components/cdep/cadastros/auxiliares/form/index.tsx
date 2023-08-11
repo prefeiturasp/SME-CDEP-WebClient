@@ -116,7 +116,7 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
   const openNotificationSuccess = () => {
     notification.success({
       message: 'Sucesso',
-      description: `Registro ${id ? 'alterado' : 'Inserido'} com sucesso!`,
+      description: `Registro ${id ? 'alterado' : 'inserido'} com sucesso!`,
     });
   };
 
