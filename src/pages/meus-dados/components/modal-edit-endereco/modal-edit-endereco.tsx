@@ -65,8 +65,8 @@ const ModalEditEndereco: React.FC<ModalEditEnderecoProps> = ({
         const data = resposta.data;
         const { bairro, uf: estado, complemento, localidade: cidade, logradouro: endereco } = data;
 
-        data && form.getFieldInstance('numero').focus();
-        HttpStatusCode.NoContent && form.getFieldInstance('endereco').focus();
+        HttpStatusCode.Ok && form.getFieldInstance('numero').focus();
+        resposta.status === HttpStatusCode.NoContent && form.getFieldInstance('endereco').focus();
 
         setObterCEP({ ...data });
         form.setFieldsValue({
