@@ -1,10 +1,12 @@
 import axios, {
   AxiosError,
+  AxiosPromise,
   AxiosRequestConfig,
   AxiosResponse,
   HttpStatusCode,
   InternalAxiosRequestConfig,
 } from 'axios';
+import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 
 import dayjs from 'dayjs';
 
@@ -142,13 +144,28 @@ const openNotificationError = (erro: any) => {
   }
 };
 
-export const obterRegistro = (url: string, params: any): Promise<AxiosResponse> | AxiosError => {
+type ApiResult<T> = {
+  dados: T;
+  sucesso: boolean;
+  mensagens: string[];
+};
+
+export const obterRegistro = async <T>(url: string): Promise<ApiResult<T>> => {
   store.dispatch(setSpinning(true));
   return api
-    .get(url, params)
-    .catch((error) => {
+    .get(url)
+    .then((response: AxiosResponse<T>): ApiResult<T> => {
+      return { sucesso: true, dados: response?.data, mensagens: [] };
+    })
+    .catch((error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
+      const mensagens = error?.response?.data?.mensagens?.length
+        ? error?.response?.data?.mensagens
+        : [];
+
+      // TODO Fiz modal error
       openNotificationError(error);
-      return error;
+
+      return { sucesso: false, mensagens, dados: null };
     })
     .finally(() => store.dispatch(setSpinning(false)));
 };

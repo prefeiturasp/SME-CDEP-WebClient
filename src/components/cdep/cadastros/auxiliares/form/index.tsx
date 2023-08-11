@@ -1,7 +1,7 @@
-import { Button, Col, Form, Input, Row, Modal, notification } from 'antd';
+import { Button, Col, Form, Input, Modal, Row, notification } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { HttpStatusCode } from 'axios';
-import React from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BreadcrumbCDEPProps } from '~/components/cdep/breadcrumb';
 import ButtonVoltar from '~/components/cdep/button/voltar';
@@ -14,10 +14,10 @@ import {
 } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_NOVO } from '~/core/constants/ids/input';
 import {
-  DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA,
   DESEJA_CANCELAR_ALTERACOES,
+  DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA,
 } from '~/core/constants/mensagens';
-import { alterarRegistro, inserirRegistro } from '~/core/services/api';
+import { alterarRegistro, inserirRegistro, obterRegistro } from '~/core/services/api';
 import { Colors } from '~/core/styles/colors';
 const { confirm } = Modal;
 
@@ -42,6 +42,8 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
   const paramsRoute = useParams();
   const [form] = useForm();
 
+  const [formInitialValues, setFormInitialValues] = useState({});
+
   const id = paramsRoute?.id || 0;
 
   const validateMessages = {
@@ -50,6 +52,24 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
       range: 'Por favor, digite Nome',
     },
   };
+
+  const carregarDados = useCallback(async () => {
+    const resposta = await obterRegistro<any>(`${page.urlBase}/${id}`);
+
+    if (resposta.sucesso) {
+      setFormInitialValues(resposta.dados);
+    }
+  }, [page, id]);
+
+  useEffect(() => {
+    if (id) {
+      carregarDados();
+    }
+  }, [carregarDados, id]);
+
+  useEffect(() => {
+    form.resetFields();
+  }, [form, formInitialValues]);
 
   const onClickVoltar = () => {
     if (form.isFieldsTouched()) {
@@ -103,7 +123,10 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
   const salvar = async (values: any) => {
     let response = null;
     if (id) {
-      response = await alterarRegistro(`${page.urlBase}/${id}`, values);
+      response = await alterarRegistro(`${page.urlBase}/${id}`, {
+        ...formInitialValues,
+        ...values,
+      });
     } else {
       response = await inserirRegistro(page.urlBase, values);
     }
@@ -123,6 +146,7 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
           autoComplete='off'
           onFinish={salvar}
           validateMessages={validateMessages}
+          initialValues={formInitialValues}
         >
           <HeaderPage title={page.title}>
             <Col span={24}>
