@@ -1,6 +1,6 @@
 import { Button, Col, Form, Input, Row, Select } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { AxiosError } from 'axios';
+import { AxiosError, HttpStatusCode } from 'axios';
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ErroGeralLogin from '~/components/cdep/erro-geral-login';
@@ -113,7 +113,7 @@ const CriarConta = () => {
         const { bairro, uf: estado, complemento, localidade: cidade, logradouro: endereco } = data;
 
         data && form.getFieldInstance('numero').focus();
-        resposta.status === 204 && form.getFieldInstance('endereco').focus();
+        HttpStatusCode.NoContent && form.getFieldInstance('endereco').focus();
 
         setObterCEP({ ...data });
         form.setFieldsValue({

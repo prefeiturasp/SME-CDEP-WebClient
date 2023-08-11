@@ -24,7 +24,7 @@ import ModalEditDefault from '../modal-edit-default';
 import { RetornoCEPDTO } from '~/core/dto/retorno-cep-dto';
 import enderecoService from '~/core/services/endereco-service';
 import { removerTudoQueNaoEhDigito } from '~/core/utils/functions';
-import { AxiosError } from 'axios';
+import { AxiosError, HttpStatusCode } from 'axios';
 import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 
 type ModalEditEnderecoProps = {
@@ -66,7 +66,7 @@ const ModalEditEndereco: React.FC<ModalEditEnderecoProps> = ({
         const { bairro, uf: estado, complemento, localidade: cidade, logradouro: endereco } = data;
 
         data && form.getFieldInstance('numero').focus();
-        resposta.status === 204 && form.getFieldInstance('endereco').focus();
+        HttpStatusCode.NoContent && form.getFieldInstance('endereco').focus();
 
         setObterCEP({ ...data });
         form.setFieldsValue({
