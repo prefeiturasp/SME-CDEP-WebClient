@@ -1,7 +1,7 @@
 import { FC } from 'react';
 import { Space, Typography } from 'antd';
 import { EntidadeBaseAuditavel } from '~/core/dto/auditoria-dto';
-import { formatarDataHora } from '~/core/utils/functions';
+import { formatarDataHoraAuditoria } from '~/core/utils/functions';
 
 interface InfoAuditoriaProps {
   rf: string;
@@ -17,7 +17,7 @@ interface AuditoriaProps {
 const InfoAuditoria: FC<InfoAuditoriaProps> = ({ label, autor, rf, data }) => {
   return (
     <Typography.Text strong>
-      {`${label} por ${autor} ${rf}`} em {formatarDataHora(data)}
+      {`${label} por ${autor} ${rf}`} em {formatarDataHoraAuditoria(data)}
     </Typography.Text>
   );
 };
