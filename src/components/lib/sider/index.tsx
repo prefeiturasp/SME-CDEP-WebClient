@@ -43,7 +43,6 @@ const Sider: React.FC = () => {
   const navigate = useNavigate();
 
   const [collapsed, setCollapsed] = useState(true);
-
   return (
     <SiderContainer
       width={collapsed ? 88 : 264}

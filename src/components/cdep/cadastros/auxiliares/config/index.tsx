@@ -4,6 +4,7 @@ import { ROUTES } from '~/core/enum/routes';
 
 import { useLocation, useParams } from 'react-router-dom';
 import FormCadastrosAuxiliares, { FormConfigCadastros } from '../form';
+import { INPUTS_NAMES } from '~/core/constants/inputs-cadastros';
 
 const FormConfigCadastrosAuxiliares: React.FC = () => {
   const paramsRoute = useParams();
@@ -21,6 +22,12 @@ const FormConfigCadastrosAuxiliares: React.FC = () => {
       page: {
         title: 'Crédito',
         urlBase: 'v1/credito',
+        inputs: [
+          {
+            name: INPUTS_NAMES.TEXT.NOME,
+            placeholder: 'Informe o nome do crédito',
+          },
+        ],
       },
     },
     {
@@ -32,6 +39,12 @@ const FormConfigCadastrosAuxiliares: React.FC = () => {
       page: {
         title: 'Autor',
         urlBase: 'v1/autor',
+        inputs: [
+          {
+            name: INPUTS_NAMES.TEXT.NOME,
+            placeholder: 'Informe o nome do autor da obra',
+          },
+        ],
       },
     },
     {
@@ -43,6 +56,12 @@ const FormConfigCadastrosAuxiliares: React.FC = () => {
       page: {
         title: 'Editora',
         urlBase: 'v1/editora',
+        inputs: [
+          {
+            name: INPUTS_NAMES.TEXT.NOME,
+            placeholder: 'Informe o nome da editora da obra',
+          },
+        ],
       },
     },
     {
@@ -54,6 +73,12 @@ const FormConfigCadastrosAuxiliares: React.FC = () => {
       page: {
         title: 'Assunto',
         urlBase: 'v1/assunto',
+        inputs: [
+          {
+            name: INPUTS_NAMES.TEXT.NOME,
+            placeholder: 'Informe o título do assunto',
+          },
+        ],
       },
     },
     {
@@ -65,6 +90,12 @@ const FormConfigCadastrosAuxiliares: React.FC = () => {
       page: {
         title: 'Série/Coleção',
         urlBase: 'v1/seriecolecao',
+        inputs: [
+          {
+            name: INPUTS_NAMES.TEXT.NOME,
+            placeholder: 'Informe o título da série ou coleção',
+          },
+        ],
       },
     },
   ];
