@@ -113,7 +113,7 @@ const CriarConta = () => {
         const { bairro, uf: estado, complemento, localidade: cidade, logradouro: endereco } = data;
 
         data && form.getFieldInstance('numero').focus();
-        HttpStatusCode.NoContent && form.getFieldInstance('endereco').focus();
+        resposta.status === HttpStatusCode.NoContent && form.getFieldInstance('endereco').focus();
 
         setObterCEP({ ...data });
         form.setFieldsValue({
