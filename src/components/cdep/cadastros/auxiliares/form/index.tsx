@@ -3,12 +3,14 @@ import { useForm } from 'antd/es/form/Form';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BreadcrumbCDEPProps } from '~/components/cdep/breadcrumb';
+import ButtonExcluir from '~/components/cdep/button/excluir';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import Auditoria from '~/components/cdep/text/auditoria';
 import CardContent from '~/components/lib/card-content';
 import HeaderPage from '~/components/lib/header-page';
 import {
   CDEP_BUTTON_CANCELAR,
+  CDEP_BUTTON_EXCLUIR,
   CDEP_BUTTON_NOVO,
   CDEP_BUTTON_VOLTAR,
 } from '~/core/constants/ids/button/intex';
@@ -16,9 +18,15 @@ import { CDEP_INPUT_NOVO } from '~/core/constants/ids/input';
 import {
   DESEJA_CANCELAR_ALTERACOES,
   DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA,
+  DESEJA_EXCLUIR_ACERVO,
 } from '~/core/constants/mensagens';
 import { CadastroAuxiliarDTO } from '~/core/dto/cadastro-auxiliar-dto';
-import { alterarRegistro, inserirRegistro, obterRegistro } from '~/core/services/api';
+import {
+  alterarRegistro,
+  deletarRegistro,
+  inserirRegistro,
+  obterRegistro,
+} from '~/core/services/api';
 import { Colors } from '~/core/styles/colors';
 const { confirm } = Modal;
 
@@ -114,13 +122,6 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
     }
   };
 
-  const openNotificationSuccess = () => {
-    notification.success({
-      message: 'Sucesso',
-      description: `Registro ${id ? 'alterado' : 'inserido'} com sucesso!`,
-    });
-  };
-
   const salvar = async (values: any) => {
     let response = null;
     if (id) {
@@ -133,8 +134,39 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
     }
 
     if (response.sucesso) {
-      openNotificationSuccess();
+      notification.success({
+        message: 'Sucesso',
+        description: `Registro ${id ? 'alterado' : 'inserido'} com sucesso!`,
+      });
       navigate(breadcrumb.urlMainPage);
+    }
+  };
+
+  const onClickExcluir = () => {
+    if (id) {
+      confirm({
+        width: 500,
+        title: 'Atenção',
+        icon: <></>,
+        content: DESEJA_EXCLUIR_ACERVO,
+        onOk() {
+          deletarRegistro(`${page.urlBase}/${id}`).then((response) => {
+            if (response.sucesso) {
+              notification.success({
+                message: 'Sucesso',
+                description: 'Acervo excluído com sucesso',
+              });
+              navigate(breadcrumb.urlMainPage);
+            }
+          });
+        },
+        cancelText: 'Cancelar',
+        okButtonProps: { type: 'default' },
+        cancelButtonProps: {
+          type: 'text',
+          style: { color: Colors.TEXT },
+        },
+      });
     }
   };
 
@@ -155,6 +187,13 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
                 <Col>
                   <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
                 </Col>
+                {id ? (
+                  <Col>
+                    <ButtonExcluir id={CDEP_BUTTON_EXCLUIR} onClick={onClickExcluir} />
+                  </Col>
+                ) : (
+                  <></>
+                )}
                 <Col>
                   <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
                     {() => (

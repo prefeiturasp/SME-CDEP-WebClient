@@ -208,4 +208,24 @@ export const alterarRegistro = async <T>(url: string, params: any): Promise<ApiR
     .finally(() => store.dispatch(setSpinning(false)));
 };
 
+export const deletarRegistro = async <T>(url: string): Promise<ApiResult<T>> => {
+  store.dispatch(setSpinning(true));
+  return api
+    .delete(url)
+    .then((response: AxiosResponse<T>): ApiResult<T> => {
+      return { sucesso: true, dados: response?.data, mensagens: [] };
+    })
+    .catch((error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
+      const mensagens = error?.response?.data?.mensagens?.length
+        ? error?.response?.data?.mensagens
+        : [];
+
+      // TODO modal error
+      openNotificationError(mensagens);
+
+      return { sucesso: false, mensagens, dados: null };
+    })
+    .finally(() => store.dispatch(setSpinning(false)));
+};
+
 export default api;
