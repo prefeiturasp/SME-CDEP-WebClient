@@ -16,7 +16,7 @@ interface AuditoriaProps {
 
 const InfoAuditoria: FC<InfoAuditoriaProps> = ({ label, autor, rf, data }) => {
   return (
-    <Typography.Text strong>
+    <Typography.Text style={{ fontSize: 9, fontWeight: 700 }}>
       {`${label} por ${autor} ${`(${rf})`}`} em {formatarDataHoraAuditoria(data)}
     </Typography.Text>
   );
