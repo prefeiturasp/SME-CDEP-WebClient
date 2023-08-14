@@ -1,10 +1,10 @@
 import { Button, Col, Form, Input, Modal, Row, notification } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { HttpStatusCode } from 'axios';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BreadcrumbCDEPProps } from '~/components/cdep/breadcrumb';
 import ButtonVoltar from '~/components/cdep/button/voltar';
+import Auditoria from '~/components/cdep/text/auditoria';
 import CardContent from '~/components/lib/card-content';
 import HeaderPage from '~/components/lib/header-page';
 import {
@@ -17,6 +17,7 @@ import {
   DESEJA_CANCELAR_ALTERACOES,
   DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA,
 } from '~/core/constants/mensagens';
+import { CadastroAuxiliarDTO } from '~/core/dto/cadastro-auxiliar-dto';
 import { alterarRegistro, inserirRegistro, obterRegistro } from '~/core/services/api';
 import { Colors } from '~/core/styles/colors';
 const { confirm } = Modal;
@@ -42,7 +43,7 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
   const paramsRoute = useParams();
   const [form] = useForm();
 
-  const [formInitialValues, setFormInitialValues] = useState({});
+  const [formInitialValues, setFormInitialValues] = useState<CadastroAuxiliarDTO>();
 
   const id = paramsRoute?.id || 0;
 
@@ -131,7 +132,7 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
       response = await inserirRegistro(page.urlBase, values);
     }
 
-    if (response.status === HttpStatusCode.Ok) {
+    if (response.sucesso) {
       openNotificationSuccess();
       navigate(breadcrumb.urlMainPage);
     }
@@ -178,7 +179,7 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
                     id={CDEP_BUTTON_NOVO}
                     style={{ fontWeight: 700 }}
                   >
-                    Salvar
+                    {id ? 'Alterar' : 'Salvar'}
                   </Button>
                 </Col>
               </Row>
@@ -193,7 +194,6 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
                 label='Nome'
                 name={input.name}
                 rules={[{ required: true }]}
-                style={{ fontWeight: 700 }}
               >
                 <Input
                   type='text'
@@ -204,6 +204,7 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
                 />
               </Form.Item>
             ))}
+            <Auditoria dados={formInitialValues} />
           </CardContent>
         </Form>
       </Col>

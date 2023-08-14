@@ -1,5 +1,5 @@
+import { Col, Row, Typography } from 'antd';
 import { FC } from 'react';
-import { Space, Typography } from 'antd';
 import { EntidadeBaseAuditavel } from '~/core/dto/auditoria-dto';
 import { formatarDataHoraAuditoria } from '~/core/utils/functions';
 
@@ -11,7 +11,7 @@ interface InfoAuditoriaProps {
 }
 
 interface AuditoriaProps {
-  dados: EntidadeBaseAuditavel;
+  dados: EntidadeBaseAuditavel | undefined;
 }
 
 const InfoAuditoria: FC<InfoAuditoriaProps> = ({ label, autor, rf, data }) => {
@@ -23,17 +23,28 @@ const InfoAuditoria: FC<InfoAuditoriaProps> = ({ label, autor, rf, data }) => {
 };
 
 const Auditoria: FC<AuditoriaProps> = ({ dados }) => {
+  if (!dados?.criadoPor) return <></>;
+
   const { criadoPor, criadoEm, criadoLogin, alteradoLogin, alteradoPor, alteradoEm } = dados;
 
   return (
-    <Space direction='vertical'>
+    <Row>
       {criadoPor && (
-        <InfoAuditoria label='INSERIDO' autor={criadoPor} rf={criadoLogin} data={criadoEm} />
+        <Col span={24}>
+          <InfoAuditoria label='INSERIDO' autor={criadoPor} rf={criadoLogin} data={criadoEm} />
+        </Col>
       )}
       {alteradoPor && (
-        <InfoAuditoria label='ALTERADO' autor={alteradoPor} rf={alteradoLogin} data={alteradoEm} />
+        <Col span={24}>
+          <InfoAuditoria
+            label='ALTERADO'
+            autor={alteradoPor}
+            rf={alteradoLogin}
+            data={alteradoEm}
+          />
+        </Col>
       )}
-    </Space>
+    </Row>
   );
 };
 

@@ -131,10 +131,8 @@ api.interceptors.response.use(
 );
 
 // TODO - Criar uma método genérico e as interfaces!
-const openNotificationError = (erro: any) => {
-  if (erro?.response?.data?.mensagens?.length) {
-    const mensagens: string[] = erro?.response?.data?.mensagens;
-
+const openNotificationError = (mensagens: string[]) => {
+  if (mensagens?.length) {
     mensagens.forEach((description) => {
       notification.error({
         message: 'Erro',
@@ -162,32 +160,50 @@ export const obterRegistro = async <T>(url: string): Promise<ApiResult<T>> => {
         ? error?.response?.data?.mensagens
         : [];
 
-      // TODO Fiz modal error
-      openNotificationError(error);
+      // TODO modal error
+      openNotificationError(mensagens);
 
       return { sucesso: false, mensagens, dados: null };
     })
     .finally(() => store.dispatch(setSpinning(false)));
 };
 
-export const inserirRegistro = (url: string, params: any): Promise<AxiosResponse> | AxiosError => {
+export const inserirRegistro = async <T>(url: string, params: any): Promise<ApiResult<T>> => {
   store.dispatch(setSpinning(true));
   return api
     .post(url, params)
-    .catch((error) => {
-      openNotificationError(error);
-      return error;
+    .then((response: AxiosResponse<T>): ApiResult<T> => {
+      return { sucesso: true, dados: response?.data, mensagens: [] };
+    })
+    .catch((error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
+      const mensagens = error?.response?.data?.mensagens?.length
+        ? error?.response?.data?.mensagens
+        : [];
+
+      // TODO modal error
+      openNotificationError(mensagens);
+
+      return { sucesso: false, mensagens, dados: null };
     })
     .finally(() => store.dispatch(setSpinning(false)));
 };
 
-export const alterarRegistro = (url: string, params: any): Promise<AxiosResponse> | AxiosError => {
+export const alterarRegistro = async <T>(url: string, params: any): Promise<ApiResult<T>> => {
   store.dispatch(setSpinning(true));
   return api
     .put(url, params)
-    .catch((error) => {
-      openNotificationError(error);
-      return error;
+    .then((response: AxiosResponse<T>): ApiResult<T> => {
+      return { sucesso: true, dados: response?.data, mensagens: [] };
+    })
+    .catch((error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
+      const mensagens = error?.response?.data?.mensagens?.length
+        ? error?.response?.data?.mensagens
+        : [];
+
+      // TODO modal error
+      openNotificationError(mensagens);
+
+      return { sucesso: false, mensagens, dados: null };
     })
     .finally(() => store.dispatch(setSpinning(false)));
 };
