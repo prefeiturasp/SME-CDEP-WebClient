@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, Row, Select } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { AxiosError } from 'axios';
-import { useState } from 'react';
+import { AxiosError, HttpStatusCode } from 'axios';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ErroGeralLogin from '~/components/cdep/erro-geral-login';
 import InputBairro from '~/components/cdep/input/bairro';
@@ -45,13 +45,22 @@ import { RetornoCEPDTO } from '~/core/dto/retorno-cep-dto';
 
 const CriarConta = () => {
   const [form] = useForm();
+
   const navigate = useNavigate();
   const dispatch = useAppDispatch();
 
-  const [loading, setLoading] = useState<boolean>(false);
+  const [erroCPF, setErroCPF] = useState<boolean>(false);
   const [erroGeral, setErroGeral] = useState<string[]>();
+  const [loadingCPF, setLoadingCPF] = useState<boolean>(false);
+  const [loadingCEP, setLoadingCEP] = useState<boolean>(false);
   const [CPFExistente, setCPFExistente] = useState<string[]>();
+  const [CEPExistente, setCEPExistente] = useState<string[]>();
   const [obterCEP, setObterCEP] = useState<RetornoCEPDTO | undefined>();
+
+  useEffect(() => {
+    form.getFieldInstance('cpf').focus();
+    erroCPF && form.getFieldInstance('cpf').focus();
+  }, [erroCPF, form]);
 
   const validateMessages = {
     required: 'Campo obrigatório',
@@ -78,38 +87,36 @@ const CriarConta = () => {
 
   const validaCPFExistente = (value: string) => {
     setCPFExistente([]);
-    setLoading(true);
+    setLoadingCPF(true);
     usuarioService
       .validaCPFExistente(value)
+      .then((resposta) => {
+        !resposta.data && form.getFieldInstance('nome').focus();
+      })
       .catch((erro: AxiosError<RetornoBaseDTO>) => {
         const dataErro = erro?.response?.data;
 
         if (dataErro?.mensagens?.length) {
+          setErroCPF(true);
           setCPFExistente(dataErro.mensagens);
-          return;
         }
       })
-      .finally(() => setLoading(false));
+      .finally(() => setLoadingCPF(false));
   };
 
   const getCEP = (value: string) => {
-    setLoading(true);
+    setLoadingCEP(true);
     enderecoService
       .obterDadosCEP(value)
       .then((resposta) => {
         const data = resposta.data;
-        const {
-          cep,
-          bairro,
-          uf: estado,
-          complemento,
-          localidade: cidade,
-          logradouro: endereco,
-        } = data;
+        const { bairro, uf: estado, complemento, localidade: cidade, logradouro: endereco } = data;
+
+        data && form.getFieldInstance('numero').focus();
+        resposta.status === HttpStatusCode.NoContent && form.getFieldInstance('endereco').focus();
 
         setObterCEP({ ...data });
         form.setFieldsValue({
-          cep,
           estado,
           bairro,
           cidade,
@@ -117,7 +124,15 @@ const CriarConta = () => {
           complemento,
         });
       })
-      .finally(() => setLoading(false));
+      .catch((erro: AxiosError<RetornoBaseDTO>) => {
+        const dataErro = erro?.response?.data;
+
+        if (dataErro?.mensagens?.length) {
+          setErroCPF(true);
+          setCEPExistente(dataErro.mensagens);
+        }
+      })
+      .finally(() => setLoadingCEP(false));
   };
 
   const onFinish = (values: UsuarioExternoDTO) => {
@@ -149,10 +164,11 @@ const CriarConta = () => {
             <InputCPF
               formItemProps={{
                 help: CPFExistente,
-                hasFeedback: loading,
-                validateStatus: CPFExistente?.length ? 'error' : loading ? 'validating' : '',
+                hasFeedback: loadingCPF,
+                validateStatus: CPFExistente?.length ? 'error' : loadingCPF ? 'validating' : '',
               }}
               inputProps={{
+                name: 'cpf',
                 id: CDEP_INPUT_CPF,
                 onChange: (e: React.ChangeEvent<HTMLInputElement>) => {
                   const value = removerTudoQueNaoEhDigito(e.target.value);
@@ -179,8 +195,9 @@ const CriarConta = () => {
           <Col span={24}>
             <InputCEP
               formItemProps={{
-                hasFeedback: loading,
-                validateStatus: loading ? 'validating' : '',
+                help: CEPExistente,
+                hasFeedback: loadingCEP,
+                validateStatus: CEPExistente?.length ? 'error' : loadingCEP ? 'validating' : '',
               }}
               inputProps={{
                 id: CDEP_INPUT_CEP,
