@@ -11,7 +11,7 @@ interface InfoAuditoriaProps {
 }
 
 interface AuditoriaProps {
-  dadosAuditoria: EntidadeBaseAuditavel;
+  dados: EntidadeBaseAuditavel;
 }
 
 const InfoAuditoria: FC<InfoAuditoriaProps> = ({ label, autor, rf, data }) => {
@@ -22,9 +22,8 @@ const InfoAuditoria: FC<InfoAuditoriaProps> = ({ label, autor, rf, data }) => {
   );
 };
 
-const Auditoria: FC<AuditoriaProps> = ({ dadosAuditoria }) => {
-  const { criadoPor, criadoEm, criadoLogin, alteradoLogin, alteradoPor, alteradoEm } =
-    dadosAuditoria;
+const Auditoria: FC<AuditoriaProps> = ({ dados }) => {
+  const { criadoPor, criadoEm, criadoLogin, alteradoLogin, alteradoPor, alteradoEm } = dados;
 
   return (
     <Space direction='vertical'>
