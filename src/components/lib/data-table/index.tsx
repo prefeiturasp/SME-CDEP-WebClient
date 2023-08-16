@@ -95,6 +95,7 @@ const DataTable = <T extends object>({ filters, url, columns, ...rest }: DataTab
         onChange={handleTableChange}
         bordered
         locale={{ emptyText: 'Sem dados' }}
+        size='small'
         {...rest}
       />
     </>
