@@ -66,27 +66,14 @@ const Login = () => {
     setErroGeral([ERRO_LOGIN]);
   };
 
-  const autenticarCDEP = (loginValidado: string) => {
-    dispatch(setSpinning(true));
-    autenticacaoService
-      .listarPerfisUsuario(loginValidado)
-      .then((resposta) => {
-        if (resposta?.data?.autenticado) {
-          window.clarity('identify', loginValidado);
-          dispatch(setDadosLogin(resposta.data));
-        }
-      })
-      .catch(validarExibirErros)
-      .finally(() => dispatch(setSpinning(false)));
-  };
-
   const onFinish = (values: AutenticacaoDTO) => {
     dispatch(setSpinning(true));
     autenticacaoService
       .autenticar(values)
       .then((resposta) => {
-        if (resposta?.data?.login) {
-          autenticarCDEP(resposta.data.login);
+        if (resposta?.data?.autenticado) {
+          window.clarity('identify', resposta.data.usuarioLogin);
+          dispatch(setDadosLogin(resposta.data));
         }
       })
       .catch(validarExibirErros)
@@ -101,7 +88,7 @@ const Login = () => {
 
   const onClickCriarConta = () => navigate(ROUTES.CRIAR_CONTA);
 
-  const onClickEsqueciSenha = () => navigate(ROUTES.REDEFINIR_SENHA);
+  const onClickEsqueciSenha = () => navigate(ROUTES.REDEFINIR_SENHA, { state: login });
 
   return (
     <Col span={14}>

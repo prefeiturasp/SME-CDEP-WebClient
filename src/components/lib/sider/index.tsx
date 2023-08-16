@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import { BoxShadow, Colors } from '~/core/styles/colors';
 
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import { FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '~/core/enum/routes';
+import { FaUser, FaUserPlus } from 'react-icons/fa';
 
 const SiderContainer = styled(Layout.Sider)`
   box-shadow: ${BoxShadow.DEFAULT};
@@ -43,7 +43,6 @@ const Sider: React.FC = () => {
   const navigate = useNavigate();
 
   const [collapsed, setCollapsed] = useState(true);
-
   return (
     <SiderContainer
       width={collapsed ? 88 : 264}
@@ -80,6 +79,26 @@ const Sider: React.FC = () => {
         <MenuGroup onClick={() => navigate(ROUTES.MEUS_DADOS)}>
           <FaUser size={24} />
           <div>Meus dados</div>
+        </MenuGroup>
+        <MenuGroup onClick={() => navigate(ROUTES.CREDITO)}>
+          <FaUserPlus size={24} />
+          <div>Crédito</div>
+        </MenuGroup>
+        <MenuGroup onClick={() => navigate(ROUTES.AUTOR)}>
+          <FaUserPlus size={24} />
+          <div>Autor</div>
+        </MenuGroup>
+        <MenuGroup onClick={() => navigate(ROUTES.EDITORA)}>
+          <FaUserPlus size={24} />
+          <div>Editora</div>
+        </MenuGroup>
+        <MenuGroup onClick={() => navigate(ROUTES.ASSUNTO)}>
+          <FaUserPlus size={24} />
+          <div>Assunto</div>
+        </MenuGroup>
+        <MenuGroup onClick={() => navigate(ROUTES.SERIE_COLECAO)}>
+          <FaUserPlus size={24} />
+          <div>Série/Coleção</div>
         </MenuGroup>
       </MenuContainer>
     </SiderContainer>

@@ -1,9 +1,12 @@
 import axios, {
   AxiosError,
+  AxiosPromise,
   AxiosRequestConfig,
   AxiosResponse,
+  HttpStatusCode,
   InternalAxiosRequestConfig,
 } from 'axios';
+import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 
 import dayjs from 'dayjs';
 
@@ -11,6 +14,8 @@ import { setDeslogar } from '~/core/redux/modules/auth/actions';
 
 import { store } from '../../redux';
 import autenticacaoService, { URL_AUTENTICACAO_REVALIDAR } from '../autenticacao-service';
+import { setSpinning } from '~/core/redux/modules/spin/actions';
+import { notification } from 'antd';
 
 const config: AxiosRequestConfig = {
   baseURL: import.meta.env.VITE_SME_CDEP_API,
@@ -113,7 +118,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response: AxiosResponse) => response,
   (error: AxiosError) => {
-    if (error?.response?.status === 401) {
+    if (error?.response?.status === HttpStatusCode.Unauthorized) {
       deslogarDoSistema();
     }
 
@@ -124,5 +129,103 @@ api.interceptors.response.use(
     return Promise.reject(error);
   },
 );
+
+// TODO - Criar uma método genérico e as interfaces!
+const openNotificationError = (mensagens: string[]) => {
+  if (mensagens?.length) {
+    mensagens.forEach((description) => {
+      notification.error({
+        message: 'Erro',
+        description,
+      });
+    });
+  }
+};
+
+type ApiResult<T> = {
+  dados: T;
+  sucesso: boolean;
+  mensagens: string[];
+};
+
+export const obterRegistro = async <T>(url: string): Promise<ApiResult<T>> => {
+  store.dispatch(setSpinning(true));
+  return api
+    .get(url)
+    .then((response: AxiosResponse<T>): ApiResult<T> => {
+      return { sucesso: true, dados: response?.data, mensagens: [] };
+    })
+    .catch((error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
+      const mensagens = error?.response?.data?.mensagens?.length
+        ? error?.response?.data?.mensagens
+        : [];
+
+      // TODO modal error
+      openNotificationError(mensagens);
+
+      return { sucesso: false, mensagens, dados: null };
+    })
+    .finally(() => store.dispatch(setSpinning(false)));
+};
+
+export const inserirRegistro = async <T>(url: string, params: any): Promise<ApiResult<T>> => {
+  store.dispatch(setSpinning(true));
+  return api
+    .post(url, params)
+    .then((response: AxiosResponse<T>): ApiResult<T> => {
+      return { sucesso: true, dados: response?.data, mensagens: [] };
+    })
+    .catch((error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
+      const mensagens = error?.response?.data?.mensagens?.length
+        ? error?.response?.data?.mensagens
+        : [];
+
+      // TODO modal error
+      openNotificationError(mensagens);
+
+      return { sucesso: false, mensagens, dados: null };
+    })
+    .finally(() => store.dispatch(setSpinning(false)));
+};
+
+export const alterarRegistro = async <T>(url: string, params: any): Promise<ApiResult<T>> => {
+  store.dispatch(setSpinning(true));
+  return api
+    .put(url, params)
+    .then((response: AxiosResponse<T>): ApiResult<T> => {
+      return { sucesso: true, dados: response?.data, mensagens: [] };
+    })
+    .catch((error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
+      const mensagens = error?.response?.data?.mensagens?.length
+        ? error?.response?.data?.mensagens
+        : [];
+
+      // TODO modal error
+      openNotificationError(mensagens);
+
+      return { sucesso: false, mensagens, dados: null };
+    })
+    .finally(() => store.dispatch(setSpinning(false)));
+};
+
+export const deletarRegistro = async <T>(url: string): Promise<ApiResult<T>> => {
+  store.dispatch(setSpinning(true));
+  return api
+    .delete(url)
+    .then((response: AxiosResponse<T>): ApiResult<T> => {
+      return { sucesso: true, dados: response?.data, mensagens: [] };
+    })
+    .catch((error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
+      const mensagens = error?.response?.data?.mensagens?.length
+        ? error?.response?.data?.mensagens
+        : [];
+
+      // TODO modal error
+      openNotificationError(mensagens);
+
+      return { sucesso: false, mensagens, dados: null };
+    })
+    .finally(() => store.dispatch(setSpinning(false)));
+};
 
 export default api;

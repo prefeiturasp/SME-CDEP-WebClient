@@ -24,6 +24,8 @@ import ModalEditDefault from '../modal-edit-default';
 import { RetornoCEPDTO } from '~/core/dto/retorno-cep-dto';
 import enderecoService from '~/core/services/endereco-service';
 import { removerTudoQueNaoEhDigito } from '~/core/utils/functions';
+import { AxiosError, HttpStatusCode } from 'axios';
+import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 
 type ModalEditEnderecoProps = {
   closeModal: () => void;
@@ -38,6 +40,7 @@ const ModalEditEndereco: React.FC<ModalEditEnderecoProps> = ({
 }) => {
   const [form] = useForm();
   const [loading, setLoading] = useState<boolean>(false);
+  const [CEPExistente, setCEPExistente] = useState<string[]>();
   const [obterCEP, setObterCEP] = useState<RetornoCEPDTO | undefined>();
 
   const auth = useAppSelector((store) => store.auth);
@@ -60,24 +63,26 @@ const ModalEditEndereco: React.FC<ModalEditEnderecoProps> = ({
       .obterDadosCEP(value)
       .then((resposta) => {
         const data = resposta.data;
-        const {
-          cep,
-          bairro,
-          uf: estado,
-          complemento,
-          localidade: cidade,
-          logradouro: endereco,
-        } = data;
+        const { bairro, uf: estado, complemento, localidade: cidade, logradouro: endereco } = data;
+
+        HttpStatusCode.Ok && form.getFieldInstance('numero').focus();
+        resposta.status === HttpStatusCode.NoContent && form.getFieldInstance('endereco').focus();
 
         setObterCEP({ ...data });
         form.setFieldsValue({
-          cep,
           estado,
           bairro,
           cidade,
           endereco,
           complemento,
         });
+      })
+      .catch((erro: AxiosError<RetornoBaseDTO>) => {
+        const dataErro = erro?.response?.data;
+
+        if (dataErro?.mensagens?.length) {
+          setCEPExistente(dataErro.mensagens);
+        }
       })
       .finally(() => setLoading(false));
   };
@@ -109,8 +114,9 @@ const ModalEditEndereco: React.FC<ModalEditEnderecoProps> = ({
                 },
               }}
               formItemProps={{
+                help: CEPExistente,
                 hasFeedback: loading,
-                validateStatus: loading ? 'validating' : '',
+                validateStatus: CEPExistente?.length ? 'error' : loading ? 'validating' : '',
               }}
             />
           </Col>
