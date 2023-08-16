@@ -67,6 +67,7 @@ const DataTable = <T extends object>({ filters, url, columns, ...rest }: DataTab
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
     setTableParams({
+      ...tableParams,
       pagination,
     });
 
