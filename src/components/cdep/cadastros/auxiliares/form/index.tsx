@@ -171,83 +171,75 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
   };
 
   return (
-    <>
-      <Col>
-        <Form
-          form={form}
-          layout='vertical'
-          autoComplete='off'
-          onFinish={salvar}
-          validateMessages={validateMessages}
-          initialValues={formInitialValues}
-        >
-          <HeaderPage title={page.title}>
-            <Col span={24}>
-              <Row gutter={[8, 8]}>
+    <Col>
+      <Form
+        form={form}
+        layout='vertical'
+        autoComplete='off'
+        onFinish={salvar}
+        validateMessages={validateMessages}
+        initialValues={formInitialValues}
+      >
+        <HeaderPage title={page.title}>
+          <Col span={24}>
+            <Row gutter={[8, 8]}>
+              <Col>
+                <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
+              </Col>
+              {id ? (
                 <Col>
-                  <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
+                  <ButtonExcluir id={CDEP_BUTTON_EXCLUIR} onClick={onClickExcluir} />
                 </Col>
-                {id ? (
-                  <Col>
-                    <ButtonExcluir id={CDEP_BUTTON_EXCLUIR} onClick={onClickExcluir} />
-                  </Col>
-                ) : (
-                  <></>
-                )}
-                <Col>
-                  <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
-                    {() => (
-                      <Button
-                        block
-                        type='default'
-                        id={CDEP_BUTTON_CANCELAR}
-                        onClick={onClickCancelar}
-                        style={{ fontWeight: 700 }}
-                        disabled={!form.isFieldsTouched()}
-                      >
-                        Cancelar
-                      </Button>
-                    )}
-                  </Form.Item>
-                </Col>
-                <Col>
-                  <Button
-                    block
-                    type='primary'
-                    htmlType='submit'
-                    id={CDEP_BUTTON_NOVO}
-                    style={{ fontWeight: 700 }}
-                  >
-                    {id ? 'Alterar' : 'Salvar'}
-                  </Button>
-                </Col>
-              </Row>
-            </Col>
-          </HeaderPage>
+              ) : (
+                <></>
+              )}
+              <Col>
+                <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
+                  {() => (
+                    <Button
+                      block
+                      type='default'
+                      id={CDEP_BUTTON_CANCELAR}
+                      onClick={onClickCancelar}
+                      style={{ fontWeight: 700 }}
+                      disabled={!form.isFieldsTouched()}
+                    >
+                      Cancelar
+                    </Button>
+                  )}
+                </Form.Item>
+              </Col>
+              <Col>
+                <Button
+                  block
+                  type='primary'
+                  htmlType='submit'
+                  id={CDEP_BUTTON_NOVO}
+                  style={{ fontWeight: 700 }}
+                >
+                  {id ? 'Alterar' : 'Salvar'}
+                </Button>
+              </Col>
+            </Row>
+          </Col>
+        </HeaderPage>
 
-          <CardContent>
-            {page.inputs.map((input) => (
-              // TODO - Criar uma função quando tiver mais campos
-              <Form.Item
-                key={input.name}
-                label='Nome'
-                name={input.name}
-                rules={[{ required: true }]}
-              >
-                <Input
-                  type='text'
-                  placeholder={input.placeholder}
-                  maxLength={200}
-                  showCount
-                  id={CDEP_INPUT_NOVO}
-                />
-              </Form.Item>
-            ))}
-            <Auditoria dados={formInitialValues} />
-          </CardContent>
-        </Form>
-      </Col>
-    </>
+        <CardContent>
+          {page.inputs.map((input) => (
+            <Form.Item key={input.name} label='Nome' name={input.name} rules={[{ required: true }]}>
+              <Input
+                type='text'
+                placeholder={input.placeholder}
+                maxLength={200}
+                showCount
+                id={CDEP_INPUT_NOVO}
+              />
+            </Form.Item>
+          ))}
+          <Auditoria dados={formInitialValues} />
+        </CardContent>
+      </Form>
+    </Col>
   );
 };
 
