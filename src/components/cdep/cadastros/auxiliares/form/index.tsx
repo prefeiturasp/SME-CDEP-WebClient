@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Modal, Row, notification } from 'antd';
+import { Button, Col, Form, Input, Row, notification } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -21,14 +21,13 @@ import {
   DESEJA_EXCLUIR_ACERVO,
 } from '~/core/constants/mensagens';
 import { CadastroAuxiliarDTO } from '~/core/dto/cadastro-auxiliar-dto';
+import { confirmacao } from '~/core/services/alerta-service';
 import {
   alterarRegistro,
   deletarRegistro,
   inserirRegistro,
   obterRegistro,
 } from '~/core/services/api';
-import { Colors } from '~/core/styles/colors';
-const { confirm } = Modal;
 
 type FormPageInputsProps = {
   name: string;
@@ -82,19 +81,10 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
 
   const onClickVoltar = () => {
     if (form.isFieldsTouched()) {
-      confirm({
-        width: 500,
-        title: 'Atenção',
-        icon: <></>,
+      confirmacao({
         content: DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA,
         onOk() {
           navigate(breadcrumb.urlMainPage);
-        },
-        cancelText: 'Cancelar',
-        okButtonProps: { type: 'default' },
-        cancelButtonProps: {
-          type: 'text',
-          style: { color: Colors.TEXT },
         },
       });
     } else {
@@ -104,19 +94,10 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
 
   const onClickCancelar = () => {
     if (form.isFieldsTouched()) {
-      confirm({
-        width: 500,
-        title: 'Atenção',
-        icon: <></>,
+      confirmacao({
         content: DESEJA_CANCELAR_ALTERACOES,
         onOk() {
           form.resetFields();
-        },
-        cancelText: 'Cancelar',
-        okButtonProps: { type: 'default' },
-        cancelButtonProps: {
-          type: 'text',
-          style: { color: Colors.TEXT },
         },
       });
     }
@@ -144,10 +125,7 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
 
   const onClickExcluir = () => {
     if (id) {
-      confirm({
-        width: 500,
-        title: 'Atenção',
-        icon: <></>,
+      confirmacao({
         content: DESEJA_EXCLUIR_ACERVO,
         onOk() {
           deletarRegistro(`${page.urlBase}/${id}`).then((response) => {
@@ -159,12 +137,6 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
               navigate(breadcrumb.urlMainPage);
             }
           });
-        },
-        cancelText: 'Cancelar',
-        okButtonProps: { type: 'default' },
-        cancelButtonProps: {
-          type: 'text',
-          style: { color: Colors.TEXT },
         },
       });
     }
