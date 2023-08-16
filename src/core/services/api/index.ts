@@ -1,6 +1,5 @@
 import axios, {
   AxiosError,
-  AxiosPromise,
   AxiosRequestConfig,
   AxiosResponse,
   HttpStatusCode,
@@ -12,10 +11,10 @@ import dayjs from 'dayjs';
 
 import { setDeslogar } from '~/core/redux/modules/auth/actions';
 
+import { notification } from 'antd';
+import { setSpinning } from '~/core/redux/modules/spin/actions';
 import { store } from '../../redux';
 import autenticacaoService, { URL_AUTENTICACAO_REVALIDAR } from '../autenticacao-service';
-import { setSpinning } from '~/core/redux/modules/spin/actions';
-import { notification } from 'antd';
 
 const config: AxiosRequestConfig = {
   baseURL: import.meta.env.VITE_SME_CDEP_API,
