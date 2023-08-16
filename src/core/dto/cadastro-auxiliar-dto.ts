@@ -1,5 +1,5 @@
-import { EntidadeBaseAuditavel } from './auditoria-dto';
+import { BaseAuditavelDTO } from './base-auditavel-dto';
 
 export type CadastroAuxiliarDTO = {
   nome: string;
-} & EntidadeBaseAuditavel;
+} & BaseAuditavelDTO;

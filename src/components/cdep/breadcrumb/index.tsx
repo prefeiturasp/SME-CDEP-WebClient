@@ -6,7 +6,7 @@ export type BreadcrumbCDEPProps = {
   menu?: string;
   mainPage?: string;
   urlMainPage: string;
-  title: string;
+  title?: string;
 };
 
 const BreadcrumbCDEP: React.FC<BreadcrumbCDEPProps> = ({

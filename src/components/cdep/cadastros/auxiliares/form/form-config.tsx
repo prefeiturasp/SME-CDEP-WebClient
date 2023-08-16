@@ -1,9 +1,7 @@
-import BreadcrumbCDEP from '~/components/cdep/breadcrumb';
-
 import { ROUTES } from '~/core/enum/routes';
 
 import { useLocation, useParams } from 'react-router-dom';
-import FormCadastrosAuxiliares, { FormConfigCadastros } from '../form';
+import FormCadastrosAuxiliares, { FormConfigCadastros } from '.';
 import { INPUTS_NAMES } from '~/core/constants/inputs-cadastros';
 
 const FormConfigCadastrosAuxiliares: React.FC = () => {
@@ -112,11 +110,6 @@ const FormConfigCadastrosAuxiliares: React.FC = () => {
 
   if (!formParams) return <></>;
 
-  return (
-    <>
-      <BreadcrumbCDEP menu='Cadastros' {...formParams.breadcrumb} />
-      <FormCadastrosAuxiliares {...formParams} />
-    </>
-  );
+  return <FormCadastrosAuxiliares {...formParams} />;
 };
 export default FormConfigCadastrosAuxiliares;

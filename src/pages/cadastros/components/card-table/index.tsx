@@ -1,8 +1,10 @@
 import { SearchOutlined } from '@ant-design/icons';
-import { Col, Input, Table } from 'antd';
+import { Col, Input, Row } from 'antd';
 import { ColumnsType } from 'antd/es/table';
+import { useState } from 'react';
 import CardContent from '~/components/lib/card-content';
-import PropTypes from 'prop-types';
+import DataTable from '~/components/lib/data-table';
+import { CadastroAuxiliarDTO } from '~/core/dto/cadastro-auxiliar-dto';
 
 interface EstruturaDados {
   key: string;
@@ -13,28 +15,36 @@ type TableCadastroProps = {
   dadosTabela: EstruturaDados[];
   colunasTabela: ColumnsType<EstruturaDados>;
 };
-const CardTableCadastros: React.FC<TableCadastroProps> = ({ dadosTabela, colunasTabela }) => {
+const CardTableCadastros: React.FC<TableCadastroProps> = () => {
+  const [filters, setFilters] = useState({ nome: '' });
+
+  const columns: ColumnsType<CadastroAuxiliarDTO> = [
+    {
+      title: 'Nome',
+      dataIndex: 'nome',
+    },
+  ];
+
   return (
-    <>
-      <Col>
-        <CardContent>
+    <CardContent>
+      <Row gutter={[8, 16]}>
+        <Col span={24}>
           <Input
             type='text'
             placeholder='Nome'
             prefix={<SearchOutlined />}
-            onKeyUp={(e: React.KeyboardEvent<HTMLInputElement>) => {
-              console.table((e.target as HTMLInputElement).value);
+            onChange={(e: any) => {
+              setFilters({ nome: e.target.value });
             }}
           />
-          &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;
-          <Table dataSource={dadosTabela} columns={colunasTabela} bordered />
-        </CardContent>
-      </Col>
-    </>
+        </Col>
+
+        <Col span={24}>
+          <DataTable filters={filters} url='v1/assunto' columns={columns} />
+        </Col>
+      </Row>
+    </CardContent>
   );
 };
-CardTableCadastros.propTypes = {
-  dadosTabela: PropTypes.array.isRequired,
-  colunasTabela: PropTypes.array.isRequired,
-};
+
 export default CardTableCadastros;
