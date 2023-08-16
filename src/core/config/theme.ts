@@ -21,5 +21,8 @@ export const CDEPTheme: ThemeConfig = {
     Form: {
       paddingXS: 2,
     },
+    Modal: {
+      borderRadiusLG: 4,
+    },
   },
 };

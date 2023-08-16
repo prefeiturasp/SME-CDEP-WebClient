@@ -6,9 +6,13 @@ import { persistor, store } from './core/redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import Routes from './routes';
 import 'antd/dist/reset.css';
+import 'dayjs/locale/pt-br';
 
 import GlobalStyle from '~/core/styles/global';
 import Spin from './components/cdep/spin';
+import dayjs from 'dayjs';
+
+dayjs.locale('pt-br');
 
 declare global {
   interface Window {
