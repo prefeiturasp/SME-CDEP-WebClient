@@ -1,5 +1,5 @@
 import { Button, Col, Form, Input, Row, notification } from 'antd';
-import { useForm } from 'antd/es/form/Form';
+import { FormProps, useForm } from 'antd/es/form/Form';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { BreadcrumbCDEPProps } from '~/components/cdep/breadcrumb';
@@ -54,11 +54,12 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
 
   const id = paramsRoute?.id || 0;
 
-  const validateMessages = {
+  const validateMessages: FormProps['validateMessages'] = {
     required: 'Campo obrigatório',
     string: {
       range: 'Por favor, digite Nome',
     },
+    whitespace: 'Campo obrigatório',
   };
 
   const carregarDados = useCallback(async () => {
@@ -198,7 +199,12 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
 
         <CardContent>
           {page.inputs.map((input) => (
-            <Form.Item key={input.name} label='Nome' name={input.name} rules={[{ required: true }]}>
+            <Form.Item
+              key={input.name}
+              label='Nome'
+              name={input.name}
+              rules={[{ required: true, whitespace: true }]}
+            >
               <Input
                 type='text'
                 placeholder={input.placeholder}
