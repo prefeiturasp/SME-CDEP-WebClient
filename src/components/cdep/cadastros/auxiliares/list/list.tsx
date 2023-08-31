@@ -1,7 +1,7 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Col, Input, Row } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BreadcrumbCDEPProps } from '~/components/cdep/breadcrumb';
 import ButtonVoltar from '~/components/cdep/button/voltar';
@@ -11,9 +11,6 @@ import HeaderPage from '~/components/lib/header-page';
 import { CDEP_BUTTON_NOVO, CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { CadastroAuxiliarDTO } from '~/core/dto/cadastro-auxiliar-dto';
 import { ROUTES } from '~/core/enum/routes';
-import { useAppDispatch } from '~/core/hooks/use-redux';
-import { setSpinning } from '~/core/redux/modules/spin/actions';
-import React from 'react';
 
 export type ListPageProps = {
   title: string;
@@ -27,7 +24,6 @@ export type ListConfigCadastros = {
 
 const ListCadastrosAuxiliares: React.FC<ListConfigCadastros> = ({ page, breadcrumb }) => {
   const navigate = useNavigate();
-  const dispatch = useAppDispatch();
 
   const [filters, setFilters] = useState({ nome: '' });
 
@@ -37,14 +33,6 @@ const ListCadastrosAuxiliares: React.FC<ListConfigCadastros> = ({ page, breadcru
       dataIndex: 'nome',
     },
   ];
-
-  const obterDados = useCallback(() => {
-    dispatch(setSpinning(false));
-  }, [dispatch]);
-
-  useEffect(() => {
-    obterDados();
-  }, [obterDados]);
 
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
