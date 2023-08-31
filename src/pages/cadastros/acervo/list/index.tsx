@@ -43,7 +43,7 @@ const ListAcervo: React.FC = () => {
   const onClickNovo = () => navigate(ROUTES.ACERVO_NOVO);
 
   const onClickEditar = (id: number) =>
-    navigate(`${ROUTES.EDITORA_EDITAR}/${id}`, { replace: true });
+    navigate(`${ROUTES.ACERVO}/editar/${id}`, { replace: true });
 
   return (
     <Col>
