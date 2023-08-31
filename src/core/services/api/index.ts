@@ -141,7 +141,7 @@ const openNotificationError = (mensagens: string[]) => {
   }
 };
 
-type ApiResult<T> = {
+export type ApiResult<T> = {
   dados: T;
   sucesso: boolean;
   mensagens: string[];

@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { Table } from 'antd';
 import type { TablePaginationConfig, TableProps } from 'antd/es/table';
 import queryString from 'query-string';
+import ButtonOrdenacao from '~/components/cdep/button/ordenacao';
 import { PaginacaoResultadoDTO } from '~/core/dto/paginacao-resultado-dto';
 import { TipoOrdenacaoEnum } from '~/core/enum/tipo-ordenacao';
 import api from '~/core/services/api';
-import ButtonOrdenacao from '~/components/cdep/button/ordenacao';
 
 interface TableParams {
   pagination?: TablePaginationConfig;
@@ -25,13 +25,16 @@ const DataTable = <T extends object>({ filters, url, columns, ...rest }: DataTab
     pagination: {
       current: 1,
       pageSize: 10,
+      showSizeChanger: true,
+      locale: { items_per_page: '' },
+      pageSizeOptions: [10, 20, 50, 100],
     },
     order: TipoOrdenacaoEnum.DATA,
   });
 
-  const fetchData = () => {
+  const fetchData = (newParams: TableParams) => {
     setLoading(true);
-    const urlQuery = `${url}?numeroPagina=${tableParams?.pagination?.current}&numeroRegistros=${tableParams?.pagination?.pageSize}&ordenacao=${tableParams.order}`;
+    const urlQuery = `${url}?numeroPagina=${newParams?.pagination?.current}&numeroRegistros=${newParams?.pagination?.pageSize}&ordenacao=${newParams.order}`;
 
     api
       .get<PaginacaoResultadoDTO<T[]>>(urlQuery, {
@@ -50,9 +53,9 @@ const DataTable = <T extends object>({ filters, url, columns, ...rest }: DataTab
         if (response?.data.items) {
           setData(response.data.items);
           setTableParams({
-            ...tableParams,
+            ...newParams,
             pagination: {
-              ...tableParams.pagination,
+              ...newParams.pagination,
               total: response.data.totalRegistros,
             },
           });
@@ -62,25 +65,33 @@ const DataTable = <T extends object>({ filters, url, columns, ...rest }: DataTab
   };
 
   useEffect(() => {
-    fetchData();
-  }, [JSON.stringify(tableParams), JSON.stringify(filters)]);
+    fetchData(tableParams);
+  }, [JSON.stringify(filters)]);
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
-    setTableParams({
+    const newParams = {
       ...tableParams,
       pagination,
-    });
+    };
 
-    if (pagination.pageSize !== tableParams.pagination?.pageSize) {
+    setTableParams(newParams);
+
+    fetchData(newParams);
+
+    if (pagination.pageSize !== newParams.pagination?.pageSize) {
       setData([]);
     }
   };
 
   const onClickOrdenar = (ordenacaoNova: TipoOrdenacaoEnum) => {
-    setTableParams({
+    const newParams = {
       ...tableParams,
       order: ordenacaoNova,
-    });
+    };
+
+    setTableParams(newParams);
+
+    fetchData(newParams);
   };
 
   return (
