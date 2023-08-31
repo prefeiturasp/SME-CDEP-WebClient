@@ -5,7 +5,8 @@ import FormConfigCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliare
 import { ROUTES } from '~/core/enum/routes';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import PagNotFound from '~/pages/404';
-import ListAcervo from '~/pages/cadastros/acervo';
+import FormAcervo from '~/pages/cadastros/acervo/form';
+import ListAcervo from '~/pages/cadastros/acervo/list';
 import Assunto from '~/pages/cadastros/assunto';
 import Autor from '~/pages/cadastros/autor';
 import Credito from '~/pages/cadastros/credito';
@@ -77,6 +78,8 @@ const RoutesConfig = () => {
                 </Route>
                 <Route path={ROUTES.ACERVO}>
                   <Route path='' element={<ListAcervo />} />
+                  <Route path={ROUTES.ACERVO_NOVO} element={<FormAcervo />} />
+                  <Route path={ROUTES.ACERVO_EDITAR} element={<FormAcervo />} />
                 </Route>
                 <Route path='*' element={pagNotFound} />
                 <Route path={ROUTES.LOGIN} element={<Navigate to={ROUTES.PRINCIPAL} />} />

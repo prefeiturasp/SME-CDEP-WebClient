@@ -2,6 +2,7 @@ import ListCadastrosAuxiliares, {
   ListConfigCadastros,
 } from '~/components/cdep/cadastros/auxiliares/list/list';
 import { ROUTES } from '~/core/enum/routes';
+import { URL_API_CREDITO_AUTOR } from '~/core/services/credito-autor';
 
 const Credito: React.FC = () => {
   const paramsConfigPage: ListConfigCadastros = {
@@ -10,7 +11,7 @@ const Credito: React.FC = () => {
     },
     page: {
       title: 'Crédito',
-      urlApiBase: 'v1/credito',
+      urlApiBase: URL_API_CREDITO_AUTOR,
     },
   };
 
