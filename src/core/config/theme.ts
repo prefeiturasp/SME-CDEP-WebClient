@@ -24,5 +24,8 @@ export const CDEPTheme: ThemeConfig = {
     Modal: {
       borderRadiusLG: 4,
     },
+    Select: {
+      zIndexPopup: 1,
+    },
   },
 };

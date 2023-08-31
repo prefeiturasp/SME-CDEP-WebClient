@@ -1,8 +1,9 @@
 import { ROUTES } from '~/core/enum/routes';
 
 import { useLocation, useParams } from 'react-router-dom';
-import FormCadastrosAuxiliares, { FormConfigCadastros } from '.';
 import { INPUTS_NAMES } from '~/core/constants/inputs-cadastros';
+import { URL_API_CREDITO_AUTOR } from '~/core/services/credito-autor';
+import FormCadastrosAuxiliares, { FormConfigCadastros } from '.';
 
 const FormConfigCadastrosAuxiliares: React.FC = () => {
   const paramsRoute = useParams();
@@ -19,7 +20,7 @@ const FormConfigCadastrosAuxiliares: React.FC = () => {
       },
       page: {
         title: 'Crédito',
-        urlBase: 'v1/credito',
+        urlBase: URL_API_CREDITO_AUTOR,
         inputs: [
           {
             name: INPUTS_NAMES.TEXT.NOME,
@@ -36,7 +37,7 @@ const FormConfigCadastrosAuxiliares: React.FC = () => {
       },
       page: {
         title: 'Autor',
-        urlBase: 'v1/autor',
+        urlBase: URL_API_CREDITO_AUTOR,
         inputs: [
           {
             name: INPUTS_NAMES.TEXT.NOME,

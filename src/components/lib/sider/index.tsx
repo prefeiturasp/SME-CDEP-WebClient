@@ -100,6 +100,10 @@ const Sider: React.FC = () => {
           <FaUserPlus size={24} />
           <div>Série/Coleção</div>
         </MenuGroup>
+        <MenuGroup onClick={() => navigate(ROUTES.ACERVO)}>
+          <FaUserPlus size={24} />
+          <div>Acervo</div>
+        </MenuGroup>
       </MenuContainer>
     </SiderContainer>
   );
