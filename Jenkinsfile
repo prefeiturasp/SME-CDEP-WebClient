@@ -5,7 +5,7 @@ pipeline {
       registryCredential = 'jenkins_registry'
       namespace = "${env.branchname == 'development' ? 'cdep-dev' : env.branchname == 'release' ? 'sme-cdep' : env.branchname == 'release-r2' ? 'cdep-hom2' : 'sme-cdep' }"
     }
-    }
+    
 
     agent {
       node { label 'AGENT-NODES' }
