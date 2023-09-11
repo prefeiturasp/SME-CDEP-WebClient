@@ -1,5 +1,43 @@
+import { Modal, ModalFuncProps, notification } from 'antd';
 import { Colors } from '../styles/colors';
-import { Modal, ModalFuncProps } from 'antd';
+
+const exibirAlerta = (tipo: any, mensagem: string) => {
+  let titulo;
+  let classeTipo;
+  switch (tipo) {
+    case 'success':
+      titulo = 'Sucesso';
+      classeTipo = 'alerta-sucesso';
+      break;
+    case 'error':
+      titulo = 'Erro';
+      classeTipo = 'alerta-erro';
+      break;
+    case 'warning':
+      titulo = 'Aviso';
+      classeTipo = 'alerta-aviso';
+      break;
+
+    default:
+      titulo = '';
+      classeTipo = '';
+      break;
+  }
+  notification[tipo]({
+    message: titulo,
+    description: mensagem,
+    duration: 6,
+    className: classeTipo,
+  });
+};
+
+const sucesso = (mensagem: string) => {
+  exibirAlerta('success', mensagem);
+};
+
+const erro = (mensagem: string) => {
+  exibirAlerta('error', mensagem);
+};
 
 const confirmacao = (props: ModalFuncProps) => {
   const { title, content, okText, cancelText } = props;
@@ -29,4 +67,4 @@ const confirmacao = (props: ModalFuncProps) => {
   });
 };
 
-export { confirmacao };
+export { confirmacao, erro, exibirAlerta, sucesso };
