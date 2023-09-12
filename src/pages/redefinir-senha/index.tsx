@@ -6,17 +6,18 @@ import { useForm, useWatch } from 'antd/es/form/Form';
 import { useAppDispatch } from '~/core/hooks/use-redux';
 import usuarioService from '~/core/services/usuario-service';
 
-import { IoInformationCircleSharp } from 'react-icons/io5';
 import { AxiosError } from 'axios';
+import { IoInformationCircleSharp } from 'react-icons/io5';
 import { useLocation, useNavigate } from 'react-router-dom';
 import ErroGeralLogin from '~/components/cdep/erro-geral-login';
+import Modal from '~/components/lib/modal';
 import { CDEP_BUTTON_CONTINUAR, CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_LOGIN } from '~/core/constants/ids/input';
 import { ERRO_RECUPERACAO_SENHA } from '~/core/constants/mensagens';
+import { validateMessages } from '~/core/constants/validate-messages';
 import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 import { ROUTES } from '~/core/enum/routes';
 import { setSpinning } from '~/core/redux/modules/spin/actions';
-import Modal from '~/components/lib/modal';
 
 const RedefinirSenha = () => {
   const [form] = useForm();
@@ -30,13 +31,6 @@ const RedefinirSenha = () => {
 
   const usuarioLogin = location.state;
   const login = useWatch('login', form);
-
-  const validateMessages = {
-    required: 'Campo obrigatório',
-    string: {
-      min: 'Deve conter no mínimo ${min} caracteres',
-    },
-  };
 
   const validarExibirErros = (erro: AxiosError<RetornoBaseDTO>) => {
     const dataErro = erro?.response?.data;

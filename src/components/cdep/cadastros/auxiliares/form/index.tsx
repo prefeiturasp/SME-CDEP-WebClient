@@ -1,8 +1,7 @@
 import { Button, Col, Form, Input, Row, notification } from 'antd';
-import { FormProps, useForm } from 'antd/es/form/Form';
+import { useForm } from 'antd/es/form/Form';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { BreadcrumbCDEPProps } from '~/components/cdep/breadcrumb';
 import ButtonExcluir from '~/components/cdep/button/excluir';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import Auditoria from '~/components/cdep/text/auditoria';
@@ -20,7 +19,9 @@ import {
   DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA,
   DESEJA_EXCLUIR_ACERVO,
 } from '~/core/constants/mensagens';
+import { validateMessages } from '~/core/constants/validate-messages';
 import { CadastroAuxiliarDTO } from '~/core/dto/cadastro-auxiliar-dto';
+import { FormCadastrosAuxiliaresProps } from '~/core/dto/form-cadastros-auxiliares';
 import { confirmacao } from '~/core/services/alerta-service';
 import {
   alterarRegistro,
@@ -29,44 +30,28 @@ import {
   obterRegistro,
 } from '~/core/services/api';
 
-type FormPageInputsProps = {
-  name: string;
-  placeholder: string;
-};
-
-export type FormPageProps = {
-  title: string;
-  urlBase: string;
-  inputs: FormPageInputsProps[];
-};
-
-export type FormConfigCadastros = {
-  breadcrumb: BreadcrumbCDEPProps;
-  page: FormPageProps;
-};
-
-const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcrumb }) => {
+const FormCadastrosAuxiliares: React.FC<FormCadastrosAuxiliaresProps> = ({
+  page,
+  initialValues = {},
+}) => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
   const [form] = useForm();
 
-  const [formInitialValues, setFormInitialValues] = useState<CadastroAuxiliarDTO>();
+  const [formInitialValues, setFormInitialValues] = useState<CadastroAuxiliarDTO>(initialValues);
 
   const id = paramsRoute?.id || 0;
-
-  const validateMessages: FormProps['validateMessages'] = {
-    required: 'Campo obrigatório',
-    string: {
-      range: 'Por favor, digite Nome',
-    },
-    whitespace: 'Campo obrigatório',
-  };
 
   const carregarDados = useCallback(async () => {
     const resposta = await obterRegistro<any>(`${page.urlBase}/${id}`);
 
     if (resposta.sucesso) {
-      setFormInitialValues(resposta.dados);
+      setFormInitialValues((prevState) => {
+        return {
+          ...prevState,
+          ...resposta.dados,
+        };
+      });
     }
   }, [page, id]);
 
@@ -85,11 +70,11 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
       confirmacao({
         content: DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA,
         onOk() {
-          navigate(breadcrumb.urlMainPage);
+          navigate(page.urlMainPage);
         },
       });
     } else {
-      navigate(breadcrumb.urlMainPage);
+      navigate(page.urlMainPage);
     }
   };
 
@@ -105,14 +90,16 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
   };
 
   const salvar = async (values: any) => {
+    const valoresSalvar = { ...initialValues, ...values };
+
     let response = null;
     if (id) {
       response = await alterarRegistro(page.urlBase, {
         id,
-        ...values,
+        ...valoresSalvar,
       });
     } else {
-      response = await inserirRegistro(page.urlBase, values);
+      response = await inserirRegistro(page.urlBase, valoresSalvar);
     }
 
     if (response.sucesso) {
@@ -120,7 +107,7 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
         message: 'Sucesso',
         description: `Registro ${id ? 'alterado' : 'inserido'} com sucesso!`,
       });
-      navigate(breadcrumb.urlMainPage);
+      navigate(page.urlMainPage);
     }
   };
 
@@ -135,7 +122,7 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
                 message: 'Sucesso',
                 description: 'Acervo excluído com sucesso',
               });
-              navigate(breadcrumb.urlMainPage);
+              navigate(page.urlMainPage);
             }
           });
         },

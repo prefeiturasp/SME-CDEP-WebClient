@@ -2,22 +2,22 @@ import { Form, FormItemProps, SelectProps } from 'antd';
 import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useState } from 'react';
 import Select from '~/components/lib/inputs/select';
-import { CDEP_SELECT_CREDITO_AUTORIA } from '~/core/constants/ids/select';
-import { obterCreditoAutorResumido } from '~/core/services/credito-autor';
+import { CDEP_SELECT_ESTADO_FORMATO_IMAGEM } from '~/core/constants/ids/select';
+import { obterFormatosImagem } from '~/core/services/formato-service';
 
-type SelectCreditoAutoriaProps = {
+type SelectFormatoImagemProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
 };
 
-const SelectCreditoAutoria: React.FC<SelectCreditoAutoriaProps> = ({
+const SelectFormatoImagem: React.FC<SelectFormatoImagemProps> = ({
   selectProps,
   formItemProps,
 }) => {
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
 
-  const obterTipos = async () => {
-    const resposta = await obterCreditoAutorResumido();
+  const obterDados = async () => {
+    const resposta = await obterFormatosImagem();
 
     if (resposta.sucesso) {
       const newOptions = resposta.dados.map((item) => ({ label: item.nome, value: item.id }));
@@ -28,21 +28,26 @@ const SelectCreditoAutoria: React.FC<SelectCreditoAutoriaProps> = ({
   };
 
   useEffect(() => {
-    obterTipos();
+    obterDados();
   }, []);
 
   return (
-    <Form.Item label='Crédito/Autoria' name='creditoAutorId' {...formItemProps}>
+    <Form.Item
+      label='Formato da imagem'
+      name='formatoId'
+      rules={[{ required: true }]}
+      {...formItemProps}
+    >
       <Select
         showSearch
         allowClear
-        id={CDEP_SELECT_CREDITO_AUTORIA}
+        id={CDEP_SELECT_ESTADO_FORMATO_IMAGEM}
         {...selectProps}
         options={options}
-        placeholder='Crédito/Autoria'
+        placeholder='Formato da imagem'
       />
     </Form.Item>
   );
 };
 
-export default SelectCreditoAutoria;
+export default SelectFormatoImagem;

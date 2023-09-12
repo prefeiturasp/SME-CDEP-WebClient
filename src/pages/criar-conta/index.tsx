@@ -1,7 +1,7 @@
 import { Button, Col, Form, Input, Row, Select } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { AxiosError, HttpStatusCode } from 'axios';
-import { useState, useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ErroGeralLogin from '~/components/cdep/erro-geral-login';
 import InputBairro from '~/components/cdep/input/bairro';
@@ -17,31 +17,32 @@ import SenhaCadastro from '~/components/cdep/input/senha-cadastro';
 import InputTelefone from '~/components/cdep/input/telefone';
 import { CDEP_BUTTON_CADASTRAR, CDEP_BUTTON_CANCELAR } from '~/core/constants/ids/button/intex';
 import {
-  CDEP_INPUT_CPF,
-  CDEP_INPUT_CEP,
-  CDEP_INPUT_EMAIL,
-  CDEP_INPUT_SENHA,
-  CDEP_INPUT_CIDADE,
-  CDEP_INPUT_NUMERO,
   CDEP_INPUT_BAIRRO,
-  CDEP_INPUT_ENDERECO,
-  CDEP_INPUT_TELEFONE,
+  CDEP_INPUT_CEP,
+  CDEP_INPUT_CIDADE,
   CDEP_INPUT_COMPLEMENTO,
-  CDEP_INPUT_NOME_COMPLETO,
   CDEP_INPUT_CONFIRMAR_SENHA,
+  CDEP_INPUT_CPF,
+  CDEP_INPUT_EMAIL,
+  CDEP_INPUT_ENDERECO,
+  CDEP_INPUT_NOME_COMPLETO,
+  CDEP_INPUT_NUMERO,
+  CDEP_INPUT_SENHA,
+  CDEP_INPUT_TELEFONE,
 } from '~/core/constants/ids/input';
 import { CDEP_SELECT_TIPO_USUARIO, CDEP_SELECT_UF } from '~/core/constants/ids/select';
 import { LISTA_TIPO_USUARIO } from '~/core/constants/lista-tipo-usuario';
 import { ERRO_CADASTRO_USUARIO } from '~/core/constants/mensagens';
+import { validateMessages } from '~/core/constants/validate-messages';
 import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
+import { RetornoCEPDTO } from '~/core/dto/retorno-cep-dto';
 import { UsuarioExternoDTO } from '~/core/dto/usuario-externo-dto';
 import { ROUTES } from '~/core/enum/routes';
 import { useAppDispatch } from '~/core/hooks/use-redux';
 import { setSpinning } from '~/core/redux/modules/spin/actions';
-import usuarioService from '~/core/services/usuario-service';
 import enderecoService from '~/core/services/endereco-service';
+import usuarioService from '~/core/services/usuario-service';
 import { removerTudoQueNaoEhDigito } from '~/core/utils/functions/index';
-import { RetornoCEPDTO } from '~/core/dto/retorno-cep-dto';
 
 const CriarConta = () => {
   const [form] = useForm();
@@ -61,13 +62,6 @@ const CriarConta = () => {
     form.getFieldInstance('cpf').focus();
     erroCPF && form.getFieldInstance('cpf').focus();
   }, [erroCPF, form]);
-
-  const validateMessages = {
-    required: 'Campo obrigatório',
-    string: {
-      range: 'Deve ter entre ${min} e ${max} caracteres',
-    },
-  };
 
   const validarExibirErros = (erro: AxiosError<RetornoBaseDTO>) => {
     const dataErro = erro?.response?.data;

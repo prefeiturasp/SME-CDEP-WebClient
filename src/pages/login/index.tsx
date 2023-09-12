@@ -20,6 +20,7 @@ import {
   ERRO_LOGIN,
   ERRO_LOGIN_SENHA_INCORRETOS,
 } from '~/core/constants/mensagens';
+import { validateMessages } from '~/core/constants/validate-messages';
 import { AutenticacaoDTO } from '~/core/dto/autenticacao-dto';
 import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 import { ValidateErrorEntity } from '~/core/dto/validate-error-entity';
@@ -37,13 +38,6 @@ const Login = () => {
 
   const login = useWatch('login', form);
   const senha = useWatch('senha', form);
-
-  const validateMessages = {
-    required: 'Campo obrigatório',
-    string: {
-      min: 'Deve conter no mínimo ${min} caracteres',
-    },
-  };
 
   const validarExibirErros = (erro: AxiosError<RetornoBaseDTO>) => {
     if (erro?.response?.status === 401) {
