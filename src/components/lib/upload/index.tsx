@@ -1,8 +1,8 @@
 import { InboxOutlined } from '@ant-design/icons';
 import type { FormItemProps, UploadFile, UploadProps } from 'antd';
 import { Form, Upload } from 'antd';
+import { RcFile } from 'antd/es/upload';
 import React, { useState } from 'react';
-import { erro } from '~/core/services/alerta-service';
 import armazenamentoService from '~/core/services/armazenamento-service';
 import { permiteInserirFormato } from '~/core/utils/functions';
 
@@ -10,28 +10,32 @@ const { Dragger } = Upload;
 
 type UploadArquivosProps = {
   uploadProps?: UploadProps;
+  tamanhoMaximoUpload?: number;
   formItemProps?: FormItemProps;
+  tiposArquivosPermitidos?: string;
 };
 
-const UploadArquivos: React.FC<UploadArquivosProps> = ({ uploadProps, formItemProps }) => {
-  const [fileList, setFileList] = useState<UploadFile[]>([]);
-
-  const TAMANHO_MAXIMO_UPLOAD = 100;
-  const tiposArquivosPermitidos = '.jpeg,.jpg,.png';
+const UploadArquivos: React.FC<UploadArquivosProps> = ({
+  uploadProps,
+  formItemProps,
+  tamanhoMaximoUpload = 100,
+  tiposArquivosPermitidos = '',
+}) => {
+  const [fileList, setFileList] = useState<UploadFile<any>[] | undefined>([]);
 
   const excedeuLimiteMaximo = (arquivo: File) => {
     const tamanhoArquivo = arquivo.size / 1024 / 1024;
-    return tamanhoArquivo > TAMANHO_MAXIMO_UPLOAD;
+    return tamanhoArquivo > tamanhoMaximoUpload;
   };
 
-  const beforeUploadDefault = (arquivo: File) => {
+  const beforeUploadDefault = (arquivo: RcFile) => {
     if (!permiteInserirFormato(arquivo, tiposArquivosPermitidos)) {
-      erro('Formato não permitido');
+      console.log('Formato não permitido');
       return false;
     }
 
     if (excedeuLimiteMaximo(arquivo)) {
-      erro('Tamanho máximo 100 MB');
+      console.log(`Tamanho máximo ${tamanhoMaximoUpload} MB`);
       return false;
     }
 
@@ -49,10 +53,12 @@ const UploadArquivos: React.FC<UploadArquivosProps> = ({ uploadProps, formItemPr
         onProgress({ percent: (event.loaded / event.total) * 100 }, file);
       },
     };
+
     fmData.append('file', file);
+    console.log('🚀 ~ customRequestDefault ~ file:', file);
 
     armazenamentoService
-      .fazerUploadArquivo(fmData, config)
+      .fazerUploadArquivo(file, config)
       .then((resposta) => {
         const codigo = resposta?.data?.codigo || resposta.data;
         onSuccess(file, codigo);
@@ -64,16 +70,15 @@ const UploadArquivos: React.FC<UploadArquivosProps> = ({ uploadProps, formItemPr
     setFileList(newFileList);
 
   return (
-    <Form.Item label='Anexos' name='anexos' rules={[{ required: true }]} {...formItemProps}>
+    <Form.Item name='anexos' label='Anexos' wrapperCol={{ xs: 24 }} {...formItemProps}>
       <Dragger
-        multiple
         name='file'
         fileList={fileList}
         onChange={handleChange}
-        accept={tiposArquivosPermitidos}
+        action='v1/Armazenamento'
+        // accept={tiposArquivosPermitidos}
         beforeUpload={beforeUploadDefault}
         customRequest={customRequestDefault}
-        action='https://www.mocky.io/v2/5cc8019d300000980a055e76'
         onDrop={(e) => {
           console.log('Dropped files', e.dataTransfer.files);
         }}

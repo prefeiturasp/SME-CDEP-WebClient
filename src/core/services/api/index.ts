@@ -69,7 +69,6 @@ const configPadraoAutenticacao = async (
   const diff = now.diff(dayjs(dataHoraExpiracao), 'seconds');
 
   if (requestConfig.headers) {
-    requestConfig.headers['Content-Type'] = 'application/json';
     if (token) requestConfig.headers.Authorization = `Bearer ${token}`;
   }
 
