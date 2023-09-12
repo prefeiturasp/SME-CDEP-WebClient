@@ -8,6 +8,7 @@ import {
   CDEP_INPUT_SENHA,
   CDEP_INPUT_SENHA_ATUAL,
 } from '~/core/constants/ids/input';
+import { validateMessages } from '~/core/constants/validate-messages';
 import { SenhaNovaDTO } from '~/core/dto/senha-nova-dto';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import usuarioService from '~/core/services/usuario-service';
@@ -33,13 +34,6 @@ const ModalEditNovaSenha: React.FC<ModalEditNovaSenha> = ({ closeModal }) => {
     'Não pode permitir caracteres acentuados',
     'Deve ter no mínimo 8 e no máximo 12 caracteres',
   ];
-
-  const validateMessages = {
-    required: 'Campo obrigatório',
-    string: {
-      range: 'Deve ter entre ${min} e ${max} caracteres',
-    },
-  };
 
   const alterar = (values: SenhaNovaDTO) => usuarioService.alterarSenha(login, values);
 

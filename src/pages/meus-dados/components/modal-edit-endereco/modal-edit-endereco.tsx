@@ -1,5 +1,6 @@
 import { Col, Form, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import { AxiosError, HttpStatusCode } from 'axios';
 import React, { useState } from 'react';
 import InputBairro from '~/components/cdep/input/bairro';
 import InputCEP from '~/components/cdep/input/cep';
@@ -17,15 +18,15 @@ import {
   CDEP_INPUT_NUMERO,
 } from '~/core/constants/ids/input';
 import { CDEP_SELECT_UF } from '~/core/constants/ids/select';
+import { validateMessages } from '~/core/constants/validate-messages';
 import { EnderecoUsuarioExternoDTO } from '~/core/dto/endereco-usuario-externo-dto';
-import { useAppSelector } from '~/core/hooks/use-redux';
-import usuarioService from '~/core/services/usuario-service';
-import ModalEditDefault from '../modal-edit-default';
-import { RetornoCEPDTO } from '~/core/dto/retorno-cep-dto';
-import enderecoService from '~/core/services/endereco-service';
-import { removerTudoQueNaoEhDigito } from '~/core/utils/functions';
-import { AxiosError, HttpStatusCode } from 'axios';
 import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
+import { RetornoCEPDTO } from '~/core/dto/retorno-cep-dto';
+import { useAppSelector } from '~/core/hooks/use-redux';
+import enderecoService from '~/core/services/endereco-service';
+import usuarioService from '~/core/services/usuario-service';
+import { removerTudoQueNaoEhDigito } from '~/core/utils/functions';
+import ModalEditDefault from '../modal-edit-default';
 
 type ModalEditEnderecoProps = {
   closeModal: () => void;
@@ -46,13 +47,6 @@ const ModalEditEndereco: React.FC<ModalEditEnderecoProps> = ({
   const auth = useAppSelector((store) => store.auth);
 
   const usuarioLogin = auth?.usuarioLogin;
-
-  const validateMessages = {
-    required: 'Campo obrigatório',
-    string: {
-      range: 'Deve ter entre ${min} e ${max} caracteres',
-    },
-  };
 
   const alterar = (values: EnderecoUsuarioExternoDTO) =>
     usuarioService.alterarEndereco(usuarioLogin, values);

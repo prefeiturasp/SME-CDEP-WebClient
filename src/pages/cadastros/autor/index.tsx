@@ -2,6 +2,7 @@ import ListCadastrosAuxiliares, {
   ListConfigCadastros,
 } from '~/components/cdep/cadastros/auxiliares/list/list';
 import { ROUTES } from '~/core/enum/routes';
+import { TipoCreditoAutoria } from '~/core/enum/tipo-credito-autoria';
 import { URL_API_CREDITO_AUTOR } from '~/core/services/credito-autor';
 
 const Autor: React.FC = () => {
@@ -11,7 +12,7 @@ const Autor: React.FC = () => {
     },
     page: {
       title: 'Autor',
-      urlApiBase: URL_API_CREDITO_AUTOR,
+      urlApiBase: `${URL_API_CREDITO_AUTOR}?tipo=${TipoCreditoAutoria.Autoria}`,
     },
   };
 

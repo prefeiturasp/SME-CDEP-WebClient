@@ -1,25 +1,22 @@
 import { ROUTES } from '~/core/enum/routes';
 
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 import { INPUTS_NAMES } from '~/core/constants/inputs-cadastros';
+import { FormCadastrosAuxiliaresProps } from '~/core/dto/form-cadastros-auxiliares';
+import { TipoCreditoAutoria } from '~/core/enum/tipo-credito-autoria';
 import { URL_API_CREDITO_AUTOR } from '~/core/services/credito-autor';
-import FormCadastrosAuxiliares, { FormConfigCadastros } from '.';
+import FormCadastrosAuxiliares from '.';
 
 const FormConfigCadastrosAuxiliares: React.FC = () => {
-  const paramsRoute = useParams();
   const location = useLocation();
 
   const pathname = location.pathname;
 
-  const paramsConfigPage: FormConfigCadastros[] = [
+  const paramsConfigPage: FormCadastrosAuxiliaresProps[] = [
     {
-      breadcrumb: {
-        mainPage: 'Crédito',
-        urlMainPage: ROUTES.CREDITO,
-        title: paramsRoute?.id ? 'Editar' : 'Novo',
-      },
       page: {
         title: 'Crédito',
+        urlMainPage: ROUTES.CREDITO,
         urlBase: URL_API_CREDITO_AUTOR,
         inputs: [
           {
@@ -28,15 +25,12 @@ const FormConfigCadastrosAuxiliares: React.FC = () => {
           },
         ],
       },
+      initialValues: { tipo: TipoCreditoAutoria.Credito },
     },
     {
-      breadcrumb: {
-        mainPage: 'Autor',
-        urlMainPage: ROUTES.AUTOR,
-        title: paramsRoute?.id ? 'Editar' : 'Novo',
-      },
       page: {
         title: 'Autor',
+        urlMainPage: ROUTES.AUTOR,
         urlBase: URL_API_CREDITO_AUTOR,
         inputs: [
           {
@@ -45,16 +39,13 @@ const FormConfigCadastrosAuxiliares: React.FC = () => {
           },
         ],
       },
+      initialValues: { tipo: TipoCreditoAutoria.Autoria },
     },
     {
-      breadcrumb: {
-        mainPage: 'Editora',
-        urlMainPage: ROUTES.EDITORA,
-        title: paramsRoute?.id ? 'Editar' : 'Novo',
-      },
       page: {
         title: 'Editora',
         urlBase: 'v1/editora',
+        urlMainPage: ROUTES.EDITORA,
         inputs: [
           {
             name: INPUTS_NAMES.TEXT.NOME,
@@ -64,14 +55,10 @@ const FormConfigCadastrosAuxiliares: React.FC = () => {
       },
     },
     {
-      breadcrumb: {
-        mainPage: 'Assunto',
-        urlMainPage: ROUTES.ASSUNTO,
-        title: paramsRoute?.id ? 'Editar' : 'Novo',
-      },
       page: {
         title: 'Assunto',
         urlBase: 'v1/assunto',
+        urlMainPage: ROUTES.ASSUNTO,
         inputs: [
           {
             name: INPUTS_NAMES.TEXT.NOME,
@@ -81,14 +68,10 @@ const FormConfigCadastrosAuxiliares: React.FC = () => {
       },
     },
     {
-      breadcrumb: {
-        mainPage: 'Série/Coleção',
-        urlMainPage: ROUTES.SERIE_COLECAO,
-        title: paramsRoute?.id ? 'Editar' : 'Novo',
-      },
       page: {
         title: 'Série/Coleção',
         urlBase: 'v1/seriecolecao',
+        urlMainPage: ROUTES.SERIE_COLECAO,
         inputs: [
           {
             name: INPUTS_NAMES.TEXT.NOME,
@@ -99,9 +82,9 @@ const FormConfigCadastrosAuxiliares: React.FC = () => {
     },
   ];
 
-  const getFormParams = (): FormConfigCadastros | undefined => {
-    const configAtual = paramsConfigPage.find((item: FormConfigCadastros) =>
-      pathname.includes(item.breadcrumb.urlMainPage),
+  const getFormParams = (): FormCadastrosAuxiliaresProps | undefined => {
+    const configAtual = paramsConfigPage.find((item: FormCadastrosAuxiliaresProps) =>
+      pathname.includes(item.page.urlMainPage),
     );
 
     return configAtual;

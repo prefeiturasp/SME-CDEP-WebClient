@@ -1,5 +1,5 @@
-import { Colors } from '../styles/colors';
 import { Modal, ModalFuncProps } from 'antd';
+import { Colors } from '../styles/colors';
 
 const confirmacao = (props: ModalFuncProps) => {
   const { title, content, okText, cancelText } = props;

@@ -42,8 +42,11 @@ const ListAcervo: React.FC = () => {
 
   const onClickNovo = () => navigate(ROUTES.ACERVO_NOVO);
 
-  const onClickEditar = (id: number) =>
-    navigate(`${ROUTES.ACERVO}/editar/${id}`, { replace: true });
+  const onClickEditar = (row: IdTipoTituloCreditoAutoriaCodigoAcervoDTO) =>
+    navigate(`${ROUTES.ACERVO}/editar/${row.acervoId}`, {
+      state: { tipoAcervoId: row.tipoAcervoId },
+      replace: true,
+    });
 
   return (
     <Col>
@@ -101,7 +104,7 @@ const ListAcervo: React.FC = () => {
                     columns={columns}
                     onRow={(row) => ({
                       onClick: () => {
-                        onClickEditar(row?.acervoId);
+                        onClickEditar(row);
                       },
                     })}
                   />
