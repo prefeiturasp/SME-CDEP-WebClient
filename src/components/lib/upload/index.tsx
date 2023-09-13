@@ -1,41 +1,47 @@
 import { InboxOutlined } from '@ant-design/icons';
-import type { FormItemProps, UploadFile, UploadProps } from 'antd';
-import { Form, Upload } from 'antd';
-import { RcFile } from 'antd/es/upload';
+import { Upload, message } from 'antd';
+import { DraggerProps, RcFile, UploadFile } from 'antd/es/upload';
+import { HttpStatusCode } from 'axios';
 import React, { useState } from 'react';
-import armazenamentoService from '~/core/services/armazenamento-service';
 import { permiteInserirFormato } from '~/core/utils/functions';
 
 const { Dragger } = Upload;
 
 type UploadArquivosProps = {
-  uploadProps?: UploadProps;
+  multiple?: boolean;
+  draggerProps?: DraggerProps;
   tamanhoMaximoUpload?: number;
-  formItemProps?: FormItemProps;
   tiposArquivosPermitidos?: string;
+  dowloadService: (codigosArquivo: string) => any;
+  removeService: (codigosArquivo: string[]) => any;
+  uploadService: (formData: FormData, configuracaoHeader: any) => any;
 };
 
-const UploadArquivos: React.FC<UploadArquivosProps> = ({
-  uploadProps,
-  formItemProps,
+const UploadArquivosSME: React.FC<UploadArquivosProps> = ({
+  multiple,
+  draggerProps,
+  uploadService,
+  removeService,
+  dowloadService,
   tamanhoMaximoUpload = 100,
   tiposArquivosPermitidos = '',
 }) => {
-  const [fileList, setFileList] = useState<UploadFile<any>[] | undefined>([]);
+  const [listaDeArquivos, setListaDeArquivos] = useState<UploadFile<any>[]>([]);
 
   const excedeuLimiteMaximo = (arquivo: File) => {
     const tamanhoArquivo = arquivo.size / 1024 / 1024;
+
     return tamanhoArquivo > tamanhoMaximoUpload;
   };
 
   const beforeUploadDefault = (arquivo: RcFile) => {
     if (!permiteInserirFormato(arquivo, tiposArquivosPermitidos)) {
-      console.log('Formato não permitido');
+      message.error('Formato não permitido');
       return false;
     }
 
     if (excedeuLimiteMaximo(arquivo)) {
-      console.log(`Tamanho máximo ${tamanhoMaximoUpload} MB`);
+      message.error(`Tamanho máximo ${tamanhoMaximoUpload} MB`);
       return false;
     }
 
@@ -55,43 +61,91 @@ const UploadArquivos: React.FC<UploadArquivosProps> = ({
     };
 
     fmData.append('file', file);
-    console.log('🚀 ~ customRequestDefault ~ file:', file);
 
-    armazenamentoService
-      .fazerUploadArquivo(file, config)
-      .then((resposta) => {
+    uploadService(fmData, config)
+      .then((resposta: any) => {
         const codigo = resposta?.data?.codigo || resposta.data;
         onSuccess(file, codigo);
       })
-      .catch((e) => onError({ event: e }));
+      .catch((e: any) => onError({ event: e }));
   };
 
-  const handleChange: UploadProps['onChange'] = ({ fileList: newFileList }) =>
-    setFileList(newFileList);
+  const onRemoveDefault = async (arquivo: any) => {
+    const filtrarCodigosPraRemover = listaDeArquivos.filter((item) => item.xhr === arquivo.xhr);
+    const codigosPraRemover = filtrarCodigosPraRemover.map((item) => item.xhr);
+
+    const resposta = await removeService(codigosPraRemover).catch((e: any) => message.error(e));
+
+    if (resposta && resposta.status === HttpStatusCode.Ok) {
+      message.success(`Arquivo ${arquivo.name} excluído com sucesso`);
+      return true;
+    }
+    // return false
+    return message.error(`Não foi possivel excluir`);
+  };
+
+  const atualizaListaArquivos = (fileList: any, file: any) => {
+    const novaLista = fileList.filter((item: any) => item.uid !== file.uid);
+    const novoMap = [...novaLista];
+    setListaDeArquivos(novoMap);
+  };
+
+  const onChangeDefault = ({ file, fileList }: any) => {
+    const { status } = file;
+
+    if (excedeuLimiteMaximo(file)) {
+      atualizaListaArquivos(fileList, file);
+      return;
+    }
+
+    if (!permiteInserirFormato(file, tiposArquivosPermitidos)) {
+      atualizaListaArquivos(fileList, file);
+      return;
+    }
+
+    const novoMap = [...fileList]?.filter((f) => f?.status !== 'removed');
+
+    if (status === 'done') {
+      message.success(`${file.name} arquivo carregado com sucesso`);
+    } else if (status === 'error') {
+      atualizaListaArquivos(fileList, file);
+      return;
+    }
+
+    setListaDeArquivos(novoMap);
+  };
+
+  const onDownloadDefault = (arquivo: any) => {
+    const codigoArquivo = arquivo.xhr;
+    dowloadService(codigoArquivo)
+      .then((resposta: any) => {
+        // downloadBlob(resposta.data, arquivo.name);
+        console.log(resposta.data, arquivo.name);
+      })
+      .catch((e: any) => message.error(e));
+  };
 
   return (
-    <Form.Item name='anexos' label='Anexos' wrapperCol={{ xs: 24 }} {...formItemProps}>
-      <Dragger
-        name='file'
-        fileList={fileList}
-        onChange={handleChange}
-        action='v1/Armazenamento'
-        // accept={tiposArquivosPermitidos}
-        beforeUpload={beforeUploadDefault}
-        customRequest={customRequestDefault}
-        onDrop={(e) => {
-          console.log('Dropped files', e.dataTransfer.files);
-        }}
-        {...uploadProps}
-      >
-        <p className='ant-upload-drag-icon'>
-          <InboxOutlined />
-        </p>
-        <p className='ant-upload-text'>Clique ou arraste para fazer o upload do arquivo</p>
-        <p className='ant-upload-hint'>Deve permitir apenas imagens com no máximo 5MB cada</p>
-      </Dragger>
-    </Form.Item>
+    <Dragger
+      name='file'
+      listType='picture'
+      fileList={listaDeArquivos}
+      showUploadList={{ showDownloadIcon: true }}
+      multiple={draggerProps?.multiple || multiple}
+      onRemove={draggerProps?.onRemove || onRemoveDefault}
+      onChange={draggerProps?.onChange || onChangeDefault}
+      onDownload={draggerProps?.onDownload || onDownloadDefault}
+      beforeUpload={draggerProps?.beforeUpload || beforeUploadDefault}
+      customRequest={draggerProps?.customRequest || customRequestDefault}
+      {...draggerProps}
+    >
+      <p className='ant-upload-drag-icon'>
+        <InboxOutlined />
+      </p>
+      <p className='ant-upload-text'>Clique ou arraste para fazer o upload do arquivo</p>
+      <p className='ant-upload-hint'>Deve permitir apenas imagens com no máximo 5MB cada</p>
+    </Dragger>
   );
 };
 
-export default UploadArquivos;
+export default UploadArquivosSME;
