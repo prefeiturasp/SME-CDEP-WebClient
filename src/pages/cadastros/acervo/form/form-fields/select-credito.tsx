@@ -4,12 +4,10 @@ import React, { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form';
 import Select from '~/components/lib/inputs/select';
+import { paramsConfigPageFormCredito } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_CREDITO } from '~/core/constants/ids/select';
-import { INPUTS_NAMES } from '~/core/constants/inputs-cadastros';
-import { FormCadastrosAuxiliaresProps } from '~/core/dto/form-cadastros-auxiliares';
-import { ROUTES } from '~/core/enum/routes';
 import { TipoCreditoAutoria } from '~/core/enum/tipo-credito-autoria';
-import { URL_API_CREDITO_AUTOR, obterCreditoAutorResumido } from '~/core/services/credito-autor';
+import { obterCreditoAutorResumido } from '~/core/services/credito-autor';
 
 type SelectCreditoProps = {
   selectProps?: SelectProps;
@@ -35,21 +33,6 @@ const SelectCredito: React.FC<SelectCreditoProps> = ({ selectProps, formItemProp
   useEffect(() => {
     obterDados();
   }, []);
-
-  const paramsConfigPage: FormCadastrosAuxiliaresProps = {
-    page: {
-      title: 'Crédito',
-      urlMainPage: ROUTES.CREDITO,
-      urlBase: URL_API_CREDITO_AUTOR,
-      inputs: [
-        {
-          name: INPUTS_NAMES.TEXT.NOME,
-          placeholder: 'Informe o nome do crédito',
-        },
-      ],
-    },
-    initialValues: { tipo: TipoCreditoAutoria.Credito },
-  };
 
   const validarAoFecharModal = (open: boolean, updateData?: boolean) => {
     setOpenModal(open);
@@ -89,7 +72,7 @@ const SelectCredito: React.FC<SelectCreditoProps> = ({ selectProps, formItemProp
       />
       {openModal && (
         <FormCadastrosAuxiliares
-          {...paramsConfigPage}
+          {...paramsConfigPageFormCredito}
           isModal
           setOpenModal={validarAoFecharModal}
         />

@@ -3,20 +3,20 @@ import { useForm } from 'antd/es/form/Form';
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
+import Auditoria from '~/components/cdep/text/auditoria';
 import CardContent from '~/components/lib/card-content';
+import { URL_API_ACERVO_FOTOGRAFICO } from '~/core/constants/urls-api';
 import { validateMessages } from '~/core/constants/validate-messages';
 import {
   FormDefaultCadastroAcervoDTO,
   FormPageConfigCadastroAcervoProps,
 } from '~/core/dto/form-cadastro-acervo';
+import { ROUTES } from '~/core/enum/routes';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
-import { URL_API_ACERVO_FOTOGRAFICO } from '~/core/services/acervo-fotografico-service';
 import { alterarRegistro, inserirRegistro, obterRegistro } from '~/core/services/api';
 import FormContentCadastroAcervo from './form-content-cadastro-acervo';
 import { FieldsAcervoFotografico } from './form-fields-config/acervo-fotografico-fields-config';
 import FormCadastroAcervoHeader from './form-header-cadastro-acervo';
-import { ROUTES } from '~/core/enum/routes';
-import Auditoria from '~/components/cdep/text/auditoria';
 
 const FormAcervo: React.FC = () => {
   const navigate = useNavigate();
