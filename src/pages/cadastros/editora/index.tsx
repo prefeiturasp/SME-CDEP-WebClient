@@ -1,20 +1,6 @@
-import ListCadastrosAuxiliares, {
-  ListConfigCadastros,
-} from '~/components/cdep/cadastros/auxiliares/list/list';
-import { ROUTES } from '~/core/enum/routes';
+import ListCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/list/list';
+import { paramsConfigPageListEditora } from '~/core/constants/config-page-cadastros-auxiliares';
 
-const Editora: React.FC = () => {
-  const paramsConfigPage: ListConfigCadastros = {
-    breadcrumb: {
-      urlMainPage: ROUTES.EDITORA,
-    },
-    page: {
-      title: 'Editora',
-      urlApiBase: 'v1/editora',
-    },
-  };
-
-  return <ListCadastrosAuxiliares {...paramsConfigPage} />;
-};
+const Editora: React.FC = () => <ListCadastrosAuxiliares {...paramsConfigPageListEditora} />;
 
 export default Editora;

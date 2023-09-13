@@ -1,20 +1,7 @@
-import ListCadastrosAuxiliares, {
-  ListConfigCadastros,
-} from '~/components/cdep/cadastros/auxiliares/list/list';
-import { ROUTES } from '~/core/enum/routes';
+import ListCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/list/list';
+import { paramsConfigPageListSerieColecao } from '~/core/constants/config-page-cadastros-auxiliares';
 
-const SerieColecao: React.FC = () => {
-  const paramsConfigPage: ListConfigCadastros = {
-    breadcrumb: {
-      urlMainPage: ROUTES.SERIE_COLECAO,
-    },
-    page: {
-      title: 'Série/Coleção',
-      urlApiBase: 'v1/seriecolecao',
-    },
-  };
-
-  return <ListCadastrosAuxiliares {...paramsConfigPage} />;
-};
-
+const SerieColecao: React.FC = () => (
+  <ListCadastrosAuxiliares {...paramsConfigPageListSerieColecao} />
+);
 export default SerieColecao;
