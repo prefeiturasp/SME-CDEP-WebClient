@@ -10,8 +10,8 @@ const { Dragger } = Upload;
 type UploadArquivosProps = {
   multiple?: boolean;
   draggerProps?: DraggerProps;
-  tamanhoMaximoUpload?: number;
   tiposArquivosPermitidos?: string;
+  tamanhoMaxUploadPorArquivo?: number;
   dowloadService: (codigosArquivo: string) => any;
   removeService: (codigosArquivo: string[]) => any;
   uploadService: (formData: FormData, configuracaoHeader: any) => any;
@@ -23,15 +23,15 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = ({
   uploadService,
   removeService,
   dowloadService,
-  tamanhoMaximoUpload = 100,
   tiposArquivosPermitidos = '',
+  tamanhoMaxUploadPorArquivo = 5,
 }) => {
   const [listaDeArquivos, setListaDeArquivos] = useState<UploadFile<any>[]>([]);
 
   const excedeuLimiteMaximo = (arquivo: File) => {
-    const tamanhoArquivo = arquivo.size / 1024 / 1024;
+    const tamanhoMaximoUpload = tamanhoMaxUploadPorArquivo * 1024 * 1024; // 5MB
 
-    return tamanhoArquivo > tamanhoMaximoUpload;
+    return arquivo.size > tamanhoMaximoUpload;
   };
 
   const beforeUploadDefault = (arquivo: RcFile) => {
@@ -41,7 +41,7 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = ({
     }
 
     if (excedeuLimiteMaximo(arquivo)) {
-      message.error(`Tamanho máximo ${tamanhoMaximoUpload} MB`);
+      message.error(`Tamanho máximo ${tamanhoMaxUploadPorArquivo}MB`);
       return false;
     }
 
@@ -70,7 +70,7 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = ({
       .catch((e: any) => onError({ event: e }));
   };
 
-  const onRemoveDefault = async (arquivo: any) => {
+  const onRemoveDefault = async (arquivo: UploadFile<any>) => {
     const filtrarCodigosPraRemover = listaDeArquivos.filter((item) => item.xhr === arquivo.xhr);
     const codigosPraRemover = filtrarCodigosPraRemover.map((item) => item.xhr);
 
@@ -84,7 +84,7 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = ({
     return message.error(`Não foi possivel excluir`);
   };
 
-  const atualizaListaArquivos = (fileList: any, file: any) => {
+  const atualizaListaArquivos = (fileList: any, file: UploadFile<any>) => {
     const novaLista = fileList.filter((item: any) => item.uid !== file.uid);
     const novoMap = [...novaLista];
     setListaDeArquivos(novoMap);
@@ -115,7 +115,7 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = ({
     setListaDeArquivos(novoMap);
   };
 
-  const onDownloadDefault = (arquivo: any) => {
+  const onDownloadDefault = (arquivo: UploadFile<any>) => {
     const codigoArquivo = arquivo.xhr;
     dowloadService(codigoArquivo)
       .then((resposta: any) => {
