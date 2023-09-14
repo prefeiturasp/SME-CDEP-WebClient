@@ -3,7 +3,6 @@ import { useForm } from 'antd/es/form/Form';
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
-import UploadArquivosCDEP from '~/components/cdep/upload';
 import Auditoria from '~/components/cdep/text/auditoria';
 import CardContent from '~/components/lib/card-content';
 import { URL_API_ACERVO_FOTOGRAFICO } from '~/core/constants/urls-api';
@@ -28,7 +27,7 @@ const FormAcervo: React.FC = () => {
 
   const state = location.state;
 
-  const id = paramsRoute?.id ? Number(paramsRoute.id) : 0;
+  const acervoId = paramsRoute?.acervoId ? Number(paramsRoute.acervoId) : 0;
   const stateTipoAcervoId = state?.tipoAcervoId;
 
   const tipo = Form.useWatch('tipoAcervoId', form);
@@ -38,7 +37,7 @@ const FormAcervo: React.FC = () => {
 
   const carregarDados = useCallback(async () => {
     const resposta = await obterRegistro<FormDefaultCadastroAcervoDTO>(
-      `${fieldsConfig?.urlBase}/${id}`,
+      `${fieldsConfig?.urlBase}/${acervoId}`,
     );
     if (resposta.sucesso) {
       if (resposta.dados?.arquivos?.length) {
@@ -50,13 +49,13 @@ const FormAcervo: React.FC = () => {
       }
       setFormInitialValues(resposta.dados);
     }
-  }, [fieldsConfig, id]);
+  }, [fieldsConfig, acervoId]);
 
   useEffect(() => {
-    if (id && fieldsConfig?.urlBase) {
+    if (acervoId && fieldsConfig?.urlBase) {
       carregarDados();
     }
-  }, [carregarDados, fieldsConfig, id]);
+  }, [carregarDados, fieldsConfig, acervoId]);
 
   useEffect(() => {
     form.resetFields();
@@ -66,7 +65,7 @@ const FormAcervo: React.FC = () => {
     const valoresSalvar = { ...values };
 
     if (valoresSalvar?.arquivos?.length) {
-      if (id) {
+      if (acervoId) {
         valoresSalvar.arquivos = valoresSalvar.arquivos?.map((item: any) => ({
           codigo: item.xhr,
           nome: item.name,
@@ -78,16 +77,11 @@ const FormAcervo: React.FC = () => {
       valoresSalvar.arquivos = [];
     }
 
-    // TODO - Descrição - Editor
-    valoresSalvar.descricao = 'MOCK DESCRIÇÃO';
-
-    valoresSalvar.id = id;
-
     if (fieldsConfig) {
       let response = null;
 
-      if (id && formInitialValues) {
-        valoresSalvar.id = id;
+      if (acervoId && formInitialValues) {
+        valoresSalvar.id = formInitialValues.id;
         valoresSalvar.acervoId = formInitialValues.acervoId;
         valoresSalvar.tipoAcervoId = formInitialValues.tipoAcervoId;
         response = await alterarRegistro(fieldsConfig.urlBase, valoresSalvar);
@@ -98,7 +92,7 @@ const FormAcervo: React.FC = () => {
       if (response.sucesso) {
         notification.success({
           message: 'Sucesso',
-          description: `Registro ${id ? 'alterado' : 'inserido'} com sucesso!`,
+          description: `Registro ${acervoId ? 'alterado' : 'inserido'} com sucesso!`,
         });
         navigate(ROUTES.ACERVO);
       }
@@ -120,7 +114,7 @@ const FormAcervo: React.FC = () => {
   }, [tipo, stateTipoAcervoId]);
 
   useEffect(() => {
-    if (!id) {
+    if (!acervoId) {
       if (tipo) {
         setFieldsConfig(onterCampos());
       } else {
@@ -130,7 +124,7 @@ const FormAcervo: React.FC = () => {
     } else {
       setFieldsConfig(onterCampos());
     }
-  }, [onterCampos, id, form, tipo]);
+  }, [onterCampos, acervoId, form, tipo]);
 
   return (
     <Col>
@@ -148,9 +142,9 @@ const FormAcervo: React.FC = () => {
           <Row gutter={[16, 8]}>
             <Col xs={24}>
               <SelectTipoAcervo
-                formItemProps={{ required: true, name: 'tipoAcervoId' }}
+                formItemProps={{ rules: [{ required: true }], name: 'tipoAcervoId' }}
                 selectProps={{
-                  disabled: !!id,
+                  disabled: !!acervoId,
                   onChange: (newValue) => {
                     setFieldsConfig(undefined);
                     form.resetFields();
@@ -159,9 +153,8 @@ const FormAcervo: React.FC = () => {
                 }}
               />
             </Col>
-            {tipo ? <FormContentCadastroAcervo fieldsConfig={fieldsConfig} /> : <></>}
+            {tipo ? <FormContentCadastroAcervo fieldsConfig={fieldsConfig} form={form} /> : <></>}
           </Row>
-          <UploadArquivosCDEP form={form} />
           <Auditoria dados={formInitialValues?.auditoria} />
         </CardContent>
       </Form>

@@ -1,5 +1,6 @@
-import { Col } from 'antd';
+import { Col, FormInstance } from 'antd';
 import React from 'react';
+import UploadArquivosCDEP from '~/components/cdep/upload';
 import {
   FieldAcervoProps,
   FormPageConfigCadastroAcervoProps,
@@ -24,11 +25,16 @@ import {
   SelectFormatoImagem,
   SelectSuporte,
 } from './form-fields';
+import InputDescricao from './form-fields/input-descricao';
 
 type FormContentCadastroAcervoProps = {
   fieldsConfig: FormPageConfigCadastroAcervoProps | undefined;
+  form: FormInstance;
 };
-const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({ fieldsConfig }) => {
+const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
+  fieldsConfig,
+  form,
+}) => {
   if (!fieldsConfig?.fields?.length) return;
 
   return (
@@ -64,6 +70,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({ f
           case FieldAcervoEnum.EstadoConservacao:
             input = <SelectConservacao />;
             break;
+          case FieldAcervoEnum.Descricao:
+            input = <InputDescricao />;
+            break;
           case FieldAcervoEnum.Quantidade:
             input = <InputQuantidade />;
             break;
@@ -87,6 +96,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({ f
             break;
           case FieldAcervoEnum.Resolucao:
             input = <InputResolucao />;
+            break;
+          case FieldAcervoEnum.Anexos:
+            input = <UploadArquivosCDEP form={form} />;
             break;
 
           default:

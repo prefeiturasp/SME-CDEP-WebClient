@@ -51,6 +51,7 @@ const SelectCredito: React.FC<SelectCreditoProps> = ({ selectProps, formItemProp
         <Select
           showSearch
           allowClear
+          // mode='multiple' // TODO HABILITAR MULTIPLE
           id={CDEP_SELECT_CREDITO}
           {...selectProps}
           options={options}

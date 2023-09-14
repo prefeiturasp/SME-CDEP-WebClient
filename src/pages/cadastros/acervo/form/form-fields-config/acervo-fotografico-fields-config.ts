@@ -1,6 +1,7 @@
+import { FieldAcervoProps } from '~/core/dto/form-cadastro-acervo';
 import { FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 
-export const FieldsAcervoFotografico = [
+export const FieldsAcervoFotografico: FieldAcervoProps[] = [
   {
     fieldCervo: FieldAcervoEnum.Titulo,
   },
@@ -32,6 +33,9 @@ export const FieldsAcervoFotografico = [
   {
     fieldCervo: FieldAcervoEnum.EstadoConservacao,
     sm: 12,
+  },
+  {
+    fieldCervo: FieldAcervoEnum.Descricao,
   },
   {
     fieldCervo: FieldAcervoEnum.Quantidade,
