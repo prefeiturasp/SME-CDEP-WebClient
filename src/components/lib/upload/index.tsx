@@ -135,7 +135,7 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
 
     uploadService(fmData, config)
       .then((resposta: any) => {
-        const codigo = resposta?.data?.codigo || resposta.data;
+        const codigo = resposta?.data?.codigo || resposta?.dados?.codigo || resposta.data;
         onSuccess(file, codigo);
       })
       .catch((e: any) => onError({ event: e }));
@@ -145,21 +145,25 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
     const filtrarCodigosPraRemover = listaDeArquivos.filter(
       (item: any) => item.xhr === arquivo.xhr,
     );
+
     const codigosPraRemover = filtrarCodigosPraRemover.map((item: any) => item.xhr);
 
-    const resposta = await removeService(codigosPraRemover);
+    if (codigosPraRemover?.length) {
+      const resposta = await removeService(codigosPraRemover);
 
-    if (resposta?.status === HttpStatusCodeOk || resposta?.sucesso) {
-      notification.success({
-        message: 'Sucesso',
-        description: `Arquivo ${arquivo.name} excluído com sucesso`,
+      if (resposta?.status === HttpStatusCodeOk || resposta?.sucesso) {
+        notification.success({
+          message: 'Sucesso',
+          description: `Arquivo ${arquivo.name} excluído com sucesso`,
+        });
+        return true;
+      }
+      notification.error({
+        message: 'Erro',
+        description: `Não foi possivel excluir`,
       });
-      return true;
+      return false;
     }
-    notification.error({
-      message: 'Erro',
-      description: `Não foi possivel excluir`,
-    });
     return false;
   };
 

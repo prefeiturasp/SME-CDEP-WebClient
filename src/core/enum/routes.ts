@@ -23,5 +23,5 @@ export enum ROUTES {
   SERIE_COLECAO_EDITAR = '/cadastro/serie-colecao/editar/:id',
   ACERVO = '/cadastro/acervo',
   ACERVO_NOVO = '/cadastro/acervo/novo',
-  ACERVO_EDITAR = '/cadastro/acervo/editar/:id',
+  ACERVO_EDITAR = '/cadastro/acervo/editar/:acervoId',
 }
