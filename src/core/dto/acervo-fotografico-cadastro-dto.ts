@@ -17,5 +17,5 @@ export type AcervoFotograficoCadastroDTO = {
   tamanhoArquivo: string;
   cromiaId: number;
   resolucao: string;
-  arquivos?: string[];
+  arquivos?: any;
 };

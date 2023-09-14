@@ -206,10 +206,13 @@ export const alterarRegistro = async <T>(url: string, params: any): Promise<ApiR
     .finally(() => store.dispatch(setSpinning(false)));
 };
 
-export const deletarRegistro = async <T>(url: string): Promise<ApiResult<T>> => {
+export const deletarRegistro = async <T>(
+  url: string,
+  config?: AxiosRequestConfig,
+): Promise<ApiResult<T>> => {
   store.dispatch(setSpinning(true));
   return api
-    .delete(url)
+    .delete(url, config)
     .then((response: AxiosResponse<T>): ApiResult<T> => {
       return { sucesso: true, dados: response?.data, mensagens: [] };
     })
