@@ -11,9 +11,9 @@ import DataTable from '~/components/lib/data-table';
 import HeaderPage from '~/components/lib/header-page';
 import { CDEP_BUTTON_NOVO, CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_CODIGO, CDEP_INPUT_TITULO } from '~/core/constants/ids/input';
+import { URL_API_ACERVO } from '~/core/constants/urls-api';
 import { IdTipoTituloCreditoAutoriaCodigoAcervoDTO } from '~/core/dto/id-tipo-titulo-credito-autoria-codigo-acervo-dto';
 import { ROUTES } from '~/core/enum/routes';
-import { URL_API_ACERVO } from '~/core/services/acervo-service';
 
 const ListAcervo: React.FC = () => {
   const navigate = useNavigate();

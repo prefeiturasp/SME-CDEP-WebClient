@@ -1,20 +1,6 @@
-import ListCadastrosAuxiliares, {
-  ListConfigCadastros,
-} from '~/components/cdep/cadastros/auxiliares/list/list';
-import { ROUTES } from '~/core/enum/routes';
+import ListCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/list/list';
+import { paramsConfigPageListAssunto } from '~/core/constants/config-page-cadastros-auxiliares';
 
-const Assunto: React.FC = () => {
-  const paramsConfigPage: ListConfigCadastros = {
-    breadcrumb: {
-      urlMainPage: ROUTES.ASSUNTO,
-    },
-    page: {
-      title: 'Assunto',
-      urlApiBase: 'v1/assunto',
-    },
-  };
-
-  return <ListCadastrosAuxiliares {...paramsConfigPage} />;
-};
+const Assunto: React.FC = () => <ListCadastrosAuxiliares {...paramsConfigPageListAssunto} />;
 
 export default Assunto;
