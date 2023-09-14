@@ -1,47 +1,118 @@
 import { InboxOutlined } from '@ant-design/icons';
-import { Upload, message } from 'antd';
+import { Form, FormInstance, FormItemProps, Upload, notification } from 'antd';
 import { DraggerProps, RcFile, UploadFile } from 'antd/es/upload';
-import { HttpStatusCode } from 'axios';
-import React, { useState } from 'react';
-import { permiteInserirFormato } from '~/core/utils/functions';
+import React from 'react';
+import styled from 'styled-components';
 
 const { Dragger } = Upload;
 
+export const permiteInserirFormato = (arquivo: any, tiposArquivosPermitidos: string) => {
+  if (tiposArquivosPermitidos?.trim()) {
+    const listaPermitidos = tiposArquivosPermitidos
+      .split(',')
+      .map((tipo) => tipo?.trim()?.toLowerCase());
+
+    const tamanhoNome = arquivo?.name?.length;
+
+    const permiteTipo = listaPermitidos.find((tipo) => {
+      const nomeTipoAtual = arquivo.name.substring(tamanhoNome, tamanhoNome - tipo.length);
+
+      if (nomeTipoAtual) {
+        return tipo?.toLowerCase() === nomeTipoAtual?.toLowerCase();
+      }
+
+      return false;
+    });
+
+    return !!permiteTipo;
+  }
+  return true;
+};
+
+const downloadBlob = (data: any, fileName: string) => {
+  const a = document.createElement('a');
+  document.body.appendChild(a);
+  a.setAttribute('style', 'display: none');
+
+  const blob = new Blob([data]);
+  const url = window.URL.createObjectURL(blob);
+  a.href = url;
+  a.download = fileName;
+  a.click();
+  window.URL.revokeObjectURL(url);
+
+  document.body.removeChild(a);
+};
+
+export const ContainerUpload = styled.div`
+  .ant-upload-wrapper
+    .ant-upload-list
+    .ant-upload-list-item
+    .ant-upload-list-item-actions
+    .ant-upload-list-item-action {
+    opacity: 1;
+  }
+`;
+
 type UploadArquivosProps = {
   multiple?: boolean;
+  form: FormInstance;
   draggerProps?: DraggerProps;
+  formItemProps: FormItemProps & { name: string };
   tiposArquivosPermitidos?: string;
   tamanhoMaxUploadPorArquivo?: number;
-  dowloadService: (codigosArquivo: string) => any;
+  downloadService: (codigosArquivo: string) => any;
   removeService: (codigosArquivo: string[]) => any;
   uploadService: (formData: FormData, configuracaoHeader: any) => any;
 };
 
-const UploadArquivosSME: React.FC<UploadArquivosProps> = ({
-  multiple,
-  draggerProps,
-  uploadService,
-  removeService,
-  dowloadService,
-  tiposArquivosPermitidos = '',
-  tamanhoMaxUploadPorArquivo = 5,
-}) => {
-  const [listaDeArquivos, setListaDeArquivos] = useState<UploadFile<any>[]>([]);
+const TAMANHO_PADRAO_MAXIMO_UPLOAD = 100;
+const HttpStatusCodeOk = 200;
+
+const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
+  const {
+    form,
+    multiple,
+    draggerProps,
+    formItemProps,
+    uploadService,
+    removeService,
+    downloadService,
+    tiposArquivosPermitidos = '',
+    tamanhoMaxUploadPorArquivo = TAMANHO_PADRAO_MAXIMO_UPLOAD,
+  } = props;
+
+  if (!formItemProps.name) {
+    formItemProps.name = 'arquivos';
+  }
+
+  const listaDeArquivos = Form.useWatch(formItemProps.name, form);
+
+  const setNovoValor = (novoMap: any) => {
+    if (form && form.setFieldValue) {
+      form.setFieldValue(formItemProps.name, novoMap);
+    }
+  };
 
   const excedeuLimiteMaximo = (arquivo: File) => {
-    const tamanhoMaximoUpload = tamanhoMaxUploadPorArquivo * 1024 * 1024; // 5MB
-
-    return arquivo.size > tamanhoMaximoUpload;
+    const tamanhoArquivo = arquivo.size / 1024 / 1024;
+    return tamanhoArquivo > tamanhoMaxUploadPorArquivo;
   };
 
   const beforeUploadDefault = (arquivo: RcFile) => {
     if (!permiteInserirFormato(arquivo, tiposArquivosPermitidos)) {
-      message.error('Formato não permitido');
+      notification.error({
+        message: 'Erro',
+        description: 'Formato não permitido',
+      });
       return false;
     }
 
     if (excedeuLimiteMaximo(arquivo)) {
-      message.error(`Tamanho máximo ${tamanhoMaxUploadPorArquivo}MB`);
+      notification.error({
+        message: 'Erro',
+        description: `Tamanho máximo ${tamanhoMaxUploadPorArquivo}MB`,
+      });
       return false;
     }
 
@@ -71,23 +142,32 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = ({
   };
 
   const onRemoveDefault = async (arquivo: UploadFile<any>) => {
-    const filtrarCodigosPraRemover = listaDeArquivos.filter((item) => item.xhr === arquivo.xhr);
-    const codigosPraRemover = filtrarCodigosPraRemover.map((item) => item.xhr);
+    const filtrarCodigosPraRemover = listaDeArquivos.filter(
+      (item: any) => item.xhr === arquivo.xhr,
+    );
+    const codigosPraRemover = filtrarCodigosPraRemover.map((item: any) => item.xhr);
 
-    const resposta = await removeService(codigosPraRemover).catch((e: any) => message.error(e));
+    const resposta = await removeService(codigosPraRemover);
 
-    if (resposta && resposta.status === HttpStatusCode.Ok) {
-      message.success(`Arquivo ${arquivo.name} excluído com sucesso`);
+    if (resposta?.status === HttpStatusCodeOk || resposta?.sucesso) {
+      notification.success({
+        message: 'Sucesso',
+        description: `Arquivo ${arquivo.name} excluído com sucesso`,
+      });
       return true;
     }
-    // return false
-    return message.error(`Não foi possivel excluir`);
+    notification.error({
+      message: 'Erro',
+      description: `Não foi possivel excluir`,
+    });
+    return false;
   };
 
   const atualizaListaArquivos = (fileList: any, file: UploadFile<any>) => {
     const novaLista = fileList.filter((item: any) => item.uid !== file.uid);
     const novoMap = [...novaLista];
-    setListaDeArquivos(novoMap);
+
+    setNovoValor(novoMap);
   };
 
   const onChangeDefault = ({ file, fileList }: any) => {
@@ -106,45 +186,69 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = ({
     const novoMap = [...fileList]?.filter((f) => f?.status !== 'removed');
 
     if (status === 'done') {
-      message.success(`${file.name} arquivo carregado com sucesso`);
+      notification.success({
+        message: 'Sucesso',
+        description: `${file.name} arquivo carregado com sucesso`,
+      });
     } else if (status === 'error') {
       atualizaListaArquivos(fileList, file);
       return;
     }
 
-    setListaDeArquivos(novoMap);
+    if (status === 'done' || status === 'removed') {
+      if (form && form.setFieldValue) {
+        form.setFieldValue(formItemProps.name, novoMap);
+      }
+    }
+
+    setNovoValor(novoMap);
   };
 
   const onDownloadDefault = (arquivo: UploadFile<any>) => {
     const codigoArquivo = arquivo.xhr;
-    dowloadService(codigoArquivo)
+    downloadService(codigoArquivo)
       .then((resposta: any) => {
-        // downloadBlob(resposta.data, arquivo.name);
-        console.log(resposta.data, arquivo.name);
+        downloadBlob(resposta.data, arquivo.name);
       })
-      .catch((e: any) => message.error(e));
+      .catch(() =>
+        notification.error({
+          message: 'Erro',
+          description: 'Erro ao tentar fazer download',
+        }),
+      );
+  };
+
+  const normFile = (e: any) => {
+    if (Array.isArray(e)) {
+      return e;
+    }
+    return listaDeArquivos;
   };
 
   return (
-    <Dragger
-      name='file'
-      listType='picture'
-      fileList={listaDeArquivos}
-      showUploadList={{ showDownloadIcon: true }}
-      multiple={draggerProps?.multiple || multiple}
-      onRemove={draggerProps?.onRemove || onRemoveDefault}
-      onChange={draggerProps?.onChange || onChangeDefault}
-      onDownload={draggerProps?.onDownload || onDownloadDefault}
-      beforeUpload={draggerProps?.beforeUpload || beforeUploadDefault}
-      customRequest={draggerProps?.customRequest || customRequestDefault}
-      {...draggerProps}
-    >
-      <p className='ant-upload-drag-icon'>
-        <InboxOutlined />
-      </p>
-      <p className='ant-upload-text'>Clique ou arraste para fazer o upload do arquivo</p>
-      <p className='ant-upload-hint'>Deve permitir apenas imagens com no máximo 5MB cada</p>
-    </Dragger>
+    <Form.Item valuePropName='fileList' getValueFromEvent={normFile} {...formItemProps}>
+      <ContainerUpload>
+        <Dragger
+          name='file'
+          listType='text'
+          fileList={listaDeArquivos}
+          showUploadList={{ showDownloadIcon: true }}
+          multiple={draggerProps?.multiple || multiple}
+          onRemove={draggerProps?.onRemove || onRemoveDefault}
+          onChange={draggerProps?.onChange || onChangeDefault}
+          onDownload={draggerProps?.onDownload || onDownloadDefault}
+          beforeUpload={draggerProps?.beforeUpload || beforeUploadDefault}
+          customRequest={draggerProps?.customRequest || customRequestDefault}
+          {...draggerProps}
+        >
+          <p className='ant-upload-drag-icon'>
+            <InboxOutlined />
+          </p>
+          <p className='ant-upload-text'>Clique ou arraste para fazer o upload do arquivo</p>
+          <p className='ant-upload-hint'>Deve permitir apenas imagens com no máximo 5MB cada</p>
+        </Dragger>
+      </ContainerUpload>
+    </Form.Item>
   );
 };
 

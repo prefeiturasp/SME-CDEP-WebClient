@@ -1,17 +1,25 @@
-import { Form } from 'antd';
+import { FormInstance } from 'antd';
+import React from 'react';
 import UploadArquivosSME from '~/components/lib/upload';
 import armazenamentoService from '~/core/services/armazenamento-service';
 
-const UploadArquivosCDEP = () => {
+type UploadArquivosCDEPProps = {
+  form: FormInstance;
+};
+const UploadArquivosCDEP: React.FC<UploadArquivosCDEPProps> = ({ form }) => {
   return (
-    <Form.Item name='arquivos' label='Arquivos' wrapperCol={{ xs: 24 }}>
-      <UploadArquivosSME
-        multiple
-        removeService={armazenamentoService.removerArquivos}
-        uploadService={armazenamentoService.fazerUploadArquivo}
-        dowloadService={armazenamentoService.obterArquivoParaDownload}
-      />
-    </Form.Item>
+    <UploadArquivosSME
+      multiple
+      form={form}
+      formItemProps={{
+        name: 'arquivos',
+        label: 'Arquivos',
+      }}
+      tiposArquivosPermitidos='.jpg,.jpeg,.png'
+      removeService={armazenamentoService.removerArquivos}
+      uploadService={armazenamentoService.fazerUploadArquivo}
+      downloadService={armazenamentoService.obterArquivoParaDownload}
+    />
   );
 };
 
