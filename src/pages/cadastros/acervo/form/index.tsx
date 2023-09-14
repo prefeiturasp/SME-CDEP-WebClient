@@ -14,6 +14,7 @@ import {
 import { ROUTES } from '~/core/enum/routes';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { alterarRegistro, inserirRegistro, obterRegistro } from '~/core/services/api';
+import { formatarDuasCasasDecimais, removerTudoQueNaoEhDigito } from '~/core/utils/functions';
 import FormContentCadastroAcervo from './form-content-cadastro-acervo';
 import { FieldsAcervoFotografico } from './form-fields-config/acervo-fotografico-fields-config';
 import FormCadastroAcervoHeader from './form-header-cadastro-acervo';
@@ -46,6 +47,13 @@ const FormAcervo: React.FC = () => {
           name: item.nome,
           status: 'done',
         }));
+      }
+
+      if (resposta.dados?.altura) {
+        resposta.dados.altura = formatarDuasCasasDecimais(resposta.dados.altura);
+      }
+      if (resposta.dados?.largura) {
+        resposta.dados.largura = formatarDuasCasasDecimais(resposta.dados.largura);
       }
       setFormInitialValues(resposta.dados);
     }
@@ -80,6 +88,17 @@ const FormAcervo: React.FC = () => {
     if (fieldsConfig) {
       let response = null;
 
+      if (valoresSalvar?.altura) {
+        valoresSalvar.altura = removerTudoQueNaoEhDigito(valoresSalvar.altura);
+      } else {
+        valoresSalvar.altura = null;
+      }
+      if (valoresSalvar?.largura) {
+        valoresSalvar.largura = removerTudoQueNaoEhDigito(valoresSalvar.largura);
+      } else {
+        valoresSalvar.largura = null;
+      }
+
       if (acervoId && formInitialValues) {
         valoresSalvar.id = formInitialValues.id;
         valoresSalvar.acervoId = formInitialValues.acervoId;
@@ -92,7 +111,7 @@ const FormAcervo: React.FC = () => {
       if (response.sucesso) {
         notification.success({
           message: 'Sucesso',
-          description: `Registro ${acervoId ? 'alterado' : 'inserido'} com sucesso!`,
+          description: `Acervo ${acervoId ? 'alterado' : 'registrado'} com sucesso!`,
         });
         navigate(ROUTES.ACERVO);
       }

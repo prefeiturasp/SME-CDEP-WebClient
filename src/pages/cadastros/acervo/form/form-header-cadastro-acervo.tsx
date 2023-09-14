@@ -11,7 +11,12 @@ import {
   CDEP_BUTTON_SALVAR_ALTERAR,
   CDEP_BUTTON_VOLTAR,
 } from '~/core/constants/ids/button/intex';
-import { DESEJA_CANCELAR_ALTERACOES, DESEJA_EXCLUIR_ACERVO } from '~/core/constants/mensagens';
+import {
+  ACERVO_EXCLUIDO_SUCESSO,
+  DESEJA_CANCELAR_ALTERACOES,
+  DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA,
+  DESEJA_EXCLUIR_ACERVO,
+} from '~/core/constants/mensagens';
 import { FormPageConfigCadastroAcervoProps } from '~/core/dto/form-cadastro-acervo';
 import { ROUTES } from '~/core/enum/routes';
 import { confirmacao } from '~/core/services/alerta-service';
@@ -25,11 +30,20 @@ const FormHeaderCadastroAcervo: React.FC<FormHeaderCadastroAcervoProps> = ({ fie
   const navigate = useNavigate();
   const paramsRoute = useParams();
 
-  const id = paramsRoute?.id || 0;
-  const title = id ? 'Editar Acervo' : 'Novo Acervo';
+  const acervoId = paramsRoute?.acervoId || 0;
+  const title = acervoId ? 'Editar Acervo' : 'Novo Acervo';
 
-  const onClickVoltar = () => {
-    navigate(ROUTES.ACERVO);
+  const onClickVoltar = (form: FormInstance) => {
+    if (form.isFieldsTouched()) {
+      confirmacao({
+        content: DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA,
+        onOk() {
+          navigate(ROUTES.ACERVO);
+        },
+      });
+    } else {
+      navigate(ROUTES.ACERVO);
+    }
   };
 
   const onClickCancelar = (form: FormInstance) => {
@@ -44,15 +58,15 @@ const FormHeaderCadastroAcervo: React.FC<FormHeaderCadastroAcervoProps> = ({ fie
   };
 
   const onClickExcluir = () => {
-    if (id) {
+    if (acervoId) {
       confirmacao({
         content: DESEJA_EXCLUIR_ACERVO,
         onOk() {
-          deletarRegistro(`${fieldsConfig?.urlBase}/${id}`).then((response) => {
+          deletarRegistro(`${fieldsConfig?.urlBase}/${acervoId}`).then((response) => {
             if (response.sucesso) {
               notification.success({
                 message: 'Sucesso',
-                description: 'Acervo excluído com sucesso',
+                description: ACERVO_EXCLUIDO_SUCESSO,
               });
               navigate(ROUTES.ACERVO);
             }
@@ -67,9 +81,13 @@ const FormHeaderCadastroAcervo: React.FC<FormHeaderCadastroAcervoProps> = ({ fie
       <Col span={24}>
         <Row gutter={[8, 8]}>
           <Col>
-            <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
+            <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
+              {(form) => (
+                <ButtonVoltar onClick={() => onClickVoltar(form)} id={CDEP_BUTTON_VOLTAR} />
+              )}
+            </Form.Item>
           </Col>
-          {id ? (
+          {acervoId ? (
             <Col>
               <ButtonExcluir id={CDEP_BUTTON_EXCLUIR} onClick={onClickExcluir} />
             </Col>
@@ -100,7 +118,7 @@ const FormHeaderCadastroAcervo: React.FC<FormHeaderCadastroAcervoProps> = ({ fie
               id={CDEP_BUTTON_SALVAR_ALTERAR}
               style={{ fontWeight: 700 }}
             >
-              {id ? 'Alterar' : 'Salvar'}
+              {acervoId ? 'Alterar' : 'Salvar'}
             </Button>
           </Col>
         </Row>

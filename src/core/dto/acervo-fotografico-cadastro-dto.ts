@@ -10,8 +10,8 @@ export type AcervoFotograficoCadastroDTO = {
   conservacaoId: number;
   descricao: string;
   quantidade: number;
-  largura: number;
-  altura: number;
+  largura: string | null;
+  altura: string | null;
   suporteId: number;
   formatoId: number;
   tamanhoArquivo: string;
