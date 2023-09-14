@@ -24,5 +24,4 @@ export enum ROUTES {
   ACERVO = '/cadastro/acervo',
   ACERVO_NOVO = '/cadastro/acervo/novo',
   ACERVO_EDITAR = '/cadastro/acervo/editar/:id',
-  POC_UPLOAD = '/poc/upload',
 }

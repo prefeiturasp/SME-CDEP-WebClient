@@ -2,7 +2,6 @@ import { createElement } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import FormConfigCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form/form-config';
-import UploadArquivos from '~/components/lib/upload';
 import { ROUTES } from '~/core/enum/routes';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import PagNotFound from '~/pages/404';
@@ -84,7 +83,6 @@ const RoutesConfig = () => {
                 </Route>
                 <Route path='*' element={pagNotFound} />
                 <Route path={ROUTES.LOGIN} element={<Navigate to={ROUTES.PRINCIPAL} />} />
-                <Route path={ROUTES.POC_UPLOAD} element={<UploadArquivos />} />
               </Route>
             </Route>
           </Routes>

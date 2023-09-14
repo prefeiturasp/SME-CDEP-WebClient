@@ -3,6 +3,7 @@ import { useForm } from 'antd/es/form/Form';
 import { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
+import UploadArquivosCDEP from '~/components/cdep/upload';
 import Auditoria from '~/components/cdep/text/auditoria';
 import CardContent from '~/components/lib/card-content';
 import { URL_API_ACERVO_FOTOGRAFICO } from '~/core/constants/urls-api';
@@ -40,6 +41,13 @@ const FormAcervo: React.FC = () => {
       `${fieldsConfig?.urlBase}/${id}`,
     );
     if (resposta.sucesso) {
+      if (resposta.dados?.arquivos?.length) {
+        resposta.dados.arquivos = resposta.dados.arquivos.map((item: any) => ({
+          xhr: item.codigo,
+          name: item.nome,
+          status: 'done',
+        }));
+      }
       setFormInitialValues(resposta.dados);
     }
   }, [fieldsConfig, id]);
@@ -56,6 +64,20 @@ const FormAcervo: React.FC = () => {
 
   const onFinish = async (values: FormDefaultCadastroAcervoDTO) => {
     const valoresSalvar = { ...values };
+
+    if (valoresSalvar?.arquivos?.length) {
+      if (id) {
+        valoresSalvar.arquivos = valoresSalvar.arquivos?.map((item: any) => ({
+          codigo: item.xhr,
+          nome: item.name,
+        }));
+      } else {
+        valoresSalvar.arquivos = valoresSalvar.arquivos?.map((item: any) => item.xhr);
+      }
+    } else {
+      valoresSalvar.arquivos = [];
+    }
+
     // TODO - Descrição - Editor
     valoresSalvar.descricao = 'MOCK DESCRIÇÃO';
 
@@ -139,6 +161,7 @@ const FormAcervo: React.FC = () => {
             </Col>
             {tipo ? <FormContentCadastroAcervo fieldsConfig={fieldsConfig} /> : <></>}
           </Row>
+          <UploadArquivosCDEP form={form} />
           <Auditoria dados={formInitialValues?.auditoria} />
         </CardContent>
       </Form>
