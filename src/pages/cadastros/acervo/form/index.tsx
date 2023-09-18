@@ -112,7 +112,7 @@ const FormAcervo: React.FC = () => {
     }
   };
 
-  const onterCampos = useCallback((): FormPageConfigCadastroAcervoProps | undefined => {
+  const obterCampos = useCallback((): FormPageConfigCadastroAcervoProps | undefined => {
     switch (tipo || stateTipoAcervoId) {
       case TipoAcervo.Fotografico:
         return {
@@ -129,15 +129,15 @@ const FormAcervo: React.FC = () => {
   useEffect(() => {
     if (!acervoId) {
       if (tipo) {
-        setFieldsConfig(onterCampos());
+        setFieldsConfig(obterCampos());
       } else {
         setFieldsConfig(undefined);
         form.resetFields();
       }
     } else {
-      setFieldsConfig(onterCampos());
+      setFieldsConfig(obterCampos());
     }
-  }, [onterCampos, acervoId, form, tipo]);
+  }, [obterCampos, acervoId, form, tipo]);
 
   return (
     <Col>
