@@ -15,8 +15,7 @@ const UploadArquivosCDEP: React.FC<UploadArquivosCDEPProps> = ({ form }) => {
         name: 'arquivos',
         label: 'Arquivos',
       }}
-      tiposArquivosPermitidos='.jpg,.jpeg,.png'
-      removeService={armazenamentoService.removerArquivos}
+      tiposArquivosPermitidos='.jpg,.jpeg,.png,.tiff'
       uploadService={armazenamentoService.fazerUploadArquivo}
       downloadService={armazenamentoService.obterArquivoParaDownload}
     />

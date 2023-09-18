@@ -1,4 +1,4 @@
-import api, { deletarRegistro, inserirRegistro } from './api';
+import api, { inserirRegistro } from './api';
 
 const URL_DEFAULT = 'v1/Armazenamento';
 
@@ -11,11 +11,7 @@ const obterArquivoParaDownload = (codigoArquivo: string) => {
   });
 };
 
-const removerArquivos = (codigosArquivo: string[]) =>
-  deletarRegistro(URL_DEFAULT, { data: codigosArquivo });
-
 export default {
-  removerArquivos,
   fazerUploadArquivo,
   obterArquivoParaDownload,
 };
