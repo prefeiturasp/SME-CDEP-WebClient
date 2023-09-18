@@ -98,7 +98,15 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = <InputResolucao />;
             break;
           case FieldAcervoEnum.Anexos:
-            input = <UploadArquivosCDEP form={form} />;
+            input = (
+              <UploadArquivosCDEP
+                form={form}
+                formItemProps={{
+                  name: 'arquivos',
+                  label: 'Arquivos',
+                }}
+              />
+            );
             break;
 
           default:
