@@ -43,8 +43,9 @@ const FormAcervo: React.FC = () => {
     if (resposta.sucesso) {
       if (resposta.dados?.arquivos?.length) {
         resposta.dados.arquivos = resposta.dados.arquivos.map((item: any) => ({
-          xhr: item.codigo,
-          name: item.nome,
+          xhr: item?.codigo,
+          name: item?.nome,
+          id: item?.id,
           status: 'done',
         }));
       }
@@ -73,14 +74,7 @@ const FormAcervo: React.FC = () => {
     const valoresSalvar = { ...values };
 
     if (valoresSalvar?.arquivos?.length) {
-      if (acervoId) {
-        valoresSalvar.arquivos = valoresSalvar.arquivos?.map((item: any) => ({
-          codigo: item.xhr,
-          nome: item.name,
-        }));
-      } else {
-        valoresSalvar.arquivos = valoresSalvar.arquivos?.map((item: any) => item.xhr);
-      }
+      valoresSalvar.arquivos = valoresSalvar.arquivos?.map((item: any) => item?.id);
     } else {
       valoresSalvar.arquivos = [];
     }

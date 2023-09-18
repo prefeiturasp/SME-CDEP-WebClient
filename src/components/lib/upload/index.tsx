@@ -62,12 +62,10 @@ type UploadArquivosProps = {
   tiposArquivosPermitidos?: string;
   tamanhoMaxUploadPorArquivo?: number;
   downloadService: (codigosArquivo: string) => any;
-  removeService: (codigosArquivo: string[]) => any;
   uploadService: (formData: FormData, configuracaoHeader: any) => any;
 };
 
 const TAMANHO_PADRAO_MAXIMO_UPLOAD = 100;
-const HttpStatusCodeOk = 200;
 
 const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
   const {
@@ -76,7 +74,6 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
     draggerProps,
     formItemProps,
     uploadService,
-    removeService,
     downloadService,
     tiposArquivosPermitidos = '',
     tamanhoMaxUploadPorArquivo = TAMANHO_PADRAO_MAXIMO_UPLOAD,
@@ -136,33 +133,20 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
     uploadService(fmData, config)
       .then((resposta: any) => {
         const codigo = resposta?.data?.codigo || resposta?.dados?.codigo || resposta.data;
+        const id = resposta?.data?.id || resposta?.dados?.id;
+        file.id = id;
         onSuccess(file, codigo);
       })
       .catch((e: any) => onError({ event: e }));
   };
 
   const onRemoveDefault = async (arquivo: UploadFile<any>) => {
-    const filtrarCodigosPraRemover = listaDeArquivos.filter(
-      (item: any) => item.xhr === arquivo.xhr,
-    );
-
-    const codigosPraRemover = filtrarCodigosPraRemover.map((item: any) => item.xhr);
-
-    if (codigosPraRemover?.length) {
-      const resposta = await removeService(codigosPraRemover);
-
-      if (resposta?.status === HttpStatusCodeOk || resposta?.sucesso) {
-        notification.success({
-          message: 'Sucesso',
-          description: `Arquivo ${arquivo.name} excluído com sucesso`,
-        });
-        return true;
-      }
-      notification.error({
-        message: 'Erro',
-        description: `Não foi possivel excluir`,
+    if (arquivo.xhr) {
+      notification.success({
+        message: 'Sucesso',
+        description: `Arquivo ${arquivo.name} excluído com sucesso`,
       });
-      return false;
+      return true;
     }
     return false;
   };
