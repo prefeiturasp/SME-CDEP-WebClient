@@ -11,3 +11,4 @@ export const ERRO_RECUPERACAO_SENHA = 'Erro ao tentar recuperar senha';
 export const DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA =
   'Você não salvou as informações preenchidas, saindo desta página elas serão perdidas. Deseja realmente cancelar as alterações?';
 export const DESEJA_EXCLUIR_ACERVO = 'Deseja realmente excluir o acervo?';
+export const ACERVO_EXCLUIDO_SUCESSO = 'Acervo excluído com sucesso';

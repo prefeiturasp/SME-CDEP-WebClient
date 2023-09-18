@@ -34,7 +34,15 @@ const DataTable = <T extends object>({ filters, url, columns, ...rest }: DataTab
 
   const fetchData = (newParams: TableParams) => {
     setLoading(true);
-    const urlQuery = `${url}?numeroPagina=${newParams?.pagination?.current}&numeroRegistros=${newParams?.pagination?.pageSize}&ordenacao=${newParams.order}`;
+    let urlQuery = '';
+
+    if (url.includes('?')) {
+      urlQuery = `${url}&`;
+    } else {
+      urlQuery = `${url}?`;
+    }
+
+    urlQuery = `${urlQuery}numeroPagina=${newParams?.pagination?.current}&numeroRegistros=${newParams?.pagination?.pageSize}&ordenacao=${newParams.order}`;
 
     api
       .get<PaginacaoResultadoDTO<T[]>>(urlQuery, {

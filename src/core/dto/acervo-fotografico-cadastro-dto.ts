@@ -1,0 +1,21 @@
+export type AcervoFotograficoCadastroDTO = {
+  titulo: string;
+  codigo: string;
+  creditosAutoresIds: number[];
+  localizacao: string;
+  procedencia: string;
+  dataAcervo: string;
+  copiaDigital: boolean;
+  permiteUsoImagem: boolean;
+  conservacaoId: number;
+  descricao: string;
+  quantidade: number;
+  largura: string | null;
+  altura: string | null;
+  suporteId: number;
+  formatoId: number;
+  tamanhoArquivo: string;
+  cromiaId: number;
+  resolucao: string;
+  arquivos?: any;
+};

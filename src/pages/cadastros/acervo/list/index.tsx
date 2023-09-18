@@ -11,9 +11,9 @@ import DataTable from '~/components/lib/data-table';
 import HeaderPage from '~/components/lib/header-page';
 import { CDEP_BUTTON_NOVO, CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_CODIGO, CDEP_INPUT_TITULO } from '~/core/constants/ids/input';
+import { URL_API_ACERVO } from '~/core/constants/urls-api';
 import { IdTipoTituloCreditoAutoriaCodigoAcervoDTO } from '~/core/dto/id-tipo-titulo-credito-autoria-codigo-acervo-dto';
 import { ROUTES } from '~/core/enum/routes';
-import { URL_API_ACERVO } from '~/core/services/acervo-service';
 
 const ListAcervo: React.FC = () => {
   const navigate = useNavigate();
@@ -42,8 +42,11 @@ const ListAcervo: React.FC = () => {
 
   const onClickNovo = () => navigate(ROUTES.ACERVO_NOVO);
 
-  const onClickEditar = (id: number) =>
-    navigate(`${ROUTES.ACERVO}/editar/${id}`, { replace: true });
+  const onClickEditar = (row: IdTipoTituloCreditoAutoriaCodigoAcervoDTO) =>
+    navigate(`${ROUTES.ACERVO}/editar/${row.acervoId}`, {
+      state: { tipoAcervoId: row.tipoAcervoId },
+      replace: true,
+    });
 
   return (
     <Col>
@@ -101,7 +104,7 @@ const ListAcervo: React.FC = () => {
                     columns={columns}
                     onRow={(row) => ({
                       onClick: () => {
-                        onClickEditar(row?.acervoId);
+                        onClickEditar(row);
                       },
                     })}
                   />

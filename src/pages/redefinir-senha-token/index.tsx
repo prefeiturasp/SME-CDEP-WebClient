@@ -1,5 +1,5 @@
 import { Button, Col, Form, Row, Typography } from 'antd';
-import { useState, useEffect, useCallback } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 import { useForm } from 'antd/es/form/Form';
 
@@ -10,18 +10,19 @@ import { AxiosError, HttpStatusCode } from 'axios';
 import { useNavigate, useParams } from 'react-router-dom';
 import ErroGeralLogin from '~/components/cdep/erro-geral-login';
 import SenhaCadastro from '~/components/cdep/input/senha-cadastro';
+import Spin from '~/components/cdep/spin';
 import {
   CDEP_BUTTON_CONFIRMAR_REDEFINICAO_SENHA,
   CDEP_BUTTON_VOLTAR,
 } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_CONFIRMAR_SENHA, CDEP_INPUT_SENHA } from '~/core/constants/ids/input';
 import { ERRO_RECUPERACAO_SENHA } from '~/core/constants/mensagens';
+import { validateMessages } from '~/core/constants/validate-messages';
 import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 import { ROUTES } from '~/core/enum/routes';
 import { setDadosLogin } from '~/core/redux/modules/auth/actions';
 import { setSpinning } from '~/core/redux/modules/spin/actions';
 import TokenExpirado from './token-expirado';
-import Spin from '~/components/cdep/spin';
 
 const RedefinirSenhaToken = () => {
   const dispatch = useAppDispatch();
@@ -36,13 +37,6 @@ const RedefinirSenhaToken = () => {
   const [validandoToken, setValidandoToken] = useState<boolean>(!!token);
 
   const [form] = useForm();
-
-  const validateMessages = {
-    required: 'Campo obrigatório',
-    string: {
-      range: 'Deve ter entre ${min} e ${max} caracteres',
-    },
-  };
 
   const validarExibirErros = (erro: AxiosError<RetornoBaseDTO>) => {
     const dataErro = erro?.response?.data;

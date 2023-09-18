@@ -1,107 +1,30 @@
-import { ROUTES } from '~/core/enum/routes';
-
-import { useLocation, useParams } from 'react-router-dom';
-import { INPUTS_NAMES } from '~/core/constants/inputs-cadastros';
-import { URL_API_CREDITO_AUTOR } from '~/core/services/credito-autor';
-import FormCadastrosAuxiliares, { FormConfigCadastros } from '.';
+import { useLocation } from 'react-router-dom';
+import {
+  paramsConfigPageFormAssunto,
+  paramsConfigPageFormAutor,
+  paramsConfigPageFormCredito,
+  paramsConfigPageFormEditora,
+  paramsConfigPageFormSerieColecao,
+} from '~/core/constants/config-page-cadastros-auxiliares';
+import { FormCadastrosAuxiliaresProps } from '~/core/dto/form-cadastros-auxiliares';
+import FormCadastrosAuxiliares from '.';
 
 const FormConfigCadastrosAuxiliares: React.FC = () => {
-  const paramsRoute = useParams();
   const location = useLocation();
 
   const pathname = location.pathname;
 
-  const paramsConfigPage: FormConfigCadastros[] = [
-    {
-      breadcrumb: {
-        mainPage: 'Crédito',
-        urlMainPage: ROUTES.CREDITO,
-        title: paramsRoute?.id ? 'Editar' : 'Novo',
-      },
-      page: {
-        title: 'Crédito',
-        urlBase: URL_API_CREDITO_AUTOR,
-        inputs: [
-          {
-            name: INPUTS_NAMES.TEXT.NOME,
-            placeholder: 'Informe o nome do crédito',
-          },
-        ],
-      },
-    },
-    {
-      breadcrumb: {
-        mainPage: 'Autor',
-        urlMainPage: ROUTES.AUTOR,
-        title: paramsRoute?.id ? 'Editar' : 'Novo',
-      },
-      page: {
-        title: 'Autor',
-        urlBase: URL_API_CREDITO_AUTOR,
-        inputs: [
-          {
-            name: INPUTS_NAMES.TEXT.NOME,
-            placeholder: 'Informe o nome do autor da obra',
-          },
-        ],
-      },
-    },
-    {
-      breadcrumb: {
-        mainPage: 'Editora',
-        urlMainPage: ROUTES.EDITORA,
-        title: paramsRoute?.id ? 'Editar' : 'Novo',
-      },
-      page: {
-        title: 'Editora',
-        urlBase: 'v1/editora',
-        inputs: [
-          {
-            name: INPUTS_NAMES.TEXT.NOME,
-            placeholder: 'Informe o nome da editora da obra',
-          },
-        ],
-      },
-    },
-    {
-      breadcrumb: {
-        mainPage: 'Assunto',
-        urlMainPage: ROUTES.ASSUNTO,
-        title: paramsRoute?.id ? 'Editar' : 'Novo',
-      },
-      page: {
-        title: 'Assunto',
-        urlBase: 'v1/assunto',
-        inputs: [
-          {
-            name: INPUTS_NAMES.TEXT.NOME,
-            placeholder: 'Informe o título do assunto',
-          },
-        ],
-      },
-    },
-    {
-      breadcrumb: {
-        mainPage: 'Série/Coleção',
-        urlMainPage: ROUTES.SERIE_COLECAO,
-        title: paramsRoute?.id ? 'Editar' : 'Novo',
-      },
-      page: {
-        title: 'Série/Coleção',
-        urlBase: 'v1/seriecolecao',
-        inputs: [
-          {
-            name: INPUTS_NAMES.TEXT.NOME,
-            placeholder: 'Informe o título da série ou coleção',
-          },
-        ],
-      },
-    },
+  const paramsConfigPage: FormCadastrosAuxiliaresProps[] = [
+    paramsConfigPageFormCredito,
+    paramsConfigPageFormAutor,
+    paramsConfigPageFormEditora,
+    paramsConfigPageFormAssunto,
+    paramsConfigPageFormSerieColecao,
   ];
 
-  const getFormParams = (): FormConfigCadastros | undefined => {
-    const configAtual = paramsConfigPage.find((item: FormConfigCadastros) =>
-      pathname.includes(item.breadcrumb.urlMainPage),
+  const getFormParams = (): FormCadastrosAuxiliaresProps | undefined => {
+    const configAtual = paramsConfigPage.find((item: FormCadastrosAuxiliaresProps) =>
+      pathname.includes(item.page.urlMainPage),
     );
 
     return configAtual;

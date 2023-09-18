@@ -1,21 +1,6 @@
-import ListCadastrosAuxiliares, {
-  ListConfigCadastros,
-} from '~/components/cdep/cadastros/auxiliares/list/list';
-import { ROUTES } from '~/core/enum/routes';
-import { URL_API_CREDITO_AUTOR } from '~/core/services/credito-autor';
+import ListCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/list/list';
+import { paramsConfigPageListAutor } from '~/core/constants/config-page-cadastros-auxiliares';
 
-const Autor: React.FC = () => {
-  const paramsConfigPage: ListConfigCadastros = {
-    breadcrumb: {
-      urlMainPage: ROUTES.AUTOR,
-    },
-    page: {
-      title: 'Autor',
-      urlApiBase: URL_API_CREDITO_AUTOR,
-    },
-  };
-
-  return <ListCadastrosAuxiliares {...paramsConfigPage} />;
-};
+const Autor: React.FC = () => <ListCadastrosAuxiliares {...paramsConfigPageListAutor} />;
 
 export default Autor;

@@ -17,12 +17,15 @@ export type ListPageProps = {
   urlApiBase: string;
 };
 
-export type ListConfigCadastros = {
+export type ListConfigCadastrosAuxiliaresProps = {
   breadcrumb: BreadcrumbCDEPProps;
   page: ListPageProps;
 };
 
-const ListCadastrosAuxiliares: React.FC<ListConfigCadastros> = ({ page, breadcrumb }) => {
+const ListCadastrosAuxiliares: React.FC<ListConfigCadastrosAuxiliaresProps> = ({
+  page,
+  breadcrumb,
+}) => {
   const navigate = useNavigate();
 
   const [filters, setFilters] = useState({ nome: '' });

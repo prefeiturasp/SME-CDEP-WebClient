@@ -1,18 +1,14 @@
-import { Button, Col, Form, Input, Row, notification } from 'antd';
-import { FormProps, useForm } from 'antd/es/form/Form';
+import { Col, Form, Input, Spin, notification } from 'antd';
+import { useForm } from 'antd/es/form/Form';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { BreadcrumbCDEPProps } from '~/components/cdep/breadcrumb';
-import ButtonExcluir from '~/components/cdep/button/excluir';
-import ButtonVoltar from '~/components/cdep/button/voltar';
 import Auditoria from '~/components/cdep/text/auditoria';
 import CardContent from '~/components/lib/card-content';
 import HeaderPage from '~/components/lib/header-page';
+import Modal from '~/components/lib/modal';
 import {
-  CDEP_BUTTON_CANCELAR,
-  CDEP_BUTTON_EXCLUIR,
-  CDEP_BUTTON_NOVO,
-  CDEP_BUTTON_VOLTAR,
+  CDEP_BUTTON_MODAL_CANCELAR,
+  CDEP_BUTTON_MODAL_SALVAR,
 } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_NOVO } from '~/core/constants/ids/input';
 import {
@@ -20,7 +16,9 @@ import {
   DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA,
   DESEJA_EXCLUIR_ACERVO,
 } from '~/core/constants/mensagens';
+import { validateMessages } from '~/core/constants/validate-messages';
 import { CadastroAuxiliarDTO } from '~/core/dto/cadastro-auxiliar-dto';
+import { FormCadastrosAuxiliaresProps } from '~/core/dto/form-cadastros-auxiliares';
 import { confirmacao } from '~/core/services/alerta-service';
 import {
   alterarRegistro,
@@ -28,45 +26,33 @@ import {
   inserirRegistro,
   obterRegistro,
 } from '~/core/services/api';
+import FormCadastrosAuxiliaresBotoesAcoes from './botoes-acoes';
 
-type FormPageInputsProps = {
-  name: string;
-  placeholder: string;
-};
-
-export type FormPageProps = {
-  title: string;
-  urlBase: string;
-  inputs: FormPageInputsProps[];
-};
-
-export type FormConfigCadastros = {
-  breadcrumb: BreadcrumbCDEPProps;
-  page: FormPageProps;
-};
-
-const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcrumb }) => {
+const FormCadastrosAuxiliares: React.FC<FormCadastrosAuxiliaresProps> = ({
+  page,
+  initialValues = {},
+  isModal = false,
+  setOpenModal = () => false,
+}) => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
   const [form] = useForm();
 
-  const [formInitialValues, setFormInitialValues] = useState<CadastroAuxiliarDTO>();
+  const [formInitialValues, setFormInitialValues] = useState<CadastroAuxiliarDTO>(initialValues);
+  const [loadingModal, setLoadingModal] = useState<boolean>(false);
 
   const id = paramsRoute?.id || 0;
-
-  const validateMessages: FormProps['validateMessages'] = {
-    required: 'Campo obrigatório',
-    string: {
-      range: 'Por favor, digite Nome',
-    },
-    whitespace: 'Campo obrigatório',
-  };
 
   const carregarDados = useCallback(async () => {
     const resposta = await obterRegistro<any>(`${page.urlBase}/${id}`);
 
     if (resposta.sucesso) {
-      setFormInitialValues(resposta.dados);
+      setFormInitialValues((prevState) => {
+        return {
+          ...prevState,
+          ...resposta.dados,
+        };
+      });
     }
   }, [page, id]);
 
@@ -85,11 +71,11 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
       confirmacao({
         content: DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA,
         onOk() {
-          navigate(breadcrumb.urlMainPage);
+          navigate(page.urlMainPage);
         },
       });
     } else {
-      navigate(breadcrumb.urlMainPage);
+      navigate(page.urlMainPage);
     }
   };
 
@@ -99,20 +85,30 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
         content: DESEJA_CANCELAR_ALTERACOES,
         onOk() {
           form.resetFields();
+          setOpenModal(false);
         },
       });
+    } else {
+      if (isModal) {
+        form.resetFields();
+        setOpenModal(false);
+      }
     }
   };
 
   const salvar = async (values: any) => {
+    const valoresSalvar = { ...initialValues, ...values };
+
+    if (isModal) setLoadingModal(true);
+
     let response = null;
     if (id) {
       response = await alterarRegistro(page.urlBase, {
         id,
-        ...values,
+        ...valoresSalvar,
       });
     } else {
-      response = await inserirRegistro(page.urlBase, values);
+      response = await inserirRegistro(page.urlBase, valoresSalvar);
     }
 
     if (response.sucesso) {
@@ -120,8 +116,15 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
         message: 'Sucesso',
         description: `Registro ${id ? 'alterado' : 'inserido'} com sucesso!`,
       });
-      navigate(breadcrumb.urlMainPage);
+
+      if (isModal) {
+        setOpenModal(false, true);
+      } else {
+        navigate(page.urlMainPage);
+      }
     }
+
+    setLoadingModal(false);
   };
 
   const onClickExcluir = () => {
@@ -135,7 +138,7 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
                 message: 'Sucesso',
                 description: 'Acervo excluído com sucesso',
               });
-              navigate(breadcrumb.urlMainPage);
+              navigate(page.urlMainPage);
             }
           });
         },
@@ -143,8 +146,33 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
     }
   };
 
-  return (
-    <Col>
+  const montarCampos = () => {
+    return page.inputs.map((input) => (
+      <Form.Item
+        key={input.name}
+        label='Nome'
+        name={input.name}
+        rules={[{ required: true, whitespace: true }]}
+      >
+        <Input
+          type='text'
+          placeholder={input.placeholder}
+          maxLength={200}
+          showCount
+          id={CDEP_INPUT_NOVO}
+        />
+      </Form.Item>
+    ));
+  };
+
+  const validateFields = () => {
+    form.validateFields().then(() => {
+      salvar(form.getFieldsValue());
+    });
+  };
+
+  const formDefault = (children: any) => {
+    return (
       <Form
         form={form}
         layout='vertical'
@@ -153,72 +181,54 @@ const FormCadastrosAuxiliares: React.FC<FormConfigCadastros> = ({ page, breadcru
         validateMessages={validateMessages}
         initialValues={formInitialValues}
       >
-        <HeaderPage title={page.title}>
-          <Col span={24}>
-            <Row gutter={[8, 8]}>
-              <Col>
-                <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
-              </Col>
-              {id ? (
-                <Col>
-                  <ButtonExcluir id={CDEP_BUTTON_EXCLUIR} onClick={onClickExcluir} />
-                </Col>
-              ) : (
-                <></>
-              )}
-              <Col>
-                <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
-                  {() => (
-                    <Button
-                      block
-                      type='default'
-                      id={CDEP_BUTTON_CANCELAR}
-                      onClick={onClickCancelar}
-                      style={{ fontWeight: 700 }}
-                      disabled={!form.isFieldsTouched()}
-                    >
-                      Cancelar
-                    </Button>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col>
-                <Button
-                  block
-                  type='primary'
-                  htmlType='submit'
-                  id={CDEP_BUTTON_NOVO}
-                  style={{ fontWeight: 700 }}
-                >
-                  {id ? 'Alterar' : 'Salvar'}
-                </Button>
-              </Col>
-            </Row>
-          </Col>
-        </HeaderPage>
+        {children}
+      </Form>
+    );
+  };
 
+  const montarForm = () => {
+    if (isModal) {
+      return (
+        <Modal
+          open
+          title='Cadastrar crédito'
+          onOk={validateFields}
+          onCancel={onClickCancelar}
+          centered
+          destroyOnClose
+          cancelButtonProps={{ disabled: loadingModal, id: CDEP_BUTTON_MODAL_CANCELAR }}
+          okButtonProps={{ disabled: loadingModal, id: CDEP_BUTTON_MODAL_SALVAR }}
+          closable={!loadingModal}
+          maskClosable={!loadingModal}
+          keyboard={!loadingModal}
+          okText='Salvar'
+          cancelText='Cancelar'
+        >
+          <Spin spinning={loadingModal}>{formDefault(montarCampos())}</Spin>
+        </Modal>
+      );
+    }
+
+    return formDefault(
+      <>
+        <HeaderPage title={page.title}>
+          <FormCadastrosAuxiliaresBotoesAcoes
+            id={id}
+            form={form}
+            onClickCancelar={onClickCancelar}
+            onClickExcluir={onClickExcluir}
+            onClickVoltar={onClickVoltar}
+          />
+        </HeaderPage>
         <CardContent>
-          {page.inputs.map((input) => (
-            <Form.Item
-              key={input.name}
-              label='Nome'
-              name={input.name}
-              rules={[{ required: true, whitespace: true }]}
-            >
-              <Input
-                type='text'
-                placeholder={input.placeholder}
-                maxLength={200}
-                showCount
-                id={CDEP_INPUT_NOVO}
-              />
-            </Form.Item>
-          ))}
+          {montarCampos()}
           <Auditoria dados={formInitialValues} />
         </CardContent>
-      </Form>
-    </Col>
-  );
+      </>,
+    );
+  };
+
+  return <Col>{montarForm()}</Col>;
 };
 
 export default FormCadastrosAuxiliares;
