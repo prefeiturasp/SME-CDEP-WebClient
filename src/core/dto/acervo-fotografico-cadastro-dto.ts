@@ -1,7 +1,7 @@
 export type AcervoFotograficoCadastroDTO = {
   titulo: string;
   codigo: string;
-  creditoAutorId: number;
+  creditosAutoresIds: number[];
   localizacao: string;
   procedencia: string;
   dataAcervo: string;

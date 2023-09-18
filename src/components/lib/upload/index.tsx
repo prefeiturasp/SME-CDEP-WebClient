@@ -44,8 +44,8 @@ const downloadBlob = (data: any, fileName: string) => {
   document.body.removeChild(a);
 };
 
-export const ContainerUpload = styled.div`
-  .ant-upload-wrapper
+export const ContainerDraggerUpload = styled(Dragger)`
+  &.ant-upload-wrapper
     .ant-upload-list
     .ant-upload-list-item
     .ant-upload-list-item-actions
@@ -55,7 +55,6 @@ export const ContainerUpload = styled.div`
 `;
 
 type UploadArquivosProps = {
-  multiple?: boolean;
   form: FormInstance;
   draggerProps?: DraggerProps;
   formItemProps: FormItemProps & { name: string };
@@ -70,7 +69,6 @@ const TAMANHO_PADRAO_MAXIMO_UPLOAD = 100;
 const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
   const {
     form,
-    multiple,
     draggerProps,
     formItemProps,
     uploadService,
@@ -215,27 +213,24 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
 
   return (
     <Form.Item valuePropName='fileList' getValueFromEvent={normFile} {...formItemProps}>
-      <ContainerUpload>
-        <Dragger
-          name='file'
-          listType='text'
-          fileList={listaDeArquivos}
-          showUploadList={{ showDownloadIcon: true }}
-          multiple={draggerProps?.multiple || multiple}
-          onRemove={draggerProps?.onRemove || onRemoveDefault}
-          onChange={draggerProps?.onChange || onChangeDefault}
-          onDownload={draggerProps?.onDownload || onDownloadDefault}
-          beforeUpload={draggerProps?.beforeUpload || beforeUploadDefault}
-          customRequest={draggerProps?.customRequest || customRequestDefault}
-          {...draggerProps}
-        >
-          <p className='ant-upload-drag-icon'>
-            <InboxOutlined />
-          </p>
-          <p className='ant-upload-text'>Clique ou arraste para fazer o upload do arquivo</p>
-          <p className='ant-upload-hint'>Deve permitir apenas imagens com no máximo 5MB cada</p>
-        </Dragger>
-      </ContainerUpload>
+      <ContainerDraggerUpload
+        name='file'
+        listType='text'
+        fileList={listaDeArquivos}
+        showUploadList={{ showDownloadIcon: true }}
+        onRemove={draggerProps?.onRemove || onRemoveDefault}
+        onChange={draggerProps?.onChange || onChangeDefault}
+        onDownload={draggerProps?.onDownload || onDownloadDefault}
+        beforeUpload={draggerProps?.beforeUpload || beforeUploadDefault}
+        customRequest={draggerProps?.customRequest || customRequestDefault}
+        {...draggerProps}
+      >
+        <p className='ant-upload-drag-icon'>
+          <InboxOutlined />
+        </p>
+        <p className='ant-upload-text'>Clique ou arraste para fazer o upload do arquivo</p>
+        <p className='ant-upload-hint'>Deve permitir apenas imagens com no máximo 5MB cada</p>
+      </ContainerDraggerUpload>
     </Form.Item>
   );
 };

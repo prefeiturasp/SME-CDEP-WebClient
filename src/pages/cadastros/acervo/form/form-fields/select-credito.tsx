@@ -43,7 +43,7 @@ const SelectCredito: React.FC<SelectCreditoProps> = ({ selectProps, formItemProp
     <Row wrap={false} align='middle'>
       <Form.Item
         label='Crédito'
-        name='creditoAutorId'
+        name='creditosAutoresIds'
         rules={[{ required: true }]}
         style={{ width: '100%', marginRight: '8px' }}
         {...formItemProps}
@@ -51,7 +51,7 @@ const SelectCredito: React.FC<SelectCreditoProps> = ({ selectProps, formItemProp
         <Select
           showSearch
           allowClear
-          // mode='multiple' // TODO HABILITAR MULTIPLE
+          mode='multiple'
           id={CDEP_SELECT_CREDITO}
           {...selectProps}
           options={options}
