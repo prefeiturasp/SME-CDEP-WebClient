@@ -83,7 +83,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = <InputDimensaoAltura />;
             break;
           case FieldAcervoEnum.Suporte:
-            input = <SelectSuporte />;
+            input = <SelectSuporte tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.FormatoImagem:
             input = <SelectFormatoImagem />;
