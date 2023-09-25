@@ -7,6 +7,7 @@ import {
 } from '~/core/dto/form-cadastro-acervo';
 import { FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import {
+  EditorDescricao,
   InputDataAcervo,
   InputDimensaoAltura,
   InputDimensaoLargura,
@@ -25,7 +26,6 @@ import {
   SelectFormatoImagem,
   SelectSuporte,
 } from './form-fields';
-import InputDescricao from './form-fields/input-descricao';
 
 type FormContentCadastroAcervoProps = {
   fieldsConfig: FormPageConfigCadastroAcervoProps | undefined;
@@ -71,7 +71,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = <SelectConservacao />;
             break;
           case FieldAcervoEnum.Descricao:
-            input = <InputDescricao />;
+            input = <EditorDescricao />;
             break;
           case FieldAcervoEnum.Quantidade:
             input = <InputQuantidade />;
