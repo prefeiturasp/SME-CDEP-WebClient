@@ -49,7 +49,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = <InputTitulo />;
             break;
           case FieldAcervoEnum.Tombo:
-            input = <InputTombo />;
+            input = <InputTombo tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.Credito:
             input = <SelectCredito tipoAcervo={fieldsConfig.tipo} />;
@@ -64,10 +64,10 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = <InputDataAcervo />;
             break;
           case FieldAcervoEnum.CopiaDigital:
-            input = <RadioCopiaDigital tipoAcervo={fieldsConfig.tipo}/>;
+            input = <RadioCopiaDigital tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.AutorizacaoUsoImagem:
-            input = <RadioAutorizacaoUsoImagem tipoAcervo={fieldsConfig.tipo}/>;
+            input = <RadioAutorizacaoUsoImagem tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.EstadoConservacao:
             input = <SelectConservacao />;
