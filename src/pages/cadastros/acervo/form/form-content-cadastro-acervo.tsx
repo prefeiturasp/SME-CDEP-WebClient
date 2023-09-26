@@ -26,6 +26,8 @@ import {
   SelectFormatoImagem,
   SelectSuporte,
 } from './form-fields';
+import InputDimensaoDiametro from './form-fields/input-dimensao-diametro';
+import InputTecnica from './form-fields/input-tecnica';
 
 type FormContentCadastroAcervoProps = {
   fieldsConfig: FormPageConfigCadastroAcervoProps | undefined;
@@ -50,7 +52,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = <InputTombo />;
             break;
           case FieldAcervoEnum.Credito:
-            input = <SelectCredito />;
+            input = <SelectCredito tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.Localizacao:
             input = <InputLocalizacao />;
@@ -62,10 +64,10 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = <InputDataAcervo />;
             break;
           case FieldAcervoEnum.CopiaDigital:
-            input = <RadioCopiaDigital />;
+            input = <RadioCopiaDigital tipoAcervo={fieldsConfig.tipo}/>;
             break;
           case FieldAcervoEnum.AutorizacaoUsoImagem:
-            input = <RadioAutorizacaoUsoImagem />;
+            input = <RadioAutorizacaoUsoImagem tipoAcervo={fieldsConfig.tipo}/>;
             break;
           case FieldAcervoEnum.EstadoConservacao:
             input = <SelectConservacao />;
@@ -81,6 +83,12 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             break;
           case FieldAcervoEnum.DimensaoAltura:
             input = <InputDimensaoAltura />;
+            break;
+          case FieldAcervoEnum.DimensaoDiametro:
+            input = <InputDimensaoDiametro />;
+            break;
+          case FieldAcervoEnum.Tecnica:
+            input = <InputTecnica />;
             break;
           case FieldAcervoEnum.Suporte:
             input = <SelectSuporte tipoAcervo={fieldsConfig.tipo} />;
@@ -103,7 +111,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
                 form={form}
                 formItemProps={{
                   name: 'arquivos',
-                  label: 'Arquivos',
+                  label: 'Anexo',
                 }}
               />
             );
