@@ -20,4 +20,5 @@ export enum FieldAcervoEnum {
   Anexos = 19,
   Tecnica = 20,
   DimensaoDiametro = 21,
+  DimensaoProfundidade = 22,
 }
