@@ -8,3 +8,4 @@ export const URL_API_CONSERVACAO = 'v1/Conservacao';
 export const URL_API_CROMIA = 'v1/Cromia';
 export const URL_API_FORMATO_IMAGEM = 'v1/Formato';
 export const URL_API_SUPORTE = 'v1/Suporte';
+export const URL_API_ACERVO_ARTE_GRAFICA = 'v1/AcervoArteGrafica';

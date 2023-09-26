@@ -1,7 +1,7 @@
 import { ColProps } from 'antd';
 import { FieldAcervoEnum } from '../enum/field-acervo-enum';
 import { TipoAcervo } from '../enum/tipo-acervo';
-import { AcervoFotograficoDTO } from './acervo-fotografico-dto';
+import { AuditoriaDTO } from './auditoria-dto';
 
 type FormPageInputsProps = {
   name: string;
@@ -31,4 +31,28 @@ export type FormPageConfigCadastroAcervoProps = {
 
 export type FormDefaultCadastroAcervoDTO = {
   id: number;
-} & AcervoFotograficoDTO;
+  acervoId: number;
+  tipoAcervoId: TipoAcervo;
+  auditoria: AuditoriaDTO;
+  titulo: string;
+  codigo: string;
+  creditosAutoresIds: number[];
+  localizacao: string;
+  procedencia: string;
+  dataAcervo: string;
+  copiaDigital: boolean;
+  permiteUsoImagem: boolean;
+  conservacaoId: number;
+  descricao: string;
+  quantidade: number;
+  largura: string | null;
+  altura: string | null;
+  diametro: string | null;
+  suporteId: number;
+  formatoId: number;
+  tamanhoArquivo: string;
+  cromiaId: number;
+  resolucao: string;
+  arquivos?: any;
+  tecnica: string;
+};
