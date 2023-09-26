@@ -10,12 +10,15 @@ import {
   EditorDescricao,
   InputDataAcervo,
   InputDimensaoAltura,
+  InputDimensaoDiametro,
   InputDimensaoLargura,
+  InputDimensaoProfundidade,
   InputLocalizacao,
   InputProcedencia,
   InputQuantidade,
   InputResolucao,
   InputTamanhoArquivo,
+  InputTecnica,
   InputTitulo,
   InputTombo,
   RadioAutorizacaoUsoImagem,
@@ -26,8 +29,6 @@ import {
   SelectFormatoImagem,
   SelectSuporte,
 } from './form-fields';
-import InputDimensaoDiametro from './form-fields/input-dimensao-diametro';
-import InputTecnica from './form-fields/input-tecnica';
 
 type FormContentCadastroAcervoProps = {
   fieldsConfig: FormPageConfigCadastroAcervoProps | undefined;
@@ -86,6 +87,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             break;
           case FieldAcervoEnum.DimensaoDiametro:
             input = <InputDimensaoDiametro />;
+            break;
+          case FieldAcervoEnum.DimensaoProfundidade:
+            input = <InputDimensaoProfundidade />;
             break;
           case FieldAcervoEnum.Tecnica:
             input = <InputTecnica />;

@@ -16,3 +16,6 @@ export { default as SelectConservacao } from './select-estado-conservacao';
 export { default as SelectFormatoImagem } from './select-formato';
 export { default as SelectSuporte } from './select-suporte';
 export { default as EditorDescricao } from './editor-descricao';
+export { default as InputDimensaoDiametro } from './input-dimensao-diametro';
+export { default as InputDimensaoProfundidade } from './input-dimensao-profundidade ';
+export { default as InputTecnica } from './input-tecnica';
