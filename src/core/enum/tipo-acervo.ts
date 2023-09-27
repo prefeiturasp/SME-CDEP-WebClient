@@ -22,5 +22,5 @@ export const TipoAcervoSuffix: Record<TipoAcervo, string> = {
   [TipoAcervo.ArtesGraficas]: '.AG',
   [TipoAcervo.Audiovisual]: '',
   [TipoAcervo.Fotografico]: '.FT',
-  [TipoAcervo.Tridimensional]: '',
+  [TipoAcervo.Tridimensional]: '.TD',
 };

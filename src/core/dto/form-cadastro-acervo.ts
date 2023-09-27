@@ -48,6 +48,7 @@ export type FormDefaultCadastroAcervoDTO = {
   largura: string | null;
   altura: string | null;
   diametro: string | null;
+  profundidade: string | null;
   suporteId: number;
   formatoId: number;
   tamanhoArquivo: string;

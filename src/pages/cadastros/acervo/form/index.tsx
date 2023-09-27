@@ -5,7 +5,11 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
 import Auditoria from '~/components/cdep/text/auditoria';
 import CardContent from '~/components/lib/card-content';
-import { URL_API_ACERVO_ARTE_GRAFICA, URL_API_ACERVO_FOTOGRAFICO } from '~/core/constants/urls-api';
+import {
+  URL_API_ACERVO_ARTE_GRAFICA,
+  URL_API_ACERVO_FOTOGRAFICO,
+  URL_API_ACERVO_TRIDIMENSIONAL,
+} from '~/core/constants/urls-api';
 import { validateMessages } from '~/core/constants/validate-messages';
 import {
   FormDefaultCadastroAcervoDTO,
@@ -16,9 +20,10 @@ import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { alterarRegistro, inserirRegistro, obterRegistro } from '~/core/services/api';
 import { formatarDuasCasasDecimais, removerTudoQueNaoEhDigito } from '~/core/utils/functions';
 import FormContentCadastroAcervo from './form-content-cadastro-acervo';
-import { FieldsAcervoFotografico } from './form-fields-config/fotografico';
-import FormCadastroAcervoHeader from './form-header-cadastro-acervo';
 import { FieldsArtesGraficas } from './form-fields-config/artes-graficas';
+import { FieldsAcervoFotografico } from './form-fields-config/fotografico';
+import { FieldsTridimensional } from './form-fields-config/tridimensional';
+import FormCadastroAcervoHeader from './form-header-cadastro-acervo';
 
 const FormAcervo: React.FC = () => {
   const navigate = useNavigate();
@@ -100,6 +105,11 @@ const FormAcervo: React.FC = () => {
       } else {
         valoresSalvar.diametro = null;
       }
+      if (valoresSalvar?.profundidade) {
+        valoresSalvar.profundidade = removerTudoQueNaoEhDigito(valoresSalvar.profundidade);
+      } else {
+        valoresSalvar.profundidade = null;
+      }
 
       if (acervoId && formInitialValues) {
         valoresSalvar.id = formInitialValues.id;
@@ -133,6 +143,12 @@ const FormAcervo: React.FC = () => {
           tipo: TipoAcervo.ArtesGraficas,
           urlBase: URL_API_ACERVO_ARTE_GRAFICA,
           fields: FieldsArtesGraficas,
+        };
+      case TipoAcervo.Tridimensional:
+        return {
+          tipo: TipoAcervo.Tridimensional,
+          urlBase: URL_API_ACERVO_TRIDIMENSIONAL,
+          fields: FieldsTridimensional,
         };
 
       default:
