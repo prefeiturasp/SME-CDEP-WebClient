@@ -5,9 +5,11 @@ pipeline {
       registryCredential = 'jenkins_registry'
     }
 
-    agent {
-      node { label 'AGENT-NODES' }
-    }
+    agent { kubernetes { 
+                  label 'builder'
+                  defaultContainer 'builder'
+                }
+              } 
 
     options {
       buildDiscarder(logRotator(numToKeepStr: '20', artifactNumToKeepStr: '5'))
