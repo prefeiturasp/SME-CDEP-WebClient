@@ -15,3 +15,12 @@ export const TipoAcervoDisplay: Record<TipoAcervo, string> = {
   [TipoAcervo.Fotografico]: 'Fotográfico',
   [TipoAcervo.Tridimensional]: 'Tridimensional',
 };
+
+export const TipoAcervoSuffix: Record<TipoAcervo, string> = {
+  [TipoAcervo.Bibliografico]: '',
+  [TipoAcervo.DocumentacaoHistorica]: '',
+  [TipoAcervo.ArtesGraficas]: '.AG',
+  [TipoAcervo.Audiovisual]: '',
+  [TipoAcervo.Fotografico]: '.FT',
+  [TipoAcervo.Tridimensional]: '',
+};

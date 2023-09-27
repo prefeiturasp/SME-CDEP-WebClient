@@ -15,3 +15,4 @@ export { default as SelectCromia } from './select-cromia';
 export { default as SelectConservacao } from './select-estado-conservacao';
 export { default as SelectFormatoImagem } from './select-formato';
 export { default as SelectSuporte } from './select-suporte';
+export { default as EditorDescricao } from './editor-descricao';
