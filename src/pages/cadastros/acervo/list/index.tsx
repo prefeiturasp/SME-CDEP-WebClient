@@ -27,6 +27,7 @@ const ListAcervo: React.FC = () => {
     {
       title: 'Título',
       dataIndex: 'titulo',
+      render: (titulo: string) => <div style={{ wordBreak: 'break-word' }}>{titulo}</div>,
     },
     {
       title: 'Crédito/Autoria',
