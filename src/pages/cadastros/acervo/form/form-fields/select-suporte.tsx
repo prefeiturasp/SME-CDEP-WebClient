@@ -30,6 +30,9 @@ const SelectSuporte: React.FC<SelectSuporteProps> = ({
       case TipoAcervo.Audiovisual:
         tipoSuporte = TipoSuporte.VIDEO;
         break;
+      case TipoAcervo.ArtesGraficas:
+        tipoSuporte = TipoSuporte.IMAGEM;
+        break;
       default:
         break;
     }
