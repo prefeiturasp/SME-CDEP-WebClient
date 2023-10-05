@@ -3,7 +3,9 @@ pipeline {
       branchname =  env.BRANCH_NAME.toLowerCase()
       kubeconfig = getKubeconf(env.branchname)
       registryCredential = 'jenkins_registry'
+      namespace = "${env.branchname == 'development' ? 'cdep-dev' : env.branchname == 'release' ? 'cdep-hom' : env.branchname == 'release-r2' ? 'cdep-hom2' : 'sme-cdep' }"
     }
+    
 
     agent { kubernetes { 
                   label 'builder'
@@ -41,7 +43,7 @@ pipeline {
             when { anyOf {  branch 'master'; branch 'main'; branch 'development'; branch 'release'; branch 'homolog';  } }
             steps {
                 script{
-                    if ( env.branchname == 'main' ||  env.branchname == 'master' || env.branchname == 'homolog_' || env.branchname == 'release_' ) {
+                    if ( env.branchname == 'main' ||  env.branchname == 'master') {
                         withCredentials([string(credentialsId: 'aprovadores-sgp', variable: 'aprovadores')]) {
                                 timeout(time: 24, unit: "HOURS") {
                                     input message: 'Deseja realizar o deploy?', ok: 'SIM', submitter: "${aprovadores}"
@@ -51,7 +53,7 @@ pipeline {
                     withCredentials([file(credentialsId: "${kubeconfig}", variable: 'config')]){
                             sh('if [ -f '+"$home"+'/.kube/config ];then rm -f '+"$home"+'/.kube/config; fi')
                             sh('cp $config '+"$home"+'/.kube/config')
-                            sh 'kubectl rollout restart deployment sme-cdep-frontend -n sme-cdep'
+                            sh 'kubectl rollout restart deployment sme-cdep-frontend -n ${namespace}'
                             sh('rm -f '+"$home"+'/.kube/config')
                     }
                 }
@@ -66,7 +68,7 @@ pipeline {
 def getKubeconf(branchName) {
     if("main".equals(branchName)) { return "config_prd"; }
     else if ("master".equals(branchName)) { return "config_prd"; }
-    else if ("homolog".equals(branchName)) { return "config_hom"; }
-    else if ("release".equals(branchName)) { return "config_hom"; }
-    else if ("development".equals(branchName)) { return "config_dev"; }
+    else if ("homolog".equals(branchName)) { return "config_release"; }
+    else if ("release".equals(branchName)) { return "config_release"; }
+    else if ("development".equals(branchName)) { return "config_release"; }
 }
