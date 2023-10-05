@@ -22,7 +22,7 @@ import { alterarRegistro, inserirRegistro, obterRegistro } from '~/core/services
 import { formatarDuasCasasDecimais, removerTudoQueNaoEhDigito } from '~/core/utils/functions';
 import FormContentCadastroAcervo from './form-content-cadastro-acervo';
 import { FieldsArtesGraficas } from './form-fields-config/artes-graficas';
-import { FieldsAudioVisual } from './form-fields-config/audiovisual';
+import { FieldsAudiovisual } from './form-fields-config/audiovisual';
 import { FieldsAcervoFotografico } from './form-fields-config/fotografico';
 import { FieldsTridimensional } from './form-fields-config/tridimensional';
 import FormCadastroAcervoHeader from './form-header-cadastro-acervo';
@@ -156,7 +156,7 @@ const FormAcervo: React.FC = () => {
         return {
           tipo: TipoAcervo.Audiovisual,
           urlBase: URL_API_ACERVO_AUDIOVISUAL,
-          fields: FieldsAudioVisual,
+          fields: FieldsAudiovisual,
         };
 
       default:
