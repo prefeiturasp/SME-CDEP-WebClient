@@ -2,7 +2,8 @@ import { Form } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React from 'react';
 import InputEmail from '~/components/cdep/input/email';
-import { CDEP_INPUT_EMAIL } from '~/core/constats/ids/input';
+import { CDEP_INPUT_EMAIL } from '~/core/constants/ids/input';
+import { validateMessages } from '~/core/constants/validate-messages';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import usuarioService from '~/core/services/usuario-service';
 import ModalEditDefault from '../modal-edit-default';
@@ -23,17 +24,13 @@ const ModalEditEmail: React.FC<ModalEditEmailProps> = ({
 
   const usuarioLogin = auth?.usuarioLogin;
 
-  const validateMessages = {
-    required: 'Campo obrigatório',
-  };
-
   const alterarEmail = (values: { email: string }) =>
     usuarioService.alterarEmail(usuarioLogin, values?.email);
 
   return (
     <ModalEditDefault
       form={form}
-      title='Editar e-mail'
+      title='Alterar e-mail'
       service={alterarEmail}
       updateFields={updateFields}
       mensagemConfirmarCancelar='Você não salvou o novo e-mail, deseja descartar a alteração?'

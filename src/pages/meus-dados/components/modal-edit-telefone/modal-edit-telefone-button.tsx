@@ -5,18 +5,12 @@ import ModalEditTelefone from './modal-edit-telefone';
 
 type ModalEditTelefoneButtonProps = {
   formPreview: FormInstance;
-  permiteEdicao: boolean;
 };
 
-const ModalEditTelefoneButton: React.FC<ModalEditTelefoneButtonProps> = ({
-  formPreview,
-  permiteEdicao,
-}) => {
+const ModalEditTelefoneButton: React.FC<ModalEditTelefoneButtonProps> = ({ formPreview }) => {
   const [open, setOpen] = useState(false);
 
   const showModal = () => setOpen(true);
-
-  if (!permiteEdicao) return <></>;
 
   const updateFields = (values: { telefone: string }) => {
     formPreview.setFieldValue('telefone', values?.telefone);
@@ -24,7 +18,7 @@ const ModalEditTelefoneButton: React.FC<ModalEditTelefoneButtonProps> = ({
 
   return (
     <>
-      <Button onClick={showModal}>Editar</Button>
+      <Button onClick={showModal}>Alterar</Button>
       {open && (
         <ModalEditTelefone
           updateFields={updateFields}

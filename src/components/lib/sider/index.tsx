@@ -5,9 +5,9 @@ import styled from 'styled-components';
 import { BoxShadow, Colors } from '~/core/styles/colors';
 
 import { MenuFoldOutlined, MenuUnfoldOutlined } from '@ant-design/icons';
-import { FaUser } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import { ROUTES } from '~/core/enum/routes';
+import { FaUser, FaUserPlus } from 'react-icons/fa';
 
 const SiderContainer = styled(Layout.Sider)`
   box-shadow: ${BoxShadow.DEFAULT};
@@ -22,7 +22,7 @@ const MenuContainer = styled.div`
 `;
 
 const MenuGroup = styled.div`
-  background-color: ${Colors.BLUE_CDEP};
+  background-color: ${Colors.CDEP_PRIMARY};
   width: 100%;
   height: 60px;
   margin: 4px;
@@ -43,14 +43,13 @@ const Sider: React.FC = () => {
   const navigate = useNavigate();
 
   const [collapsed, setCollapsed] = useState(true);
-
   return (
     <SiderContainer
       width={collapsed ? 88 : 264}
       style={{
         textAlign: 'center',
         color: '#fff',
-        backgroundColor: Colors.BLUE_CDEP_DARK,
+        backgroundColor: Colors.CDEP_DARK_PRIMARY,
         overflow: 'auto',
         height: '100vh',
         position: 'fixed',
@@ -70,7 +69,7 @@ const Sider: React.FC = () => {
           fontSize: '24px',
           width: '100%',
           height: '72px',
-          backgroundColor: Colors.BLUE_CDEP,
+          backgroundColor: Colors.CDEP_PRIMARY,
           color: 'white',
           borderRadius: 0,
         }}
@@ -80,6 +79,30 @@ const Sider: React.FC = () => {
         <MenuGroup onClick={() => navigate(ROUTES.MEUS_DADOS)}>
           <FaUser size={24} />
           <div>Meus dados</div>
+        </MenuGroup>
+        <MenuGroup onClick={() => navigate(ROUTES.CREDITO)}>
+          <FaUserPlus size={24} />
+          <div>Crédito</div>
+        </MenuGroup>
+        <MenuGroup onClick={() => navigate(ROUTES.AUTOR)}>
+          <FaUserPlus size={24} />
+          <div>Autor</div>
+        </MenuGroup>
+        <MenuGroup onClick={() => navigate(ROUTES.EDITORA)}>
+          <FaUserPlus size={24} />
+          <div>Editora</div>
+        </MenuGroup>
+        <MenuGroup onClick={() => navigate(ROUTES.ASSUNTO)}>
+          <FaUserPlus size={24} />
+          <div>Assunto</div>
+        </MenuGroup>
+        <MenuGroup onClick={() => navigate(ROUTES.SERIE_COLECAO)}>
+          <FaUserPlus size={24} />
+          <div>Série/Coleção</div>
+        </MenuGroup>
+        <MenuGroup onClick={() => navigate(ROUTES.ACERVO)}>
+          <FaUserPlus size={24} />
+          <div>Acervo</div>
         </MenuGroup>
       </MenuContainer>
     </SiderContainer>

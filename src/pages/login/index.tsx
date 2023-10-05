@@ -9,13 +9,18 @@ import autenticacaoService from '~/core/services/autenticacao-service';
 import { AxiosError } from 'axios';
 import { useNavigate } from 'react-router-dom';
 import ErroGeralLogin from '~/components/cdep/erro-geral-login';
-import { CDEP_BUTTON_ACESSAR, CDEP_BUTTON_CRIAR_CONTA } from '~/core/constats/ids/button/intex';
-import { CDEP_INPUT_LOGIN, CDEP_INPUT_SENHA } from '~/core/constats/ids/input';
+import {
+  CDEP_BUTTON_ACESSAR,
+  CDEP_BUTTON_CRIAR_CONTA,
+  CDEP_BUTTON_ESQUECI_SENHA,
+} from '~/core/constants/ids/button/intex';
+import { CDEP_INPUT_LOGIN, CDEP_INPUT_SENHA } from '~/core/constants/ids/input';
 import {
   ERRO_INFORMAR_USUARIO_SENHA,
   ERRO_LOGIN,
   ERRO_LOGIN_SENHA_INCORRETOS,
-} from '~/core/constats/mensagens';
+} from '~/core/constants/mensagens';
+import { validateMessages } from '~/core/constants/validate-messages';
 import { AutenticacaoDTO } from '~/core/dto/autenticacao-dto';
 import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 import { ValidateErrorEntity } from '~/core/dto/validate-error-entity';
@@ -33,13 +38,6 @@ const Login = () => {
 
   const login = useWatch('login', form);
   const senha = useWatch('senha', form);
-
-  const validateMessages = {
-    required: 'Campo obrigatório',
-    string: {
-      min: 'Deve conter no mínimo ${min} caracteres',
-    },
-  };
 
   const validarExibirErros = (erro: AxiosError<RetornoBaseDTO>) => {
     if (erro?.response?.status === 401) {
@@ -62,27 +60,14 @@ const Login = () => {
     setErroGeral([ERRO_LOGIN]);
   };
 
-  const autenticarCDEP = (loginValidado: string) => {
-    dispatch(setSpinning(true));
-    autenticacaoService
-      .listarPerfisUsuario(loginValidado)
-      .then((resposta) => {
-        if (resposta?.data?.autenticado) {
-          window.clarity('identify', loginValidado);
-          dispatch(setDadosLogin(resposta.data));
-        }
-      })
-      .catch(validarExibirErros)
-      .finally(() => dispatch(setSpinning(false)));
-  };
-
   const onFinish = (values: AutenticacaoDTO) => {
     dispatch(setSpinning(true));
     autenticacaoService
       .autenticar(values)
       .then((resposta) => {
-        if (resposta?.data?.login) {
-          autenticarCDEP(resposta.data.login);
+        if (resposta?.data?.autenticado) {
+          window.clarity('identify', resposta.data.usuarioLogin);
+          dispatch(setDadosLogin(resposta.data));
         }
       })
       .catch(validarExibirErros)
@@ -96,6 +81,8 @@ const Login = () => {
   };
 
   const onClickCriarConta = () => navigate(ROUTES.CRIAR_CONTA);
+
+  const onClickEsqueciSenha = () => navigate(ROUTES.REDEFINIR_SENHA, { state: login });
 
   return (
     <Col span={14}>
@@ -142,7 +129,7 @@ const Login = () => {
           </Col>
         </Row>
 
-        <Row justify='center' gutter={[0, 40]} style={{ marginTop: '20px' }}>
+        <Row justify='center' gutter={[0, 25]} style={{ marginTop: '20px' }}>
           <Col span={24}>
             <Button
               type='primary'
@@ -152,6 +139,18 @@ const Login = () => {
               id={CDEP_BUTTON_ACESSAR}
             >
               Acessar
+            </Button>
+          </Col>
+
+          <Col span={24}>
+            <Button
+              type='text'
+              block
+              style={{ fontSize: 12 }}
+              onClick={() => onClickEsqueciSenha()}
+              id={CDEP_BUTTON_ESQUECI_SENHA}
+            >
+              Esqueci minha senha
             </Button>
           </Col>
 

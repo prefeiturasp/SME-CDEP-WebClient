@@ -1,0 +1,289 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no" ?>
+
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" width="640" height="480" viewBox="0 0 640 480" xml:space="preserve">
+
+<g transform="matrix(1.94 0 0 1.94 327.63 294.42)"  >
+
+<g style=""   >
+
+    <g transform="matrix(1 0 0 1 -158.01 10.13)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-262.93, -307.77)" d="M 265.38 301.19 c -0.9 0 -1.74 0.14 -2.52 0.42 s -1.46 0.71 -2.03 1.27 c -0.57 0.56 -1.03 1.26 -1.36 2.1 c -0.33 0.83 -0.5 1.81 -0.5 2.92 c 0 1.1 0.15 2.06 0.46 2.87 c 0.31 0.81 0.74 1.48 1.31 2.01 c 0.57 0.53 1.25 0.92 2.04 1.18 c 0.8 0.25 1.68 0.38 2.66 0.38 c 0.27 0 0.55 -0.01 0.85 -0.04 c 0.3 -0.03 0.6 -0.07 0.9 -0.12 c 0.3 -0.05 0.6 -0.11 0.88 -0.18 c 0.29 -0.07 0.54 -0.14 0.77 -0.22 v 1.72 c -0.47 0.18 -1.02 0.33 -1.64 0.43 c -0.62 0.1 -1.26 0.15 -1.92 0.15 c -1.33 0 -2.51 -0.19 -3.54 -0.56 c -1.03 -0.37 -1.89 -0.9 -2.59 -1.6 c -0.7 -0.69 -1.23 -1.54 -1.59 -2.54 c -0.36 -1 -0.54 -2.14 -0.54 -3.41 c 0 -1.25 0.19 -2.39 0.57 -3.44 s 0.93 -1.94 1.64 -2.69 c 0.71 -0.75 1.58 -1.33 2.6 -1.75 c 1.02 -0.42 2.16 -0.63 3.43 -0.63 c 0.34 0 0.67 0.01 0.99 0.04 c 0.33 0.03 0.64 0.07 0.94 0.12 c 0.3 0.05 0.58 0.11 0.83 0.19 c 0.26 0.07 0.48 0.15 0.66 0.23 v 1.72 c -0.48 -0.16 -1.01 -0.29 -1.59 -0.4 S 265.96 301.19 265.38 301.19 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -143.78 10.12)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-277.16, -307.76)" d="M 274.04 314.01 h 8.21 v 1.76 h -10.17 v -16.02 h 9.72 v 1.76 h -7.77 v 5.17 h 6.91 v 1.76 h -6.91 V 314.01 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -128.84 10.12)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-292.1, -307.76)" d="M 293.83 308.68 c 0.98 1.41 1.95 2.87 2.91 4.36 h 0.07 c -0.1 -1.56 -0.16 -3.14 -0.16 -4.77 v -8.52 h 1.96 v 16.02 h -1.95 l -6.29 -8.93 c -1.09 -1.56 -2.06 -3.01 -2.91 -4.36 h -0.07 c 0.1 1.46 0.16 3.16 0.16 5.11 v 8.18 h -1.95 v -16.02 h 1.94 L 293.83 308.68 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -113.49 10.12)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-307.45, -307.76)" d="M 308.43 315.77 h -1.95 v -14.26 h -5.35 v -1.76 h 12.65 v 1.76 h -5.35 V 315.77 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -99.05 10.13)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-321.9, -307.77)" d="M 318.25 309.14 v 6.63 h -1.95 v -16.02 h 4.15 c 0.7 0 1.3 0.03 1.79 0.08 s 0.94 0.13 1.35 0.25 c 1.12 0.3 1.97 0.82 2.56 1.55 c 0.59 0.73 0.88 1.64 0.88 2.74 c 0 0.65 -0.1 1.23 -0.31 1.74 s -0.5 0.95 -0.87 1.33 c -0.38 0.38 -0.82 0.68 -1.35 0.92 c -0.52 0.24 -1.1 0.42 -1.74 0.53 v 0.05 l 4.74 6.85 h -1.95 l -4.93 -6.63 H 318.25 z M 318.25 301.51 v 5.87 h 1.93 c 0.6 0 1.11 -0.02 1.53 -0.06 c 0.42 -0.04 0.8 -0.11 1.14 -0.22 c 0.68 -0.21 1.2 -0.54 1.57 -0.99 c 0.37 -0.45 0.55 -1.05 0.55 -1.78 c -0.01 -0.69 -0.18 -1.24 -0.53 -1.66 s -0.82 -0.72 -1.42 -0.9 c -0.29 -0.09 -0.63 -0.15 -1.03 -0.19 c -0.4 -0.04 -0.91 -0.06 -1.52 -0.06 H 318.25 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -83.29 10.12)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-337.66, -307.75)" d="M 345.12 307.77 c 0 1.21 -0.17 2.33 -0.52 3.34 c -0.35 1.01 -0.85 1.89 -1.5 2.62 s -1.43 1.31 -2.35 1.72 s -1.94 0.62 -3.07 0.62 c -1.17 0 -2.22 -0.21 -3.15 -0.62 c -0.93 -0.41 -1.71 -0.98 -2.35 -1.72 c -0.64 -0.73 -1.13 -1.61 -1.47 -2.62 c -0.34 -1.01 -0.51 -2.13 -0.51 -3.34 c 0 -1.22 0.18 -2.34 0.53 -3.36 c 0.35 -1.02 0.85 -1.89 1.5 -2.63 c 0.64 -0.73 1.43 -1.31 2.35 -1.72 c 0.92 -0.41 1.95 -0.62 3.09 -0.62 c 1.16 0 2.21 0.21 3.13 0.62 s 1.71 0.98 2.35 1.72 c 0.64 0.73 1.13 1.61 1.47 2.63 C 344.96 305.43 345.12 306.55 345.12 307.77 z M 343.19 307.77 c 0 -1.08 -0.14 -2.03 -0.42 -2.85 c -0.28 -0.82 -0.67 -1.51 -1.17 -2.06 s -1.08 -0.97 -1.76 -1.25 s -1.4 -0.42 -2.17 -0.42 c -0.78 0 -1.5 0.14 -2.17 0.42 s -1.26 0.7 -1.75 1.25 s -0.89 1.24 -1.17 2.06 c -0.28 0.82 -0.42 1.77 -0.42 2.85 c 0 1.08 0.14 2.03 0.43 2.84 c 0.29 0.82 0.68 1.5 1.17 2.05 s 1.08 0.97 1.76 1.25 s 1.4 0.42 2.18 0.42 c 0.78 0 1.5 -0.14 2.16 -0.42 c 0.67 -0.28 1.25 -0.69 1.74 -1.25 s 0.88 -1.24 1.17 -2.05 C 343.04 309.8 343.19 308.85 343.19 307.77 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -60.83 10.12)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-360.11, -307.76)" d="M 366.6 307.69 c 0 0.93 -0.12 1.81 -0.35 2.63 c -0.23 0.82 -0.58 1.56 -1.05 2.22 s -1.05 1.23 -1.75 1.71 c -0.7 0.48 -1.51 0.85 -2.45 1.11 c -0.54 0.15 -1.11 0.26 -1.74 0.32 c -0.62 0.06 -1.3 0.09 -2.02 0.09 h -3.63 v -16.02 h 3.66 c 0.73 0 1.4 0.03 2.02 0.09 c 0.62 0.06 1.2 0.17 1.74 0.32 c 0.93 0.26 1.75 0.63 2.45 1.1 c 0.7 0.47 1.28 1.03 1.74 1.67 c 0.46 0.64 0.8 1.37 1.03 2.17 C 366.49 305.9 366.6 306.76 366.6 307.69 z M 364.66 307.69 c 0 -1.54 -0.34 -2.79 -1.02 -3.75 c -0.68 -0.96 -1.65 -1.64 -2.92 -2.04 c -0.49 -0.15 -1.03 -0.25 -1.63 -0.31 c -0.6 -0.06 -1.27 -0.08 -2.03 -0.08 h -1.49 v 12.5 h 1.49 c 0.75 0 1.43 -0.03 2.03 -0.08 s 1.14 -0.16 1.63 -0.31 c 1.27 -0.4 2.25 -1.1 2.92 -2.09 C 364.32 310.52 364.66 309.25 364.66 307.69 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -45.79 10.12)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-375.15, -307.76)" d="M 372.03 314.01 h 8.21 v 1.76 h -10.17 v -16.02 h 9.72 v 1.76 h -7.77 v 5.17 h 6.91 v 1.76 h -6.91 V 314.01 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -25.95 10.12)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-394.99, -307.76)" d="M 401.48 307.69 c 0 0.93 -0.12 1.81 -0.35 2.63 c -0.23 0.82 -0.58 1.56 -1.05 2.22 s -1.05 1.23 -1.75 1.71 c -0.7 0.48 -1.51 0.85 -2.45 1.11 c -0.54 0.15 -1.11 0.26 -1.74 0.32 c -0.62 0.06 -1.3 0.09 -2.02 0.09 h -3.63 v -16.02 h 3.66 c 0.73 0 1.4 0.03 2.02 0.09 c 0.62 0.06 1.2 0.17 1.74 0.32 c 0.93 0.26 1.75 0.63 2.45 1.1 c 0.7 0.47 1.28 1.03 1.74 1.67 c 0.46 0.64 0.8 1.37 1.03 2.17 C 401.37 305.9 401.48 306.76 401.48 307.69 z M 399.54 307.69 c 0 -1.54 -0.34 -2.79 -1.02 -3.75 c -0.68 -0.96 -1.65 -1.64 -2.92 -2.04 c -0.49 -0.15 -1.03 -0.25 -1.63 -0.31 c -0.6 -0.06 -1.27 -0.08 -2.03 -0.08 h -1.49 v 12.5 h 1.49 c 0.75 0 1.43 -0.03 2.03 -0.08 s 1.14 -0.16 1.63 -0.31 c 1.27 -0.4 2.25 -1.1 2.92 -2.09 C 399.2 310.52 399.54 309.25 399.54 307.69 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -9.14 10.12)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-411.81, -307.75)" d="M 419.27 307.77 c 0 1.21 -0.17 2.33 -0.52 3.34 s -0.85 1.89 -1.5 2.62 c -0.65 0.73 -1.43 1.31 -2.35 1.72 c -0.91 0.41 -1.94 0.62 -3.07 0.62 c -1.17 0 -2.22 -0.21 -3.15 -0.62 c -0.93 -0.41 -1.71 -0.98 -2.35 -1.72 s -1.13 -1.61 -1.47 -2.62 c -0.34 -1.01 -0.51 -2.13 -0.51 -3.34 c 0 -1.22 0.18 -2.34 0.53 -3.36 s 0.85 -1.89 1.5 -2.63 s 1.43 -1.31 2.35 -1.72 c 0.92 -0.41 1.95 -0.62 3.09 -0.62 c 1.16 0 2.21 0.21 3.13 0.62 c 0.92 0.41 1.7 0.98 2.35 1.72 s 1.13 1.61 1.47 2.63 C 419.1 305.43 419.27 306.55 419.27 307.77 z M 417.33 307.77 c 0 -1.08 -0.14 -2.03 -0.42 -2.85 s -0.67 -1.51 -1.17 -2.06 s -1.08 -0.97 -1.75 -1.25 s -1.4 -0.42 -2.17 -0.42 s -1.5 0.14 -2.17 0.42 s -1.26 0.7 -1.75 1.25 s -0.89 1.24 -1.17 2.06 s -0.42 1.77 -0.42 2.85 c 0 1.08 0.14 2.03 0.43 2.84 c 0.29 0.82 0.68 1.5 1.17 2.05 c 0.5 0.55 1.08 0.97 1.75 1.25 s 1.4 0.42 2.18 0.42 c 0.77 0 1.5 -0.14 2.16 -0.42 c 0.67 -0.28 1.25 -0.69 1.74 -1.25 s 0.89 -1.24 1.17 -2.05 C 417.19 309.8 417.33 308.85 417.33 307.77 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 7.22 10.13)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-428.16, -307.77)" d="M 430.6 301.19 c -0.9 0 -1.74 0.14 -2.51 0.42 c -0.78 0.28 -1.46 0.71 -2.03 1.27 c -0.57 0.56 -1.03 1.26 -1.36 2.1 s -0.5 1.81 -0.5 2.92 c 0 1.1 0.15 2.06 0.46 2.87 c 0.31 0.81 0.74 1.48 1.31 2.01 c 0.57 0.53 1.25 0.92 2.04 1.18 c 0.8 0.25 1.68 0.38 2.66 0.38 c 0.27 0 0.55 -0.01 0.85 -0.04 c 0.3 -0.03 0.6 -0.07 0.9 -0.12 c 0.3 -0.05 0.6 -0.11 0.88 -0.18 c 0.29 -0.07 0.54 -0.14 0.77 -0.22 v 1.72 c -0.47 0.18 -1.02 0.33 -1.64 0.43 c -0.62 0.1 -1.26 0.15 -1.92 0.15 c -1.33 0 -2.51 -0.19 -3.54 -0.56 c -1.03 -0.37 -1.89 -0.9 -2.59 -1.6 s -1.23 -1.54 -1.59 -2.54 s -0.54 -2.14 -0.54 -3.41 c 0 -1.25 0.19 -2.39 0.57 -3.44 c 0.38 -1.05 0.93 -1.94 1.64 -2.69 c 0.71 -0.75 1.58 -1.33 2.6 -1.75 c 1.02 -0.42 2.16 -0.63 3.43 -0.63 c 0.33 0 0.67 0.01 0.99 0.04 c 0.33 0.03 0.64 0.07 0.94 0.12 c 0.3 0.05 0.58 0.11 0.83 0.19 c 0.26 0.07 0.47 0.15 0.66 0.23 v 1.72 c -0.48 -0.16 -1.01 -0.29 -1.59 -0.4 C 431.76 301.24 431.19 301.19 430.6 301.19 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 22.55 10.24)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-443.5, -307.89)" d="M 443.5 314.33 c 0.58 0 1.1 -0.07 1.55 -0.2 s 0.84 -0.33 1.18 -0.58 c 0.33 -0.25 0.61 -0.54 0.84 -0.89 c 0.22 -0.35 0.4 -0.73 0.51 -1.16 c 0.08 -0.26 0.14 -0.56 0.17 -0.88 s 0.05 -0.64 0.05 -0.94 v -9.94 h 1.95 v 9.89 c 0 0.38 -0.02 0.77 -0.06 1.17 c -0.04 0.41 -0.1 0.79 -0.19 1.14 c -0.15 0.59 -0.38 1.14 -0.68 1.64 s -0.7 0.94 -1.19 1.3 c -0.49 0.37 -1.07 0.66 -1.75 0.86 s -1.48 0.31 -2.4 0.31 c -0.88 0 -1.65 -0.1 -2.31 -0.29 c -0.66 -0.19 -1.23 -0.46 -1.71 -0.8 c -0.48 -0.34 -0.86 -0.74 -1.17 -1.21 c -0.3 -0.47 -0.54 -0.98 -0.71 -1.53 c -0.12 -0.4 -0.21 -0.83 -0.26 -1.28 c -0.05 -0.46 -0.08 -0.9 -0.08 -1.33 v -9.89 h 1.95 v 9.94 c 0 0.36 0.03 0.73 0.08 1.11 c 0.05 0.38 0.13 0.72 0.25 1.04 c 0.28 0.77 0.74 1.38 1.4 1.83 C 441.57 314.11 442.43 314.33 443.5 314.33 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 40.84 10.12)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-461.78, -307.76)" d="M 462.25 315.77 h -0.9 l -4.04 -9.57 c -0.56 -1.32 -1.12 -2.75 -1.68 -4.3 h -0.1 c 0.11 2.23 0.17 4.27 0.17 6.12 v 7.75 h -1.95 v -16.02 h 2.81 l 3.77 9.06 c 0.43 1.04 0.91 2.29 1.42 3.75 h 0.06 c 0.58 -1.62 1.05 -2.87 1.42 -3.75 l 3.77 -9.06 h 2.81 v 16.02 h -1.95 v -7.75 c 0 -1.81 0.06 -3.85 0.17 -6.12 h -0.1 c -0.59 1.64 -1.15 3.07 -1.68 4.3 L 462.25 315.77 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 58.05 10.12)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-479, -307.76)" d="M 475.87 314.01 h 8.21 v 1.76 h -10.17 v -16.02 h 9.72 v 1.76 h -7.77 v 5.17 h 6.91 v 1.76 h -6.91 V 314.01 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 72.99 10.12)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-493.94, -307.76)" d="M 495.66 308.68 c 0.98 1.41 1.95 2.87 2.91 4.36 h 0.07 c -0.1 -1.56 -0.16 -3.14 -0.16 -4.77 v -8.52 h 1.96 v 16.02 h -1.95 l -6.29 -8.93 c -1.09 -1.56 -2.06 -3.01 -2.91 -4.36 h -0.07 c 0.1 1.46 0.16 3.16 0.16 5.11 v 8.18 h -1.95 v -16.02 h 1.94 L 495.66 308.68 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 88.33 10.12)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-509.28, -307.76)" d="M 510.25 315.77 h -1.95 v -14.26 h -5.35 v -1.76 h 12.66 v 1.76 h -5.35 V 315.77 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 101.61 10.12)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-522.55, -307.76)" d="M 515.18 315.77 l 6.53 -16.02 h 1.69 l 6.53 16.02 h -2.12 l -1.91 -4.83 h -6.7 l -1.91 4.83 H 515.18 z M 522.54 302.24 c -0.71 1.99 -1.4 3.81 -2.05 5.44 l -0.6 1.51 h 5.31 l -0.61 -1.51 c -0.66 -1.66 -1.33 -3.47 -2.01 -5.44 H 522.54 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 116.49 12.9)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-537.44, -310.54)" d="M 537.74 315.9 c -1.01 -0.18 -1.9 -0.48 -2.67 -0.92 c -0.77 -0.44 -1.42 -1 -1.95 -1.67 c -0.52 -0.67 -0.92 -1.46 -1.19 -2.36 c -0.27 -0.9 -0.4 -1.89 -0.4 -2.99 c 0 -1.25 0.19 -2.39 0.57 -3.44 c 0.38 -1.05 0.93 -1.94 1.64 -2.69 c 0.71 -0.75 1.58 -1.33 2.6 -1.75 c 1.02 -0.42 2.16 -0.63 3.43 -0.63 c 0.33 0 0.67 0.01 0.99 0.04 c 0.33 0.03 0.64 0.07 0.94 0.12 c 0.3 0.05 0.58 0.11 0.83 0.19 c 0.26 0.07 0.47 0.15 0.66 0.23 v 1.72 c -0.48 -0.16 -1 -0.29 -1.57 -0.4 c -0.57 -0.11 -1.14 -0.16 -1.71 -0.16 c -0.89 0 -1.71 0.14 -2.48 0.42 s -1.44 0.71 -2 1.27 c -0.57 0.56 -1.01 1.26 -1.34 2.1 c -0.33 0.83 -0.49 1.81 -0.49 2.92 c 0 1.1 0.15 2.06 0.46 2.87 c 0.3 0.81 0.73 1.48 1.29 2.01 c 0.56 0.53 1.23 0.92 2.02 1.18 c 0.79 0.25 1.66 0.38 2.63 0.38 c 0.26 0 0.54 -0.01 0.84 -0.04 c 0.29 -0.03 0.59 -0.07 0.89 -0.12 c 0.3 -0.05 0.59 -0.11 0.87 -0.18 c 0.28 -0.07 0.54 -0.14 0.76 -0.22 v 1.72 c -0.47 0.18 -1.02 0.33 -1.64 0.43 c -0.62 0.1 -1.26 0.15 -1.92 0.15 c -0.11 0 -0.22 0 -0.32 -0.01 c -0.1 0 -0.21 -0.01 -0.32 -0.02 l -0.34 1.23 c 0.32 0.05 0.61 0.12 0.88 0.22 s 0.5 0.23 0.69 0.39 c 0.19 0.16 0.34 0.35 0.44 0.58 s 0.16 0.49 0.16 0.78 c 0 0.42 -0.09 0.77 -0.28 1.07 c -0.18 0.3 -0.43 0.55 -0.74 0.74 c -0.31 0.2 -0.66 0.34 -1.06 0.43 c -0.4 0.09 -0.81 0.14 -1.25 0.14 c -0.34 0 -0.65 -0.02 -0.93 -0.07 s -0.5 -0.1 -0.66 -0.16 v -1.35 c 0.1 0.03 0.21 0.06 0.33 0.08 c 0.12 0.02 0.25 0.05 0.38 0.07 c 0.13 0.02 0.26 0.03 0.38 0.04 c 0.12 0.01 0.23 0.01 0.33 0.01 c 0.23 0 0.46 -0.01 0.68 -0.04 c 0.22 -0.03 0.42 -0.08 0.59 -0.16 s 0.32 -0.18 0.42 -0.3 c 0.11 -0.12 0.16 -0.28 0.16 -0.47 c 0 -0.17 -0.06 -0.31 -0.17 -0.42 c -0.11 -0.12 -0.27 -0.21 -0.47 -0.28 c -0.2 -0.07 -0.45 -0.13 -0.74 -0.16 c -0.29 -0.04 -0.62 -0.06 -0.98 -0.08 L 537.74 315.9 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 131.41 8.3)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-552.35, -305.94)" d="M 544.97 315.77 l 6.53 -16.02 h 1.69 l 6.53 16.02 h -2.12 l -1.91 -4.83 h -6.7 l -1.91 4.83 H 544.97 z M 550.6 296.12 c 0.33 0 0.65 0.06 0.96 0.17 s 0.6 0.24 0.86 0.38 s 0.51 0.27 0.75 0.38 c 0.24 0.12 0.46 0.17 0.67 0.17 c 0.27 0 0.46 -0.09 0.57 -0.28 s 0.16 -0.43 0.16 -0.74 h 1.5 v 0.26 c 0 0.26 -0.03 0.53 -0.08 0.8 s -0.17 0.51 -0.33 0.74 c -0.16 0.23 -0.38 0.41 -0.65 0.54 c -0.27 0.13 -0.59 0.2 -0.98 0.2 c -0.33 0 -0.65 -0.06 -0.96 -0.17 s -0.6 -0.24 -0.86 -0.38 s -0.51 -0.27 -0.75 -0.38 s -0.46 -0.17 -0.67 -0.17 c -0.27 0 -0.46 0.09 -0.57 0.28 s -0.16 0.43 -0.16 0.74 h -1.5 v -0.17 c -0.01 -0.28 0.02 -0.57 0.08 -0.86 c 0.06 -0.29 0.17 -0.56 0.33 -0.78 s 0.38 -0.4 0.65 -0.53 C 549.89 296.19 550.22 296.12 550.6 296.12 z M 552.32 302.24 c -0.71 1.99 -1.4 3.81 -2.05 5.44 l -0.6 1.51 h 5.31 l -0.61 -1.51 c -0.66 -1.66 -1.33 -3.47 -2.01 -5.44 H 552.32 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 147.84 10.12)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-568.79, -307.75)" d="M 576.25 307.77 c 0 1.21 -0.17 2.33 -0.52 3.34 s -0.85 1.89 -1.5 2.62 c -0.65 0.73 -1.43 1.31 -2.35 1.72 c -0.91 0.41 -1.94 0.62 -3.07 0.62 c -1.17 0 -2.22 -0.21 -3.15 -0.62 c -0.93 -0.41 -1.71 -0.98 -2.35 -1.72 s -1.13 -1.61 -1.47 -2.62 c -0.34 -1.01 -0.51 -2.13 -0.51 -3.34 c 0 -1.22 0.18 -2.34 0.53 -3.36 s 0.85 -1.89 1.5 -2.63 s 1.43 -1.31 2.35 -1.72 c 0.92 -0.41 1.95 -0.62 3.09 -0.62 c 1.16 0 2.21 0.21 3.13 0.62 c 0.92 0.41 1.7 0.98 2.35 1.72 s 1.13 1.61 1.47 2.63 C 576.08 305.43 576.25 306.55 576.25 307.77 z M 574.31 307.77 c 0 -1.08 -0.14 -2.03 -0.42 -2.85 s -0.67 -1.51 -1.17 -2.06 s -1.08 -0.97 -1.75 -1.25 s -1.4 -0.42 -2.17 -0.42 s -1.5 0.14 -2.17 0.42 s -1.26 0.7 -1.75 1.25 s -0.89 1.24 -1.17 2.06 s -0.42 1.77 -0.42 2.85 c 0 1.08 0.14 2.03 0.43 2.84 c 0.29 0.82 0.68 1.5 1.17 2.05 c 0.5 0.55 1.08 0.97 1.75 1.25 s 1.4 0.42 2.18 0.42 c 0.77 0 1.5 -0.14 2.16 -0.42 c 0.67 -0.28 1.25 -0.69 1.74 -1.25 s 0.89 -1.24 1.17 -2.05 C 574.16 309.8 574.31 308.85 574.31 307.77 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -147.06 39.54)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-273.88, -337.18)" d="M 280.38 337.11 c 0 0.93 -0.12 1.81 -0.35 2.63 s -0.58 1.56 -1.05 2.22 c -0.47 0.66 -1.05 1.23 -1.75 1.71 c -0.7 0.48 -1.51 0.85 -2.45 1.11 c -0.53 0.15 -1.11 0.26 -1.74 0.32 s -1.3 0.09 -2.02 0.09 h -3.63 v -16.02 h 3.66 c 0.73 0 1.4 0.03 2.02 0.09 s 1.2 0.17 1.74 0.32 c 0.93 0.26 1.75 0.63 2.45 1.1 s 1.28 1.03 1.74 1.67 c 0.46 0.64 0.8 1.37 1.03 2.17 C 280.26 335.32 280.38 336.19 280.38 337.11 z M 278.44 337.11 c 0 -1.54 -0.34 -2.79 -1.02 -3.75 c -0.68 -0.96 -1.65 -1.64 -2.92 -2.04 c -0.48 -0.15 -1.03 -0.26 -1.63 -0.31 s -1.27 -0.08 -2.03 -0.08 h -1.49 v 12.5 h 1.49 c 0.75 0 1.43 -0.03 2.03 -0.08 s 1.14 -0.16 1.63 -0.31 c 1.27 -0.4 2.24 -1.1 2.92 -2.09 C 278.1 339.95 278.44 338.67 278.44 337.11 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -131.34 39.54)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-289.6, -337.18)" d="M 282.23 345.19 l 6.53 -16.02 h 1.69 l 6.52 16.02 h -2.12 l -1.91 -4.83 h -6.7 l -1.91 4.83 H 282.23 z M 289.58 331.66 c -0.71 1.99 -1.4 3.81 -2.05 5.44 l -0.6 1.51 h 5.31 l -0.61 -1.51 c -0.66 -1.66 -1.33 -3.47 -2.01 -5.44 H 289.58 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -111.53 39.54)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-309.41, -337.18)" d="M 306.29 343.43 h 8.21 v 1.76 h -10.17 v -16.02 h 9.72 v 1.76 h -7.77 v 5.17 h 6.91 v 1.76 h -6.91 V 343.43 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -96.61 39.54)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-324.33, -337.18)" d="M 330.83 337.11 c 0 0.93 -0.12 1.81 -0.35 2.63 c -0.23 0.82 -0.58 1.56 -1.05 2.22 c -0.47 0.66 -1.05 1.23 -1.75 1.71 c -0.7 0.48 -1.51 0.85 -2.45 1.11 c -0.53 0.15 -1.11 0.26 -1.74 0.32 s -1.3 0.09 -2.02 0.09 h -3.63 v -16.02 h 3.66 c 0.73 0 1.4 0.03 2.02 0.09 s 1.2 0.17 1.74 0.32 c 0.93 0.26 1.75 0.63 2.45 1.1 s 1.28 1.03 1.74 1.67 c 0.46 0.64 0.8 1.37 1.03 2.17 C 330.72 335.32 330.83 336.19 330.83 337.11 z M 328.89 337.11 c 0 -1.54 -0.34 -2.79 -1.02 -3.75 c -0.68 -0.96 -1.65 -1.64 -2.92 -2.04 c -0.48 -0.15 -1.03 -0.26 -1.63 -0.31 s -1.27 -0.08 -2.03 -0.08 h -1.49 v 12.5 h 1.49 c 0.75 0 1.43 -0.03 2.03 -0.08 s 1.14 -0.16 1.63 -0.31 c 1.27 -0.4 2.24 -1.1 2.92 -2.09 C 328.55 339.95 328.89 338.67 328.89 337.11 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -80.46 39.68)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-340.49, -337.33)" d="M 340.49 343.76 c 0.58 0 1.1 -0.07 1.55 -0.2 s 0.84 -0.33 1.18 -0.57 s 0.61 -0.54 0.84 -0.89 c 0.22 -0.35 0.4 -0.73 0.51 -1.16 c 0.08 -0.26 0.14 -0.56 0.17 -0.88 s 0.05 -0.64 0.05 -0.94 v -9.94 h 1.95 v 9.89 c 0 0.38 -0.02 0.77 -0.06 1.17 c -0.04 0.41 -0.1 0.79 -0.19 1.14 c -0.15 0.59 -0.38 1.14 -0.68 1.64 s -0.7 0.94 -1.19 1.3 c -0.49 0.37 -1.07 0.65 -1.75 0.86 c -0.68 0.21 -1.48 0.31 -2.4 0.31 c -0.88 0 -1.65 -0.1 -2.31 -0.29 c -0.66 -0.19 -1.23 -0.46 -1.71 -0.8 c -0.48 -0.34 -0.86 -0.74 -1.17 -1.21 c -0.3 -0.47 -0.54 -0.98 -0.71 -1.53 c -0.12 -0.4 -0.21 -0.83 -0.26 -1.28 c -0.05 -0.46 -0.08 -0.9 -0.08 -1.33 v -9.89 h 1.95 v 9.94 c 0 0.36 0.03 0.73 0.08 1.11 s 0.13 0.72 0.25 1.04 c 0.28 0.77 0.74 1.39 1.4 1.83 C 338.56 343.53 339.42 343.76 340.49 343.76 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -64.89 39.55)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-356.05, -337.19)" d="M 358.49 330.61 c -0.9 0 -1.74 0.14 -2.51 0.43 c -0.78 0.28 -1.46 0.71 -2.03 1.27 c -0.57 0.56 -1.03 1.26 -1.36 2.1 s -0.5 1.81 -0.5 2.92 c 0 1.1 0.15 2.06 0.46 2.87 c 0.31 0.81 0.74 1.48 1.31 2.01 s 1.25 0.92 2.04 1.18 c 0.8 0.26 1.68 0.38 2.66 0.38 c 0.27 0 0.55 -0.01 0.85 -0.04 s 0.6 -0.07 0.9 -0.12 c 0.3 -0.05 0.6 -0.11 0.88 -0.18 c 0.29 -0.07 0.54 -0.14 0.77 -0.22 v 1.72 c -0.47 0.18 -1.02 0.33 -1.64 0.42 c -0.62 0.1 -1.26 0.15 -1.92 0.15 c -1.33 0 -2.51 -0.19 -3.54 -0.56 c -1.03 -0.37 -1.89 -0.9 -2.59 -1.6 s -1.23 -1.54 -1.59 -2.54 c -0.36 -1 -0.54 -2.14 -0.54 -3.41 c 0 -1.25 0.19 -2.39 0.57 -3.44 c 0.38 -1.05 0.93 -1.94 1.64 -2.69 c 0.71 -0.75 1.58 -1.33 2.6 -1.75 c 1.02 -0.42 2.16 -0.63 3.43 -0.63 c 0.33 0 0.67 0.01 0.99 0.04 c 0.33 0.03 0.64 0.07 0.94 0.12 c 0.3 0.05 0.58 0.11 0.83 0.19 c 0.26 0.07 0.47 0.15 0.66 0.23 v 1.72 c -0.48 -0.16 -1.01 -0.29 -1.59 -0.4 C 359.65 330.66 359.08 330.61 358.49 330.61 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -49.99 39.54)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-370.96, -337.18)" d="M 363.59 345.19 l 6.53 -16.02 h 1.69 l 6.53 16.02 h -2.12 l -1.91 -4.83 h -6.7 l -1.91 4.83 H 363.59 z M 370.94 331.66 c -0.71 1.99 -1.4 3.81 -2.05 5.44 l -0.6 1.51 h 5.31 l -0.61 -1.51 c -0.66 -1.66 -1.33 -3.47 -2.01 -5.44 H 370.94 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -35.1 42.33)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-385.85, -339.97)" d="M 386.14 345.33 c -1.01 -0.18 -1.9 -0.48 -2.67 -0.92 c -0.77 -0.44 -1.42 -1 -1.95 -1.67 c -0.52 -0.67 -0.92 -1.46 -1.19 -2.36 c -0.27 -0.9 -0.4 -1.89 -0.4 -2.99 c 0 -1.25 0.19 -2.39 0.57 -3.44 c 0.38 -1.05 0.93 -1.94 1.64 -2.69 c 0.71 -0.75 1.58 -1.33 2.6 -1.75 c 1.02 -0.42 2.16 -0.63 3.43 -0.63 c 0.33 0 0.67 0.01 0.99 0.04 c 0.33 0.03 0.64 0.07 0.94 0.12 c 0.3 0.05 0.58 0.11 0.83 0.19 c 0.26 0.07 0.47 0.15 0.66 0.23 v 1.72 c -0.48 -0.16 -1 -0.29 -1.57 -0.4 c -0.57 -0.11 -1.14 -0.16 -1.71 -0.16 c -0.89 0 -1.71 0.14 -2.48 0.43 s -1.44 0.71 -2 1.27 c -0.57 0.56 -1.01 1.26 -1.34 2.1 c -0.33 0.83 -0.49 1.81 -0.49 2.92 c 0 1.1 0.15 2.06 0.46 2.87 c 0.3 0.81 0.73 1.48 1.29 2.01 s 1.23 0.92 2.02 1.18 c 0.79 0.26 1.66 0.38 2.63 0.38 c 0.26 0 0.54 -0.01 0.84 -0.04 c 0.29 -0.03 0.59 -0.07 0.89 -0.12 c 0.3 -0.05 0.59 -0.11 0.87 -0.18 c 0.28 -0.07 0.54 -0.14 0.76 -0.22 v 1.72 c -0.47 0.18 -1.02 0.33 -1.64 0.42 c -0.62 0.1 -1.26 0.15 -1.92 0.15 c -0.11 0 -0.22 0 -0.32 -0.01 c -0.1 0 -0.21 -0.01 -0.32 -0.02 l -0.34 1.23 c 0.32 0.05 0.61 0.12 0.88 0.22 c 0.27 0.1 0.5 0.23 0.69 0.39 c 0.19 0.16 0.34 0.35 0.44 0.58 s 0.16 0.49 0.16 0.78 c 0 0.42 -0.09 0.77 -0.28 1.07 c -0.18 0.3 -0.43 0.55 -0.74 0.74 c -0.31 0.2 -0.66 0.34 -1.06 0.43 c -0.4 0.09 -0.81 0.14 -1.25 0.14 c -0.34 0 -0.65 -0.02 -0.93 -0.07 s -0.5 -0.1 -0.66 -0.16 v -1.35 c 0.1 0.03 0.21 0.06 0.33 0.08 c 0.12 0.02 0.25 0.05 0.38 0.07 c 0.13 0.02 0.26 0.03 0.38 0.04 c 0.12 0.01 0.23 0.01 0.33 0.01 c 0.23 0 0.46 -0.01 0.68 -0.04 c 0.22 -0.03 0.42 -0.08 0.59 -0.16 s 0.32 -0.18 0.42 -0.3 c 0.11 -0.12 0.16 -0.28 0.16 -0.47 c 0 -0.17 -0.06 -0.31 -0.17 -0.42 c -0.11 -0.12 -0.27 -0.21 -0.47 -0.28 c -0.2 -0.07 -0.45 -0.13 -0.74 -0.16 c -0.29 -0.04 -0.62 -0.06 -0.98 -0.08 L 386.14 345.33 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -20.2 37.73)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-400.75, -335.37)" d="M 393.37 345.19 l 6.53 -16.02 h 1.69 l 6.53 16.02 h -2.12 l -1.91 -4.83 h -6.7 l -1.91 4.83 H 393.37 z M 399 325.55 c 0.33 0 0.65 0.06 0.96 0.17 c 0.31 0.12 0.6 0.24 0.86 0.38 c 0.26 0.14 0.51 0.27 0.75 0.38 c 0.24 0.12 0.46 0.17 0.67 0.17 c 0.27 0 0.46 -0.09 0.57 -0.27 s 0.16 -0.43 0.16 -0.74 h 1.5 v 0.26 c 0 0.26 -0.03 0.53 -0.08 0.8 c -0.06 0.27 -0.17 0.52 -0.33 0.74 c -0.16 0.23 -0.38 0.41 -0.65 0.54 s -0.59 0.2 -0.98 0.2 c -0.33 0 -0.65 -0.06 -0.96 -0.17 c -0.31 -0.12 -0.6 -0.24 -0.86 -0.38 c -0.26 -0.14 -0.51 -0.27 -0.75 -0.38 c -0.24 -0.12 -0.46 -0.17 -0.67 -0.17 c -0.27 0 -0.46 0.09 -0.57 0.28 s -0.16 0.43 -0.16 0.74 h -1.5 v -0.17 c -0.01 -0.28 0.02 -0.57 0.08 -0.86 c 0.06 -0.29 0.17 -0.56 0.33 -0.78 s 0.38 -0.41 0.65 -0.53 C 398.29 325.61 398.62 325.55 399 325.55 z M 400.73 331.66 c -0.71 1.99 -1.4 3.81 -2.05 5.44 l -0.6 1.51 h 5.31 l -0.61 -1.51 c -0.66 -1.66 -1.33 -3.47 -2.01 -5.44 H 400.73 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -3.76 39.55)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-417.19, -337.18)" d="M 424.65 337.2 c 0 1.21 -0.17 2.33 -0.52 3.34 s -0.85 1.89 -1.5 2.62 c -0.65 0.73 -1.43 1.31 -2.35 1.72 c -0.91 0.41 -1.94 0.62 -3.07 0.62 c -1.17 0 -2.22 -0.21 -3.15 -0.62 c -0.93 -0.41 -1.71 -0.98 -2.35 -1.72 s -1.13 -1.61 -1.47 -2.62 c -0.34 -1.01 -0.51 -2.13 -0.51 -3.34 c 0 -1.22 0.18 -2.34 0.53 -3.36 s 0.85 -1.89 1.5 -2.63 s 1.43 -1.31 2.35 -1.72 c 0.92 -0.41 1.95 -0.62 3.09 -0.62 c 1.16 0 2.21 0.21 3.13 0.62 c 0.92 0.41 1.7 0.98 2.35 1.72 s 1.13 1.61 1.47 2.63 C 424.48 334.85 424.65 335.97 424.65 337.2 z M 422.71 337.2 c 0 -1.08 -0.14 -2.03 -0.42 -2.85 c -0.28 -0.82 -0.67 -1.51 -1.17 -2.06 s -1.08 -0.97 -1.75 -1.25 s -1.4 -0.43 -2.17 -0.43 s -1.5 0.14 -2.17 0.43 s -1.26 0.7 -1.75 1.25 s -0.89 1.24 -1.17 2.06 c -0.28 0.82 -0.42 1.77 -0.42 2.85 c 0 1.08 0.14 2.03 0.43 2.84 c 0.29 0.82 0.68 1.5 1.17 2.05 c 0.5 0.55 1.08 0.97 1.75 1.25 s 1.4 0.42 2.18 0.42 c 0.77 0 1.5 -0.14 2.16 -0.42 c 0.67 -0.28 1.25 -0.69 1.74 -1.25 s 0.89 -1.24 1.17 -2.05 S 422.71 338.27 422.71 337.2 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 17.58 39.54)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-438.52, -337.18)" d="M 435.1 345.19 h -1.95 v -16.02 h 4.44 c 0.66 0 1.27 0.04 1.83 0.12 c 0.56 0.08 1.08 0.2 1.55 0.37 c 0.96 0.34 1.68 0.86 2.18 1.54 s 0.74 1.52 0.74 2.52 c 0 0.81 -0.16 1.53 -0.48 2.15 c -0.32 0.62 -0.79 1.13 -1.4 1.55 c -0.61 0.42 -1.36 0.73 -2.24 0.94 c -0.88 0.21 -1.88 0.32 -3 0.32 c -0.53 0 -1.09 -0.02 -1.66 -0.07 V 345.19 z M 435.1 336.82 c 0.26 0.03 0.54 0.06 0.83 0.07 c 0.29 0.02 0.56 0.02 0.81 0.02 c 0.92 0 1.7 -0.07 2.35 -0.21 s 1.17 -0.35 1.58 -0.63 c 0.41 -0.28 0.7 -0.61 0.89 -1.01 c 0.18 -0.39 0.28 -0.84 0.28 -1.35 c 0 -0.62 -0.15 -1.13 -0.45 -1.53 c -0.3 -0.4 -0.72 -0.7 -1.28 -0.91 c -0.34 -0.13 -0.74 -0.22 -1.18 -0.27 c -0.45 -0.05 -0.97 -0.08 -1.56 -0.08 h -2.26 V 336.82 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 30.03 39.54)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-450.98, -337.18)" d="M 443.6 345.19 l 6.53 -16.02 h 1.69 l 6.53 16.02 h -2.12 l -1.91 -4.83 h -6.7 l -1.91 4.83 H 443.6 z M 450.95 331.66 c -0.71 1.99 -1.4 3.81 -2.05 5.44 l -0.6 1.51 h 5.31 l -0.61 -1.51 c -0.66 -1.66 -1.33 -3.47 -2.01 -5.44 H 450.95 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 46.03 39.68)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-466.98, -337.33)" d="M 466.98 343.76 c 0.58 0 1.1 -0.07 1.55 -0.2 s 0.84 -0.33 1.18 -0.57 s 0.61 -0.54 0.84 -0.89 c 0.22 -0.35 0.4 -0.73 0.51 -1.16 c 0.08 -0.26 0.14 -0.56 0.17 -0.88 s 0.05 -0.64 0.05 -0.94 v -9.94 h 1.95 v 9.89 c 0 0.38 -0.02 0.77 -0.06 1.17 c -0.04 0.41 -0.1 0.79 -0.19 1.14 c -0.15 0.59 -0.38 1.14 -0.68 1.64 s -0.7 0.94 -1.19 1.3 c -0.49 0.37 -1.07 0.65 -1.75 0.86 c -0.68 0.21 -1.48 0.31 -2.4 0.31 c -0.88 0 -1.65 -0.1 -2.31 -0.29 c -0.66 -0.19 -1.23 -0.46 -1.71 -0.8 c -0.48 -0.34 -0.86 -0.74 -1.17 -1.21 c -0.3 -0.47 -0.54 -0.98 -0.71 -1.53 c -0.12 -0.4 -0.21 -0.83 -0.26 -1.28 c -0.05 -0.46 -0.08 -0.9 -0.08 -1.33 v -9.89 h 1.95 v 9.94 c 0 0.36 0.03 0.73 0.08 1.11 s 0.13 0.72 0.25 1.04 c 0.28 0.77 0.74 1.39 1.4 1.83 C 465.05 343.53 465.91 343.76 466.98 343.76 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 61.19 39.54)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-482.13, -337.18)" d="M 479.2 329.17 v 14.26 h 7.82 v 1.76 h -9.77 v -16.02 H 479.2 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 70.03 39.54)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-490.99, -337.18)" d="M 490.01 345.19 v -16.02 h 1.95 v 16.02 H 490.01 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 79.87 39.53)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-500.81, -337.17)" d="M 497.58 333.41 c 0 0.47 0.1 0.86 0.29 1.17 c 0.19 0.31 0.45 0.56 0.77 0.76 s 0.7 0.36 1.12 0.49 s 0.87 0.25 1.33 0.36 c 0.62 0.15 1.23 0.32 1.83 0.5 c 0.6 0.18 1.14 0.44 1.61 0.76 s 0.85 0.74 1.14 1.26 c 0.29 0.52 0.44 1.19 0.44 2 c 0 0.83 -0.16 1.55 -0.47 2.15 c -0.31 0.6 -0.75 1.1 -1.31 1.49 c -0.55 0.39 -1.21 0.67 -1.97 0.86 c -0.76 0.19 -1.59 0.28 -2.49 0.28 c -0.42 0 -0.84 -0.03 -1.28 -0.08 c -0.44 -0.05 -0.85 -0.12 -1.25 -0.21 s -0.75 -0.19 -1.07 -0.3 c -0.32 -0.11 -0.57 -0.22 -0.75 -0.34 v -1.78 c 0.29 0.14 0.61 0.28 0.97 0.39 c 0.36 0.12 0.73 0.22 1.11 0.31 c 0.38 0.08 0.77 0.15 1.16 0.2 c 0.39 0.05 0.76 0.07 1.1 0.07 c 0.56 0 1.09 -0.05 1.6 -0.14 s 0.95 -0.26 1.33 -0.48 c 0.38 -0.22 0.69 -0.53 0.91 -0.92 c 0.22 -0.39 0.33 -0.87 0.33 -1.45 c 0 -0.48 -0.1 -0.87 -0.29 -1.19 s -0.46 -0.57 -0.78 -0.77 c -0.33 -0.2 -0.7 -0.37 -1.13 -0.5 c -0.43 -0.13 -0.88 -0.25 -1.35 -0.36 c -0.62 -0.14 -1.23 -0.31 -1.83 -0.49 c -0.59 -0.18 -1.13 -0.43 -1.59 -0.75 s -0.84 -0.73 -1.12 -1.23 c -0.28 -0.5 -0.43 -1.15 -0.43 -1.93 c 0 -0.81 0.15 -1.51 0.45 -2.1 c 0.3 -0.59 0.7 -1.07 1.21 -1.46 c 0.51 -0.38 1.09 -0.67 1.76 -0.85 c 0.66 -0.18 1.37 -0.28 2.12 -0.28 c 0.85 0 1.65 0.08 2.39 0.25 c 0.74 0.16 1.42 0.38 2.03 0.64 v 1.81 c -0.66 -0.28 -1.35 -0.51 -2.05 -0.68 c -0.71 -0.17 -1.46 -0.27 -2.27 -0.28 c -0.61 0 -1.13 0.07 -1.58 0.2 c -0.45 0.13 -0.82 0.32 -1.11 0.56 s -0.51 0.54 -0.66 0.89 C 497.66 332.6 497.58 332.99 497.58 333.41 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 93.38 39.54)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-514.33, -337.18)" d="M 515.3 345.19 h -1.95 v -14.26 H 508 v -1.76 h 12.66 v 1.76 h -5.35 V 345.19 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 106.67 39.54)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-527.62, -337.18)" d="M 520.24 345.19 l 6.53 -16.02 h 1.69 l 6.53 16.02 h -2.12 l -1.91 -4.83 h -6.7 l -1.91 4.83 H 520.24 z M 527.59 331.66 c -0.71 1.99 -1.4 3.81 -2.05 5.44 l -0.6 1.51 h 5.31 l -0.61 -1.51 c -0.66 -1.66 -1.33 -3.47 -2.01 -5.44 H 527.59 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 122.99 39.55)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-543.93, -337.19)" d="M 545.66 338.11 c 0.98 1.41 1.95 2.87 2.91 4.36 h 0.07 c -0.1 -1.56 -0.16 -3.14 -0.16 -4.77 v -8.52 h 1.96 v 16.02 h -1.95 l -6.29 -8.93 c -1.09 -1.56 -2.06 -3.01 -2.91 -4.36 h -0.07 c 0.1 1.46 0.16 3.17 0.16 5.11 v 8.18 h -1.95 v -16.02 h 1.94 L 545.66 338.11 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 139.31 39.54)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(87,87,86); fill-rule: nonzero; opacity: 1;"  transform=" translate(-560.26, -337.18)" d="M 552.89 345.19 l 6.53 -16.02 h 1.69 l 6.53 16.02 h -2.12 l -1.91 -4.83 h -6.7 l -1.91 4.83 H 552.89 z M 560.24 331.66 c -0.71 1.99 -1.4 3.81 -2.05 5.44 l -0.6 1.51 h 5.31 l -0.61 -1.51 c -0.66 -1.66 -1.33 -3.47 -2.01 -5.44 H 560.24 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 37.61 -32.51)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(137,22,45); fill-rule: nonzero; opacity: 1;"  transform=" translate(-458.55, -265.13)" d="M 493.38 259.78 c -1.16 -2.09 -2.87 -3.63 -5.12 -4.62 c -1.54 -0.66 -3.5 -1 -5.87 -1 h -60.01 v 21.95 h 59.98 c 1.85 0 3.42 -0.2 4.71 -0.59 c 1.29 -0.39 2.5 -1.04 3.64 -1.95 c 2.68 -2.12 4.02 -4.94 4.02 -8.44 C 494.72 263.15 494.28 261.36 493.38 259.78 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 37.61 -98.38)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(137,22,45); fill-rule: nonzero; opacity: 1;"  transform=" translate(-458.55, -199.26)" d="M 493.38 193.91 c -1.16 -2.09 -2.87 -3.63 -5.12 -4.62 c -1.54 -0.66 -3.5 -1 -5.87 -1 h -60.01 v 21.95 h 59.98 c 1.85 0 3.42 -0.2 4.71 -0.59 c 1.29 -0.39 2.5 -1.04 3.64 -1.95 c 2.68 -2.12 4.02 -4.94 4.02 -8.44 C 494.72 197.29 494.28 195.5 493.38 193.91 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 37.61 -65.45)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(137,22,45); fill-rule: nonzero; opacity: 1;"  transform=" translate(-458.55, -232.19)" d="M 493.38 226.84 c -1.16 -2.09 -2.87 -3.63 -5.12 -4.62 c -1.54 -0.66 -3.5 -1 -5.87 -1 h -60.01 v 21.95 h 59.98 c 1.85 0 3.42 -0.2 4.71 -0.59 c 1.29 -0.39 2.5 -1.04 3.64 -1.95 c 2.68 -2.12 4.02 -4.94 4.02 -8.44 C 494.72 230.22 494.28 228.43 493.38 226.84 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 120.77 -65.43)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(137,22,45); fill-rule: nonzero; opacity: 1;"  transform=" translate(-541.72, -232.21)" d="M 565.09 195.91 c -3.63 -2.74 -7.5 -4.69 -11.62 -5.87 c -4.11 -1.17 -9.12 -1.76 -15.03 -1.76 h -10.97 h -3.87 h -10.97 h -7.11 l 0.05 21.82 h 23.79 c 2.37 0 4.33 0.33 5.87 1 c 2.25 0.99 3.96 2.53 5.12 4.62 c 0.89 1.59 1.34 3.37 1.34 5.36 c 0 3.51 -1.34 6.32 -4.02 8.44 c -1.14 0.91 -2.35 1.56 -3.64 1.95 c -1.29 0.39 -2.86 0.59 -4.71 0.59 h -23.7 l 0.08 31.72 c 0 1.85 0.2 3.42 0.59 4.71 c 0.39 1.29 1.04 2.5 1.95 3.64 c 2.12 2.68 4.94 4.02 8.44 4.02 c 1.98 0 3.77 -0.45 5.36 -1.34 c 2.09 -1.16 3.63 -2.87 4.62 -5.12 c 0.66 -1.54 1 -3.5 1 -5.87 l -0.02 -9.6 h 10.92 c 7.58 0 13.83 -1 18.74 -2.99 c 7.19 -2.96 12.64 -7.58 16.34 -13.86 c 2.85 -4.77 4.27 -10.13 4.27 -16.08 C 577.91 210.73 573.64 202.28 565.09 195.91 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -129.02 -65.43)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(137,22,45); fill-rule: nonzero; opacity: 1;"  transform=" translate(-291.92, -232.22)" d="M 308.32 232.21 c -1.85 0 -3.42 -0.2 -4.71 -0.59 c -1.29 -0.39 -2.5 -1.04 -3.64 -1.95 c -2.68 -2.12 -4.02 -4.94 -4.02 -8.44 c 0 -1.98 0.45 -3.77 1.34 -5.36 c 1.16 -2.09 2.87 -3.63 5.12 -4.62 c 1.54 -0.66 3.5 -1 5.87 -1 h 19.81 v -10.02 V 188.3 h -19.78 c -7.87 0 -14.55 0.78 -20.03 2.35 c -5.48 1.57 -10.64 4.17 -15.47 7.82 c -11.38 8.49 -17.07 19.75 -17.07 33.78 c 0 7.93 1.89 15.08 5.69 21.42 c 4.94 8.36 12.19 14.52 21.77 18.47 c 6.54 2.66 14.87 3.99 24.97 3.99 h 19.92 v -27.47 v -13.83 v -2.61 H 308.32 z" stroke-linecap="round" />
+
+</g>
+
+    <g transform="matrix(1 0 0 1 -45.72 -65.44)"  >
+
+<path style="stroke: none; stroke-width: 1; stroke-dasharray: none; stroke-linecap: butt; stroke-dashoffset: 0; stroke-linejoin: miter; stroke-miterlimit: 4; fill: rgb(137,22,45); fill-rule: nonzero; opacity: 1;"  transform=" translate(-375.23, -232.2)" d="M 394.34 198.46 c -4.84 -3.65 -9.99 -6.25 -15.47 -7.82 c -5.48 -1.57 -12.15 -2.35 -20.03 -2.35 h -19.78 v 11.93 v 15.85 v 16.37 h 34.83 c 2.37 0 4.33 0.33 5.87 1 c 2.25 0.99 3.96 2.53 5.12 4.62 c 0.89 1.59 1.34 3.37 1.34 5.36 c 0 3.51 -1.34 6.32 -4.02 8.44 c -1.14 0.91 -2.35 1.56 -3.64 1.95 c -1.29 0.39 -2.86 0.59 -4.71 0.59 h -34.79 v 21.71 h 19.92 c 10.1 0 18.42 -1.33 24.97 -3.99 c 9.58 -3.95 16.83 -10.1 21.77 -18.47 c 3.79 -6.35 5.69 -13.49 5.69 -21.42 C 411.41 218.21 405.72 206.96 394.34 198.46 z" stroke-linecap="round" />
+
+</g>
+
+</g>
+
+</g>
+
+</svg>

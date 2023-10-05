@@ -1,18 +1,22 @@
-import { Modal as ModalAntd, Spin } from 'antd';
+import { Spin, notification } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
-import { AxiosResponse } from 'axios';
+import { AxiosResponse, HttpStatusCode } from 'axios';
 import React, { PropsWithChildren, useState } from 'react';
 import Modal from '~/components/lib/modal';
+import {
+  CDEP_BUTTON_MODAL_ALTERAR,
+  CDEP_BUTTON_MODAL_CANCELAR,
+} from '~/core/constants/ids/button/intex';
+import { DadosUsuarioDTO } from '~/core/dto/dados-usuario-dto';
 import { EnderecoUsuarioExternoDTO } from '~/core/dto/endereco-usuario-externo-dto';
 import { SenhaNovaDTO } from '~/core/dto/senha-nova-dto';
-import { Colors } from '~/core/styles/colors';
-
-const { confirm } = ModalAntd;
+import { confirmacao } from '~/core/services/alerta-service';
 
 type ModalEditDefaultServiceProps = {
   email: string;
   telefone: string;
-} & EnderecoUsuarioExternoDTO &
+} & DadosUsuarioDTO &
+  EnderecoUsuarioExternoDTO &
   SenhaNovaDTO;
 
 type ModalEditDefaultProps = {
@@ -36,18 +40,37 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
 }) => {
   const [loading, setLoading] = useState(false);
 
+  const openNotificationError = (mensagens: string[]) => {
+    mensagens.forEach((description) => {
+      notification.error({
+        message: 'Erro',
+        description,
+      });
+    });
+  };
+
+  const openNotificationSuccess = () => {
+    notification.success({
+      message: 'Sucesso',
+      description: 'Registro alterado com sucesso!',
+    });
+  };
+
   const handleOk = () => {
     setLoading(true);
 
     service(form.getFieldsValue())
       .then((resposta) => {
-        if (resposta?.status === 200 && resposta?.data && updateFields) {
+        if (resposta?.status === HttpStatusCode.Ok && resposta?.data && updateFields) {
           updateFields(form.getFieldsValue());
+          openNotificationSuccess();
         }
         closeModal();
       })
-      .catch(() => {
-        alert('Erro ao alterar dados');
+      .catch((erro) => {
+        if (erro?.response?.data?.mensagens?.length) {
+          openNotificationError(erro.response.data.mensagens);
+        }
       })
       .finally(() => setLoading(false));
   };
@@ -65,18 +88,10 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
 
   const showConfirmCancel = () => {
     if (form.isFieldsTouched()) {
-      confirm({
-        width: 500,
-        title: 'Atenção',
-        icon: <></>,
+      confirmacao({
         content: mensagemConfirmarCancelar,
         onOk() {
           handleCancel();
-        },
-        okButtonProps: { type: 'default' },
-        cancelButtonProps: {
-          type: 'text',
-          style: { color: Colors.TEXT },
         },
       });
     } else {
@@ -92,12 +107,13 @@ const ModalEditDefault: React.FC<ModalEditDefaultProps> = ({
       onCancel={showConfirmCancel}
       centered
       destroyOnClose
-      cancelButtonProps={{ disabled: loading }}
-      okButtonProps={{ disabled: loading }}
+      cancelButtonProps={{ disabled: loading, id: CDEP_BUTTON_MODAL_CANCELAR }}
+      okButtonProps={{ disabled: loading, id: CDEP_BUTTON_MODAL_ALTERAR }}
       closable={!loading}
       maskClosable={!loading}
       keyboard={!loading}
       okText='Alterar'
+      cancelText='Cancelar'
     >
       <Spin spinning={loading}>{children}</Spin>
     </Modal>

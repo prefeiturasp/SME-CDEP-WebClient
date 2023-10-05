@@ -2,7 +2,8 @@ import { Form } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React from 'react';
 import InputTelefone from '~/components/cdep/input/telefone';
-import { CDEP_INPUT_TELEFONE } from '~/core/constats/ids/input';
+import { CDEP_INPUT_TELEFONE } from '~/core/constants/ids/input';
+import { validateMessages } from '~/core/constants/validate-messages';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import usuarioService from '~/core/services/usuario-service';
 import ModalEditDefault from '../modal-edit-default';
@@ -23,17 +24,13 @@ const ModalEditTelefone: React.FC<ModalEditTelefoneProps> = ({
 
   const usuarioLogin = auth?.usuarioLogin;
 
-  const validateMessages = {
-    required: 'Campo obrigatório',
-  };
-
   const alterar = (values: { telefone: string }) =>
     usuarioService.alterarTelefone(usuarioLogin, values?.telefone);
 
   return (
     <ModalEditDefault
       form={form}
-      title='Editar telefone'
+      title='Alterar telefone'
       service={alterar}
       updateFields={updateFields}
       mensagemConfirmarCancelar='Você não salvou o telefone, deseja descartar a alteração?'

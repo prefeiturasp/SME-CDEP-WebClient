@@ -18,7 +18,7 @@ const ModalEditEmailButton: React.FC<ModalEditEmailButtonProps> = ({ formPreview
 
   return (
     <>
-      <Button onClick={showModal}>Editar</Button>
+      <Button onClick={showModal}>Alterar</Button>
       {open && (
         <ModalEditEmail
           updateFields={updateFields}

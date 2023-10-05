@@ -27,6 +27,7 @@ const HeaderContentContainer = styled.div`
   margin-right: 32px;
   justify-content: space-between;
   align-items: end;
+  line-height: normal;
 `;
 
 const Title = styled.div`
