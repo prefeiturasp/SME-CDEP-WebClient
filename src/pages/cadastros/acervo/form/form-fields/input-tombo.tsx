@@ -13,7 +13,7 @@ const InputTombo: React.FC<InputTomboProps> = ({ tipoAcervo }) => {
       <Input
         type='text'
         placeholder='Tombo'
-        maxLength={13}
+        maxLength={12}
         id={CDEP_INPUT_TOMBO}
         addonAfter={TipoAcervoSuffix[tipoAcervo]}
       />
