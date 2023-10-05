@@ -20,9 +20,10 @@ const RadioAutorizacaoUsoImagem: React.FC<RadioAutorizacaoUsoImagemProps> = ({ t
     },
   ];
 
-  const validarCampoObrigatorio = async () => {
+  const validarCampoObrigatorio = () => {
     switch (tipoAcervo) {
       case TipoAcervo.ArtesGraficas:
+      case TipoAcervo.Audiovisual:
         setRequired(true);
         break;
 

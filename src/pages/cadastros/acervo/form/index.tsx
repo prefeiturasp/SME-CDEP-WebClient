@@ -7,6 +7,7 @@ import Auditoria from '~/components/cdep/text/auditoria';
 import CardContent from '~/components/lib/card-content';
 import {
   URL_API_ACERVO_ARTE_GRAFICA,
+  URL_API_ACERVO_AUDIOVISUAL,
   URL_API_ACERVO_FOTOGRAFICO,
   URL_API_ACERVO_TRIDIMENSIONAL,
 } from '~/core/constants/urls-api';
@@ -21,6 +22,7 @@ import { alterarRegistro, inserirRegistro, obterRegistro } from '~/core/services
 import { formatarDuasCasasDecimais, removerTudoQueNaoEhDigito } from '~/core/utils/functions';
 import FormContentCadastroAcervo from './form-content-cadastro-acervo';
 import { FieldsArtesGraficas } from './form-fields-config/artes-graficas';
+import { FieldsAudiovisual } from './form-fields-config/audiovisual';
 import { FieldsAcervoFotografico } from './form-fields-config/fotografico';
 import { FieldsTridimensional } from './form-fields-config/tridimensional';
 import FormCadastroAcervoHeader from './form-header-cadastro-acervo';
@@ -149,6 +151,12 @@ const FormAcervo: React.FC = () => {
           tipo: TipoAcervo.Tridimensional,
           urlBase: URL_API_ACERVO_TRIDIMENSIONAL,
           fields: FieldsTridimensional,
+        };
+      case TipoAcervo.Audiovisual:
+        return {
+          tipo: TipoAcervo.Audiovisual,
+          urlBase: URL_API_ACERVO_AUDIOVISUAL,
+          fields: FieldsAudiovisual,
         };
 
       default:
