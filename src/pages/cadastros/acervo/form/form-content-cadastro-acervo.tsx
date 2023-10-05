@@ -7,14 +7,18 @@ import {
 } from '~/core/dto/form-cadastro-acervo';
 import { FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import {
+  EditorDescricao,
   InputDataAcervo,
   InputDimensaoAltura,
+  InputDimensaoDiametro,
   InputDimensaoLargura,
+  InputDimensaoProfundidade,
   InputLocalizacao,
   InputProcedencia,
   InputQuantidade,
   InputResolucao,
   InputTamanhoArquivo,
+  InputTecnica,
   InputTitulo,
   InputTombo,
   RadioAutorizacaoUsoImagem,
@@ -25,7 +29,6 @@ import {
   SelectFormatoImagem,
   SelectSuporte,
 } from './form-fields';
-import InputDescricao from './form-fields/input-descricao';
 
 type FormContentCadastroAcervoProps = {
   fieldsConfig: FormPageConfigCadastroAcervoProps | undefined;
@@ -47,10 +50,10 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = <InputTitulo />;
             break;
           case FieldAcervoEnum.Tombo:
-            input = <InputTombo />;
+            input = <InputTombo tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.Credito:
-            input = <SelectCredito />;
+            input = <SelectCredito tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.Localizacao:
             input = <InputLocalizacao />;
@@ -62,16 +65,16 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = <InputDataAcervo />;
             break;
           case FieldAcervoEnum.CopiaDigital:
-            input = <RadioCopiaDigital />;
+            input = <RadioCopiaDigital tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.AutorizacaoUsoImagem:
-            input = <RadioAutorizacaoUsoImagem />;
+            input = <RadioAutorizacaoUsoImagem tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.EstadoConservacao:
             input = <SelectConservacao />;
             break;
           case FieldAcervoEnum.Descricao:
-            input = <InputDescricao />;
+            input = <EditorDescricao />;
             break;
           case FieldAcervoEnum.Quantidade:
             input = <InputQuantidade />;
@@ -81,6 +84,15 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             break;
           case FieldAcervoEnum.DimensaoAltura:
             input = <InputDimensaoAltura />;
+            break;
+          case FieldAcervoEnum.DimensaoDiametro:
+            input = <InputDimensaoDiametro />;
+            break;
+          case FieldAcervoEnum.DimensaoProfundidade:
+            input = <InputDimensaoProfundidade />;
+            break;
+          case FieldAcervoEnum.Tecnica:
+            input = <InputTecnica />;
             break;
           case FieldAcervoEnum.Suporte:
             input = <SelectSuporte tipoAcervo={fieldsConfig.tipo} />;
@@ -103,7 +115,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
                 form={form}
                 formItemProps={{
                   name: 'arquivos',
-                  label: 'Arquivos',
+                  label: 'Anexo',
                 }}
               />
             );

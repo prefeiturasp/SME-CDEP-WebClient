@@ -18,4 +18,7 @@ export enum FieldAcervoEnum {
   Cromia = 17,
   Resolucao = 18,
   Anexos = 19,
+  Tecnica = 20,
+  DimensaoDiametro = 21,
+  DimensaoProfundidade = 22,
 }

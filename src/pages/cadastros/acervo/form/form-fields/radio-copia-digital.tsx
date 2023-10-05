@@ -1,7 +1,14 @@
 import { Form, Radio as RadioAnt } from 'antd';
 import { AbstractCheckboxGroupProps } from 'antd/es/checkbox/Group';
+import React, { useEffect, useState } from 'react';
+import { TipoAcervo } from '~/core/enum/tipo-acervo';
 
-const RadioCopiaDigital: React.FC = () => {
+type RadioCopiaDigitalProps = {
+  tipoAcervo?: TipoAcervo;
+};
+const RadioCopiaDigital: React.FC<RadioCopiaDigitalProps> = ({ tipoAcervo }) => {
+  const [required, setRequired] = useState<boolean>(false);
+
   const options: AbstractCheckboxGroupProps['options'] = [
     {
       label: 'Sim',
@@ -12,8 +19,24 @@ const RadioCopiaDigital: React.FC = () => {
       value: false,
     },
   ];
+
+  const validarCampoObrigatorio = async () => {
+    switch (tipoAcervo) {
+      case TipoAcervo.ArtesGraficas:
+        setRequired(true);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    validarCampoObrigatorio();
+  }, []);
+
   return (
-    <Form.Item label='Cópia digital' name='copiaDigital'>
+    <Form.Item label='Cópia digital' name='copiaDigital' rules={[{ required }]}>
       <RadioAnt.Group options={options} />
     </Form.Item>
   );
