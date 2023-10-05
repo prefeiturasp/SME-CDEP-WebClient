@@ -42,6 +42,10 @@ const SelectCredito: React.FC<SelectCreditoProps> = ({
         setRequired(false);
         break;
 
+      case TipoAcervo.Audiovisual:
+        setRequired(false);
+        break;
+
       default:
         break;
     }

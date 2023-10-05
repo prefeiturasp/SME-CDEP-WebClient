@@ -8,11 +8,15 @@ import {
 import { FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import {
   EditorDescricao,
+  InputAcessibilidade,
+  InputCopia,
   InputDataAcervo,
   InputDimensaoAltura,
   InputDimensaoDiametro,
   InputDimensaoLargura,
   InputDimensaoProfundidade,
+  InputDisponibilizacao,
+  InputDuracao,
   InputLocalizacao,
   InputProcedencia,
   InputQuantidade,
@@ -59,7 +63,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = <InputLocalizacao />;
             break;
           case FieldAcervoEnum.Procedencia:
-            input = <InputProcedencia />;
+            input = <InputProcedencia tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.DataAcervo:
             input = <InputDataAcervo />;
@@ -67,14 +71,20 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
           case FieldAcervoEnum.CopiaDigital:
             input = <RadioCopiaDigital tipoAcervo={fieldsConfig.tipo} />;
             break;
+          case FieldAcervoEnum.Copia:
+            input = <InputCopia />;
+            break;
           case FieldAcervoEnum.AutorizacaoUsoImagem:
             input = <RadioAutorizacaoUsoImagem tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.EstadoConservacao:
-            input = <SelectConservacao />;
+            input = <SelectConservacao tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.Descricao:
             input = <EditorDescricao />;
+            break;
+          case FieldAcervoEnum.Duracao:
+            input = <InputDuracao />;
             break;
           case FieldAcervoEnum.Quantidade:
             input = <InputQuantidade />;
@@ -101,13 +111,19 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = <SelectFormatoImagem />;
             break;
           case FieldAcervoEnum.TamanhoArquivo:
-            input = <InputTamanhoArquivo />;
+            input = <InputTamanhoArquivo tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.Cromia:
-            input = <SelectCromia />;
+            input = <SelectCromia tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.Resolucao:
             input = <InputResolucao />;
+            break;
+          case FieldAcervoEnum.Acessibilidade:
+            input = <InputAcessibilidade />;
+            break;
+          case FieldAcervoEnum.Disponibilizacao:
+            input = <InputDisponibilizacao />;
             break;
           case FieldAcervoEnum.Anexos:
             input = (

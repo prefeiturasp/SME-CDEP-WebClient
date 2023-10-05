@@ -1,12 +1,35 @@
 import { Form, Input } from 'antd';
+import React, { useEffect, useState } from 'react';
 import { CDEP_INPUT_TAMANHO_ARQUIVO } from '~/core/constants/ids/input';
+import { TipoAcervo } from '~/core/enum/tipo-acervo';
 
-const InputTamanhoArquivo: React.FC = () => {
+type InputTamanhoArquivoProps = {
+  tipoAcervo?: TipoAcervo;
+};
+
+const InputTamanhoArquivo: React.FC<InputTamanhoArquivoProps> = ({ tipoAcervo }) => {
+  const [required, setRequired] = useState<boolean>(true);
+
+  const validarCampoObrigatorio = async () => {
+    switch (tipoAcervo) {
+      case TipoAcervo.Audiovisual:
+        setRequired(false);
+        break;
+
+      default:
+        break;
+    }
+  };
+
+  useEffect(() => {
+    validarCampoObrigatorio();
+  }, []);
+
   return (
     <Form.Item
       label='Tamanho do arquivo'
       name='tamanhoArquivo'
-      rules={[{ required: true, whitespace: true }]}
+      rules={[{ required, whitespace: true }]}
     >
       <Input
         type='text'

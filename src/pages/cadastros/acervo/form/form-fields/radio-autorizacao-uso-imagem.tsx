@@ -26,6 +26,10 @@ const RadioAutorizacaoUsoImagem: React.FC<RadioAutorizacaoUsoImagemProps> = ({ t
         setRequired(true);
         break;
 
+      case TipoAcervo.Audiovisual:
+        setRequired(true);
+        break;
+
       default:
         break;
     }
