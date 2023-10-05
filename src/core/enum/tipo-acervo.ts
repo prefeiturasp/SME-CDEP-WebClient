@@ -20,7 +20,7 @@ export const TipoAcervoSuffix: Record<TipoAcervo, string> = {
   [TipoAcervo.Bibliografico]: '',
   [TipoAcervo.DocumentacaoHistorica]: '',
   [TipoAcervo.ArtesGraficas]: '.AG',
-  [TipoAcervo.Audiovisual]: '',
+  [TipoAcervo.Audiovisual]: '.AV',
   [TipoAcervo.Fotografico]: '.FT',
   [TipoAcervo.Tridimensional]: '.TD',
 };

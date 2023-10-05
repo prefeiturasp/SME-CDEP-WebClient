@@ -36,10 +36,12 @@ export type FormDefaultCadastroAcervoDTO = {
   auditoria: AuditoriaDTO;
   titulo: string;
   codigo: string;
+  copia: string;
   creditosAutoresIds: number[];
   localizacao: string;
   procedencia: string;
   dataAcervo: string;
+  duracao: string;
   copiaDigital: boolean;
   permiteUsoImagem: boolean;
   conservacaoId: number;
@@ -52,6 +54,8 @@ export type FormDefaultCadastroAcervoDTO = {
   suporteId: number;
   formatoId: number;
   tamanhoArquivo: string;
+  acessibilidade: string;
+  disponibilizacao: string;
   cromiaId: number;
   resolucao: string;
   arquivos?: any;
