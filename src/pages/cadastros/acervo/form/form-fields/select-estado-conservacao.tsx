@@ -31,7 +31,7 @@ const SelectConservacao: React.FC<SelectConservacaoProps> = ({
     }
   };
 
-  const validarCampoObrigatorio = async () => {
+  const validarCampoObrigatorio = () => {
     switch (tipoAcervo) {
       case TipoAcervo.Audiovisual:
         setRequired(false);

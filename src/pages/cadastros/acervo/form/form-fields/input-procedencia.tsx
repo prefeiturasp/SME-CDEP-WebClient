@@ -10,7 +10,7 @@ type InputProcedenciaProps = {
 const InputProcedencia: React.FC<InputProcedenciaProps> = ({ tipoAcervo }) => {
   const [required, setRequired] = useState<boolean>(true);
 
-  const validarCampoObrigatorio = async () => {
+  const validarCampoObrigatorio = () => {
     switch (tipoAcervo) {
       case TipoAcervo.Audiovisual:
         setRequired(false);

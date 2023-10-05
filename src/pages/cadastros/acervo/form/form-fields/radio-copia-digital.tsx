@@ -20,7 +20,7 @@ const RadioCopiaDigital: React.FC<RadioCopiaDigitalProps> = ({ tipoAcervo }) => 
     },
   ];
 
-  const validarCampoObrigatorio = async () => {
+  const validarCampoObrigatorio = () => {
     switch (tipoAcervo) {
       case TipoAcervo.ArtesGraficas:
         setRequired(true);

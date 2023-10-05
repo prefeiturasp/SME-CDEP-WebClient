@@ -27,7 +27,7 @@ const SelectCromia: React.FC<SelectCromiaProps> = ({ selectProps, formItemProps,
     }
   };
 
-  const validarCampoObrigatorio = async () => {
+  const validarCampoObrigatorio = () => {
     switch (tipoAcervo) {
       case TipoAcervo.Audiovisual:
         setRequired(false);

@@ -36,12 +36,9 @@ const SelectCredito: React.FC<SelectCreditoProps> = ({
     }
   };
 
-  const validarCampoObrigatorio = async () => {
+  const validarCampoObrigatorio = () => {
     switch (tipoAcervo) {
       case TipoAcervo.ArtesGraficas:
-        setRequired(false);
-        break;
-
       case TipoAcervo.Audiovisual:
         setRequired(false);
         break;

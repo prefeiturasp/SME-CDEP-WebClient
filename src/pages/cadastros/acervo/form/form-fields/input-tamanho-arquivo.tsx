@@ -10,7 +10,7 @@ type InputTamanhoArquivoProps = {
 const InputTamanhoArquivo: React.FC<InputTamanhoArquivoProps> = ({ tipoAcervo }) => {
   const [required, setRequired] = useState<boolean>(true);
 
-  const validarCampoObrigatorio = async () => {
+  const validarCampoObrigatorio = () => {
     switch (tipoAcervo) {
       case TipoAcervo.Audiovisual:
         setRequired(false);
