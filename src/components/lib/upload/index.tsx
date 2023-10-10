@@ -1,8 +1,10 @@
 import { InboxOutlined } from '@ant-design/icons';
 import { Form, FormInstance, FormItemProps, Upload, notification } from 'antd';
 import { DraggerProps, RcFile, UploadFile } from 'antd/es/upload';
+import { HttpStatusCode } from 'axios';
 import React from 'react';
 import styled from 'styled-components';
+import { TipoAcervo } from '~/core/enum/tipo-acervo';
 
 const { Dragger } = Upload;
 
@@ -56,6 +58,7 @@ export const ContainerDraggerUpload = styled(Dragger)`
 
 type UploadArquivosProps = {
   form: FormInstance;
+  tipoAcervo?: TipoAcervo;
   draggerProps?: DraggerProps;
   formItemProps: FormItemProps & { name: string };
   tiposArquivosPermitidos?: string;
@@ -91,6 +94,7 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
 
   const excedeuLimiteMaximo = (arquivo: File) => {
     const tamanhoArquivo = arquivo.size / 1024 / 1024;
+
     return tamanhoArquivo > tamanhoMaxUploadPorArquivo;
   };
 
@@ -130,10 +134,14 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
 
     uploadService(fmData, config)
       .then((resposta: any) => {
-        const codigo = resposta?.data?.codigo || resposta?.dados?.codigo || resposta.data;
-        const id = resposta?.data?.id || resposta?.dados?.id;
-        file.id = id;
-        onSuccess(file, codigo);
+        if (resposta?.status === HttpStatusCode.Ok || resposta?.sucesso) {
+          const codigo = resposta?.data?.codigo || resposta?.dados?.codigo || resposta.data;
+          const id = resposta?.data?.id || resposta?.dados?.id;
+          file.id = id;
+          onSuccess(file, codigo);
+        } else {
+          onError({});
+        }
       })
       .catch((e: any) => onError({ event: e }));
   };
@@ -229,7 +237,7 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
           <InboxOutlined />
         </p>
         <p className='ant-upload-text'>Clique ou arraste para fazer o upload do arquivo</p>
-        <p className='ant-upload-hint'>Deve permitir apenas imagens com no máximo 5MB cada</p>
+        <p className='ant-upload-hint'>{`${`Deve permitir apenas arquivos com no máximo ${tamanhoMaxUploadPorArquivo}MB cada`}`}</p>
       </ContainerDraggerUpload>
     </Form.Item>
   );

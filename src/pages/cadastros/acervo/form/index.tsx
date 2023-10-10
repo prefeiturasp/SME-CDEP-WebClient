@@ -8,6 +8,7 @@ import CardContent from '~/components/lib/card-content';
 import {
   URL_API_ACERVO_ARTE_GRAFICA,
   URL_API_ACERVO_AUDIOVISUAL,
+  URL_API_ACERVO_DOCUMENTACAO_HISTORICA,
   URL_API_ACERVO_FOTOGRAFICO,
   URL_API_ACERVO_TRIDIMENSIONAL,
 } from '~/core/constants/urls-api';
@@ -23,6 +24,7 @@ import { formatarDuasCasasDecimais, removerTudoQueNaoEhDigito } from '~/core/uti
 import FormContentCadastroAcervo from './form-content-cadastro-acervo';
 import { FieldsArtesGraficas } from './form-fields-config/artes-graficas';
 import { FieldsAudiovisual } from './form-fields-config/audiovisual';
+import { FieldsDocumentacaoHistorica } from './form-fields-config/documentacao-historica';
 import { FieldsAcervoFotografico } from './form-fields-config/fotografico';
 import { FieldsTridimensional } from './form-fields-config/tridimensional';
 import FormCadastroAcervoHeader from './form-header-cadastro-acervo';
@@ -50,6 +52,7 @@ const FormAcervo: React.FC = () => {
     const resposta = await obterRegistro<FormDefaultCadastroAcervoDTO>(
       `${fieldsConfig?.urlBase}/${acervoId}`,
     );
+
     if (resposta.sucesso) {
       if (resposta.dados?.arquivos?.length) {
         resposta.dados.arquivos = resposta.dados.arquivos.map((item: any) => ({
@@ -63,9 +66,11 @@ const FormAcervo: React.FC = () => {
       if (resposta.dados?.altura) {
         resposta.dados.altura = formatarDuasCasasDecimais(resposta.dados.altura);
       }
+
       if (resposta.dados?.largura) {
         resposta.dados.largura = formatarDuasCasasDecimais(resposta.dados.largura);
       }
+
       setFormInitialValues(resposta.dados);
     }
   }, [fieldsConfig, acervoId]);
@@ -157,6 +162,12 @@ const FormAcervo: React.FC = () => {
           tipo: TipoAcervo.Audiovisual,
           urlBase: URL_API_ACERVO_AUDIOVISUAL,
           fields: FieldsAudiovisual,
+        };
+      case TipoAcervo.DocumentacaoHistorica:
+        return {
+          tipo: TipoAcervo.DocumentacaoHistorica,
+          urlBase: URL_API_ACERVO_DOCUMENTACAO_HISTORICA,
+          fields: FieldsDocumentacaoHistorica,
         };
 
       default:

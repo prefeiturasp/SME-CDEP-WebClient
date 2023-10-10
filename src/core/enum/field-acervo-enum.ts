@@ -25,4 +25,13 @@ export enum FieldAcervoEnum {
   Copia = 24,
   Acessibilidade = 25,
   Disponibilizacao = 26,
+  CodigoAntigoNovo = 27,
+  Material = 28,
+  Idioma = 29,
+  Autor = 30,
+  Ano = 31,
+  NumeroDePaginas = 32,
+  Volume = 33,
+  TipoDeAnexo = 34,
+  AcessoDocumento = 35,
 }
