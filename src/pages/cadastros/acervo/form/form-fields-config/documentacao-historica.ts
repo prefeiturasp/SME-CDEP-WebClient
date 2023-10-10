@@ -56,6 +56,7 @@ export const FieldsDocumentacaoHistorica: FieldAcervoProps[] = [
   },
   {
     fieldCervo: FieldAcervoEnum.Localizacao,
+    sm: 12,
   },
   {
     fieldCervo: FieldAcervoEnum.CopiaDigital,

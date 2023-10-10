@@ -8,10 +8,10 @@ const InputDimensaoProfundidade: React.FC = () => {
       inputProps={{
         id: CDEP_INPUT_DIMENSAO_PROFUNDIDADE,
         maxLength: 5,
-        placeholder: 'Dimensão Profundidade (cm)',
+        placeholder: 'Dimensão profundidade (cm)',
       }}
       formItemProps={{
-        label: 'Dimensão Profundidade (cm)',
+        label: 'Dimensão profundidade (cm)',
         name: 'profundidade',
         getValueFromEvent: (e: React.ChangeEvent<HTMLInputElement>) =>
           formatarDuasCasasDecimais(e?.target?.value),

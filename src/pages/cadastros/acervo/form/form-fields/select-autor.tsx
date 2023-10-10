@@ -43,7 +43,7 @@ const SelectAutor: React.FC<SelectAutorProps> = ({ selectProps, formItemProps })
     <Row wrap={false} align='middle'>
       <Form.Item
         label='Autor'
-        name='autoresIds'
+        name='creditosAutoresIds'
         style={{ width: '100%', marginRight: '8px' }}
         {...formItemProps}
       >

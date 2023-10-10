@@ -1,9 +1,9 @@
-import { Form, FormItemProps, Row, SelectProps } from 'antd';
+import { Form, FormItemProps, SelectProps } from 'antd';
 import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useState } from 'react';
 import Select from '~/components/lib/inputs/select';
 import { CDEP_SELECT_ACESSO_DOCUMENTO } from '~/core/constants/ids/select';
-import { obterAcessoDocumento } from '~/core/services/acervo-documentacao-historica-service';
+import { obterAcessoDocumento } from '~/core/services/acesso-documento-service';
 
 type SelectAcessoDocumentoProps = {
   selectProps?: SelectProps;
@@ -32,25 +32,22 @@ const SelectAcessoDocumento: React.FC<SelectAcessoDocumentoProps> = ({
   }, []);
 
   return (
-    <Row wrap={false} align='middle'>
-      <Form.Item
-        label='Acesso do documento'
-        name='acessoDocumentos'
-        rules={[{ required: true }]}
-        style={{ width: '100%', marginRight: '8px' }}
-        {...formItemProps}
-      >
-        <Select
-          showSearch
-          allowClear
-          mode='multiple'
-          id={CDEP_SELECT_ACESSO_DOCUMENTO}
-          {...selectProps}
-          options={options}
-          placeholder='Acesso do documento'
-        />
-      </Form.Item>
-    </Row>
+    <Form.Item
+      label='Acesso do documento'
+      name='acessoDocumentosIds'
+      rules={[{ required: true }]}
+      {...formItemProps}
+    >
+      <Select
+        showSearch
+        allowClear
+        mode='multiple'
+        id={CDEP_SELECT_ACESSO_DOCUMENTO}
+        {...selectProps}
+        options={options}
+        placeholder='Acesso do documento'
+      />
+    </Form.Item>
   );
 };
 

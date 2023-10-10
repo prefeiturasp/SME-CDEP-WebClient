@@ -7,19 +7,39 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormMaterial } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_MATERIAL } from '~/core/constants/ids/select';
-import { obterMaterial } from '~/core/services/acervo-documentacao-historica-service';
+import { TipoAcervo } from '~/core/enum/tipo-acervo';
+import { TipoMaterial } from '~/core/enum/tipo-material-enum';
+import { obterMaterial } from '~/core/services/material-service';
 
 type SelectMaterialProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
+  tipoAcervo: TipoAcervo;
 };
 
-const SelectMaterial: React.FC<SelectMaterialProps> = ({ selectProps, formItemProps }) => {
+const SelectMaterial: React.FC<SelectMaterialProps> = ({
+  selectProps,
+  formItemProps,
+  tipoAcervo,
+}) => {
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
   const [openModal, setOpenModal] = useState(false);
 
   const obterDados = async () => {
-    const resposta = await obterMaterial();
+    let tipoMaterial = TipoMaterial.NAO_DEFINIDO;
+
+    switch (tipoAcervo) {
+      case TipoAcervo.Bibliografico:
+        tipoMaterial = TipoMaterial.BIBLIOGRAFICO;
+        break;
+      case TipoAcervo.DocumentacaoHistorica:
+        tipoMaterial = TipoMaterial.DOCUMENTAL;
+        break;
+      default:
+        break;
+    }
+
+    const resposta = await obterMaterial(tipoMaterial);
 
     if (resposta.sucesso) {
       const newOptions = resposta.dados.map((item) => ({
@@ -45,14 +65,13 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({ selectProps, formItemPr
     <Row wrap={false} align='middle'>
       <Form.Item
         label='Material'
-        name='materiaisIds'
+        name='materialId'
         style={{ width: '100%', marginRight: '8px' }}
         {...formItemProps}
       >
         <Select
           showSearch
           allowClear
-          mode='multiple'
           id={CDEP_SELECT_MATERIAL}
           {...selectProps}
           options={options}

@@ -41,10 +41,9 @@ export type FormDefaultCadastroAcervoDTO = {
   idiomaId: number;
   ano: string;
   numeroPagina: string;
-  acessoDocumentos: number;
+  acessoDocumentosIds: number;
   volume: string;
   tipoAnexo: string;
-  copia: string;
   creditosAutoresIds: number[];
   localizacao: string;
   procedencia: string;

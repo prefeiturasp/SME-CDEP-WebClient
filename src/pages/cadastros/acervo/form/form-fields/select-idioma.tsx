@@ -7,7 +7,7 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormIdioma } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_MATERIAL } from '~/core/constants/ids/select';
-import { obterIdioma } from '~/core/services/acervo-documentacao-historica-service';
+import { obterIdioma } from '~/core/services/idioma-service';
 
 type SelectIdiomaProps = {
   selectProps?: SelectProps;
@@ -53,7 +53,6 @@ const SelectIdioma: React.FC<SelectIdiomaProps> = ({ selectProps, formItemProps 
         <Select
           showSearch
           allowClear
-          mode='multiple'
           id={CDEP_SELECT_MATERIAL}
           {...selectProps}
           options={options}

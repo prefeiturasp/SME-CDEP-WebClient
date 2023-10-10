@@ -1,12 +1,15 @@
 import { InboxOutlined } from '@ant-design/icons';
 import { Form, FormInstance, FormItemProps, Upload, notification } from 'antd';
 import { DraggerProps, RcFile, UploadFile } from 'antd/es/upload';
-import { HttpStatusCode } from 'axios';
+
 import React from 'react';
 import styled from 'styled-components';
-import { TipoAcervo } from '~/core/enum/tipo-acervo';
 
 const { Dragger } = Upload;
+
+enum HttpStatusCode {
+  Ok = 200,
+}
 
 export const permiteInserirFormato = (arquivo: any, tiposArquivosPermitidos: string) => {
   if (tiposArquivosPermitidos?.trim()) {
@@ -58,7 +61,6 @@ export const ContainerDraggerUpload = styled(Dragger)`
 
 type UploadArquivosProps = {
   form: FormInstance;
-  tipoAcervo?: TipoAcervo;
   draggerProps?: DraggerProps;
   formItemProps: FormItemProps & { name: string };
   tiposArquivosPermitidos?: string;
@@ -237,7 +239,7 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
           <InboxOutlined />
         </p>
         <p className='ant-upload-text'>Clique ou arraste para fazer o upload do arquivo</p>
-        <p className='ant-upload-hint'>{`${`Deve permitir apenas arquivos com no máximo ${tamanhoMaxUploadPorArquivo}MB cada`}`}</p>
+        <p className='ant-upload-hint'>{`Deve permitir apenas arquivos com no máximo ${tamanhoMaxUploadPorArquivo}MB cada`}</p>
       </ContainerDraggerUpload>
     </Form.Item>
   );

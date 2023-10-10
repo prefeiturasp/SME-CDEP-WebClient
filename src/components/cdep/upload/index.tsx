@@ -41,7 +41,6 @@ const UploadArquivosCDEP: React.FC<UploadArquivosCDEPProps> = ({
   return (
     <UploadArquivosSME
       form={form}
-      tipoAcervo={tipoAcervo}
       formItemProps={formItemProps}
       draggerProps={draggerProps}
       tiposArquivosPermitidos={tiposArquivosPermitidos}

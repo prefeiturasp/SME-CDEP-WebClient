@@ -7,11 +7,11 @@ const InputNumeroDePaginas: React.FC = () => {
       inputProps={{
         id: CDEP_INPUT_NUMERO_DE_PAGINAS,
         maxLength: 4,
-        placeholder: 'Número de Páginas',
+        placeholder: 'Número de páginas',
       }}
       formItemProps={{
-        label: 'Número de Páginas',
-        name: 'numeroDePaginas',
+        label: 'Número de páginas',
+        name: 'numeroPagina',
         rules: [{ required: true }],
       }}
     />

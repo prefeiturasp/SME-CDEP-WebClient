@@ -72,7 +72,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = <InputCodigoAntigoNovo />;
             break;
           case FieldAcervoEnum.Material:
-            input = <SelectMaterial />;
+            input = <SelectMaterial tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.Idioma:
             input = <SelectIdioma />;

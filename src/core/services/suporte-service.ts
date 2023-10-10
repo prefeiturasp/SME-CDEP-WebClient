@@ -4,7 +4,7 @@ import { TipoSuporte } from '../enum/tipo-suporte';
 import { ApiResult, obterRegistro } from './api';
 
 const obterListaSuporte = (
-  tipoSuporte: TipoSuporte = TipoSuporte.NA_DEFINIDO,
+  tipoSuporte: TipoSuporte = TipoSuporte.NAO_DEFINIDO,
 ): Promise<ApiResult<IdNomeExcluidoDTO[]>> =>
   obterRegistro(`${URL_API_SUPORTE}?tipoSuporte=${tipoSuporte}`);
 

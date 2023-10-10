@@ -24,9 +24,7 @@ const SelectConservacao: React.FC<SelectConservacaoProps> = ({
     const resposta = await obterConservacoes();
 
     if (resposta.sucesso) {
-      const newOptions = resposta.dados.map((item) => {
-        return { label: item.nome, value: item.id };
-      });
+      const newOptions = resposta.dados.map((item) => ({ label: item.nome, value: item.id }));
       setOptions(newOptions);
     } else {
       setOptions([]);
