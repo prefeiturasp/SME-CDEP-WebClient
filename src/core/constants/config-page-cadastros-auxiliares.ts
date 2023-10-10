@@ -8,6 +8,8 @@ import {
   URL_API_ASSUNTO,
   URL_API_CREDITO_AUTOR,
   URL_API_EDITORA,
+  URL_API_IDIOMA,
+  URL_API_MATERIAL,
   URL_API_SERIE_COLECAO,
 } from './urls-api';
 
@@ -129,5 +131,53 @@ export const paramsConfigPageListSerieColecao: ListConfigCadastrosAuxiliaresProp
   page: {
     title: 'Série/Coleção',
     urlApiBase: URL_API_SERIE_COLECAO,
+  },
+};
+
+export const paramsConfigPageFormMaterial: FormCadastrosAuxiliaresProps = {
+  page: {
+    title: 'Material',
+    urlBase: URL_API_MATERIAL,
+    urlMainPage: ROUTES.MATERIAL,
+    inputs: [
+      {
+        name: INPUTS_NAMES.TEXT.NOME,
+        placeholder: 'Informe o material',
+      },
+    ],
+  },
+};
+
+export const paramsConfigPageListMaterial: ListConfigCadastrosAuxiliaresProps = {
+  breadcrumb: {
+    urlMainPage: ROUTES.MATERIAL,
+  },
+  page: {
+    title: 'Material',
+    urlApiBase: URL_API_MATERIAL,
+  },
+};
+
+export const paramsConfigPageFormIdioma: FormCadastrosAuxiliaresProps = {
+  page: {
+    title: 'Idioma',
+    urlBase: URL_API_IDIOMA,
+    urlMainPage: ROUTES.IDIOMA,
+    inputs: [
+      {
+        name: INPUTS_NAMES.TEXT.NOME,
+        placeholder: 'Informe o idioma',
+      },
+    ],
+  },
+};
+
+export const paramsConfigPageListIdioma: ListConfigCadastrosAuxiliaresProps = {
+  breadcrumb: {
+    urlMainPage: ROUTES.IDIOMA,
+  },
+  page: {
+    title: 'Idioma',
+    urlApiBase: URL_API_IDIOMA,
   },
 };
