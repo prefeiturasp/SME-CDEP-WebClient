@@ -21,7 +21,7 @@ const SelectSuporte: React.FC<SelectSuporteProps> = ({
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
 
   const obterDados = async () => {
-    let tipoSuporte = TipoSuporte.NA_DEFINIDO;
+    let tipoSuporte = TipoSuporte.NAO_DEFINIDO;
 
     switch (tipoAcervo) {
       case TipoAcervo.Fotografico:

@@ -9,6 +9,8 @@ import { FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import {
   EditorDescricao,
   InputAcessibilidade,
+  InputAno,
+  InputCodigoAntigoNovo,
   InputCopia,
   InputDataAcervo,
   InputDimensaoAltura,
@@ -18,21 +20,28 @@ import {
   InputDisponibilizacao,
   InputDuracao,
   InputLocalizacao,
+  InputNumeroDePaginas,
   InputProcedencia,
   InputQuantidade,
   InputResolucao,
   InputTamanhoArquivo,
   InputTecnica,
+  InputTipoAnexo,
   InputTitulo,
   InputTombo,
+  InputVolume,
   RadioAutorizacaoUsoImagem,
   RadioCopiaDigital,
+  SelectAcessoDocumento,
+  SelectAutor,
   SelectConservacao,
   SelectCredito,
   SelectCromia,
   SelectFormatoImagem,
+  SelectMaterial,
   SelectSuporte,
 } from './form-fields';
+import SelectIdioma from './form-fields/select-idioma';
 
 type FormContentCadastroAcervoProps = {
   fieldsConfig: FormPageConfigCadastroAcervoProps | undefined;
@@ -58,6 +67,33 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             break;
           case FieldAcervoEnum.Credito:
             input = <SelectCredito tipoAcervo={fieldsConfig.tipo} />;
+            break;
+          case FieldAcervoEnum.CodigoAntigoNovo:
+            input = <InputCodigoAntigoNovo />;
+            break;
+          case FieldAcervoEnum.Material:
+            input = <SelectMaterial tipoAcervo={fieldsConfig.tipo} />;
+            break;
+          case FieldAcervoEnum.Idioma:
+            input = <SelectIdioma />;
+            break;
+          case FieldAcervoEnum.Autor:
+            input = <SelectAutor />;
+            break;
+          case FieldAcervoEnum.Ano:
+            input = <InputAno />;
+            break;
+          case FieldAcervoEnum.NumeroDePaginas:
+            input = <InputNumeroDePaginas />;
+            break;
+          case FieldAcervoEnum.Volume:
+            input = <InputVolume />;
+            break;
+          case FieldAcervoEnum.TipoDeAnexo:
+            input = <InputTipoAnexo />;
+            break;
+          case FieldAcervoEnum.AcessoDocumento:
+            input = <SelectAcessoDocumento />;
             break;
           case FieldAcervoEnum.Localizacao:
             input = <InputLocalizacao />;
@@ -133,6 +169,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
                   name: 'arquivos',
                   label: 'Anexo',
                 }}
+                tipoAcervo={fieldsConfig.tipo}
               />
             );
             break;

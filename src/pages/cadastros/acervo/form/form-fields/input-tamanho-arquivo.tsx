@@ -13,6 +13,7 @@ const InputTamanhoArquivo: React.FC<InputTamanhoArquivoProps> = ({ tipoAcervo })
   const validarCampoObrigatorio = () => {
     switch (tipoAcervo) {
       case TipoAcervo.Audiovisual:
+      case TipoAcervo.DocumentacaoHistorica:
         setRequired(false);
         break;
 

@@ -12,6 +12,8 @@ type FormPageCadastrosAuxiliaresProps = {
 
 export type FormCadastrosAuxiliaresProps = {
   page: FormPageCadastrosAuxiliaresProps;
+  title?: string;
+  maxLength?: number;
   initialValues?: any;
   isModal?: boolean;
   setOpenModal?: (open: boolean, updateData?: boolean) => void;
