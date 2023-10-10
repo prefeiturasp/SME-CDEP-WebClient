@@ -24,9 +24,10 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({
 }) => {
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
   const [openModal, setOpenModal] = useState(false);
+  const [tipo, setTipo] = useState(TipoMaterial.NAO_DEFINIDO);
 
   const obterDados = async () => {
-    let tipoMaterial = TipoMaterial.NAO_DEFINIDO;
+    let tipoMaterial = tipo;
 
     switch (tipoAcervo) {
       case TipoAcervo.Bibliografico:
@@ -38,6 +39,8 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({
       default:
         break;
     }
+
+    setTipo(tipoMaterial);
 
     const resposta = await obterMaterial(tipoMaterial);
 
@@ -94,6 +97,7 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({
       {openModal && (
         <FormCadastrosAuxiliares
           {...paramsConfigPageFormMaterial}
+          initialValues={{ tipo }}
           isModal
           title='Cadastrar Material'
           maxLength={15}
