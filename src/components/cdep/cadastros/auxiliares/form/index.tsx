@@ -30,6 +30,8 @@ import FormCadastrosAuxiliaresBotoesAcoes from './botoes-acoes';
 
 const FormCadastrosAuxiliares: React.FC<FormCadastrosAuxiliaresProps> = ({
   page,
+  title,
+  maxLength,
   initialValues = {},
   isModal = false,
   setOpenModal = () => false,
@@ -157,7 +159,7 @@ const FormCadastrosAuxiliares: React.FC<FormCadastrosAuxiliaresProps> = ({
         <Input
           type='text'
           placeholder={input.placeholder}
-          maxLength={200}
+          maxLength={maxLength}
           showCount
           id={CDEP_INPUT_NOVO}
         />
@@ -191,7 +193,7 @@ const FormCadastrosAuxiliares: React.FC<FormCadastrosAuxiliaresProps> = ({
       return (
         <Modal
           open
-          title='Cadastrar crédito'
+          title={title}
           onOk={validateFields}
           onCancel={onClickCancelar}
           centered

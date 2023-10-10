@@ -8,10 +8,10 @@ const InputDimensaoAltura: React.FC = () => {
       inputProps={{
         id: CDEP_INPUT_DIMENSAO_ALTURA,
         maxLength: 5,
-        placeholder: 'Dimensão Altura (cm)',
+        placeholder: 'Dimensão altura (cm)',
       }}
       formItemProps={{
-        label: 'Dimensão Altura (cm)',
+        label: 'Dimensão altura (cm)',
         name: 'altura',
         getValueFromEvent: (e: React.ChangeEvent<HTMLInputElement>) =>
           formatarDuasCasasDecimais(e?.target?.value),

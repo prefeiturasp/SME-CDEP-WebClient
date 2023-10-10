@@ -36,7 +36,14 @@ export type FormDefaultCadastroAcervoDTO = {
   auditoria: AuditoriaDTO;
   titulo: string;
   codigo: string;
-  copia: string;
+  codigoNovo: string;
+  materialId: number;
+  idiomaId: number;
+  ano: string;
+  numeroPagina: string;
+  acessoDocumentosIds: number;
+  volume: string;
+  tipoAnexo: string;
   creditosAutoresIds: number[];
   localizacao: string;
   procedencia: string;
