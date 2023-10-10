@@ -11,7 +11,7 @@ const EditorDescricao: React.FC = () => {
         const temErro = !!form.getFieldError('descricao')?.length;
 
         return (
-          <Form.Item name='descricao' label='Descricão' rules={[{ required: true }]}>
+          <Form.Item name='descricao' label='Descrição' rules={[{ required: true }]}>
             <JoditEditorSME hasError={temErro} config={config} />
           </Form.Item>
         );
