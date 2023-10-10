@@ -5,7 +5,7 @@ import { CDEP_INPUT_DISPONIBILIZACAO } from '~/core/constants/ids/input';
 const InputDisponibilizacao: React.FC = () => {
   return (
     <Form.Item
-      label='Disponibilizacao'
+      label='Disponibilização'
       name='disponibilizacao'
       rules={[{ required: false, whitespace: true }]}
     >
