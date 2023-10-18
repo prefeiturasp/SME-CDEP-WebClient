@@ -4,53 +4,35 @@ import React, { useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form';
 import Select from '~/components/lib/inputs/select';
-import { paramsConfigPageFormCredito } from '~/core/constants/config-page-cadastros-auxiliares';
-import { CDEP_SELECT_CREDITO } from '~/core/constants/ids/select';
-import { TipoAcervo } from '~/core/enum/tipo-acervo';
-import { TipoCreditoAutoria } from '~/core/enum/tipo-credito-autoria';
-import { obterCreditoAutorResumido } from '~/core/services/credito-autor-service';
+import { paramsConfigPageFormEditora } from '~/core/constants/config-page-cadastros-auxiliares';
+import { CDEP_SELECT_EDITORA } from '~/core/constants/ids/select';
+import { obterEditora } from '~/core/services/editora-service';
 
-type SelectCreditoProps = {
+type SelectEditoraProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
-  tipoAcervo?: TipoAcervo;
 };
 
-const SelectCredito: React.FC<SelectCreditoProps> = ({
-  selectProps,
-  formItemProps,
-  tipoAcervo,
-}) => {
+const SelectEditora: React.FC<SelectEditoraProps> = ({ selectProps, formItemProps }) => {
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
-  const [required, setRequired] = useState<boolean>(true);
   const [openModal, setOpenModal] = useState(false);
 
   const obterDados = async () => {
-    const resposta = await obterCreditoAutorResumido(TipoCreditoAutoria.Credito);
+    const resposta = await obterEditora();
 
     if (resposta.sucesso) {
-      const newOptions = resposta.dados.map((item) => ({ label: item.nome, value: item.id }));
+      const newOptions = resposta?.dados?.items?.map((item) => ({
+        label: item.nome,
+        value: item.id,
+      }));
       setOptions(newOptions);
     } else {
       setOptions([]);
     }
   };
 
-  const validarCampoObrigatorio = () => {
-    switch (tipoAcervo) {
-      case TipoAcervo.ArtesGraficas:
-      case TipoAcervo.Audiovisual:
-        setRequired(false);
-        break;
-
-      default:
-        break;
-    }
-  };
-
   useEffect(() => {
     obterDados();
-    validarCampoObrigatorio();
   }, []);
 
   const validarAoFecharModal = (open: boolean, updateData?: boolean) => {
@@ -61,20 +43,18 @@ const SelectCredito: React.FC<SelectCreditoProps> = ({
   return (
     <Row wrap={false} align='middle'>
       <Form.Item
-        label='Crédito'
-        name='creditosAutoresIds'
-        rules={[{ required }]}
+        label='Editora'
+        name='editora'
         style={{ width: '100%', marginRight: '8px' }}
         {...formItemProps}
       >
         <Select
           showSearch
           allowClear
-          mode='multiple'
-          id={CDEP_SELECT_CREDITO}
+          id={CDEP_SELECT_EDITORA}
           {...selectProps}
           options={options}
-          placeholder='Crédito'
+          placeholder='Editora'
         />
       </Form.Item>
       <Button
@@ -92,9 +72,9 @@ const SelectCredito: React.FC<SelectCreditoProps> = ({
       />
       {openModal && (
         <FormCadastrosAuxiliares
-          {...paramsConfigPageFormCredito}
+          {...paramsConfigPageFormEditora}
           isModal
-          title='Cadastrar Crédito'
+          title='Cadastrar Editora'
           maxLength={200}
           setOpenModal={validarAoFecharModal}
         />
@@ -103,4 +83,4 @@ const SelectCredito: React.FC<SelectCreditoProps> = ({
   );
 };
 
-export default SelectCredito;
+export default SelectEditora;

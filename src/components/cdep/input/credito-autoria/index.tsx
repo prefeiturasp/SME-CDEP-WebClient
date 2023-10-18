@@ -3,7 +3,7 @@ import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useState } from 'react';
 import Select from '~/components/lib/inputs/select';
 import { CDEP_SELECT_CREDITO_AUTORIA } from '~/core/constants/ids/select';
-import { obterCreditoAutorResumido } from '~/core/services/credito-autor';
+import { obterCreditoAutorResumido } from '~/core/services/credito-autor-service';
 
 type SelectCreditoAutoriaProps = {
   selectProps?: SelectProps;

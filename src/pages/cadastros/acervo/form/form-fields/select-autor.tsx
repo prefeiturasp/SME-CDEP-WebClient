@@ -6,15 +6,18 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormAutor } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_AUTOR } from '~/core/constants/ids/select';
+import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoCreditoAutoria } from '~/core/enum/tipo-credito-autoria';
-import { obterCreditoAutorResumido } from '~/core/services/credito-autor';
+import { obterCreditoAutorResumido } from '~/core/services/credito-autor-service';
 
 type SelectAutorProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
+  tipoAcervo: TipoAcervo;
 };
 
-const SelectAutor: React.FC<SelectAutorProps> = ({ selectProps, formItemProps }) => {
+const SelectAutor: React.FC<SelectAutorProps> = ({ selectProps, formItemProps, tipoAcervo }) => {
+  const [required, setRequired] = useState<boolean>(false);
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
 
   const [openModal, setOpenModal] = useState(false);
@@ -30,8 +33,20 @@ const SelectAutor: React.FC<SelectAutorProps> = ({ selectProps, formItemProps })
     }
   };
 
+  const validarCampoObrigatorio = () => {
+    switch (tipoAcervo) {
+      case TipoAcervo.Bibliografico:
+        setRequired(true);
+        break;
+
+      default:
+        break;
+    }
+  };
+
   useEffect(() => {
     obterDados();
+    validarCampoObrigatorio();
   }, []);
 
   const validarAoFecharModal = (open: boolean, updateData?: boolean) => {
@@ -45,6 +60,7 @@ const SelectAutor: React.FC<SelectAutorProps> = ({ selectProps, formItemProps })
         label='Autor'
         name='creditosAutoresIds'
         style={{ width: '100%', marginRight: '8px' }}
+        rules={[{ required }]}
         {...formItemProps}
       >
         <Select

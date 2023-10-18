@@ -8,6 +8,7 @@ import CardContent from '~/components/lib/card-content';
 import {
   URL_API_ACERVO_ARTE_GRAFICA,
   URL_API_ACERVO_AUDIOVISUAL,
+  URL_API_ACERVO_BIBLIOGRAFICO,
   URL_API_ACERVO_DOCUMENTACAO_HISTORICA,
   URL_API_ACERVO_FOTOGRAFICO,
   URL_API_ACERVO_TRIDIMENSIONAL,
@@ -24,6 +25,7 @@ import { formatarDuasCasasDecimais, removerTudoQueNaoEhDigito } from '~/core/uti
 import FormContentCadastroAcervo from './form-content-cadastro-acervo';
 import { FieldsArtesGraficas } from './form-fields-config/artes-graficas';
 import { FieldsAudiovisual } from './form-fields-config/audiovisual';
+import { FieldsBibliografico } from './form-fields-config/bibliografico';
 import { FieldsDocumentacaoHistorica } from './form-fields-config/documentacao-historica';
 import { FieldsAcervoFotografico } from './form-fields-config/fotografico';
 import { FieldsTridimensional } from './form-fields-config/tridimensional';
@@ -168,6 +170,12 @@ const FormAcervo: React.FC = () => {
           tipo: TipoAcervo.DocumentacaoHistorica,
           urlBase: URL_API_ACERVO_DOCUMENTACAO_HISTORICA,
           fields: FieldsDocumentacaoHistorica,
+        };
+      case TipoAcervo.Bibliografico:
+        return {
+          tipo: TipoAcervo.Bibliografico,
+          urlBase: URL_API_ACERVO_BIBLIOGRAFICO,
+          fields: FieldsBibliografico,
         };
 
       default:

@@ -24,6 +24,8 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({
 }) => {
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
   const [openModal, setOpenModal] = useState(false);
+  const [required, setRequired] = useState<boolean>(false);
+  const [habilitaBotaoAdicionar, setHabilitaBotaoAdicionar] = useState(true);
   const [tipo, setTipo] = useState(TipoMaterial.NAO_DEFINIDO);
 
   const obterDados = async () => {
@@ -31,6 +33,7 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({
 
     switch (tipoAcervo) {
       case TipoAcervo.Bibliografico:
+        setHabilitaBotaoAdicionar(false);
         tipoMaterial = TipoMaterial.BIBLIOGRAFICO;
         break;
       case TipoAcervo.DocumentacaoHistorica:
@@ -55,8 +58,20 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({
     }
   };
 
+  const validarCampoObrigatorio = () => {
+    switch (tipoAcervo) {
+      case TipoAcervo.Bibliografico:
+        setRequired(true);
+        break;
+
+      default:
+        break;
+    }
+  };
+
   useEffect(() => {
     obterDados();
+    validarCampoObrigatorio();
   }, []);
 
   const validarAoFecharModal = (open: boolean, updateData?: boolean) => {
@@ -69,7 +84,8 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({
       <Form.Item
         label='Material'
         name='materialId'
-        style={{ width: '100%', marginRight: '8px' }}
+        rules={[{ required }]}
+        style={{ width: '100%', marginRight: habilitaBotaoAdicionar ? '8px' : '' }}
         {...formItemProps}
       >
         <Select
@@ -81,19 +97,21 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({
           placeholder='Material'
         />
       </Form.Item>
-      <Button
-        type='default'
-        block
-        icon={<FaPlus />}
-        onClick={() => setOpenModal(true)}
-        style={{
-          fontSize: 16,
-          width: '43px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      />
+      {habilitaBotaoAdicionar && (
+        <Button
+          type='default'
+          block
+          icon={<FaPlus />}
+          onClick={() => setOpenModal(true)}
+          style={{
+            fontSize: 16,
+            width: '43px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}
+        />
+      )}
       {openModal && (
         <FormCadastrosAuxiliares
           {...paramsConfigPageFormMaterial}
