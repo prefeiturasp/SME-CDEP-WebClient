@@ -6,7 +6,7 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormSerieColecao } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_SERIE_COLECAO } from '~/core/constants/ids/select';
-import { obterSerieColecao } from '~/core/services/serie-colecao-service';
+import { obterSerieColecaoResumido } from '~/core/services/serie-colecao-service';
 
 type SelectSerieColecaoProps = {
   selectProps?: SelectProps;
@@ -19,7 +19,8 @@ const SelectSerieColecao: React.FC<SelectSerieColecaoProps> = ({ selectProps, fo
   const [openModal, setOpenModal] = useState(false);
 
   const obterDados = async () => {
-    const resposta = await obterSerieColecao();
+    //TODO: depois que o Vini terminar o endpoint, ajustar endpoint para "/resumido"
+    const resposta = await obterSerieColecaoResumido();
 
     if (resposta.sucesso) {
       const newOptions = resposta?.dados?.items?.map((item) => ({
@@ -52,7 +53,6 @@ const SelectSerieColecao: React.FC<SelectSerieColecaoProps> = ({ selectProps, fo
         <Select
           showSearch
           allowClear
-          mode='multiple'
           id={CDEP_SELECT_SERIE_COLECAO}
           {...selectProps}
           options={options}

@@ -6,7 +6,7 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormEditora } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_EDITORA } from '~/core/constants/ids/select';
-import { obterEditora } from '~/core/services/editora-service';
+import { obterEditoraResumido } from '~/core/services/editora-service';
 
 type SelectEditoraProps = {
   selectProps?: SelectProps;
@@ -18,7 +18,8 @@ const SelectEditora: React.FC<SelectEditoraProps> = ({ selectProps, formItemProp
   const [openModal, setOpenModal] = useState(false);
 
   const obterDados = async () => {
-    const resposta = await obterEditora();
+    //TODO: depois que o Vini terminar o endpoint, ajustar endpoint para "/resumido"
+    const resposta = await obterEditoraResumido();
 
     if (resposta.sucesso) {
       const newOptions = resposta?.dados?.items?.map((item) => ({

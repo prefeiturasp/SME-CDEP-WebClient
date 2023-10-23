@@ -7,7 +7,7 @@ import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormAssunto } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_ASSUNTO } from '~/core/constants/ids/select';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
-import { obterAssunto } from '~/core/services/assunto-service';
+import { obterAssuntoResumido } from '~/core/services/assunto-service';
 
 type SelectAutorProps = {
   selectProps?: SelectProps;
@@ -22,7 +22,8 @@ const SelectAssunto: React.FC<SelectAutorProps> = ({ selectProps, formItemProps,
   const [openModal, setOpenModal] = useState(false);
 
   const obterDados = async () => {
-    const resposta = await obterAssunto();
+    //TODO: depois que o Vini terminar o endpoint, ajustar endpoint para "/resumido"
+    const resposta = await obterAssuntoResumido();
 
     if (resposta.sucesso) {
       const newOptions = resposta?.dados?.items?.map((item) => ({
