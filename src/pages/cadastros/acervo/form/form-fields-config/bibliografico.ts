@@ -19,9 +19,6 @@ export const FieldsBibliografico: FieldAcervoProps[] = [
     fieldCervo: FieldAcervoEnum.Coautor,
   },
   {
-    fieldCervo: FieldAcervoEnum.TipoAutoria,
-  },
-  {
     fieldCervo: FieldAcervoEnum.Editora,
   },
   {
