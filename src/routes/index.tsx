@@ -12,6 +12,7 @@ import Autor from '~/pages/cadastros/autor';
 import Credito from '~/pages/cadastros/credito';
 import Editora from '~/pages/cadastros/editora';
 import SerieColecao from '~/pages/cadastros/serie-colecao';
+import { ConsultaAcervo } from '~/pages/consulta-acervo';
 import CriarConta from '~/pages/criar-conta';
 import Home from '~/pages/home';
 import Inicial from '~/pages/inicial';
@@ -90,6 +91,7 @@ const RoutesConfig = () => {
       ) : (
         <Routes>
           <Route path='*' element={<Navigate to={ROUTES.LOGIN} />} />
+          <Route path={ROUTES.CONSULTA_ACERVO} element={<ConsultaAcervo />} />
           <Route element={homePage}>
             <Route path={ROUTES.LOGIN} element={loginPage} />
             <Route path={ROUTES.CRIAR_CONTA} element={criarContaPage} />
