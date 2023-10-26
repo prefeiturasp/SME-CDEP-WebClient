@@ -13,9 +13,9 @@ const InputTipoAutoriaLista: React.FC = () => {
             return (
               <Form.Item shouldUpdate key={key} style={{ margin: 0 }}>
                 {(form) => {
-                  const listaTipoAutoria = form.getFieldValue('coAutores');
+                  const coAutores = form.getFieldValue('coAutores');
 
-                  const label = listaTipoAutoria[name].label;
+                  const label = coAutores[name].label;
 
                   return (
                     <InputTipoAutoria
