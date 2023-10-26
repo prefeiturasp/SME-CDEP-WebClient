@@ -71,7 +71,7 @@ const SelectCoautor: React.FC<SelectCoautorProps> = ({ selectProps, formItemProp
                       );
 
                       return {
-                        coAutorId: coAutor?.value,
+                        creditoAutorId: coAutor?.value,
                         tipoAutoria: tipoAutoriaAtual?.tipoAutoria,
                       };
                     });
