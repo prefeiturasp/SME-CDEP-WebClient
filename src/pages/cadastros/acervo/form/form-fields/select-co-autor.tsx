@@ -6,6 +6,7 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormAutor } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_COAUTOR } from '~/core/constants/ids/select';
+import { CoAutorDTO } from '~/core/dto/coautores-dto';
 import { TipoCreditoAutoria } from '~/core/enum/tipo-credito-autoria';
 import { obterCreditoAutorResumido } from '~/core/services/credito-autor-service';
 import InputTipoAutoriaLista from './input-tipo-autoria-lista';
@@ -39,11 +40,11 @@ const SelectCoautor: React.FC<SelectCoautorProps> = ({ selectProps, formItemProp
     setOpenModal(open);
     if (updateData) obterDados();
   };
-
   return (
     <Form.Item shouldUpdate style={{ margin: 0 }}>
       {(form) => {
         const listaTipoAutoria = form.getFieldValue('listaTipoAutoria');
+
         return (
           <>
             <Row wrap={false} align='middle'>
@@ -65,9 +66,9 @@ const SelectCoautor: React.FC<SelectCoautorProps> = ({ selectProps, formItemProp
                   placeholder='Coautor'
                   id={CDEP_SELECT_COAUTOR}
                   onChange={(value) => {
-                    const novalistaTipoAutoria = value?.map((coAutor: any) => {
+                    const novalistaTipoAutoria = value?.map((coAutor: CoAutorDTO) => {
                       const tipoAutoriaAtual = listaTipoAutoria?.find(
-                        (item: any) => item.coAutorId === coAutor.value,
+                        (item: any) => item.creditoAutorId === coAutor.value,
                       );
 
                       return {

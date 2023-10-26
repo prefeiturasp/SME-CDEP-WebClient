@@ -55,9 +55,11 @@ const FormAcervo: React.FC = () => {
       `${fieldsConfig?.urlBase}/${acervoId}`,
     );
 
+    const dados = resposta.dados;
+
     if (resposta.sucesso) {
-      if (resposta.dados?.arquivos?.length) {
-        resposta.dados.arquivos = resposta.dados.arquivos.map((item: any) => ({
+      if (dados?.arquivos?.length) {
+        dados.arquivos = dados.arquivos.map((item: any) => ({
           xhr: item?.codigo,
           name: item?.nome,
           id: item?.id,
@@ -65,22 +67,34 @@ const FormAcervo: React.FC = () => {
         }));
       }
 
-      if (resposta.dados?.altura) {
-        resposta.dados.altura = formatarDuasCasasDecimais(resposta.dados.altura);
+      if (dados?.altura) {
+        dados.altura = formatarDuasCasasDecimais(dados.altura);
       }
 
-      if (resposta.dados?.largura) {
-        resposta.dados.largura = formatarDuasCasasDecimais(resposta.dados.largura);
+      if (dados?.largura) {
+        dados.largura = formatarDuasCasasDecimais(dados.largura);
       }
 
-      if (resposta.dados?.coAutores.length) {
-        resposta.dados.listaTipoAutoria = resposta.dados?.coAutores;
+      if (dados?.coAutores.length) {
+        const coAutores = [...dados.coAutores];
+
+        dados.coAutores = coAutores.map((item) => ({
+          ...item,
+          value: item.creditoAutorId,
+          label: item.creditoAutorNome,
+        }));
+
+        dados.listaTipoAutoria = coAutores.map((item) => ({
+          ...item,
+          value: item.creditoAutorId,
+          label: item.creditoAutorNome,
+        }));
       } else {
-        resposta.dados.coAutores = [];
-        resposta.dados.listaTipoAutoria = [];
+        dados.coAutores = [];
+        dados.listaTipoAutoria = [];
       }
 
-      setFormInitialValues(resposta.dados);
+      setFormInitialValues(dados);
     }
   }, [fieldsConfig, acervoId]);
 
