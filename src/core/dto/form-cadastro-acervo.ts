@@ -52,6 +52,7 @@ export type FormDefaultCadastroAcervoDTO = {
   creditosAutoresIds: number[];
   assuntosIds: number[];
   coAutores: CoAutorDTO[];
+  listaTipoAutoria: CoAutorDTO[];
   localizacao: string;
   localizacaoCDD: string;
   localizacaoPHA: string;

@@ -42,49 +42,70 @@ const SelectCoautor: React.FC<SelectCoautorProps> = ({ selectProps, formItemProp
 
   return (
     <Form.Item shouldUpdate style={{ margin: 0 }}>
-      <Row wrap={false} align='middle'>
-        <Form.Item
-          label='Coautor'
-          name='coAutores'
-          style={{ width: '100%', marginRight: '8px' }}
-          {...formItemProps}
-          shouldUpdate
-          getValueFromEvent={(_, value) => value}
-        >
-          <Select
-            showSearch
-            allowClear
-            mode='multiple'
-            id={CDEP_SELECT_COAUTOR}
-            {...selectProps}
-            options={options}
-            placeholder='Coautor'
-            labelInValue
-          />
-        </Form.Item>
-        <Button
-          type='default'
-          block
-          icon={<FaPlus />}
-          onClick={() => setOpenModal(true)}
-          style={{
-            fontSize: 16,
-            width: '43px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        />
-      </Row>
-      {openModal && (
-        <FormCadastrosAuxiliares
-          {...paramsConfigPageFormAutor}
-          isModal
-          title='Cadastrar Coautor'
-          setOpenModal={validarAoFecharModal}
-        />
-      )}
-      <InputTipoAutoriaLista />
+      {(form) => {
+        const listaTipoAutoria = form.getFieldValue('listaTipoAutoria');
+        return (
+          <>
+            <Row wrap={false} align='middle'>
+              <Form.Item
+                label='Coautor'
+                name='coAutores'
+                style={{ width: '100%', marginRight: '8px' }}
+                {...formItemProps}
+                shouldUpdate
+                getValueFromEvent={(_, value) => value}
+              >
+                <Select
+                  showSearch
+                  allowClear
+                  labelInValue
+                  mode='multiple'
+                  {...selectProps}
+                  options={options}
+                  placeholder='Coautor'
+                  id={CDEP_SELECT_COAUTOR}
+                  onChange={(value) => {
+                    const novalistaTipoAutoria = value?.map((coAutor: any) => {
+                      const tipoAutoriaAtual = listaTipoAutoria?.find(
+                        (item: any) => item.coAutorId === coAutor.value,
+                      );
+
+                      return {
+                        coAutorId: coAutor?.value,
+                        tipoAutoria: tipoAutoriaAtual?.tipoAutoria,
+                      };
+                    });
+
+                    form.setFieldValue('listaTipoAutoria', novalistaTipoAutoria);
+                  }}
+                />
+              </Form.Item>
+              <Button
+                type='default'
+                block
+                icon={<FaPlus />}
+                onClick={() => setOpenModal(true)}
+                style={{
+                  fontSize: 16,
+                  width: '43px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              />
+            </Row>
+            {openModal && (
+              <FormCadastrosAuxiliares
+                {...paramsConfigPageFormAutor}
+                isModal
+                title='Cadastrar Coautor'
+                setOpenModal={validarAoFecharModal}
+              />
+            )}
+            <InputTipoAutoriaLista />
+          </>
+        );
+      }}
     </Form.Item>
   );
 };

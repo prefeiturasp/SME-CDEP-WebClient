@@ -6,23 +6,32 @@ import InputTipoAutoria from './input-tipo-autoria';
 
 const InputTipoAutoriaLista: React.FC = () => {
   return (
-    <Form.List name='coAutores'>
+    <Form.List name='listaTipoAutoria'>
       {(fields) => (
         <>
           {fields.map(({ key, name, ...restField }) => {
             return (
               <Form.Item shouldUpdate key={key} style={{ margin: 0 }}>
-                <InputTipoAutoria
-                  inputProps={{
-                    id: `${CDEP_INPUT_TIPO_AUTORIA}_${name}`,
-                    placeholder: 'Tipo de autoria',
-                  }}
-                  formItemProps={{
-                    ...restField,
-                    name: [name, 'tipoAutoria'],
-                    required: false,
-                  }}
-                />
+                {(form) => {
+                  const listaTipoAutoria = form.getFieldValue('coAutores');
+
+                  const label = listaTipoAutoria[name].label;
+
+                  return (
+                    <InputTipoAutoria
+                      inputProps={{
+                        id: `${CDEP_INPUT_TIPO_AUTORIA}_${name}`,
+                        placeholder: 'Tipo de autoria',
+                      }}
+                      formItemProps={{
+                        ...restField,
+                        name: [name, 'tipoAutoria'],
+                        label: `Tipo de autoria - ${label}`,
+                        required: false,
+                      }}
+                    />
+                  );
+                }}
               </Form.Item>
             );
           })}
