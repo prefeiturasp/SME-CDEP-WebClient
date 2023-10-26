@@ -73,6 +73,15 @@ const FormAcervo: React.FC = () => {
         resposta.dados.largura = formatarDuasCasasDecimais(resposta.dados.largura);
       }
 
+      if (resposta?.dados?.coAutores.length) {
+        resposta.dados.coAutores = resposta?.dados?.coAutores.map((autor) => ({
+          ...autor,
+          value: autor.creditoAutorId,
+        }));
+      } else {
+        resposta.dados.coAutores = [];
+      }
+
       setFormInitialValues(resposta.dados);
     }
   }, [fieldsConfig, acervoId]);
@@ -118,6 +127,14 @@ const FormAcervo: React.FC = () => {
         valoresSalvar.profundidade = removerTudoQueNaoEhDigito(valoresSalvar.profundidade);
       } else {
         valoresSalvar.profundidade = null;
+      }
+      if (valoresSalvar?.coAutores.length) {
+        valoresSalvar.coAutores = valoresSalvar.coAutores.map(({ value, tipoAutoria }) => ({
+          creditoAutorId: value,
+          tipoAutoria,
+        }));
+      } else {
+        valoresSalvar.coAutores = [];
       }
 
       if (acervoId && formInitialValues) {
