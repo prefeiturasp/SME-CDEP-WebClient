@@ -14,6 +14,7 @@ import {
   URL_API_ACERVO_TRIDIMENSIONAL,
 } from '~/core/constants/urls-api';
 import { validateMessages } from '~/core/constants/validate-messages';
+import { CoAutorDTO } from '~/core/dto/coautores-dto';
 import {
   FormDefaultCadastroAcervoDTO,
   FormPageConfigCadastroAcervoProps,
@@ -141,7 +142,20 @@ const FormAcervo: React.FC = () => {
         valoresSalvar.profundidade = null;
       }
       if (valoresSalvar?.coAutores?.length && valoresSalvar?.listaTipoAutoria?.length) {
-        valoresSalvar.coAutores = valoresSalvar.listaTipoAutoria;
+        const coAutores = [...valoresSalvar.coAutores];
+        const listaTipoAutoria = [...valoresSalvar.listaTipoAutoria];
+        const coAutoresJoin = coAutores.map((item) => {
+          const tipoAutoriaAtual = listaTipoAutoria?.find(
+            (itemTipoAutoria: CoAutorDTO) => itemTipoAutoria.creditoAutorId === item.value,
+          );
+
+          return {
+            creditoAutorId: item.value,
+            tipoAutoria: tipoAutoriaAtual?.tipoAutoria || '',
+          };
+        });
+
+        valoresSalvar.coAutores = coAutoresJoin;
       } else {
         valoresSalvar.coAutores = [];
       }
