@@ -2,6 +2,7 @@ import { ColProps } from 'antd';
 import { FieldAcervoEnum } from '../enum/field-acervo-enum';
 import { TipoAcervo } from '../enum/tipo-acervo';
 import { AuditoriaDTO } from './auditoria-dto';
+import { CoAutorDTO } from './coautores-dto';
 
 type FormPageInputsProps = {
   name: string;
@@ -35,17 +36,28 @@ export type FormDefaultCadastroAcervoDTO = {
   tipoAcervoId: TipoAcervo;
   auditoria: AuditoriaDTO;
   titulo: string;
+  subTitulo: string;
   codigo: string;
   codigoNovo: string;
   materialId: number;
+  editoraId: number;
   idiomaId: number;
+  serieColecaoId: number;
   ano: string;
+  edicao: string;
   numeroPagina: string;
   acessoDocumentosIds: number;
   volume: string;
   tipoAnexo: string;
   creditosAutoresIds: number[];
+  assuntosIds: number[];
+  coAutores: CoAutorDTO[];
+  listaTipoAutoria: CoAutorDTO[];
   localizacao: string;
+  localizacaoCDD: string;
+  localizacaoPHA: string;
+  notasGerais: string;
+  isbn: string;
   procedencia: string;
   dataAcervo: string;
   duracao: string;

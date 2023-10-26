@@ -12,6 +12,7 @@ export const URL_API_CROMIA = 'v1/Cromia';
 export const URL_API_FORMATO_IMAGEM = 'v1/Formato';
 export const URL_API_SUPORTE = 'v1/Suporte';
 export const URL_API_ACERVO_ARTE_GRAFICA = 'v1/AcervoArteGrafica';
+export const URL_API_ACERVO_BIBLIOGRAFICO = 'v1/AcervoBibliografico';
 export const URL_API_ACERVO_TRIDIMENSIONAL = 'v1/AcervoTridimensional';
 export const URL_API_ACERVO_AUDIOVISUAL = 'v1/AcervoAudiovisual';
 export const URL_API_ACERVO_DOCUMENTACAO_HISTORICA = 'v1/AcervoDocumental';
