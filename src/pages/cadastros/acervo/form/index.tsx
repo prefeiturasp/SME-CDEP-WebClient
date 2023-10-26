@@ -140,7 +140,7 @@ const FormAcervo: React.FC = () => {
       } else {
         valoresSalvar.profundidade = null;
       }
-      if (valoresSalvar?.coAutores.length && valoresSalvar?.listaTipoAutoria?.length) {
+      if (valoresSalvar?.coAutores?.length && valoresSalvar?.listaTipoAutoria?.length) {
         valoresSalvar.coAutores = valoresSalvar.listaTipoAutoria;
       } else {
         valoresSalvar.coAutores = [];
