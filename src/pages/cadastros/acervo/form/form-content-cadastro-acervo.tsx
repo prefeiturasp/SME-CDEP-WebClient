@@ -19,29 +19,40 @@ import {
   InputDimensaoProfundidade,
   InputDisponibilizacao,
   InputDuracao,
+  InputEdicao,
+  InputISBN,
   InputLocalizacao,
+  InputLocalizacaoCDD,
+  InputLocalizacaoPHA,
+  InputNotasGerais,
   InputNumeroDePaginas,
   InputProcedencia,
   InputQuantidade,
   InputResolucao,
+  InputSubtitulo,
   InputTamanhoArquivo,
   InputTecnica,
   InputTipoAnexo,
+  InputTipoAutoria,
   InputTitulo,
   InputTombo,
   InputVolume,
   RadioAutorizacaoUsoImagem,
   RadioCopiaDigital,
   SelectAcessoDocumento,
+  SelectAssunto,
   SelectAutor,
+  SelectCoautor,
   SelectConservacao,
   SelectCredito,
   SelectCromia,
+  SelectEditora,
   SelectFormatoImagem,
+  SelectIdioma,
   SelectMaterial,
+  SelectSerieColecao,
   SelectSuporte,
 } from './form-fields';
-import SelectIdioma from './form-fields/select-idioma';
 
 type FormContentCadastroAcervoProps = {
   fieldsConfig: FormPageConfigCadastroAcervoProps | undefined;
@@ -62,6 +73,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
           case FieldAcervoEnum.Titulo:
             input = <InputTitulo />;
             break;
+          case FieldAcervoEnum.Subtitulo:
+            input = <InputSubtitulo />;
+            break;
           case FieldAcervoEnum.Tombo:
             input = <InputTombo tipoAcervo={fieldsConfig.tipo} />;
             break;
@@ -78,10 +92,28 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = <SelectIdioma />;
             break;
           case FieldAcervoEnum.Autor:
-            input = <SelectAutor />;
+            input = <SelectAutor tipoAcervo={fieldsConfig.tipo} />;
+            break;
+          case FieldAcervoEnum.Coautor:
+            input = <SelectCoautor />;
+            break;
+          case FieldAcervoEnum.Editora:
+            input = <SelectEditora />;
+            break;
+          case FieldAcervoEnum.SerieColecao:
+            input = <SelectSerieColecao />;
+            break;
+          case FieldAcervoEnum.Assunto:
+            input = <SelectAssunto tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.Ano:
-            input = <InputAno />;
+            input = <InputAno tipoAcervo={fieldsConfig.tipo} />;
+            break;
+          case FieldAcervoEnum.TipoAutoria:
+            input = <InputTipoAutoria />;
+            break;
+          case FieldAcervoEnum.Edicao:
+            input = <InputEdicao />;
             break;
           case FieldAcervoEnum.NumeroDePaginas:
             input = <InputNumeroDePaginas />;
@@ -97,6 +129,18 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             break;
           case FieldAcervoEnum.Localizacao:
             input = <InputLocalizacao />;
+            break;
+          case FieldAcervoEnum.LocalizacaoCDD:
+            input = <InputLocalizacaoCDD />;
+            break;
+          case FieldAcervoEnum.LocalizacaoPHA:
+            input = <InputLocalizacaoPHA />;
+            break;
+          case FieldAcervoEnum.NotasGerais:
+            input = <InputNotasGerais />;
+            break;
+          case FieldAcervoEnum.ISBN:
+            input = <InputISBN />;
             break;
           case FieldAcervoEnum.Procedencia:
             input = <InputProcedencia tipoAcervo={fieldsConfig.tipo} />;

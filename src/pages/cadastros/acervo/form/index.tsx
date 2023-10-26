@@ -8,6 +8,7 @@ import CardContent from '~/components/lib/card-content';
 import {
   URL_API_ACERVO_ARTE_GRAFICA,
   URL_API_ACERVO_AUDIOVISUAL,
+  URL_API_ACERVO_BIBLIOGRAFICO,
   URL_API_ACERVO_DOCUMENTACAO_HISTORICA,
   URL_API_ACERVO_FOTOGRAFICO,
   URL_API_ACERVO_TRIDIMENSIONAL,
@@ -24,6 +25,7 @@ import { formatarDuasCasasDecimais, removerTudoQueNaoEhDigito } from '~/core/uti
 import FormContentCadastroAcervo from './form-content-cadastro-acervo';
 import { FieldsArtesGraficas } from './form-fields-config/artes-graficas';
 import { FieldsAudiovisual } from './form-fields-config/audiovisual';
+import { FieldsBibliografico } from './form-fields-config/bibliografico';
 import { FieldsDocumentacaoHistorica } from './form-fields-config/documentacao-historica';
 import { FieldsAcervoFotografico } from './form-fields-config/fotografico';
 import { FieldsTridimensional } from './form-fields-config/tridimensional';
@@ -53,9 +55,11 @@ const FormAcervo: React.FC = () => {
       `${fieldsConfig?.urlBase}/${acervoId}`,
     );
 
+    const dados = resposta.dados;
+
     if (resposta.sucesso) {
-      if (resposta.dados?.arquivos?.length) {
-        resposta.dados.arquivos = resposta.dados.arquivos.map((item: any) => ({
+      if (dados?.arquivos?.length) {
+        dados.arquivos = dados.arquivos.map((item: any) => ({
           xhr: item?.codigo,
           name: item?.nome,
           id: item?.id,
@@ -63,15 +67,34 @@ const FormAcervo: React.FC = () => {
         }));
       }
 
-      if (resposta.dados?.altura) {
-        resposta.dados.altura = formatarDuasCasasDecimais(resposta.dados.altura);
+      if (dados?.altura) {
+        dados.altura = formatarDuasCasasDecimais(dados.altura);
       }
 
-      if (resposta.dados?.largura) {
-        resposta.dados.largura = formatarDuasCasasDecimais(resposta.dados.largura);
+      if (dados?.largura) {
+        dados.largura = formatarDuasCasasDecimais(dados.largura);
       }
 
-      setFormInitialValues(resposta.dados);
+      if (dados?.coAutores.length) {
+        const coAutores = [...dados.coAutores];
+
+        dados.coAutores = coAutores.map((item) => ({
+          ...item,
+          value: item.creditoAutorId,
+          label: item.creditoAutorNome,
+        }));
+
+        dados.listaTipoAutoria = coAutores.map((item) => ({
+          ...item,
+          value: item.creditoAutorId,
+          label: item.creditoAutorNome,
+        }));
+      } else {
+        dados.coAutores = [];
+        dados.listaTipoAutoria = [];
+      }
+
+      setFormInitialValues(dados);
     }
   }, [fieldsConfig, acervoId]);
 
@@ -116,6 +139,11 @@ const FormAcervo: React.FC = () => {
         valoresSalvar.profundidade = removerTudoQueNaoEhDigito(valoresSalvar.profundidade);
       } else {
         valoresSalvar.profundidade = null;
+      }
+      if (valoresSalvar?.coAutores?.length && valoresSalvar?.listaTipoAutoria?.length) {
+        valoresSalvar.coAutores = valoresSalvar.listaTipoAutoria;
+      } else {
+        valoresSalvar.coAutores = [];
       }
 
       if (acervoId && formInitialValues) {
@@ -168,6 +196,12 @@ const FormAcervo: React.FC = () => {
           tipo: TipoAcervo.DocumentacaoHistorica,
           urlBase: URL_API_ACERVO_DOCUMENTACAO_HISTORICA,
           fields: FieldsDocumentacaoHistorica,
+        };
+      case TipoAcervo.Bibliografico:
+        return {
+          tipo: TipoAcervo.Bibliografico,
+          urlBase: URL_API_ACERVO_BIBLIOGRAFICO,
+          fields: FieldsBibliografico,
         };
 
       default:
