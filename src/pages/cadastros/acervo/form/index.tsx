@@ -14,6 +14,7 @@ import {
   URL_API_ACERVO_TRIDIMENSIONAL,
 } from '~/core/constants/urls-api';
 import { validateMessages } from '~/core/constants/validate-messages';
+import { CoAutorDTO } from '~/core/dto/coautores-dto';
 import {
   FormDefaultCadastroAcervoDTO,
   FormPageConfigCadastroAcervoProps,
@@ -55,9 +56,11 @@ const FormAcervo: React.FC = () => {
       `${fieldsConfig?.urlBase}/${acervoId}`,
     );
 
+    const dados = resposta.dados;
+
     if (resposta.sucesso) {
-      if (resposta.dados?.arquivos?.length) {
-        resposta.dados.arquivos = resposta.dados.arquivos.map((item: any) => ({
+      if (dados?.arquivos?.length) {
+        dados.arquivos = dados.arquivos.map((item: any) => ({
           xhr: item?.codigo,
           name: item?.nome,
           id: item?.id,
@@ -65,15 +68,34 @@ const FormAcervo: React.FC = () => {
         }));
       }
 
-      if (resposta.dados?.altura) {
-        resposta.dados.altura = formatarDuasCasasDecimais(resposta.dados.altura);
+      if (dados?.altura) {
+        dados.altura = formatarDuasCasasDecimais(dados.altura);
       }
 
-      if (resposta.dados?.largura) {
-        resposta.dados.largura = formatarDuasCasasDecimais(resposta.dados.largura);
+      if (dados?.largura) {
+        dados.largura = formatarDuasCasasDecimais(dados.largura);
       }
 
-      setFormInitialValues(resposta.dados);
+      if (dados?.coAutores.length) {
+        const coAutores = [...dados.coAutores];
+
+        dados.coAutores = coAutores.map((item) => ({
+          ...item,
+          value: item.creditoAutorId,
+          label: item.creditoAutorNome,
+        }));
+
+        dados.listaTipoAutoria = coAutores.map((item) => ({
+          ...item,
+          value: item.creditoAutorId,
+          label: item.creditoAutorNome,
+        }));
+      } else {
+        dados.coAutores = [];
+        dados.listaTipoAutoria = [];
+      }
+
+      setFormInitialValues(dados);
     }
   }, [fieldsConfig, acervoId]);
 
@@ -118,6 +140,24 @@ const FormAcervo: React.FC = () => {
         valoresSalvar.profundidade = removerTudoQueNaoEhDigito(valoresSalvar.profundidade);
       } else {
         valoresSalvar.profundidade = null;
+      }
+      if (valoresSalvar?.coAutores?.length && valoresSalvar?.listaTipoAutoria?.length) {
+        const coAutores = [...valoresSalvar.coAutores];
+        const listaTipoAutoria = [...valoresSalvar.listaTipoAutoria];
+        const coAutoresJoin = coAutores.map((item) => {
+          const tipoAutoriaAtual = listaTipoAutoria?.find(
+            (itemTipoAutoria: CoAutorDTO) => itemTipoAutoria.creditoAutorId === item.value,
+          );
+
+          return {
+            creditoAutorId: item.value,
+            tipoAutoria: tipoAutoriaAtual?.tipoAutoria || '',
+          };
+        });
+
+        valoresSalvar.coAutores = coAutoresJoin;
+      } else {
+        valoresSalvar.coAutores = [];
       }
 
       if (acervoId && formInitialValues) {

@@ -22,11 +22,10 @@ const SelectAssunto: React.FC<SelectAutorProps> = ({ selectProps, formItemProps,
   const [openModal, setOpenModal] = useState(false);
 
   const obterDados = async () => {
-    //TODO: depois que o Vini terminar o endpoint, ajustar endpoint para "/resumido"
     const resposta = await obterAssuntoResumido();
 
     if (resposta.sucesso) {
-      const newOptions = resposta?.dados?.items?.map((item) => ({
+      const newOptions = resposta?.dados?.map((item) => ({
         label: item.nome,
         value: item.id,
       }));
@@ -61,7 +60,7 @@ const SelectAssunto: React.FC<SelectAutorProps> = ({ selectProps, formItemProps,
     <Row wrap={false} align='middle'>
       <Form.Item
         label='Assunto'
-        name='assunto'
+        name='assuntosIds'
         style={{ width: '100%', marginRight: '8px' }}
         rules={[{ required }]}
         {...formItemProps}

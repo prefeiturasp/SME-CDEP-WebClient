@@ -6,8 +6,10 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormAutor } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_COAUTOR } from '~/core/constants/ids/select';
+import { CoAutorDTO } from '~/core/dto/coautores-dto';
 import { TipoCreditoAutoria } from '~/core/enum/tipo-credito-autoria';
 import { obterCreditoAutorResumido } from '~/core/services/credito-autor-service';
+import InputTipoAutoriaLista from './input-tipo-autoria-lista';
 
 type SelectCoautorProps = {
   selectProps?: SelectProps;
@@ -38,47 +40,74 @@ const SelectCoautor: React.FC<SelectCoautorProps> = ({ selectProps, formItemProp
     setOpenModal(open);
     if (updateData) obterDados();
   };
-
   return (
-    <Row wrap={false} align='middle'>
-      <Form.Item
-        label='Coautor'
-        name='creditosCoautoresIds'
-        style={{ width: '100%', marginRight: '8px' }}
-        {...formItemProps}
-      >
-        <Select
-          showSearch
-          allowClear
-          mode='multiple'
-          id={CDEP_SELECT_COAUTOR}
-          {...selectProps}
-          options={options}
-          placeholder='Coautor'
-        />
-      </Form.Item>
-      <Button
-        type='default'
-        block
-        icon={<FaPlus />}
-        onClick={() => setOpenModal(true)}
-        style={{
-          fontSize: 16,
-          width: '43px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      />
-      {openModal && (
-        <FormCadastrosAuxiliares
-          {...paramsConfigPageFormAutor}
-          isModal
-          title='Cadastrar Coautor'
-          setOpenModal={validarAoFecharModal}
-        />
-      )}
-    </Row>
+    <Form.Item shouldUpdate style={{ margin: 0 }}>
+      {(form) => {
+        const listaTipoAutoria = form.getFieldValue('listaTipoAutoria');
+
+        return (
+          <>
+            <Row wrap={false} align='middle'>
+              <Form.Item
+                label='Coautor'
+                name='coAutores'
+                style={{ width: '100%', marginRight: '8px' }}
+                {...formItemProps}
+                shouldUpdate
+                getValueFromEvent={(_, value) => value}
+              >
+                <Select
+                  showSearch
+                  allowClear
+                  labelInValue
+                  mode='multiple'
+                  {...selectProps}
+                  options={options}
+                  placeholder='Coautor'
+                  id={CDEP_SELECT_COAUTOR}
+                  onChange={(value) => {
+                    const novalistaTipoAutoria = value?.map((coAutor: CoAutorDTO) => {
+                      const tipoAutoriaAtual = listaTipoAutoria?.find(
+                        (item: any) => item.creditoAutorId === coAutor.value,
+                      );
+
+                      return {
+                        creditoAutorId: coAutor?.value,
+                        tipoAutoria: tipoAutoriaAtual?.tipoAutoria,
+                      };
+                    });
+
+                    form.setFieldValue('listaTipoAutoria', novalistaTipoAutoria);
+                  }}
+                />
+              </Form.Item>
+              <Button
+                type='default'
+                block
+                icon={<FaPlus />}
+                onClick={() => setOpenModal(true)}
+                style={{
+                  fontSize: 16,
+                  width: '43px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }}
+              />
+            </Row>
+            {openModal && (
+              <FormCadastrosAuxiliares
+                {...paramsConfigPageFormAutor}
+                isModal
+                title='Cadastrar Coautor'
+                setOpenModal={validarAoFecharModal}
+              />
+            )}
+            <InputTipoAutoriaLista />
+          </>
+        );
+      }}
+    </Form.Item>
   );
 };
 

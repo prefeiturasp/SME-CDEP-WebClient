@@ -19,11 +19,10 @@ const SelectSerieColecao: React.FC<SelectSerieColecaoProps> = ({ selectProps, fo
   const [openModal, setOpenModal] = useState(false);
 
   const obterDados = async () => {
-    //TODO: depois que o Vini terminar o endpoint, ajustar endpoint para "/resumido"
     const resposta = await obterSerieColecaoResumido();
 
     if (resposta.sucesso) {
-      const newOptions = resposta?.dados?.items?.map((item) => ({
+      const newOptions = resposta?.dados?.map((item) => ({
         label: item.nome,
         value: item.id,
       }));
@@ -46,7 +45,7 @@ const SelectSerieColecao: React.FC<SelectSerieColecaoProps> = ({ selectProps, fo
     <Row wrap={false} align='middle'>
       <Form.Item
         label='Série/Coleção'
-        name='serieColecaoIds'
+        name='serieColecaoId'
         style={{ width: '100%', marginRight: '8px' }}
         {...formItemProps}
       >

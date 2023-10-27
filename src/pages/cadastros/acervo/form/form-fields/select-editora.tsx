@@ -18,11 +18,10 @@ const SelectEditora: React.FC<SelectEditoraProps> = ({ selectProps, formItemProp
   const [openModal, setOpenModal] = useState(false);
 
   const obterDados = async () => {
-    //TODO: depois que o Vini terminar o endpoint, ajustar endpoint para "/resumido"
     const resposta = await obterEditoraResumido();
 
     if (resposta.sucesso) {
-      const newOptions = resposta?.dados?.items?.map((item) => ({
+      const newOptions = resposta?.dados?.map((item) => ({
         label: item.nome,
         value: item.id,
       }));
@@ -45,7 +44,7 @@ const SelectEditora: React.FC<SelectEditoraProps> = ({ selectProps, formItemProp
     <Row wrap={false} align='middle'>
       <Form.Item
         label='Editora'
-        name='editora'
+        name='editoraId'
         style={{ width: '100%', marginRight: '8px' }}
         {...formItemProps}
       >
