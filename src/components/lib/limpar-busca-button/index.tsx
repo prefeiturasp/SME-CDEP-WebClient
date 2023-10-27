@@ -1,6 +1,12 @@
-import { Button } from 'antd';
+import { Button, ButtonProps } from 'antd';
 import React from 'react';
 
-const LimparBuscaButton: React.FC = (...rest) => <Button {...rest}>Limpar busca</Button>;
+type LimparBuscaButtonProps = {
+  buttonProps: ButtonProps;
+};
+
+const LimparBuscaButton: React.FC<LimparBuscaButtonProps> = ({ buttonProps }) => (
+  <Button {...buttonProps}>Limpar busca</Button>
+);
 
 export default LimparBuscaButton;
