@@ -90,6 +90,8 @@ export const ConsultaAcervo = () => {
       </Typography>
       <Col style={{ position: 'sticky', top: 0, zIndex: 1 }}>
         <FiltroConsultaAcervo
+          buscaTextoLivre={buscaTextoLivre}
+          buscaTipoAcervo={buscaTipoAcervo}
           setBuscaTextoLivre={setBuscaTextoLivre}
           setBuscaTipoAcervo={setBuscaTipoAcervo}
         />

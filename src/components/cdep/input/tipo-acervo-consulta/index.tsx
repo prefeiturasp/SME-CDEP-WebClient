@@ -7,7 +7,7 @@ import { obterTiposAcervo } from '~/core/services/acervo-service';
 
 type SelectTipoAcervoConsultaProps = {
   selectProps?: SelectProps;
-  onSelect?: (value: string) => void;
+  onSelect?: (value: number) => void;
 };
 
 const SelectTipoAcervoConsulta: React.FC<SelectTipoAcervoConsultaProps> = ({
@@ -31,7 +31,7 @@ const SelectTipoAcervoConsulta: React.FC<SelectTipoAcervoConsultaProps> = ({
     obterTipos();
   }, []);
 
-  const opcaoSelecionado = (value: string) => {
+  const opcaoSelecionado = (value: number) => {
     if (onSelect) {
       onSelect(value);
     }
