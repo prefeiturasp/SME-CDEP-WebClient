@@ -1,9 +1,13 @@
+import { SetStateAction } from 'react';
 import { TipoAcervo } from '../enum/tipo-acervo';
 import { TipoAcervoTag } from '../enum/tipo-acervo-tag';
 
+type BasePesquisaAcervoDTO = {
+  items: SetStateAction<PesquisaAcervoDTO[]>;
+};
+
 export type PesquisaAcervoDTO = {
-  id: number;
-  tipoAcervoId: TipoAcervo;
+  tipo: TipoAcervo;
   titulo: string;
   creditoAutoria: string;
   assunto: string;
@@ -11,4 +15,4 @@ export type PesquisaAcervoDTO = {
   data: string;
   tipoAcervoTag: TipoAcervoTag;
   enderecoImagem: string;
-};
+} & BasePesquisaAcervoDTO;

@@ -1,5 +1,6 @@
-import { Button, Col, Image, List, Row, Space, Tag } from 'antd';
+import { Button, Col, Empty, Image, List, Row, Space, Tag } from 'antd';
 import React from 'react';
+import cdepLogo from '~/assets/cdep-logo-centralizado.svg';
 import InfoAssuntoConsultaAcervo from '~/components/cdep/text/consulta-acervo/assunto-consulta-acervo';
 import InfoCreditoAutorConsultaAcervo from '~/components/cdep/text/consulta-acervo/credito-autor-consulta-acervo';
 import InfoDataConsultaAcervo from '~/components/cdep/text/consulta-acervo/data-consulta-acervo';
@@ -55,9 +56,18 @@ export const ListaCardsConsultaAcervo: React.FC<ListaCardsConsultaAcervoProps> =
       pagination={{
         pageSize: 5,
         align: 'center',
-        total: dadosGerais.length,
+        total: dadosGerais?.length,
       }}
       dataSource={dadosGerais}
+      locale={{
+        emptyText: (
+          <Empty
+            description='Sem dados'
+            className='ant-empty-small'
+            image={Empty.PRESENTED_IMAGE_SIMPLE}
+          />
+        ),
+      }}
       renderItem={(item: PesquisaAcervoDTO, index) => {
         return (
           <List style={{ margin: 16 }}>
@@ -74,8 +84,14 @@ export const ListaCardsConsultaAcervo: React.FC<ListaCardsConsultaAcervoProps> =
                 <Image
                   alt='example'
                   preview={false}
-                  src={item.enderecoImagem}
-                  style={{ maxWidth: 200, maxHeight: 200, height: '100%' }}
+                  src={item.enderecoImagem || cdepLogo}
+                  style={{
+                    minWidth: 200,
+                    minHeight: 200,
+                    maxWidth: 200,
+                    maxHeight: 200,
+                    height: '100%',
+                  }}
                 />
                 <Tag
                   color={`${Colors.BACKGROUND_CONTENT}`}
@@ -87,15 +103,17 @@ export const ListaCardsConsultaAcervo: React.FC<ListaCardsConsultaAcervoProps> =
                     color: `${Colors.TEXT}`,
                   }}
                 >
-                  {tagAcervo(item.tipoAcervoId)}
+                  {tagAcervo(item.tipo)}
                 </Tag>
-                <Space direction='vertical' size={5}>
-                  <InfoTipoAcervoConsultaAcervo valor={tipoAcervoNome(item.tipoAcervoId)} />
-                  <InfoTituloConsultaAcervo valor={item.titulo} />
-                  <InfoCreditoAutorConsultaAcervo valor={item.creditoAutoria} />
-                  <InfoAssuntoConsultaAcervo valor={item.assunto} />
-                  <InfoDescricaoConsultaAcervo valor={item.descricao} />
-                  <InfoDataConsultaAcervo valor={item.data} />
+                <Space direction='vertical' size={5} style={{ marginTop: 4 }}>
+                  {item.tipo && <InfoTipoAcervoConsultaAcervo valor={tipoAcervoNome(item.tipo)} />}
+                  {item.titulo && <InfoTituloConsultaAcervo valor={item.titulo} />}
+                  {item.creditoAutoria && (
+                    <InfoCreditoAutorConsultaAcervo valor={item.creditoAutoria} />
+                  )}
+                  {item.assunto && <InfoAssuntoConsultaAcervo valor={item.assunto} />}
+                  {item.descricao && <InfoDescricaoConsultaAcervo valor={item.descricao} />}
+                  {item.data && <InfoDataConsultaAcervo valor={item.data} />}
                 </Space>
               </Col>
               <Col style={{ display: 'flex', alignItems: 'end' }}>

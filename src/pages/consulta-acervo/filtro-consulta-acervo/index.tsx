@@ -7,9 +7,9 @@ import { Colors } from '~/core/styles/colors';
 
 type FiltroConsultaAcervoProps = {
   buscaTextoLivre: string;
-  buscaTipoAcervo: number;
+  buscaTipoAcervo: number | null;
   setBuscaTextoLivre: React.Dispatch<React.SetStateAction<string>>;
-  setBuscaTipoAcervo: React.Dispatch<React.SetStateAction<number>>;
+  setBuscaTipoAcervo: React.Dispatch<React.SetStateAction<number | null>>;
 };
 
 export const FiltroConsultaAcervo: React.FC<FiltroConsultaAcervoProps> = ({
@@ -33,7 +33,13 @@ export const FiltroConsultaAcervo: React.FC<FiltroConsultaAcervoProps> = ({
           />
         </Col>
         <Col span={12}>
-          <SelectTipoAcervoConsulta onSelect={(value) => setBuscaTipoAcervo(value)} />
+          <SelectTipoAcervoConsulta
+            selectProps={{
+              value: buscaTipoAcervo || undefined,
+              onClear: () => setBuscaTipoAcervo(0),
+            }}
+            onSelect={(value) => setBuscaTipoAcervo(value)}
+          />
         </Col>
       </Row>
       <Row justify='end' style={{ marginTop: 16 }}>

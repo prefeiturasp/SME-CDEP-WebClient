@@ -1,87 +1,67 @@
 import { Col, Typography } from 'antd';
-import { useMemo, useState } from 'react';
-import cdepLogo from '~/assets/cdep-logo-centralizado.svg';
+import { useEffect, useMemo, useState } from 'react';
 import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
+import { pesquisarAcervos } from '~/core/services/acervo-service';
 import { FiltroConsultaAcervo } from './filtro-consulta-acervo';
 import { ListaCardsConsultaAcervo } from './lista-cards-consulta-acervo';
 
 export const ConsultaAcervo = () => {
   const [buscaTextoLivre, setBuscaTextoLivre] = useState<string>('');
-  const [buscaTipoAcervo, setBuscaTipoAcervo] = useState<number>(0);
+  const [buscaTipoAcervoSelecionado, setBuscaTipoAcervoSelecionado] = useState<number | null>(null);
+  const [dadosFiltro, setDadosFiltro] = useState<PesquisaAcervoDTO[]>([]);
+
+  const nenhumTipoAcervoSelecionado =
+    buscaTipoAcervoSelecionado === null || buscaTipoAcervoSelecionado === 0;
+
+  const obterPesquisaArcevo = async () => {
+    if (!buscaTextoLivre && !buscaTipoAcervoSelecionado) {
+      const resposta = await pesquisarAcervos();
+
+      if (resposta?.sucesso) return setDadosFiltro(resposta?.dados?.items);
+    }
+
+    if (buscaTextoLivre.length >= 3 && buscaTipoAcervoSelecionado) {
+      const resposta = await pesquisarAcervos(buscaTextoLivre, buscaTipoAcervoSelecionado);
+
+      if (resposta?.sucesso) return setDadosFiltro(resposta?.dados?.items);
+    }
+
+    if (!buscaTextoLivre && buscaTipoAcervoSelecionado) {
+      const resposta = await pesquisarAcervos('', buscaTipoAcervoSelecionado);
+
+      if (resposta?.sucesso) return setDadosFiltro(resposta?.dados?.items);
+    }
+
+    if (buscaTextoLivre.length >= 3 && !buscaTipoAcervoSelecionado) {
+      const resposta = await pesquisarAcervos(buscaTextoLivre);
+
+      if (resposta?.sucesso) return setDadosFiltro(resposta?.dados?.items);
+    }
+  };
 
   const dadosFiltrado = useMemo(() => {
-    const dadosGerais: PesquisaAcervoDTO[] = [
-      {
-        id: 1,
-        tipoAcervoId: 1,
-        titulo: 'titulo',
-        creditoAutoria: 'creditoAutoria',
-        assunto: 'assunto',
-        descricao: 'descricao',
-        data: 'data',
-        tipoAcervoTag: 1,
-        enderecoImagem: cdepLogo,
-      },
-      {
-        id: 1,
-        tipoAcervoId: 2,
-        titulo: 'cachorro',
-        creditoAutoria: 'creditoAutoria',
-        assunto: 'assunto',
-        descricao: 'descricao',
-        data: 'data',
-        tipoAcervoTag: 2,
-        enderecoImagem: cdepLogo,
-      },
-      {
-        id: 1,
-        tipoAcervoId: 3,
-        titulo: 'gato',
-        creditoAutoria: 'creditoAutoria',
-        assunto: 'assunto',
-        descricao: 'descricao',
-        data: 'data',
-        tipoAcervoTag: 3,
-        enderecoImagem: cdepLogo,
-      },
-      {
-        id: 1,
-        tipoAcervoId: 4,
-        titulo: 'papagaio',
-        creditoAutoria: 'creditoAutoria',
-        assunto: 'assunto',
-        descricao: 'descricao',
-        data: 'data',
-        tipoAcervoTag: 2,
-        enderecoImagem: cdepLogo,
-      },
-      {
-        id: 1,
-        tipoAcervoId: 5,
-        titulo: 'elefante',
-        creditoAutoria: 'creditoAutoria',
-        assunto: 'assunto',
-        descricao: 'descricao',
-        data: 'data',
-        tipoAcervoTag: 1,
-        enderecoImagem: cdepLogo,
-      },
-    ];
+    if (!buscaTextoLivre && nenhumTipoAcervoSelecionado) return dadosFiltro;
 
-    if (!buscaTextoLivre) return dadosGerais;
-    const valorFiltroMinusculo = buscaTextoLivre.toLowerCase();
+    const filtroGeral = dadosFiltro?.filter((item: PesquisaAcervoDTO) => {
+      const { titulo, creditoAutoria, assunto, descricao, tipo } = item;
 
-    return dadosGerais.filter((item) => {
-      const { titulo, creditoAutoria, assunto, descricao, tipoAcervoTag } = item;
+      const textoLivreFiltro =
+        !buscaTextoLivre ||
+        (titulo + creditoAutoria + assunto + descricao)
+          .toLowerCase()
+          .includes(buscaTextoLivre.toLowerCase());
 
-      return (
-        titulo.toLowerCase().includes(valorFiltroMinusculo) ||
-        creditoAutoria.toLowerCase().includes(valorFiltroMinusculo) ||
-        assunto.toLowerCase().includes(valorFiltroMinusculo) ||
-        descricao.toLowerCase().includes(valorFiltroMinusculo)
-      );
+      const tipoAcervoFiltro = nenhumTipoAcervoSelecionado || tipo === buscaTipoAcervoSelecionado;
+
+      return textoLivreFiltro && tipoAcervoFiltro;
     });
-  }, [buscaTextoLivre, buscaTipoAcervo]);
+
+    return filtroGeral;
+  }, [buscaTextoLivre, buscaTipoAcervoSelecionado, dadosFiltro]);
+
+  useEffect(() => {
+    obterPesquisaArcevo();
+  }, [buscaTextoLivre, buscaTipoAcervoSelecionado]);
 
   return (
     <>
@@ -91,9 +71,9 @@ export const ConsultaAcervo = () => {
       <Col style={{ position: 'sticky', top: 0, zIndex: 1 }}>
         <FiltroConsultaAcervo
           buscaTextoLivre={buscaTextoLivre}
-          buscaTipoAcervo={buscaTipoAcervo}
+          buscaTipoAcervo={buscaTipoAcervoSelecionado}
           setBuscaTextoLivre={setBuscaTextoLivre}
-          setBuscaTipoAcervo={setBuscaTipoAcervo}
+          setBuscaTipoAcervo={setBuscaTipoAcervoSelecionado}
         />
       </Col>
       <ListaCardsConsultaAcervo dadosGerais={dadosFiltrado} />

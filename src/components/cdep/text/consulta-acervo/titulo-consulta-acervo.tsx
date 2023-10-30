@@ -11,9 +11,18 @@ const InfoTituloConsultaAcervo: React.FC<InfoTituloConsultaAcervoProps> = ({
   typographyProps,
 }) => {
   return (
-    <Typography style={{ fontWeight: 'bold', marginLeft: 16 }} {...typographyProps}>
+    <Typography.Text
+      ellipsis
+      style={{
+        marginLeft: 16,
+        marginRight: 16,
+        fontWeight: 'bold',
+        width: valor.length > 100 ? 500 : 'auto',
+      }}
+      {...typographyProps}
+    >
       Título: <span style={{ fontWeight: 'normal' }}>{valor}</span>
-    </Typography>
+    </Typography.Text>
   );
 };
 

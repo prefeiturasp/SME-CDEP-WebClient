@@ -11,9 +11,18 @@ const InfoCreditoAutorConsultaAcervo: React.FC<InfoCreditoAutorConsultaAcervoPro
   typographyProps,
 }) => {
   return (
-    <Typography style={{ fontWeight: 'bold', marginLeft: 16 }} {...typographyProps}>
-      Crédito/Autor: <span style={{ fontWeight: 'normal' }}>{valor}</span>
-    </Typography>
+    <Typography.Text
+      ellipsis
+      style={{
+        marginLeft: 16,
+        marginRight: 16,
+        fontWeight: 'bold',
+        width: valor.length > 100 ? 500 : 'auto',
+      }}
+      {...typographyProps}
+    >
+      Autoria/Crédito: <span style={{ fontWeight: 'normal' }}>{valor}</span>
+    </Typography.Text>
   );
 };
 
