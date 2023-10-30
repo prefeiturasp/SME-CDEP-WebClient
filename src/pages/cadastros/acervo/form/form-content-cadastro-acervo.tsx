@@ -116,7 +116,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = <InputEdicao />;
             break;
           case FieldAcervoEnum.NumeroDePaginas:
-            input = <InputNumeroDePaginas />;
+            input = <InputNumeroDePaginas tipoAcervo={fieldsConfig.tipo} />;
             break;
           case FieldAcervoEnum.Volume:
             input = <InputVolume />;
