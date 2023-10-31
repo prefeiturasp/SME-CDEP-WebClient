@@ -36,7 +36,7 @@ export const FiltroConsultaAcervo: React.FC<FiltroConsultaAcervoProps> = ({
           <SelectTipoAcervoConsulta
             selectProps={{
               value: buscaTipoAcervo || undefined,
-              onClear: () => setBuscaTipoAcervo(0),
+              onClear: () => setBuscaTipoAcervo(null),
             }}
             onSelect={(value) => setBuscaTipoAcervo(value)}
           />
@@ -48,7 +48,7 @@ export const FiltroConsultaAcervo: React.FC<FiltroConsultaAcervoProps> = ({
             buttonProps={{
               onClick: () => {
                 setBuscaTextoLivre('');
-                setBuscaTipoAcervo(0);
+                setBuscaTipoAcervo(null);
               },
             }}
           />
