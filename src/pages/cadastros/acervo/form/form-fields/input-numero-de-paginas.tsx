@@ -4,7 +4,7 @@ import { CDEP_INPUT_NUMERO_DE_PAGINAS } from '~/core/constants/ids/input';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 
 type InputNumeroDePaginasProps = {
-  tipoAcervo?: TipoAcervo;
+  tipoAcervo: TipoAcervo;
 };
 
 const InputNumeroDePaginas: React.FC<InputNumeroDePaginasProps> = ({ tipoAcervo }) => {
@@ -12,7 +12,7 @@ const InputNumeroDePaginas: React.FC<InputNumeroDePaginasProps> = ({ tipoAcervo 
 
   const validarCampoObrigatorio = () => {
     switch (tipoAcervo) {
-      case TipoAcervo.Bibliografico:
+      case TipoAcervo.DocumentacaoHistorica:
         setRequired(true);
         break;
 

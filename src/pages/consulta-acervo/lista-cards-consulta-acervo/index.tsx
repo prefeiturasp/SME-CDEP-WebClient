@@ -9,11 +9,11 @@ import InfoTipoAcervoConsultaAcervo from '~/components/cdep/text/consulta-acervo
 import InfoTituloConsultaAcervo from '~/components/cdep/text/consulta-acervo/titulo-consulta-acervo';
 import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
 import { TipoAcervo, TipoAcervoDisplay } from '~/core/enum/tipo-acervo';
-import { TipoAcervoTagDisplay } from '~/core/enum/tipo-acervo-tag';
+import { TipoAcervoTag, TipoAcervoTagDisplay } from '~/core/enum/tipo-acervo-tag';
 import { Colors } from '~/core/styles/colors';
 
 type ListaCardsConsultaAcervoProps = {
-  dadosGerais: any;
+  dadosGerais: PesquisaAcervoDTO[];
 };
 
 export const ListaCardsConsultaAcervo: React.FC<ListaCardsConsultaAcervoProps> = ({
@@ -22,42 +22,41 @@ export const ListaCardsConsultaAcervo: React.FC<ListaCardsConsultaAcervoProps> =
   const tagAcervo = (tipo: TipoAcervo) => {
     switch (tipo) {
       case TipoAcervo.Bibliografico:
-        return TipoAcervoTagDisplay[1];
+        return TipoAcervoTagDisplay[TipoAcervoTag.Biblioteca];
       case TipoAcervo.DocumentacaoHistorica:
-        return TipoAcervoTagDisplay[2];
+        return TipoAcervoTagDisplay[TipoAcervoTag.MemoriaDocumental];
       case TipoAcervo.ArtesGraficas:
       case TipoAcervo.Audiovisual:
       case TipoAcervo.Fotografico:
       case TipoAcervo.Tridimensional:
-        return TipoAcervoTagDisplay[3];
+        return TipoAcervoTagDisplay[TipoAcervoTag.MemoriaEducacaoMunicipal];
     }
   };
 
   const tipoAcervoNome = (tipo: TipoAcervo) => {
     switch (tipo) {
       case TipoAcervo.Bibliografico:
-        return TipoAcervoDisplay[1];
+        return TipoAcervoDisplay[TipoAcervo.Bibliografico];
       case TipoAcervo.DocumentacaoHistorica:
-        return TipoAcervoDisplay[2];
+        return TipoAcervoDisplay[TipoAcervo.DocumentacaoHistorica];
       case TipoAcervo.ArtesGraficas:
-        return TipoAcervoDisplay[3];
+        return TipoAcervoDisplay[TipoAcervo.ArtesGraficas];
       case TipoAcervo.Audiovisual:
-        return TipoAcervoDisplay[4];
+        return TipoAcervoDisplay[TipoAcervo.Audiovisual];
       case TipoAcervo.Fotografico:
-        return TipoAcervoDisplay[5];
+        return TipoAcervoDisplay[TipoAcervo.Fotografico];
       case TipoAcervo.Tridimensional:
-        return TipoAcervoDisplay[6];
+        return TipoAcervoDisplay[TipoAcervo.Tridimensional];
     }
+  };
+
+  const desabilitarCliqueDireitoImagem = (e: any) => {
+    e.preventDefault();
   };
 
   return (
     <List
       style={{ paddingBottom: 16 }}
-      pagination={{
-        pageSize: 5,
-        align: 'center',
-        total: dadosGerais?.length,
-      }}
       dataSource={dadosGerais}
       locale={{
         emptyText: (
@@ -84,7 +83,6 @@ export const ListaCardsConsultaAcervo: React.FC<ListaCardsConsultaAcervoProps> =
                 <Image
                   alt='example'
                   preview={false}
-                  src={item.enderecoImagem || cdepLogo}
                   style={{
                     minWidth: 200,
                     minHeight: 200,
@@ -92,6 +90,8 @@ export const ListaCardsConsultaAcervo: React.FC<ListaCardsConsultaAcervoProps> =
                     maxHeight: 200,
                     height: '100%',
                   }}
+                  src={item.enderecoImagem || cdepLogo}
+                  onContextMenu={desabilitarCliqueDireitoImagem}
                 />
                 <Tag
                   color={`${Colors.BACKGROUND_CONTENT}`}
