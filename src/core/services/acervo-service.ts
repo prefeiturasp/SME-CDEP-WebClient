@@ -7,24 +7,15 @@ const obterTiposAcervo = (): Promise<ApiResult<IdNomeDTO[]>> =>
   obterRegistro(`${URL_API_ACERVO}/tipos`);
 
 const pesquisarAcervos = (
+  numeroPagina: number,
+  numeroRegistros: number,
   textoLivre?: string,
   tipoAcervo?: number | null,
 ): Promise<ApiResult<PesquisaAcervoDTO>> => {
-  if (!textoLivre && !tipoAcervo) {
-    return obterRegistro(`${URL_API_ACERVO}/pesquisar-acervos`);
-  }
-
-  if (textoLivre && !tipoAcervo) {
-    return obterRegistro(`${URL_API_ACERVO}/pesquisar-acervos?textoLivre=${textoLivre}`);
-  }
-
-  if (!textoLivre && tipoAcervo) {
-    return obterRegistro(`${URL_API_ACERVO}/pesquisar-acervos?tipoAcervo=${tipoAcervo}`);
-  }
-
-  return obterRegistro(
-    `${URL_API_ACERVO}/pesquisar-acervos?textoLivre=${textoLivre}&tipoAcervo=${tipoAcervo}`,
-  );
+  const url = `${URL_API_ACERVO}/pesquisar-acervos?numeroPagina=${numeroPagina}&numeroRegistros=${numeroRegistros}`;
+  return obterRegistro(url, {
+    params: { textoLivre, tipoAcervo },
+  });
 };
 
 export { obterTiposAcervo, pesquisarAcervos };

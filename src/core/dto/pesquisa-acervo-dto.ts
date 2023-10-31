@@ -4,6 +4,8 @@ import { TipoAcervoTag } from '../enum/tipo-acervo-tag';
 
 type BasePesquisaAcervoDTO = {
   items: SetStateAction<PesquisaAcervoDTO[]>;
+  totalPaginas: number;
+  totalRegistros: number;
 };
 
 export type PesquisaAcervoDTO = {

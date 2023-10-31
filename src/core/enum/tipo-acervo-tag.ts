@@ -7,5 +7,5 @@ export enum TipoAcervoTag {
 export const TipoAcervoTagDisplay: Record<TipoAcervoTag, string> = {
   [TipoAcervoTag.Biblioteca]: 'Biblioteca',
   [TipoAcervoTag.MemoriaDocumental]: 'Memória Documental',
-  [TipoAcervoTag.MemoriaEducacaoMunicipal]: 'Memória Documental',
+  [TipoAcervoTag.MemoriaEducacaoMunicipal]: 'Memorial da Educação Municipal',
 };

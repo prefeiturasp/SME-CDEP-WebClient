@@ -5,13 +5,13 @@ import axios, {
   HttpStatusCode,
   InternalAxiosRequestConfig,
 } from 'axios';
-import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 
 import dayjs from 'dayjs';
 
 import { setDeslogar } from '~/core/redux/modules/auth/actions';
 
 import { notification } from 'antd';
+import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 import { setSpinning } from '~/core/redux/modules/spin/actions';
 import { store } from '../../redux';
 import autenticacaoService, { URL_AUTENTICACAO_REVALIDAR } from '../autenticacao-service';
@@ -146,24 +146,37 @@ export type ApiResult<T> = {
   mensagens: string[];
 };
 
-export const obterRegistro = async <T>(url: string): Promise<ApiResult<T>> => {
+const tratarThen = <T>(response: AxiosResponse<T>): ApiResult<T> => {
+  return { sucesso: true, dados: response?.data, mensagens: [] };
+};
+
+const tratarCatch = (error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
+  const mensagens = error?.response?.data?.mensagens?.length
+    ? error?.response?.data?.mensagens
+    : [];
+
+  openNotificationError(mensagens);
+
+  return { sucesso: false, mensagens, dados: null };
+};
+
+export const obterRegistro = async <T>(
+  url: string,
+  config?: AxiosRequestConfig,
+): Promise<ApiResult<T>> => {
   store.dispatch(setSpinning(true));
   return api
-    .get(url)
-    .then((response: AxiosResponse<T>): ApiResult<T> => {
-      return { sucesso: true, dados: response?.data, mensagens: [] };
-    })
-    .catch((error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
-      const mensagens = error?.response?.data?.mensagens?.length
-        ? error?.response?.data?.mensagens
-        : [];
-
-      // TODO modal error
-      openNotificationError(mensagens);
-
-      return { sucesso: false, mensagens, dados: null };
-    })
+    .get(url, config)
+    .then(tratarThen<T>)
+    .catch(tratarCatch)
     .finally(() => store.dispatch(setSpinning(false)));
+};
+
+export const alterarRegistro = async <T>(url: string, params: any): Promise<ApiResult<T>> => {
+  return api
+    .put(url, params)
+    .then(tratarThen<T>)
+    .catch(tratarCatch);
 };
 
 export const inserirRegistro = async <T>(
@@ -174,39 +187,8 @@ export const inserirRegistro = async <T>(
   store.dispatch(setSpinning(true));
   return api
     .post(url, params, config)
-    .then((response: AxiosResponse<T>): ApiResult<T> => {
-      return { sucesso: true, dados: response?.data, mensagens: [] };
-    })
-    .catch((error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
-      const mensagens = error?.response?.data?.mensagens?.length
-        ? error?.response?.data?.mensagens
-        : [];
-
-      // TODO modal error
-      openNotificationError(mensagens);
-
-      return { sucesso: false, mensagens, dados: null };
-    })
-    .finally(() => store.dispatch(setSpinning(false)));
-};
-
-export const alterarRegistro = async <T>(url: string, params: any): Promise<ApiResult<T>> => {
-  store.dispatch(setSpinning(true));
-  return api
-    .put(url, params)
-    .then((response: AxiosResponse<T>): ApiResult<T> => {
-      return { sucesso: true, dados: response?.data, mensagens: [] };
-    })
-    .catch((error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
-      const mensagens = error?.response?.data?.mensagens?.length
-        ? error?.response?.data?.mensagens
-        : [];
-
-      // TODO modal error
-      openNotificationError(mensagens);
-
-      return { sucesso: false, mensagens, dados: null };
-    })
+    .then(tratarThen<T>)
+    .catch(tratarCatch)
     .finally(() => store.dispatch(setSpinning(false)));
 };
 
@@ -217,19 +199,8 @@ export const deletarRegistro = async <T>(
   store.dispatch(setSpinning(true));
   return api
     .delete(url, config)
-    .then((response: AxiosResponse<T>): ApiResult<T> => {
-      return { sucesso: true, dados: response?.data, mensagens: [] };
-    })
-    .catch((error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
-      const mensagens = error?.response?.data?.mensagens?.length
-        ? error?.response?.data?.mensagens
-        : [];
-
-      // TODO modal error
-      openNotificationError(mensagens);
-
-      return { sucesso: false, mensagens, dados: null };
-    })
+    .then(tratarThen<T>)
+    .catch(tratarCatch)
     .finally(() => store.dispatch(setSpinning(false)));
 };
 

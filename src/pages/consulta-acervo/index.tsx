@@ -1,4 +1,5 @@
-import { Col, Typography } from 'antd';
+import { Col, Row, Typography } from 'antd';
+import Pagination from 'antd/es/pagination';
 import { useEffect, useMemo, useState } from 'react';
 import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
 import { pesquisarAcervos } from '~/core/services/acervo-service';
@@ -9,33 +10,25 @@ export const ConsultaAcervo = () => {
   const [buscaTextoLivre, setBuscaTextoLivre] = useState<string>('');
   const [buscaTipoAcervoSelecionado, setBuscaTipoAcervoSelecionado] = useState<number | null>(null);
   const [dadosFiltro, setDadosFiltro] = useState<PesquisaAcervoDTO[]>([]);
+  const numeroRegistrosPagina = 5;
+  const [numeroRegistros, setNumeroRegistros] = useState(1);
 
   const nenhumTipoAcervoSelecionado =
     buscaTipoAcervoSelecionado === null || buscaTipoAcervoSelecionado === 0;
 
-  const obterPesquisaArcevo = async () => {
-    if (!buscaTextoLivre && !buscaTipoAcervoSelecionado) {
-      const resposta = await pesquisarAcervos();
+  const obterPesquisaArcevo = async (pagina: number) => {
+    if (buscaTextoLivre && buscaTextoLivre.length < 3) return;
 
-      if (resposta?.sucesso) return setDadosFiltro(resposta?.dados?.items);
-    }
+    const resposta = await pesquisarAcervos(
+      pagina,
+      numeroRegistrosPagina,
+      buscaTextoLivre,
+      buscaTipoAcervoSelecionado,
+    );
 
-    if (buscaTextoLivre.length >= 3 && buscaTipoAcervoSelecionado) {
-      const resposta = await pesquisarAcervos(buscaTextoLivre, buscaTipoAcervoSelecionado);
-
-      if (resposta?.sucesso) return setDadosFiltro(resposta?.dados?.items);
-    }
-
-    if (!buscaTextoLivre && buscaTipoAcervoSelecionado) {
-      const resposta = await pesquisarAcervos('', buscaTipoAcervoSelecionado);
-
-      if (resposta?.sucesso) return setDadosFiltro(resposta?.dados?.items);
-    }
-
-    if (buscaTextoLivre.length >= 3 && !buscaTipoAcervoSelecionado) {
-      const resposta = await pesquisarAcervos(buscaTextoLivre);
-
-      if (resposta?.sucesso) return setDadosFiltro(resposta?.dados?.items);
+    if (resposta?.sucesso) {
+      setNumeroRegistros(resposta?.dados?.totalRegistros);
+      setDadosFiltro(resposta?.dados?.items);
     }
   };
 
@@ -60,7 +53,7 @@ export const ConsultaAcervo = () => {
   }, [buscaTextoLivre, buscaTipoAcervoSelecionado, dadosFiltro]);
 
   useEffect(() => {
-    obterPesquisaArcevo();
+    obterPesquisaArcevo(1);
   }, [buscaTextoLivre, buscaTipoAcervoSelecionado]);
 
   return (
@@ -77,6 +70,17 @@ export const ConsultaAcervo = () => {
         />
       </Col>
       <ListaCardsConsultaAcervo dadosGerais={dadosFiltrado} />
+      <Row align='middle' justify='center'>
+        <Pagination
+          hideOnSinglePage
+          total={numeroRegistros}
+          pageSize={numeroRegistrosPagina}
+          onChange={(page) => {
+            obterPesquisaArcevo(page);
+          }}
+          style={{ marginBottom: 16 }}
+        />
+      </Row>
     </>
   );
 };
