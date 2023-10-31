@@ -55,7 +55,7 @@ export const ConsultaAcervo = () => {
   }, [buscaTextoLivre, buscaTipoAcervoSelecionado, dadosFiltro]);
 
   useEffect(() => {
-    obterPesquisaArcevo(numeroRegistros, numeroRegistrosPagina);
+    obterPesquisaArcevo(1, numeroRegistrosPagina);
   }, [buscaTextoLivre, buscaTipoAcervoSelecionado]);
 
   return (
