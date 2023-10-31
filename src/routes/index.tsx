@@ -41,11 +41,11 @@ const RoutesConfig = () => {
       {autenticado ? (
         <>
           <Routes>
+            <Route path={ROUTES.CONSULTA_ACERVO} element={<ConsultaAcervo />} />
             <Route path={ROUTES.PRINCIPAL} element={principalPage}>
               <Route element={<Auth />}>
                 <Route path={ROUTES.PRINCIPAL} element={iniciallPage} />
                 <Route path={ROUTES.MEUS_DADOS} element={meusDadosPage} />
-                <Route path={ROUTES.CONSULTA_ACERVO} element={<ConsultaAcervo />} />
 
                 <Route path={ROUTES.CREDITO}>
                   <Route path='' element={<Credito />} />

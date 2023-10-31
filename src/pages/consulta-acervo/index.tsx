@@ -2,7 +2,6 @@ import { Col, Row, Typography } from 'antd';
 import Pagination from 'antd/es/pagination';
 import { useEffect, useMemo, useState } from 'react';
 import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
-import { useAppSelector } from '~/core/hooks/use-redux';
 import { pesquisarAcervos } from '~/core/services/acervo-service';
 import { FiltroConsultaAcervo } from './filtro-consulta-acervo';
 import { ListaCardsConsultaAcervo } from './lista-cards-consulta-acervo';
@@ -12,7 +11,6 @@ export const ConsultaAcervo = () => {
   const [dadosFiltro, setDadosFiltro] = useState<PesquisaAcervoDTO[]>([]);
   const [buscaTipoAcervoSelecionado, setBuscaTipoAcervoSelecionado] = useState<number | null>(null);
 
-  const autenticado = useAppSelector((state) => state.auth.autenticado);
   const [numeroRegistrosPagina, setNumeroRegistrosPagina] = useState(5);
   const [numeroRegistros, setNumeroRegistros] = useState(1);
 
@@ -65,7 +63,7 @@ export const ConsultaAcervo = () => {
       <Typography style={{ fontSize: 20, fontWeight: 'bold', margin: '16px 0 0 16px' }}>
         Faça sua busca
       </Typography>
-      <Col style={{ position: 'sticky', top: autenticado ? 80 : 0, zIndex: 1 }}>
+      <Col style={{ position: 'sticky', top: 0, zIndex: 1 }}>
         <FiltroConsultaAcervo
           buscaTextoLivre={buscaTextoLivre}
           buscaTipoAcervo={buscaTipoAcervoSelecionado}
