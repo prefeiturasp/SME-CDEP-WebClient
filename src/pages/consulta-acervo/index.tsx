@@ -8,25 +8,27 @@ import { ListaCardsConsultaAcervo } from './lista-cards-consulta-acervo';
 
 export const ConsultaAcervo = () => {
   const [buscaTextoLivre, setBuscaTextoLivre] = useState<string>('');
-  const [buscaTipoAcervoSelecionado, setBuscaTipoAcervoSelecionado] = useState<number | null>(null);
   const [dadosFiltro, setDadosFiltro] = useState<PesquisaAcervoDTO[]>([]);
-  const numeroRegistrosPagina = 5;
+  const [buscaTipoAcervoSelecionado, setBuscaTipoAcervoSelecionado] = useState<number | null>(null);
+
+  const [numeroRegistrosPagina, setNumeroRegistrosPagina] = useState(5);
   const [numeroRegistros, setNumeroRegistros] = useState(1);
 
   const nenhumTipoAcervoSelecionado =
     buscaTipoAcervoSelecionado === null || buscaTipoAcervoSelecionado === 0;
 
-  const obterPesquisaArcevo = async (pagina: number) => {
+  const obterPesquisaArcevo = async (pagina: number, quantidadePagina: number) => {
     if (buscaTextoLivre && buscaTextoLivre.length < 3) return;
 
     const resposta = await pesquisarAcervos(
       pagina,
-      numeroRegistrosPagina,
+      quantidadePagina,
       buscaTextoLivre,
       buscaTipoAcervoSelecionado,
     );
 
     if (resposta?.sucesso) {
+      setNumeroRegistrosPagina(quantidadePagina);
       setNumeroRegistros(resposta?.dados?.totalRegistros);
       setDadosFiltro(resposta?.dados?.items);
     }
@@ -53,7 +55,7 @@ export const ConsultaAcervo = () => {
   }, [buscaTextoLivre, buscaTipoAcervoSelecionado, dadosFiltro]);
 
   useEffect(() => {
-    obterPesquisaArcevo(1);
+    obterPesquisaArcevo(numeroRegistros, numeroRegistrosPagina);
   }, [buscaTextoLivre, buscaTipoAcervoSelecionado]);
 
   return (
@@ -72,12 +74,13 @@ export const ConsultaAcervo = () => {
       <ListaCardsConsultaAcervo dadosGerais={dadosFiltrado} />
       <Row align='middle' justify='center'>
         <Pagination
+          showSizeChanger
           hideOnSinglePage
           total={numeroRegistros}
+          locale={{ items_per_page: '' }}
           pageSize={numeroRegistrosPagina}
-          onChange={(page) => {
-            obterPesquisaArcevo(page);
-          }}
+          pageSizeOptions={[5, 10, 20, 50, 100]}
+          onChange={(page, pageSize) => obterPesquisaArcevo(page, pageSize)}
           style={{ marginBottom: 16 }}
         />
       </Row>
