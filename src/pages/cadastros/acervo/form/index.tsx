@@ -42,6 +42,7 @@ const FormAcervo: React.FC = () => {
   const state = location.state;
 
   const acervoId = paramsRoute?.acervoId ? Number(paramsRoute.acervoId) : 0;
+
   const stateTipoAcervoId = state?.tipoAcervoId;
 
   const formTipoAcervoId = Form.useWatch('tipoAcervoId', form);
@@ -76,7 +77,7 @@ const FormAcervo: React.FC = () => {
         dados.largura = formatarDuasCasasDecimais(dados.largura);
       }
 
-      if (dados?.coAutores.length) {
+      if (dados?.coAutores?.length) {
         const coAutores = [...dados.coAutores];
 
         dados.coAutores = coAutores.map((item) => ({
