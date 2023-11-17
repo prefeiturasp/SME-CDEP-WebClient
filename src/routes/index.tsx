@@ -41,6 +41,7 @@ const RoutesConfig = () => {
       {autenticado ? (
         <>
           <Routes>
+            <Route path={ROUTES.CONSULTA_ACERVO} element={<ConsultaAcervo />} />
             <Route path={ROUTES.PRINCIPAL} element={principalPage}>
               <Route element={<Auth />}>
                 <Route path={ROUTES.PRINCIPAL} element={iniciallPage} />
