@@ -31,4 +31,5 @@ export enum ROUTES {
   ACERVO_NOVO = '/cadastro/acervo/novo',
   ACERVO_EDITAR = '/cadastro/acervo/editar/:acervoId',
   CONSULTA_ACERVO = '/consulta-acervo',
+  ACERVO_IMPORTAR = '/cadastro/acervo/importar',
 }

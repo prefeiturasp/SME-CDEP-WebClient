@@ -22,6 +22,7 @@ import Principal from '~/pages/principal/index';
 import RedefinirSenha from '~/pages/redefinir-senha';
 import RedefinirSenhaToken from '~/pages/redefinir-senha-token';
 import Auth from './config/auth';
+import ImportarAcervo from '~/pages/cadastros/acervo/importar-acervo';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
@@ -82,6 +83,7 @@ const RoutesConfig = () => {
                   <Route path='' element={<ListAcervo />} />
                   <Route path={ROUTES.ACERVO_NOVO} element={<FormAcervo />} />
                   <Route path={ROUTES.ACERVO_EDITAR} element={<FormAcervo />} />
+                  <Route path={ROUTES.ACERVO_IMPORTAR} element={<ImportarAcervo />} />
                 </Route>
                 <Route path='*' element={pagNotFound} />
                 <Route path={ROUTES.LOGIN} element={<Navigate to={ROUTES.PRINCIPAL} />} />

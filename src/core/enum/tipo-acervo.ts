@@ -24,3 +24,12 @@ export const TipoAcervoSuffix: Record<TipoAcervo, string> = {
   [TipoAcervo.Fotografico]: '.FT',
   [TipoAcervo.Tridimensional]: '.TD',
 };
+
+export const TipoAcervoPlanilhaModelo: Record<TipoAcervo, string> = {
+  [TipoAcervo.Bibliografico]: 'planilha_acervo_bibliografico.xlsx',
+  [TipoAcervo.DocumentacaoHistorica]: 'planilha_acervo_documental.xlsx',
+  [TipoAcervo.ArtesGraficas]: 'planilha_acervo_arte_grafica.xlsx',
+  [TipoAcervo.Audiovisual]: 'planilha_acervo_audiovisual.xlsx',
+  [TipoAcervo.Fotografico]: 'planilha_acervo_fotografico.xlsx',
+  [TipoAcervo.Tridimensional]: 'planilha_acervo_tridimensional.xlsx',
+};

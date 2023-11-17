@@ -1,4 +1,5 @@
-import api, { inserirRegistro } from './api';
+import { TipoAcervo } from '../enum/tipo-acervo';
+import api, { inserirRegistro, obterRegistro } from './api';
 
 const URL_DEFAULT = 'v1/Armazenamento';
 
@@ -11,7 +12,14 @@ const obterArquivoParaDownload = (codigoArquivo: string) => {
   });
 };
 
+const downloadPorTipoAcervo = (tipoAcervo: TipoAcervo) =>
+  obterRegistro(`${URL_DEFAULT}/download/tipo-acervo`, {
+    responseType: 'blob',
+    params: { tipoAcervo },
+  });
+
 export default {
   fazerUploadArquivo,
   obterArquivoParaDownload,
+  downloadPorTipoAcervo,
 };
