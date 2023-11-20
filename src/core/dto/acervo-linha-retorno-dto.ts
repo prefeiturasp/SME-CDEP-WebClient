@@ -2,10 +2,7 @@ import { ImportacaoStatusEnum } from '../enum/importacao-status-enum';
 import { TipoAcervo } from '../enum/tipo-acervo';
 import { LinhaConteudoAjustarRetornoDTO } from './linha-conteudo-ajustar-retorno-dto';
 
-export type AcervoLinhaRetornoDTO = {
-  status: ImportacaoStatusEnum;
-  numeroLinha: number;
-  tipoAcervoId: TipoAcervo;
+export type AcervoLinhaRetornoCamposDTO = {
   titulo: LinhaConteudoAjustarRetornoDTO;
   subTitulo: LinhaConteudoAjustarRetornoDTO;
   codigo: LinhaConteudoAjustarRetornoDTO;
@@ -51,3 +48,9 @@ export type AcervoLinhaRetornoDTO = {
   arquivos: LinhaConteudoAjustarRetornoDTO;
   tecnica: LinhaConteudoAjustarRetornoDTO;
 };
+
+export type AcervoLinhaRetornoDTO = {
+  status: ImportacaoStatusEnum;
+  numeroLinha: number;
+  tipoAcervoId: TipoAcervo;
+} & AcervoLinhaRetornoCamposDTO;

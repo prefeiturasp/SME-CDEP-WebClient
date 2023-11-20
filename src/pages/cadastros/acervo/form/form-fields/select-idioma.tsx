@@ -7,6 +7,7 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormIdioma } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_MATERIAL } from '~/core/constants/ids/select';
+import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { obterIdioma } from '~/core/services/idioma-service';
 
 type SelectIdiomaProps = {
@@ -45,7 +46,7 @@ const SelectIdioma: React.FC<SelectIdiomaProps> = ({ selectProps, formItemProps 
     <Row wrap={false} align='middle'>
       <Form.Item
         label='Idioma'
-        name='idiomaId'
+        name={AcervoFieldName[FieldAcervoEnum.Idioma]}
         rules={[{ required: true }]}
         style={{ width: '100%', marginRight: '8px' }}
         {...formItemProps}

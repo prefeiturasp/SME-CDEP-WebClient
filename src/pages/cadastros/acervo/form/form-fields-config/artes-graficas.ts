@@ -3,69 +3,69 @@ import { FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 
 export const FieldsArtesGraficas: FieldAcervoProps[] = [
   {
-    fieldCervo: FieldAcervoEnum.Titulo,
+    fieldAcervo: FieldAcervoEnum.Titulo,
   },
   {
-    fieldCervo: FieldAcervoEnum.Tombo,
+    fieldAcervo: FieldAcervoEnum.Tombo,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Credito,
+    fieldAcervo: FieldAcervoEnum.Credito,
   },
   {
-    fieldCervo: FieldAcervoEnum.Localizacao,
+    fieldAcervo: FieldAcervoEnum.Localizacao,
   },
   {
-    fieldCervo: FieldAcervoEnum.Procedencia,
+    fieldAcervo: FieldAcervoEnum.Procedencia,
   },
   {
-    fieldCervo: FieldAcervoEnum.DataAcervo,
+    fieldAcervo: FieldAcervoEnum.DataAcervo,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.CopiaDigital,
+    fieldAcervo: FieldAcervoEnum.CopiaDigital,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.AutorizacaoUsoImagem,
+    fieldAcervo: FieldAcervoEnum.AutorizacaoUsoImagem,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.EstadoConservacao,
+    fieldAcervo: FieldAcervoEnum.EstadoConservacao,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Cromia,
+    fieldAcervo: FieldAcervoEnum.Cromia,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.DimensaoLargura,
+    fieldAcervo: FieldAcervoEnum.DimensaoLargura,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.DimensaoAltura,
+    fieldAcervo: FieldAcervoEnum.DimensaoAltura,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.DimensaoDiametro,
+    fieldAcervo: FieldAcervoEnum.DimensaoDiametro,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Tecnica,
+    fieldAcervo: FieldAcervoEnum.Tecnica,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Suporte,
+    fieldAcervo: FieldAcervoEnum.Suporte,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Quantidade,
+    fieldAcervo: FieldAcervoEnum.Quantidade,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Descricao,
+    fieldAcervo: FieldAcervoEnum.Descricao,
   },
   {
-    fieldCervo: FieldAcervoEnum.Anexos,
+    fieldAcervo: FieldAcervoEnum.Anexos,
   },
 ];

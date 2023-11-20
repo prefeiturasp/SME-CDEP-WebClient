@@ -3,60 +3,60 @@ import { FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 
 export const FieldsAudiovisual: FieldAcervoProps[] = [
   {
-    fieldCervo: FieldAcervoEnum.Titulo,
+    fieldAcervo: FieldAcervoEnum.Titulo,
   },
   {
-    fieldCervo: FieldAcervoEnum.Tombo,
+    fieldAcervo: FieldAcervoEnum.Tombo,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Credito,
+    fieldAcervo: FieldAcervoEnum.Credito,
   },
   {
-    fieldCervo: FieldAcervoEnum.Localizacao,
+    fieldAcervo: FieldAcervoEnum.Localizacao,
   },
   {
-    fieldCervo: FieldAcervoEnum.Procedencia,
+    fieldAcervo: FieldAcervoEnum.Procedencia,
   },
   {
-    fieldCervo: FieldAcervoEnum.DataAcervo,
+    fieldAcervo: FieldAcervoEnum.DataAcervo,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Copia,
+    fieldAcervo: FieldAcervoEnum.Copia,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.AutorizacaoUsoImagem,
+    fieldAcervo: FieldAcervoEnum.AutorizacaoUsoImagem,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.EstadoConservacao,
+    fieldAcervo: FieldAcervoEnum.EstadoConservacao,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Descricao,
+    fieldAcervo: FieldAcervoEnum.Descricao,
   },
   {
-    fieldCervo: FieldAcervoEnum.Suporte,
+    fieldAcervo: FieldAcervoEnum.Suporte,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Duracao,
+    fieldAcervo: FieldAcervoEnum.Duracao,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Cromia,
+    fieldAcervo: FieldAcervoEnum.Cromia,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.TamanhoArquivo,
+    fieldAcervo: FieldAcervoEnum.TamanhoArquivo,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Acessibilidade,
+    fieldAcervo: FieldAcervoEnum.Acessibilidade,
   },
   {
-    fieldCervo: FieldAcervoEnum.Disponibilizacao,
+    fieldAcervo: FieldAcervoEnum.Disponibilizacao,
   },
 ];

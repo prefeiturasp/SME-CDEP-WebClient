@@ -3,6 +3,7 @@ import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useState } from 'react';
 import Select from '~/components/lib/inputs/select';
 import { CDEP_SELECT_ESTADO_CONSERVACAO } from '~/core/constants/ids/select';
+import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { obterConservacoes } from '~/core/services/conservacao-service';
 
@@ -51,7 +52,7 @@ const SelectConservacao: React.FC<SelectConservacaoProps> = ({
   return (
     <Form.Item
       label='Estado de conservação'
-      name='conservacaoId'
+      name={AcervoFieldName[FieldAcervoEnum.EstadoConservacao]}
       rules={[{ required }]}
       {...formItemProps}
     >

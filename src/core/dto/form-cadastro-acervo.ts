@@ -21,7 +21,7 @@ export type FormCadastroAcervoProps = {
 };
 
 export type FieldAcervoProps = {
-  fieldCervo: FieldAcervoEnum;
+  fieldAcervo: FieldAcervoEnum;
 } & ColProps;
 
 export type FormPageConfigCadastroAcervoProps = {

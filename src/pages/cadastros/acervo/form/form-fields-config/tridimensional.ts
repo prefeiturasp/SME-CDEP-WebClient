@@ -3,47 +3,47 @@ import { FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 
 export const FieldsTridimensional: FieldAcervoProps[] = [
   {
-    fieldCervo: FieldAcervoEnum.Titulo,
+    fieldAcervo: FieldAcervoEnum.Titulo,
   },
   {
-    fieldCervo: FieldAcervoEnum.Tombo,
+    fieldAcervo: FieldAcervoEnum.Tombo,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Procedencia,
+    fieldAcervo: FieldAcervoEnum.Procedencia,
   },
   {
-    fieldCervo: FieldAcervoEnum.DataAcervo,
+    fieldAcervo: FieldAcervoEnum.DataAcervo,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.EstadoConservacao,
+    fieldAcervo: FieldAcervoEnum.EstadoConservacao,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Quantidade,
+    fieldAcervo: FieldAcervoEnum.Quantidade,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Descricao,
+    fieldAcervo: FieldAcervoEnum.Descricao,
   },
   {
-    fieldCervo: FieldAcervoEnum.DimensaoLargura,
+    fieldAcervo: FieldAcervoEnum.DimensaoLargura,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.DimensaoAltura,
+    fieldAcervo: FieldAcervoEnum.DimensaoAltura,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.DimensaoProfundidade,
+    fieldAcervo: FieldAcervoEnum.DimensaoProfundidade,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.DimensaoDiametro,
+    fieldAcervo: FieldAcervoEnum.DimensaoDiametro,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Anexos,
+    fieldAcervo: FieldAcervoEnum.Anexos,
   },
 ];

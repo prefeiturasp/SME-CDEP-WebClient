@@ -3,6 +3,7 @@ import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useState } from 'react';
 import Select from '~/components/lib/inputs/select';
 import { CDEP_SELECT_ESTADO_FORMATO_IMAGEM } from '~/core/constants/ids/select';
+import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { obterFormatosImagem } from '~/core/services/formato-service';
 
 type SelectFormatoImagemProps = {
@@ -34,7 +35,7 @@ const SelectFormatoImagem: React.FC<SelectFormatoImagemProps> = ({
   return (
     <Form.Item
       label='Formato da imagem'
-      name='formatoId'
+      name={AcervoFieldName[FieldAcervoEnum.FormatoImagem]}
       rules={[{ required: true }]}
       {...formItemProps}
     >

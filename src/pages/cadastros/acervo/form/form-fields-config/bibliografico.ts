@@ -3,75 +3,75 @@ import { FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 
 export const FieldsBibliografico: FieldAcervoProps[] = [
   {
-    fieldCervo: FieldAcervoEnum.Titulo,
+    fieldAcervo: FieldAcervoEnum.Titulo,
   },
   {
-    fieldCervo: FieldAcervoEnum.Subtitulo,
+    fieldAcervo: FieldAcervoEnum.Subtitulo,
   },
   {
-    fieldCervo: FieldAcervoEnum.Material,
+    fieldAcervo: FieldAcervoEnum.Material,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Autor,
+    fieldAcervo: FieldAcervoEnum.Autor,
   },
   {
-    fieldCervo: FieldAcervoEnum.Coautor,
+    fieldAcervo: FieldAcervoEnum.Coautor,
   },
   {
-    fieldCervo: FieldAcervoEnum.Editora,
+    fieldAcervo: FieldAcervoEnum.Editora,
   },
   {
-    fieldCervo: FieldAcervoEnum.Assunto,
+    fieldAcervo: FieldAcervoEnum.Assunto,
   },
   {
-    fieldCervo: FieldAcervoEnum.Ano,
+    fieldAcervo: FieldAcervoEnum.Ano,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Edicao,
+    fieldAcervo: FieldAcervoEnum.Edicao,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.NumeroDePaginas,
+    fieldAcervo: FieldAcervoEnum.NumeroDePaginas,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.DimensaoLargura,
+    fieldAcervo: FieldAcervoEnum.DimensaoLargura,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.DimensaoAltura,
+    fieldAcervo: FieldAcervoEnum.DimensaoAltura,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.SerieColecao,
+    fieldAcervo: FieldAcervoEnum.SerieColecao,
   },
   {
-    fieldCervo: FieldAcervoEnum.Volume,
+    fieldAcervo: FieldAcervoEnum.Volume,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Idioma,
+    fieldAcervo: FieldAcervoEnum.Idioma,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.LocalizacaoCDD,
+    fieldAcervo: FieldAcervoEnum.LocalizacaoCDD,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.LocalizacaoPHA,
+    fieldAcervo: FieldAcervoEnum.LocalizacaoPHA,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.NotasGerais,
+    fieldAcervo: FieldAcervoEnum.NotasGerais,
   },
   {
-    fieldCervo: FieldAcervoEnum.ISBN,
+    fieldAcervo: FieldAcervoEnum.ISBN,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Tombo,
+    fieldAcervo: FieldAcervoEnum.Tombo,
     sm: 12,
   },
 ];
