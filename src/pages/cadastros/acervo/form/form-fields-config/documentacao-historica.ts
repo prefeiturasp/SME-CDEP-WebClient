@@ -6,7 +6,12 @@ export const FieldsDocumentacaoHistorica: FieldAcervoProps[] = [
     fieldAcervo: FieldAcervoEnum.Titulo,
   },
   {
-    fieldAcervo: FieldAcervoEnum.CodigoAntigoNovo,
+    fieldAcervo: FieldAcervoEnum.CodigoAntigo,
+    sm: 12,
+  },
+  {
+    fieldAcervo: FieldAcervoEnum.CodigoNovo,
+    sm: 12,
   },
   {
     fieldAcervo: FieldAcervoEnum.Material,
