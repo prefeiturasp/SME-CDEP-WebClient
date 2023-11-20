@@ -1,15 +1,22 @@
-import { Button, Col, Form, Input, Row } from 'antd';
+import { Col, Form, Input, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
 import React from 'react';
+import { FaFileExcel } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import SelectCreditoAutoria from '~/components/cdep/input/credito-autoria';
 import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
+import ButtonPrimary from '~/components/lib/button/primary';
+import ButtonSecundary from '~/components/lib/button/secundary';
 import CardContent from '~/components/lib/card-content';
 import DataTable from '~/components/lib/data-table';
 import HeaderPage from '~/components/lib/header-page';
-import { CDEP_BUTTON_NOVO, CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
+import {
+  CDEP_BUTTON_IMPORTAR,
+  CDEP_BUTTON_NOVO,
+  CDEP_BUTTON_VOLTAR,
+} from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_CODIGO, CDEP_INPUT_TITULO } from '~/core/constants/ids/input';
 import { URL_API_ACERVO } from '~/core/constants/urls-api';
 import { IdTipoTituloCreditoAutoriaCodigoAcervoDTO } from '~/core/dto/id-tipo-titulo-credito-autoria-codigo-acervo-dto';
@@ -49,6 +56,8 @@ const ListAcervo: React.FC = () => {
       replace: true,
     });
 
+  const onClickImportar = () => navigate(ROUTES.ACERVO_IMPORTAR);
+
   return (
     <Col>
       <HeaderPage title='Acervo'>
@@ -58,16 +67,18 @@ const ListAcervo: React.FC = () => {
               <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
             </Col>
             <Col>
-              <Button
-                block
-                type='primary'
-                htmlType='submit'
-                id={CDEP_BUTTON_NOVO}
-                style={{ fontWeight: 700 }}
-                onClick={() => onClickNovo()}
+              <ButtonSecundary
+                id={CDEP_BUTTON_IMPORTAR}
+                onClick={() => onClickImportar()}
+                icon={<FaFileExcel size={16} />}
               >
+                Importar
+              </ButtonSecundary>
+            </Col>
+            <Col>
+              <ButtonPrimary id={CDEP_BUTTON_NOVO} onClick={() => onClickNovo()}>
                 Novo
-              </Button>
+              </ButtonPrimary>
             </Col>
           </Row>
         </Col>

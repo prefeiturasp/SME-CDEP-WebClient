@@ -1,10 +1,15 @@
-import { Col, Form, Row, notification } from 'antd';
+import { Col, Form, Modal, Row, notification } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
 import Auditoria from '~/components/cdep/text/auditoria';
 import CardContent from '~/components/lib/card-content';
+import {
+  CDEP_BUTTON_MODAL_CANCELAR,
+  CDEP_BUTTON_MODAL_SALVAR,
+} from '~/core/constants/ids/button/intex';
+import { DESEJA_CANCELAR_ALTERACOES } from '~/core/constants/mensagens';
 import {
   URL_API_ACERVO_ARTE_GRAFICA,
   URL_API_ACERVO_AUDIOVISUAL,
@@ -21,8 +26,10 @@ import {
 } from '~/core/dto/form-cadastro-acervo';
 import { ROUTES } from '~/core/enum/routes';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
+import { confirmacao } from '~/core/services/alerta-service';
 import { alterarRegistro, inserirRegistro, obterRegistro } from '~/core/services/api';
-import { formatarDuasCasasDecimais, removerTudoQueNaoEhDigito } from '~/core/utils/functions';
+import { removerTudoQueNaoEhDigito } from '~/core/utils/functions';
+import { mapearDtoCadastrosAcervo } from '../utils';
 import FormContentCadastroAcervo from './form-content-cadastro-acervo';
 import { FieldsArtesGraficas } from './form-fields-config/artes-graficas';
 import { FieldsAudiovisual } from './form-fields-config/audiovisual';
@@ -32,7 +39,11 @@ import { FieldsAcervoFotografico } from './form-fields-config/fotografico';
 import { FieldsTridimensional } from './form-fields-config/tridimensional';
 import FormCadastroAcervoHeader from './form-header-cadastro-acervo';
 
-const FormAcervo: React.FC = () => {
+type FormAcervoProps = {
+  setOpenFormModal?: (params: { open: boolean; updateData: boolean }) => void;
+  modalFormInitialValues?: FormDefaultCadastroAcervoDTO;
+};
+const FormAcervo: React.FC<FormAcervoProps> = ({ setOpenFormModal, modalFormInitialValues }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const paramsRoute = useParams();
@@ -52,49 +63,15 @@ const FormAcervo: React.FC = () => {
   const [fieldsConfig, setFieldsConfig] = useState<FormPageConfigCadastroAcervoProps | undefined>();
   const [formInitialValues, setFormInitialValues] = useState<FormDefaultCadastroAcervoDTO>();
 
+  const [loadingModal, setLoadingModal] = useState<boolean>(false);
+
   const carregarDados = useCallback(async () => {
     const resposta = await obterRegistro<FormDefaultCadastroAcervoDTO>(
       `${fieldsConfig?.urlBase}/${acervoId}`,
     );
 
-    const dados = resposta.dados;
-
     if (resposta.sucesso) {
-      if (dados?.arquivos?.length) {
-        dados.arquivos = dados.arquivos.map((item: any) => ({
-          xhr: item?.codigo,
-          name: item?.nome,
-          id: item?.id,
-          status: 'done',
-        }));
-      }
-
-      if (dados?.altura) {
-        dados.altura = formatarDuasCasasDecimais(dados.altura);
-      }
-
-      if (dados?.largura) {
-        dados.largura = formatarDuasCasasDecimais(dados.largura);
-      }
-
-      if (dados?.coAutores?.length) {
-        const coAutores = [...dados.coAutores];
-
-        dados.coAutores = coAutores.map((item) => ({
-          ...item,
-          value: item.creditoAutorId,
-          label: item.creditoAutorNome,
-        }));
-
-        dados.listaTipoAutoria = coAutores.map((item) => ({
-          ...item,
-          value: item.creditoAutorId,
-          label: item.creditoAutorNome,
-        }));
-      } else {
-        dados.coAutores = [];
-        dados.listaTipoAutoria = [];
-      }
+      const dados = mapearDtoCadastrosAcervo(resposta.dados);
 
       setFormInitialValues(dados);
     }
@@ -109,6 +86,15 @@ const FormAcervo: React.FC = () => {
   useEffect(() => {
     form.resetFields();
   }, [form, formInitialValues]);
+
+  useEffect(() => {
+    if (modalFormInitialValues && setOpenFormModal) {
+      const dados = mapearDtoCadastrosAcervo(modalFormInitialValues);
+
+      setFormInitialValues(dados);
+      form.resetFields();
+    }
+  }, [form, modalFormInitialValues, setOpenFormModal]);
 
   const onFinish = async (values: FormDefaultCadastroAcervoDTO) => {
     const valoresSalvar = { ...values };
@@ -161,6 +147,8 @@ const FormAcervo: React.FC = () => {
         valoresSalvar.coAutores = [];
       }
 
+      if (setOpenFormModal) setLoadingModal(true);
+
       if (acervoId && formInitialValues) {
         valoresSalvar.id = formInitialValues.id;
         valoresSalvar.acervoId = formInitialValues.acervoId;
@@ -175,8 +163,15 @@ const FormAcervo: React.FC = () => {
           message: 'Sucesso',
           description: `Acervo ${acervoId ? 'alterado' : 'registrado'} com sucesso!`,
         });
-        navigate(ROUTES.ACERVO);
+
+        if (setOpenFormModal) {
+          setOpenFormModal({ open: false, updateData: true });
+        } else {
+          navigate(ROUTES.ACERVO);
+        }
       }
+
+      setLoadingModal(false);
     }
   };
 
@@ -237,8 +232,27 @@ const FormAcervo: React.FC = () => {
     }
   }, [obterCampos, acervoId, form, tipo]);
 
-  return (
-    <Col>
+  const montarCampos = () => (
+    <Row gutter={[16, 8]}>
+      <Col xs={24} sm={12}>
+        <SelectTipoAcervo
+          formItemProps={{ rules: [{ required: true }], name: 'tipoAcervoId' }}
+          selectProps={{
+            disabled: !!acervoId || !!setOpenFormModal,
+            onChange: (newValue) => {
+              setFieldsConfig(undefined);
+              form.resetFields();
+              form.setFieldValue('tipoAcervoId', newValue);
+            },
+          }}
+        />
+      </Col>
+      {tipo ? <FormContentCadastroAcervo fieldsConfig={fieldsConfig} form={form} /> : <></>}
+    </Row>
+  );
+
+  const formDefault = (children: any) => {
+    return (
       <Form
         form={form}
         layout='vertical'
@@ -247,30 +261,71 @@ const FormAcervo: React.FC = () => {
         initialValues={formInitialValues}
         validateMessages={validateMessages}
       >
-        <FormCadastroAcervoHeader fieldsConfig={fieldsConfig} />
+        {children}
+      </Form>
+    );
+  };
 
+  const montarForm = () => {
+    if (setOpenFormModal) {
+      return (
+        <Modal
+          open
+          style={{ minWidth: '80%' }}
+          title='Novo Acervo'
+          onOk={() => {
+            form.validateFields().then(() => {
+              onFinish(form.getFieldsValue());
+            });
+          }}
+          onCancel={() => {
+            if (form.isFieldsTouched()) {
+              confirmacao({
+                content: DESEJA_CANCELAR_ALTERACOES,
+                onOk() {
+                  form.resetFields();
+                  setOpenFormModal({ open: false, updateData: false });
+                },
+              });
+            } else {
+              form.resetFields();
+              setOpenFormModal({ open: false, updateData: false });
+            }
+          }}
+          centered
+          destroyOnClose
+          cancelButtonProps={{ disabled: loadingModal, id: CDEP_BUTTON_MODAL_CANCELAR }}
+          okButtonProps={{ disabled: loadingModal, id: CDEP_BUTTON_MODAL_SALVAR }}
+          closable={!loadingModal}
+          maskClosable={!loadingModal}
+          keyboard={!loadingModal}
+          okText='Salvar'
+          cancelText='Cancelar'
+        >
+          <Col
+            style={{
+              overflow: 'auto',
+              maxHeight: 'calc(100vh - 200px)',
+            }}
+          >
+            {formDefault(montarCampos())}
+          </Col>
+        </Modal>
+      );
+    }
+
+    return formDefault(
+      <>
+        <FormCadastroAcervoHeader fieldsConfig={fieldsConfig} />
         <CardContent>
-          <Row gutter={[16, 8]}>
-            <Col xs={24} sm={12}>
-              <SelectTipoAcervo
-                formItemProps={{ rules: [{ required: true }], name: 'tipoAcervoId' }}
-                selectProps={{
-                  disabled: !!acervoId,
-                  onChange: (newValue) => {
-                    setFieldsConfig(undefined);
-                    form.resetFields();
-                    form.setFieldValue('tipoAcervoId', newValue);
-                  },
-                }}
-              />
-            </Col>
-            {tipo ? <FormContentCadastroAcervo fieldsConfig={fieldsConfig} form={form} /> : <></>}
-          </Row>
+          {montarCampos()}
           <Auditoria dados={formInitialValues?.auditoria} />
         </CardContent>
-      </Form>
-    </Col>
-  );
+      </>,
+    );
+  };
+
+  return <Col>{montarForm()}</Col>;
 };
 
 export default FormAcervo;
