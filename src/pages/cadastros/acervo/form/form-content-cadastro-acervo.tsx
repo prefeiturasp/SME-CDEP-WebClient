@@ -76,7 +76,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
       style={{ margin: '8px 0px' }}
       message={message}
       showIcon
-      description={description}
+      description={`Planilha: ${description}`}
       type='error'
     />
   );
