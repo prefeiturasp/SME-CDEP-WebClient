@@ -19,6 +19,7 @@ import {
   URL_API_ACERVO_TRIDIMENSIONAL,
 } from '~/core/constants/urls-api';
 import { validateMessages } from '~/core/constants/validate-messages';
+import { AcervoLinhaRetornoDTO } from '~/core/dto/acervo-linha-retorno-dto';
 import { CoAutorDTO } from '~/core/dto/coautores-dto';
 import {
   FormDefaultCadastroAcervoDTO,
@@ -42,8 +43,13 @@ import FormCadastroAcervoHeader from './form-header-cadastro-acervo';
 type FormAcervoProps = {
   setOpenFormModal?: (params: { open: boolean; updateData: boolean }) => void;
   modalFormInitialValues?: FormDefaultCadastroAcervoDTO;
+  errosAcervoLinhaRetorno?: AcervoLinhaRetornoDTO;
 };
-const FormAcervo: React.FC<FormAcervoProps> = ({ setOpenFormModal, modalFormInitialValues }) => {
+const FormAcervo: React.FC<FormAcervoProps> = ({
+  setOpenFormModal,
+  modalFormInitialValues,
+  errosAcervoLinhaRetorno,
+}) => {
   const navigate = useNavigate();
   const location = useLocation();
   const paramsRoute = useParams();
@@ -247,7 +253,15 @@ const FormAcervo: React.FC<FormAcervoProps> = ({ setOpenFormModal, modalFormInit
           }}
         />
       </Col>
-      {tipo ? <FormContentCadastroAcervo fieldsConfig={fieldsConfig} form={form} /> : <></>}
+      {tipo ? (
+        <FormContentCadastroAcervo
+          form={form}
+          fieldsConfig={fieldsConfig}
+          errosAcervoLinhaRetorno={errosAcervoLinhaRetorno}
+        />
+      ) : (
+        <></>
+      )}
     </Row>
   );
 

@@ -1,8 +1,13 @@
+import React from 'react';
 import InputNumero from '~/components/lib/inputs/number';
 import { CDEP_INPUT_DIMENSAO_DIAMETRO } from '~/core/constants/ids/input';
+import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { formatarDuasCasasDecimais } from '~/core/utils/functions';
 
-const InputDimensaoDiametro: React.FC = () => {
+type InputDimensaoDiametroProps = {
+  extra?: React.ReactNode;
+};
+const InputDimensaoDiametro: React.FC<InputDimensaoDiametroProps> = ({ extra }) => {
   return (
     <InputNumero
       inputProps={{
@@ -11,8 +16,9 @@ const InputDimensaoDiametro: React.FC = () => {
         placeholder: 'Dimensão diâmetro (cm)',
       }}
       formItemProps={{
+        extra,
         label: 'Dimensão diâmetro (cm)',
-        name: 'diametro',
+        name: AcervoFieldName[FieldAcervoEnum.DimensaoDiametro],
         getValueFromEvent: (e: React.ChangeEvent<HTMLInputElement>) =>
           formatarDuasCasasDecimais(e?.target?.value),
       }}

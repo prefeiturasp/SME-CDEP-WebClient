@@ -19,6 +19,7 @@ const ModalImportacaoAcervo: React.FC<ModalImportacaoAcervoProps> = ({
   const [open, setOpen] = useState(false);
 
   const modalFormInitialValues = acervoLinhaErro?.retornoObjeto;
+  const errosAcervoLinhaRetorno = acervoLinhaErro?.retornoErro;
 
   return (
     <>
@@ -50,6 +51,7 @@ const ModalImportacaoAcervo: React.FC<ModalImportacaoAcervoProps> = ({
       </Row>
       {open ? (
         <FormAcervo
+          errosAcervoLinhaRetorno={errosAcervoLinhaRetorno}
           modalFormInitialValues={modalFormInitialValues}
           setOpenFormModal={({ open, updateData }) => {
             setOpen(open);

@@ -3,70 +3,70 @@ import { FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 
 export const FieldsDocumentacaoHistorica: FieldAcervoProps[] = [
   {
-    fieldCervo: FieldAcervoEnum.Titulo,
+    fieldAcervo: FieldAcervoEnum.Titulo,
   },
   {
-    fieldCervo: FieldAcervoEnum.CodigoAntigoNovo,
+    fieldAcervo: FieldAcervoEnum.CodigoAntigoNovo,
   },
   {
-    fieldCervo: FieldAcervoEnum.Material,
+    fieldAcervo: FieldAcervoEnum.Material,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Idioma,
+    fieldAcervo: FieldAcervoEnum.Idioma,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Autor,
+    fieldAcervo: FieldAcervoEnum.Autor,
   },
   {
-    fieldCervo: FieldAcervoEnum.Ano,
+    fieldAcervo: FieldAcervoEnum.Ano,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.NumeroDePaginas,
+    fieldAcervo: FieldAcervoEnum.NumeroDePaginas,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Volume,
+    fieldAcervo: FieldAcervoEnum.Volume,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Descricao,
+    fieldAcervo: FieldAcervoEnum.Descricao,
   },
   {
-    fieldCervo: FieldAcervoEnum.TipoDeAnexo,
+    fieldAcervo: FieldAcervoEnum.TipoDeAnexo,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.DimensaoLargura,
+    fieldAcervo: FieldAcervoEnum.DimensaoLargura,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.DimensaoAltura,
+    fieldAcervo: FieldAcervoEnum.DimensaoAltura,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.TamanhoArquivo,
+    fieldAcervo: FieldAcervoEnum.TamanhoArquivo,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.AcessoDocumento,
+    fieldAcervo: FieldAcervoEnum.AcessoDocumento,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Localizacao,
+    fieldAcervo: FieldAcervoEnum.Localizacao,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.CopiaDigital,
+    fieldAcervo: FieldAcervoEnum.CopiaDigital,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.EstadoConservacao,
+    fieldAcervo: FieldAcervoEnum.EstadoConservacao,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Anexos,
+    fieldAcervo: FieldAcervoEnum.Anexos,
   },
 ];

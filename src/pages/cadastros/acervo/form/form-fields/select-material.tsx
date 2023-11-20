@@ -7,6 +7,7 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormMaterial } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_MATERIAL } from '~/core/constants/ids/select';
+import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoMaterial } from '~/core/enum/tipo-material-enum';
 import { obterMaterial } from '~/core/services/material-service';
@@ -83,7 +84,7 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({
     <Row wrap={false} align='middle'>
       <Form.Item
         label='Material'
-        name='materialId'
+        name={AcervoFieldName[FieldAcervoEnum.Material]}
         rules={[{ required }]}
         style={{ width: '100%', marginRight: habilitaBotaoAdicionar ? '8px' : '' }}
         {...formItemProps}

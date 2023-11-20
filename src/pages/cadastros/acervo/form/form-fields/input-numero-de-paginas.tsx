@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import InputNumero from '~/components/lib/inputs/number';
 import { CDEP_INPUT_NUMERO_DE_PAGINAS } from '~/core/constants/ids/input';
+import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 
 type InputNumeroDePaginasProps = {
   tipoAcervo: TipoAcervo;
+  extra?: React.ReactNode;
 };
 
-const InputNumeroDePaginas: React.FC<InputNumeroDePaginasProps> = ({ tipoAcervo }) => {
+const InputNumeroDePaginas: React.FC<InputNumeroDePaginasProps> = ({ tipoAcervo, extra }) => {
   const [required, setRequired] = useState<boolean>(false);
 
   const validarCampoObrigatorio = () => {
@@ -34,8 +36,9 @@ const InputNumeroDePaginas: React.FC<InputNumeroDePaginasProps> = ({ tipoAcervo 
       }}
       formItemProps={{
         label: 'Número de páginas',
-        name: 'numeroPagina',
+        name: AcervoFieldName[FieldAcervoEnum.NumeroDePaginas],
         rules: [{ required }],
+        extra,
       }}
     />
   );

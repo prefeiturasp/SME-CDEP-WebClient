@@ -6,6 +6,7 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormSerieColecao } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_SERIE_COLECAO } from '~/core/constants/ids/select';
+import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { obterSerieColecaoResumido } from '~/core/services/serie-colecao-service';
 
 type SelectSerieColecaoProps = {
@@ -45,7 +46,7 @@ const SelectSerieColecao: React.FC<SelectSerieColecaoProps> = ({ selectProps, fo
     <Row wrap={false} align='middle'>
       <Form.Item
         label='Série/Coleção'
-        name='serieColecaoId'
+        name={AcervoFieldName[FieldAcervoEnum.SerieColecao]}
         style={{ width: '100%', marginRight: '8px' }}
         {...formItemProps}
       >
