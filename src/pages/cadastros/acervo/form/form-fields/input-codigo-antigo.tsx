@@ -1,4 +1,4 @@
-import { Col, Form, Input } from 'antd';
+import { Form, Input } from 'antd';
 import React from 'react';
 import { CDEP_INPUT_CODIGO_ANTIGO } from '~/core/constants/ids/input';
 import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
@@ -15,21 +15,19 @@ const InputCodigoAntigo: React.FC<InputCodigoAntigoProps> = ({ extra }) => {
         );
 
         return (
-          <Col xs={24} sm={12}>
-            <Form.Item
-              label='Codigo antigo'
-              name={AcervoFieldName[FieldAcervoEnum.CodigoAntigo]}
-              rules={[{ required: !codigoNovoEstaPreenchido, whitespace: true }]}
-              extra={extra}
-            >
-              <Input
-                type='text'
-                placeholder='Codigo antigo'
-                maxLength={15}
-                id={CDEP_INPUT_CODIGO_ANTIGO}
-              />
-            </Form.Item>
-          </Col>
+          <Form.Item
+            label='Codigo antigo'
+            name={AcervoFieldName[FieldAcervoEnum.CodigoAntigo]}
+            rules={[{ required: !codigoNovoEstaPreenchido, whitespace: true }]}
+            extra={extra}
+          >
+            <Input
+              type='text'
+              placeholder='Codigo antigo'
+              maxLength={15}
+              id={CDEP_INPUT_CODIGO_ANTIGO}
+            />
+          </Form.Item>
         );
       }}
     </Form.Item>

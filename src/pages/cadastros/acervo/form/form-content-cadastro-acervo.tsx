@@ -1,4 +1,4 @@
-import { Alert, Col, FormInstance, Row } from 'antd';
+import { Alert, Col, FormInstance } from 'antd';
 import React from 'react';
 import UploadArquivosCDEP from '~/components/cdep/upload';
 import {
@@ -131,16 +131,18 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
               />
             );
             break;
-          case FieldAcervoEnum.CodigoAntigoNovo:
+          case FieldAcervoEnum.CodigoAntigo:
             input = (
-              <Row gutter={16}>
-                <InputCodigoAntigo
-                  extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.CodigoAntigo])}
-                />
-                <InputCodigoNovo
-                  extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.CodigoNovo])}
-                />
-              </Row>
+              <InputCodigoAntigo
+                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.CodigoAntigo])}
+              />
+            );
+            break;
+          case FieldAcervoEnum.CodigoNovo:
+            input = (
+              <InputCodigoNovo
+                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.CodigoNovo])}
+              />
             );
             break;
           case FieldAcervoEnum.Material:
