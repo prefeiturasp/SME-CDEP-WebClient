@@ -51,6 +51,8 @@ export type AcervoLinhaRetornoCamposDTO = {
 
 export type AcervoLinhaRetornoDTO = {
   status: ImportacaoStatusEnum;
+  mensagem: string;
+  errosCampos: string[];
   numeroLinha: number;
   tipoAcervoId: TipoAcervo;
 } & AcervoLinhaRetornoCamposDTO;

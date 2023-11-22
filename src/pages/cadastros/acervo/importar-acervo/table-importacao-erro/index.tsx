@@ -1,7 +1,8 @@
-import { Table } from 'antd';
+import { Col, Row, Table, Tag } from 'antd';
 import { ColumnsType } from 'antd/es/table';
 import React from 'react';
 import { AcervoLinhaErroDTO } from '~/core/dto/acervo-linha-erro-dto';
+import { AcervoLinhaRetornoDTO } from '~/core/dto/acervo-linha-retorno-dto';
 import { ImportacaoArquivoRetornoDTO } from '~/core/dto/importacao-arquivo-retorno-dto';
 import ModalImportacaoAcervo from '../modal';
 
@@ -27,11 +28,41 @@ const TableImportacaoErro: React.FC<TableImportacaoErroProps> = ({
       title: 'Título',
       dataIndex: 'titulo',
     },
-    { title: 'Tombo/Código', dataIndex: 'tombo' },
+    { title: 'Tombo/Código', dataIndex: 'tombo', width: 115 },
+    {
+      title: 'Erros',
+      dataIndex: 'retornoErro',
+      ellipsis: true,
+      render: (retornoErro: AcervoLinhaRetornoDTO) => {
+        if (retornoErro.mensagem) {
+          return (
+            <Row wrap>
+              <Tag color='error'>{retornoErro.mensagem}</Tag>
+            </Row>
+          );
+        }
+
+        if (retornoErro.errosCampos?.length) {
+          return (
+            <Col>
+              <Row gutter={[8, 8]}>
+                {retornoErro.errosCampos.map((erroCampo, i) => (
+                  <Tag key={i} color='error'>
+                    {erroCampo}
+                  </Tag>
+                ))}
+              </Row>
+            </Col>
+          );
+        }
+
+        return <></>;
+      },
+    },
     {
       title: 'Ações',
       align: 'center',
-      width: 70,
+      width: 80,
       render: (_, row: AcervoLinhaErroDTO) => (
         <ModalImportacaoAcervo
           acervoLinhaErro={row}
