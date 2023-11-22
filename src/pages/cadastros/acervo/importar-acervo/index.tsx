@@ -1,4 +1,4 @@
-import { Col, Form, Row, Tabs, Upload } from 'antd';
+import { Col, Empty, Form, Row, Tabs, Upload } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FaDownload, FaUpload } from 'react-icons/fa';
@@ -13,10 +13,14 @@ import {
   CDEP_BUTTON_IMPORTAR_ARQUIVO,
   CDEP_BUTTON_VOLTAR,
 } from '~/core/constants/ids/button/intex';
-import { ACERVO_EXCLUIR_LINHA } from '~/core/constants/mensagens';
+import {
+  ACERVO_EXCLUIR_LINHA,
+  DESEJA_DESCARTAR_DADOS_PLANILHA_ATUAL_E_CARREGAR_SELECIONADA,
+} from '~/core/constants/mensagens';
 import { ImportacaoArquivoRetornoDTO } from '~/core/dto/importacao-arquivo-retorno-dto';
+import { ImportacaoStatusEnum } from '~/core/enum/importacao-status-enum';
 import { ROUTES } from '~/core/enum/routes';
-import { TipoAcervo, TipoAcervoPlanilhaModelo } from '~/core/enum/tipo-acervo';
+import { TipoAcervo, TipoAcervoDisplay, TipoAcervoPlanilhaModelo } from '~/core/enum/tipo-acervo';
 import acervoArteGraficaImportacaoService from '~/core/services/acervo-arte-grafica-importacao-service';
 import acervoAudiovisualImportacaoService from '~/core/services/acervo-audiovisual-importacao-service';
 import acervoBibliograficoImportacaoService from '~/core/services/acervo-bibliografico-importacao-service';
@@ -42,6 +46,7 @@ const ImportarAcervo: React.FC = () => {
   const tipoAcervo: TipoAcervo = Form.useWatch('tipoAcervo', form);
 
   const idImportacao = dataSourceArquivoImportacao?.[0]?.id || 0;
+  const statusImportacao = dataSourceArquivoImportacao?.[0]?.status || 0;
 
   const servicePorTipoAcervo = useCallback(() => {
     switch (tipoAcervo) {
@@ -70,7 +75,7 @@ const ImportarAcervo: React.FC = () => {
 
     const resposta = await service.obterImportacaoPendente();
 
-    if (resposta.sucesso) {
+    if (resposta.sucesso && resposta.dados.dataImportacao) {
       setDataSourceArquivoImportacao([resposta.dados]);
     } else {
       setDataSourceArquivoImportacao([]);
@@ -110,6 +115,24 @@ const ImportarAcervo: React.FC = () => {
     async (options: any) => {
       const { onSuccess, file } = options;
 
+      let continuar = true;
+
+      if (statusImportacao && statusImportacao !== ImportacaoStatusEnum.Sucesso) {
+        continuar = await new Promise((resolve) => {
+          confirmacao({
+            content: DESEJA_DESCARTAR_DADOS_PLANILHA_ATUAL_E_CARREGAR_SELECIONADA,
+            onOk() {
+              resolve(true);
+            },
+            onCancel() {
+              resolve(false);
+            },
+          });
+        });
+      }
+
+      if (!continuar) return;
+
       const service = servicePorTipoAcervo();
 
       if (!service) return;
@@ -117,13 +140,13 @@ const ImportarAcervo: React.FC = () => {
       const resposta = await service.importarArquivo(file);
 
       if (resposta.sucesso) {
-        setDataSourceArquivoImportacao([resposta.dados]);
+        setDataSourceArquivoImportacao([{ ...resposta.dados }]);
         onSuccess();
       } else {
         setDataSourceArquivoImportacao([]);
       }
     },
-    [servicePorTipoAcervo],
+    [servicePorTipoAcervo, statusImportacao],
   );
 
   const onClickVoltar = () => navigate(ROUTES.ACERVO);
@@ -143,6 +166,54 @@ const ImportarAcervo: React.FC = () => {
       setDataSourceArquivoImportacao([]);
     }
   }, [tipoAcervo, obterDados]);
+
+  const carregarTabelasImportacao = () => {
+    if (tipoAcervo) {
+      if (dataSourceArquivoImportacao?.length) {
+        return (
+          <Row gutter={[16, 24]}>
+            <Col span={24}>
+              <TableImportacao dataSource={dataSourceArquivoImportacao} />
+            </Col>
+            <Col span={24}>
+              <Tabs
+                type='card'
+                defaultActiveKey='1'
+                items={[
+                  {
+                    key: '1',
+                    label: <div style={{ color: Colors.ERROR }}>Erro</div>,
+                    children: (
+                      <TableImportacaoErro
+                        obterDados={obterDados}
+                        dataSource={dataSourceArquivoImportacao}
+                        atualizarLinhaParaSucesso={atualizarLinhaParaSucesso}
+                        removerLinhaDoArquivo={removerLinhaDoArquivo}
+                      />
+                    ),
+                  },
+                  {
+                    key: '2',
+                    label: <div style={{ color: Colors.SUCCESS }}>Sucesso</div>,
+                    children: <TableImportacaoSucesso dataSource={dataSourceArquivoImportacao} />,
+                  },
+                ]}
+              />
+            </Col>
+          </Row>
+        );
+      }
+
+      return (
+        <Empty
+          description={`Sem importação pendente para o acervo ${TipoAcervoDisplay[tipoAcervo]}`}
+          style={{ color: Colors.TEXT }}
+        />
+      );
+    }
+
+    return <></>;
+  };
 
   return (
     <Col>
@@ -191,37 +262,7 @@ const ImportarAcervo: React.FC = () => {
             )}
           </Form.Item>
         </Form>
-
-        <Row gutter={[16, 24]}>
-          <Col span={24}>
-            <TableImportacao dataSource={dataSourceArquivoImportacao} />
-          </Col>
-          <Col span={24}>
-            <Tabs
-              type='card'
-              defaultActiveKey='1'
-              items={[
-                {
-                  key: '1',
-                  label: <div style={{ color: Colors.ERROR }}>Erro</div>,
-                  children: (
-                    <TableImportacaoErro
-                      obterDados={obterDados}
-                      dataSource={dataSourceArquivoImportacao}
-                      atualizarLinhaParaSucesso={atualizarLinhaParaSucesso}
-                      removerLinhaDoArquivo={removerLinhaDoArquivo}
-                    />
-                  ),
-                },
-                {
-                  key: '2',
-                  label: <div style={{ color: Colors.SUCCESS }}>Sucesso</div>,
-                  children: <TableImportacaoSucesso dataSource={dataSourceArquivoImportacao} />,
-                },
-              ]}
-            />
-          </Col>
-        </Row>
+        {carregarTabelasImportacao()}
       </CardContent>
     </Col>
   );

@@ -1,3 +1,4 @@
+import { ImportacaoStatusEnum } from '../enum/importacao-status-enum';
 import { TipoAcervo } from '../enum/tipo-acervo';
 import { AcervoLinhaErroDTO } from './acervo-linha-erro-dto';
 import { AcervoLinhaRetornoSucessoDTO } from './acervo-linha-sucesso-dto';
@@ -9,4 +10,5 @@ export type ImportacaoArquivoRetornoDTO = {
   dataImportacao: string;
   erros: AcervoLinhaErroDTO[];
   sucesso: AcervoLinhaRetornoSucessoDTO[];
+  status: ImportacaoStatusEnum;
 };
