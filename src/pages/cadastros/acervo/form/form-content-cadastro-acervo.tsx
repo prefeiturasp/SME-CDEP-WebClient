@@ -215,7 +215,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <InputAno
                 tipoAcervo={fieldsConfig.tipo}
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Subtitulo])}
+                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Ano])}
               />
             );
             break;
