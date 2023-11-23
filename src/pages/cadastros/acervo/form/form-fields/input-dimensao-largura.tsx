@@ -1,8 +1,13 @@
+import React from 'react';
 import InputNumero from '~/components/lib/inputs/number';
 import { CDEP_INPUT_DIMENSAO_LARGURA } from '~/core/constants/ids/input';
+import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { formatarDuasCasasDecimais } from '~/core/utils/functions';
 
-const InputDimensaoLargura: React.FC = () => {
+type InputDimensaoLarguraProps = {
+  extra?: React.ReactNode;
+};
+const InputDimensaoLargura: React.FC<InputDimensaoLarguraProps> = ({ extra }) => {
   return (
     <InputNumero
       inputProps={{
@@ -11,8 +16,9 @@ const InputDimensaoLargura: React.FC = () => {
         placeholder: 'Dimensão largura (cm)',
       }}
       formItemProps={{
+        extra,
         label: 'Dimensão largura (cm)',
-        name: 'largura',
+        name: AcervoFieldName[FieldAcervoEnum.DimensaoLargura],
         getValueFromEvent: (e: React.ChangeEvent<HTMLInputElement>) =>
           formatarDuasCasasDecimais(e?.target?.value),
       }}

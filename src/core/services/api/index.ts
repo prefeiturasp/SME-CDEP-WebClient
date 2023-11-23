@@ -172,9 +172,13 @@ export const obterRegistro = async <T>(
     .finally(() => store.dispatch(setSpinning(false)));
 };
 
-export const alterarRegistro = async <T>(url: string, params: any): Promise<ApiResult<T>> => {
+export const alterarRegistro = async <T>(
+  url: string,
+  params?: any,
+  config?: AxiosRequestConfig,
+): Promise<ApiResult<T>> => {
   return api
-    .put(url, params)
+    .put(url, params, config)
     .then(tratarThen<T>)
     .catch(tratarCatch);
 };
@@ -202,6 +206,16 @@ export const deletarRegistro = async <T>(
     .then(tratarThen<T>)
     .catch(tratarCatch)
     .finally(() => store.dispatch(setSpinning(false)));
+};
+
+export const alterarRegistroParcial = async <T>(
+  url: string,
+  params?: any,
+): Promise<ApiResult<T>> => {
+  return api
+    .patch(url, params, config)
+    .then(tratarThen<T>)
+    .catch(tratarCatch);
 };
 
 export default api;

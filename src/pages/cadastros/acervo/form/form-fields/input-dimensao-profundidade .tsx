@@ -1,8 +1,13 @@
+import React from 'react';
 import InputNumero from '~/components/lib/inputs/number';
 import { CDEP_INPUT_DIMENSAO_PROFUNDIDADE } from '~/core/constants/ids/input';
+import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { formatarDuasCasasDecimais } from '~/core/utils/functions';
 
-const InputDimensaoProfundidade: React.FC = () => {
+type InputDimensaoProfundidadeProps = {
+  extra?: React.ReactNode;
+};
+const InputDimensaoProfundidade: React.FC<InputDimensaoProfundidadeProps> = ({ extra }) => {
   return (
     <InputNumero
       inputProps={{
@@ -11,8 +16,9 @@ const InputDimensaoProfundidade: React.FC = () => {
         placeholder: 'Dimensão profundidade (cm)',
       }}
       formItemProps={{
+        extra,
         label: 'Dimensão profundidade (cm)',
-        name: 'profundidade',
+        name: AcervoFieldName[FieldAcervoEnum.DimensaoProfundidade],
         getValueFromEvent: (e: React.ChangeEvent<HTMLInputElement>) =>
           formatarDuasCasasDecimais(e?.target?.value),
       }}

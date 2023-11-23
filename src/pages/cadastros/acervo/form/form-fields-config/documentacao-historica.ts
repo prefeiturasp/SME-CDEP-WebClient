@@ -3,70 +3,75 @@ import { FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 
 export const FieldsDocumentacaoHistorica: FieldAcervoProps[] = [
   {
-    fieldCervo: FieldAcervoEnum.Titulo,
+    fieldAcervo: FieldAcervoEnum.Titulo,
   },
   {
-    fieldCervo: FieldAcervoEnum.CodigoAntigoNovo,
-  },
-  {
-    fieldCervo: FieldAcervoEnum.Material,
+    fieldAcervo: FieldAcervoEnum.CodigoAntigo,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Idioma,
+    fieldAcervo: FieldAcervoEnum.CodigoNovo,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Autor,
-  },
-  {
-    fieldCervo: FieldAcervoEnum.Ano,
+    fieldAcervo: FieldAcervoEnum.Material,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.NumeroDePaginas,
+    fieldAcervo: FieldAcervoEnum.Idioma,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Volume,
+    fieldAcervo: FieldAcervoEnum.Autor,
+  },
+  {
+    fieldAcervo: FieldAcervoEnum.Ano,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Descricao,
-  },
-  {
-    fieldCervo: FieldAcervoEnum.TipoDeAnexo,
+    fieldAcervo: FieldAcervoEnum.NumeroDePaginas,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.DimensaoLargura,
+    fieldAcervo: FieldAcervoEnum.Volume,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.DimensaoAltura,
+    fieldAcervo: FieldAcervoEnum.Descricao,
+  },
+  {
+    fieldAcervo: FieldAcervoEnum.TipoDeAnexo,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.TamanhoArquivo,
+    fieldAcervo: FieldAcervoEnum.DimensaoLargura,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.AcessoDocumento,
+    fieldAcervo: FieldAcervoEnum.DimensaoAltura,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Localizacao,
+    fieldAcervo: FieldAcervoEnum.TamanhoArquivo,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.CopiaDigital,
+    fieldAcervo: FieldAcervoEnum.AcessoDocumento,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.EstadoConservacao,
+    fieldAcervo: FieldAcervoEnum.Localizacao,
     sm: 12,
   },
   {
-    fieldCervo: FieldAcervoEnum.Anexos,
+    fieldAcervo: FieldAcervoEnum.CopiaDigital,
+    sm: 12,
+  },
+  {
+    fieldAcervo: FieldAcervoEnum.EstadoConservacao,
+    sm: 12,
+  },
+  {
+    fieldAcervo: FieldAcervoEnum.Anexos,
   },
 ];

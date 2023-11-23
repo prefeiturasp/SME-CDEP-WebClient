@@ -6,6 +6,7 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormEditora } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_EDITORA } from '~/core/constants/ids/select';
+import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { obterEditoraResumido } from '~/core/services/editora-service';
 
 type SelectEditoraProps = {
@@ -44,7 +45,7 @@ const SelectEditora: React.FC<SelectEditoraProps> = ({ selectProps, formItemProp
     <Row wrap={false} align='middle'>
       <Form.Item
         label='Editora'
-        name='editoraId'
+        name={AcervoFieldName[FieldAcervoEnum.Editora]}
         style={{ width: '100%', marginRight: '8px' }}
         {...formItemProps}
       >

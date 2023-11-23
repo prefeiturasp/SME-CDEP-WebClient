@@ -1,7 +1,8 @@
 export { default as EditorDescricao } from './editor-descricao';
 export { default as InputAcessibilidade } from './input-acessibilidade';
 export { default as InputAno } from './input-ano';
-export { default as InputCodigoAntigoNovo } from './input-codigo-antigo-novo';
+export { default as InputCodigoAntigo } from './input-codigo-antigo';
+export { default as InputCodigoNovo } from './input-codigo-novo';
 export { default as InputCopia } from './input-copia';
 export { default as InputDataAcervo } from './input-data-acervo';
 export { default as InputDimensaoAltura } from './input-dimensao-altura';

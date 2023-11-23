@@ -3,6 +3,7 @@ import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useState } from 'react';
 import Select from '~/components/lib/inputs/select';
 import { CDEP_SELECT_CROMIA } from '~/core/constants/ids/select';
+import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { obterListaCromia } from '~/core/services/cromia-service';
 
@@ -44,7 +45,12 @@ const SelectCromia: React.FC<SelectCromiaProps> = ({ selectProps, formItemProps,
   }, []);
 
   return (
-    <Form.Item label='Cromia' name='cromiaId' rules={[{ required }]} {...formItemProps}>
+    <Form.Item
+      label='Cromia'
+      name={AcervoFieldName[FieldAcervoEnum.Cromia]}
+      rules={[{ required }]}
+      {...formItemProps}
+    >
       <Select
         showSearch
         allowClear

@@ -3,6 +3,7 @@ import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useState } from 'react';
 import Select from '~/components/lib/inputs/select';
 import { CDEP_SELECT_ESTADO_SUPORTE } from '~/core/constants/ids/select';
+import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoSuporte } from '~/core/enum/tipo-suporte';
 import { obterListaSuporte } from '~/core/services/suporte-service';
@@ -52,7 +53,12 @@ const SelectSuporte: React.FC<SelectSuporteProps> = ({
   }, []);
 
   return (
-    <Form.Item label='Suporte' name='suporteId' rules={[{ required: true }]} {...formItemProps}>
+    <Form.Item
+      label='Suporte'
+      name={AcervoFieldName[FieldAcervoEnum.Suporte]}
+      rules={[{ required: true }]}
+      {...formItemProps}
+    >
       <Select
         showSearch
         allowClear

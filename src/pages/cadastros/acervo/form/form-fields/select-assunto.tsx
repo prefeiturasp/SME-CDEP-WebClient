@@ -6,6 +6,7 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormAssunto } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_ASSUNTO } from '~/core/constants/ids/select';
+import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { obterAssuntoResumido } from '~/core/services/assunto-service';
 
@@ -60,7 +61,7 @@ const SelectAssunto: React.FC<SelectAutorProps> = ({ selectProps, formItemProps,
     <Row wrap={false} align='middle'>
       <Form.Item
         label='Assunto'
-        name='assuntosIds'
+        name={AcervoFieldName[FieldAcervoEnum.Assunto]}
         style={{ width: '100%', marginRight: '8px' }}
         rules={[{ required }]}
         {...formItemProps}
