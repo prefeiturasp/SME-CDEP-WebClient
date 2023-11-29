@@ -1,6 +1,6 @@
 import { Col, Row, Typography } from 'antd';
 import Pagination from 'antd/es/pagination';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
 import { pesquisarAcervos } from '~/core/services/acervo-service';
 import { FiltroConsultaAcervo } from './filtro-consulta-acervo';
@@ -13,9 +13,7 @@ export const ConsultaAcervo = () => {
 
   const [numeroRegistrosPagina, setNumeroRegistrosPagina] = useState(5);
   const [numeroRegistros, setNumeroRegistros] = useState(1);
-
-  const nenhumTipoAcervoSelecionado =
-    buscaTipoAcervoSelecionado === null || buscaTipoAcervoSelecionado === 0;
+  const [numeroPaginaSelecionada, setNumeroPaginaSelecionada] = useState(1);
 
   const obterPesquisaArcevo = async (pagina: number, quantidadePagina: number) => {
     if (buscaTextoLivre && buscaTextoLivre.length < 3) return;
@@ -31,28 +29,9 @@ export const ConsultaAcervo = () => {
       setNumeroRegistrosPagina(quantidadePagina);
       setNumeroRegistros(resposta?.dados?.totalRegistros);
       setDadosFiltro(resposta?.dados?.items);
+      setNumeroPaginaSelecionada(pagina);
     }
   };
-
-  const dadosFiltrado = useMemo(() => {
-    if (!buscaTextoLivre && nenhumTipoAcervoSelecionado) return dadosFiltro;
-
-    const filtroGeral = dadosFiltro?.filter((item: PesquisaAcervoDTO) => {
-      const { titulo, creditoAutoria, assunto, descricao, tipo } = item;
-
-      const textoLivreFiltro =
-        !buscaTextoLivre ||
-        (titulo + creditoAutoria + assunto + descricao)
-          .toLowerCase()
-          .includes(buscaTextoLivre.toLowerCase());
-
-      const tipoAcervoFiltro = nenhumTipoAcervoSelecionado || tipo === buscaTipoAcervoSelecionado;
-
-      return textoLivreFiltro && tipoAcervoFiltro;
-    });
-
-    return filtroGeral;
-  }, [buscaTextoLivre, buscaTipoAcervoSelecionado, dadosFiltro]);
 
   useEffect(() => {
     obterPesquisaArcevo(1, numeroRegistrosPagina);
@@ -71,11 +50,13 @@ export const ConsultaAcervo = () => {
           setBuscaTipoAcervo={setBuscaTipoAcervoSelecionado}
         />
       </Col>
-      <ListaCardsConsultaAcervo dadosGerais={dadosFiltrado} />
+      <ListaCardsConsultaAcervo dadosGerais={dadosFiltro} />
       <Row align='middle' justify='center'>
         <Pagination
           showSizeChanger
           hideOnSinglePage
+          defaultCurrent={1}
+          current={numeroPaginaSelecionada}
           total={numeroRegistros}
           locale={{ items_per_page: '' }}
           pageSize={numeroRegistrosPagina}
