@@ -114,6 +114,10 @@ const FormAcervo: React.FC<FormAcervoProps> = ({
     if (fieldsConfig) {
       let response = null;
 
+      if (valoresSalvar?.ano) {
+        valoresSalvar.ano = Number(valoresSalvar.ano);
+      }
+
       if (valoresSalvar?.altura) {
         valoresSalvar.altura = removerTudoQueNaoEhDigito(valoresSalvar.altura);
       } else {

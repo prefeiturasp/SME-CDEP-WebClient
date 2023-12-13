@@ -13,6 +13,10 @@ export const FieldsTridimensional: FieldAcervoProps[] = [
     fieldAcervo: FieldAcervoEnum.Procedencia,
   },
   {
+    fieldAcervo: FieldAcervoEnum.Ano,
+    sm: 12,
+  },
+  {
     fieldAcervo: FieldAcervoEnum.DataAcervo,
     sm: 12,
   },

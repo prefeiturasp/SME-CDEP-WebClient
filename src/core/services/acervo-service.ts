@@ -11,10 +11,12 @@ const pesquisarAcervos = (
   numeroRegistros: number,
   textoLivre?: string,
   tipoAcervo?: number | null,
+  anoInicial?: number,
+  anoFinal?: number,
 ): Promise<ApiResult<PesquisaAcervoDTO>> => {
   const url = `${URL_API_ACERVO}/pesquisar-acervos?numeroPagina=${numeroPagina}&numeroRegistros=${numeroRegistros}`;
   return obterRegistro(url, {
-    params: { textoLivre, tipoAcervo },
+    params: { textoLivre, tipoAcervo, anoInicial, anoFinal },
   });
 };
 

@@ -113,7 +113,7 @@ export const ListaCardsConsultaAcervo: React.FC<ListaCardsConsultaAcervoProps> =
                   )}
                   {item.assunto && <InfoAssuntoConsultaAcervo valor={item.assunto} />}
                   {item.descricao && <InfoDescricaoConsultaAcervo valor={item.descricao} />}
-                  {item.data && <InfoDataConsultaAcervo valor={item.data} />}
+                  {item.dataAcervo && <InfoDataConsultaAcervo valor={item.dataAcervo} />}
                 </Space>
               </Col>
               <Col style={{ display: 'flex', alignItems: 'end' }}>
