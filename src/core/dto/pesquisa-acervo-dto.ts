@@ -14,7 +14,7 @@ export type PesquisaAcervoDTO = {
   creditoAutoria: string;
   assunto: string;
   descricao: string;
-  data: string;
+  dataAcervo: string;
   tipoAcervoTag: TipoAcervoTag;
   enderecoImagem: string;
 } & BasePesquisaAcervoDTO;
