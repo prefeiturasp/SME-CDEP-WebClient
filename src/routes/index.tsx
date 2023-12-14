@@ -39,10 +39,11 @@ const RoutesConfig = () => {
 
   return (
     <BrowserRouter>
-      {autenticado ? (
-        <>
-          <Routes>
-            <Route path={ROUTES.CONSULTA_ACERVO} element={<ConsultaAcervo />} />
+      <Routes>
+        <Route path={ROUTES.CONSULTA_ACERVO} element={<ConsultaAcervo />} />
+
+        {autenticado ? (
+          <>
             <Route path={ROUTES.PRINCIPAL} element={principalPage}>
               <Route element={<Auth />}>
                 <Route path={ROUTES.PRINCIPAL} element={iniciallPage} />
@@ -89,20 +90,19 @@ const RoutesConfig = () => {
                 <Route path={ROUTES.LOGIN} element={<Navigate to={ROUTES.PRINCIPAL} />} />
               </Route>
             </Route>
-          </Routes>
-        </>
-      ) : (
-        <Routes>
-          <Route path='*' element={<Navigate to={ROUTES.LOGIN} />} />
-          <Route path={ROUTES.CONSULTA_ACERVO} element={<ConsultaAcervo />} />
-          <Route element={homePage}>
-            <Route path={ROUTES.LOGIN} element={loginPage} />
-            <Route path={ROUTES.CRIAR_CONTA} element={criarContaPage} />
-            <Route path={ROUTES.REDEFINIR_SENHA} element={redefinirSenhaPage} />
-            <Route path={ROUTES.REDEFINIR_SENHA_TOKEN} element={redefinirSenhaTokenPage} />
-          </Route>
-        </Routes>
-      )}
+          </>
+        ) : (
+          <>
+            <Route path='*' element={<Navigate to={ROUTES.LOGIN} />} />
+            <Route element={homePage}>
+              <Route path={ROUTES.LOGIN} element={loginPage} />
+              <Route path={ROUTES.CRIAR_CONTA} element={criarContaPage} />
+              <Route path={ROUTES.REDEFINIR_SENHA} element={redefinirSenhaPage} />
+              <Route path={ROUTES.REDEFINIR_SENHA_TOKEN} element={redefinirSenhaTokenPage} />
+            </Route>
+          </>
+        )}
+      </Routes>
     </BrowserRouter>
   );
 };

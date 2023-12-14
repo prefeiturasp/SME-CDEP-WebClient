@@ -1,63 +1,133 @@
-import { Button, Col, Empty, Image, List, Row, Space, Tag } from 'antd';
-import React from 'react';
+import { Button, Col, Empty, Image, List, Row, Tag, Typography } from 'antd';
+
+import { useWatch } from 'antd/es/form/Form';
+import useFormInstance from 'antd/es/form/hooks/useFormInstance';
+import { PaginationConfig } from 'antd/es/pagination';
+import React, { useEffect, useState } from 'react';
 import cdepLogo from '~/assets/cdep-logo-centralizado.svg';
-import InfoAssuntoConsultaAcervo from '~/components/cdep/text/consulta-acervo/assunto-consulta-acervo';
-import InfoCreditoAutorConsultaAcervo from '~/components/cdep/text/consulta-acervo/credito-autor-consulta-acervo';
-import InfoDataConsultaAcervo from '~/components/cdep/text/consulta-acervo/data-consulta-acervo';
-import InfoDescricaoConsultaAcervo from '~/components/cdep/text/consulta-acervo/descricao-consulta-acervo';
-import InfoTipoAcervoConsultaAcervo from '~/components/cdep/text/consulta-acervo/tipo-de-acervo-consulta-acervo';
-import InfoTituloConsultaAcervo from '~/components/cdep/text/consulta-acervo/titulo-consulta-acervo';
+import { FiltroTextoLivreTipoAcervoDTO } from '~/core/dto/filtro-texto-livre-tipo-acervo-dto';
 import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
 import { TipoAcervo, TipoAcervoDisplay } from '~/core/enum/tipo-acervo';
 import { TipoAcervoTag, TipoAcervoTagDisplay } from '~/core/enum/tipo-acervo-tag';
+import { pesquisarAcervosAreaPublica } from '~/core/services/acervo-service';
 import { Colors } from '~/core/styles/colors';
+import TextItemCardContentConsultaAcervo from '../components/text-content-card';
 
-type ListaCardsConsultaAcervoProps = {
-  dadosGerais: PesquisaAcervoDTO[];
+const tagAcervo = (tipo: TipoAcervo) => {
+  switch (tipo) {
+    case TipoAcervo.Bibliografico:
+      return TipoAcervoTagDisplay[TipoAcervoTag.Biblioteca];
+    case TipoAcervo.DocumentacaoHistorica:
+      return TipoAcervoTagDisplay[TipoAcervoTag.MemoriaDocumental];
+    case TipoAcervo.ArtesGraficas:
+    case TipoAcervo.Audiovisual:
+    case TipoAcervo.Fotografico:
+    case TipoAcervo.Tridimensional:
+      return TipoAcervoTagDisplay[TipoAcervoTag.MemoriaEducacaoMunicipal];
+  }
 };
 
-export const ListaCardsConsultaAcervo: React.FC<ListaCardsConsultaAcervoProps> = ({
-  dadosGerais,
-}) => {
-  const tagAcervo = (tipo: TipoAcervo) => {
-    switch (tipo) {
-      case TipoAcervo.Bibliografico:
-        return TipoAcervoTagDisplay[TipoAcervoTag.Biblioteca];
-      case TipoAcervo.DocumentacaoHistorica:
-        return TipoAcervoTagDisplay[TipoAcervoTag.MemoriaDocumental];
-      case TipoAcervo.ArtesGraficas:
-      case TipoAcervo.Audiovisual:
-      case TipoAcervo.Fotografico:
-      case TipoAcervo.Tridimensional:
-        return TipoAcervoTagDisplay[TipoAcervoTag.MemoriaEducacaoMunicipal];
-    }
-  };
+const tipoAcervoNome = (tipo: TipoAcervo) => {
+  switch (tipo) {
+    case TipoAcervo.Bibliografico:
+      return TipoAcervoDisplay[TipoAcervo.Bibliografico];
+    case TipoAcervo.DocumentacaoHistorica:
+      return TipoAcervoDisplay[TipoAcervo.DocumentacaoHistorica];
+    case TipoAcervo.ArtesGraficas:
+      return TipoAcervoDisplay[TipoAcervo.ArtesGraficas];
+    case TipoAcervo.Audiovisual:
+      return TipoAcervoDisplay[TipoAcervo.Audiovisual];
+    case TipoAcervo.Fotografico:
+      return TipoAcervoDisplay[TipoAcervo.Fotografico];
+    case TipoAcervo.Tridimensional:
+      return TipoAcervoDisplay[TipoAcervo.Tridimensional];
+  }
+};
 
-  const tipoAcervoNome = (tipo: TipoAcervo) => {
-    switch (tipo) {
-      case TipoAcervo.Bibliografico:
-        return TipoAcervoDisplay[TipoAcervo.Bibliografico];
-      case TipoAcervo.DocumentacaoHistorica:
-        return TipoAcervoDisplay[TipoAcervo.DocumentacaoHistorica];
-      case TipoAcervo.ArtesGraficas:
-        return TipoAcervoDisplay[TipoAcervo.ArtesGraficas];
-      case TipoAcervo.Audiovisual:
-        return TipoAcervoDisplay[TipoAcervo.Audiovisual];
-      case TipoAcervo.Fotografico:
-        return TipoAcervoDisplay[TipoAcervo.Fotografico];
-      case TipoAcervo.Tridimensional:
-        return TipoAcervoDisplay[TipoAcervo.Tridimensional];
-    }
-  };
+export const ListaCardsConsultaAcervo: React.FC = () => {
+  const form = useFormInstance();
+
+  const [loading, setLoading] = useState<boolean>(false);
+
+  const [filtro, setFiltro] = useState<FiltroTextoLivreTipoAcervoDTO>({
+    textoLivre: '',
+    anoFinal: '',
+    anoInicial: '',
+    tipoAcervo: undefined,
+  });
+
+  const [dataSource, setDataSource] = useState<PesquisaAcervoDTO[]>();
+
+  const [listParams, setListParams] = useState<PaginationConfig>({
+    current: 1,
+    pageSize: 5,
+    showSizeChanger: true,
+    hideOnSinglePage: true,
+    defaultCurrent: 1,
+    position: 'bottom',
+    align: 'center',
+    locale: { items_per_page: '' },
+    disabled: false,
+    pageSizeOptions: [5, 10, 20, 50, 100],
+  });
+
+  const tipoAcervo = useWatch('tipoAcervo', form);
+  const textoLivre = useWatch('textoLivre', form);
+  const anoInicial = useWatch('anoInicial', form);
+  const anoFinal = useWatch('anoFinal', form);
 
   const desabilitarCliqueDireitoImagem = (e: any) => {
     e.preventDefault();
   };
 
+  const carregarDados = (listParams: PaginationConfig, params: FiltroTextoLivreTipoAcervoDTO) => {
+    const numeroPagina = listParams?.current || 1;
+    const numeroRegistros = listParams?.pageSize || 5;
+
+    setLoading(true);
+    pesquisarAcervosAreaPublica(numeroPagina, numeroRegistros, params)
+      .then((response) => {
+        if (response.sucesso) {
+          setDataSource(response.dados.items);
+
+          setListParams({
+            ...listParams,
+            total: response.dados.totalRegistros,
+          });
+        } else {
+          setDataSource([]);
+        }
+      })
+      .finally(() => setLoading(false));
+  };
+
+  const onListChange = (current: number, pageSize: number) => {
+    const newListParams = {
+      ...listParams,
+      current,
+      pageSize,
+    };
+
+    const params: FiltroTextoLivreTipoAcervoDTO = form.getFieldsValue();
+
+    carregarDados(newListParams, params);
+  };
+
+  useEffect(() => {
+    carregarDados({ ...listParams, current: 1 }, filtro);
+  }, [filtro]);
+
+  useEffect(() => {
+    form.validateFields().then((values: FiltroTextoLivreTipoAcervoDTO) => {
+      setFiltro({ ...values });
+    });
+  }, [tipoAcervo, textoLivre, anoInicial, anoFinal]);
+
   return (
     <List
-      style={{ paddingBottom: 16 }}
-      dataSource={dadosGerais}
+      pagination={{ ...listParams, onChange: onListChange }}
+      dataSource={dataSource}
+      loading={loading}
       locale={{
         emptyText: (
           <Empty
@@ -67,60 +137,87 @@ export const ListaCardsConsultaAcervo: React.FC<ListaCardsConsultaAcervoProps> =
           />
         ),
       }}
+      style={{ padding: '25px 60px' }}
       renderItem={(item: PesquisaAcervoDTO, index) => {
         return (
-          <List style={{ margin: 16 }}>
-            <Row
-              key={index}
-              style={{
-                display: 'flex',
-                borderRadius: 4,
-                border: `1px solid #ccc`,
-                justifyContent: 'space-between',
-              }}
-            >
-              <Col style={{ display: 'flex', alignContent: 'center' }}>
+          <Row
+            key={index}
+            style={{
+              display: 'flex',
+              borderRadius: 4,
+              border: `1px solid #ccc`,
+              justifyContent: 'space-between',
+              marginBottom: '24px',
+            }}
+          >
+            <Col style={{ display: 'flex', alignContent: 'center' }}>
+              <Col>
                 <Image
                   alt='example'
                   preview={false}
                   style={{
-                    minWidth: 200,
                     minHeight: 200,
-                    maxWidth: 200,
-                    maxHeight: 200,
                     height: '100%',
+                    width: 200,
                   }}
                   src={item.enderecoImagem || cdepLogo}
                   onContextMenu={desabilitarCliqueDireitoImagem}
                 />
+              </Col>
+
+              <Col style={{ margin: '10px 15px 40px' }}>
+                <Row gutter={[6, 6]} style={{ display: 'grid' }} wrap>
+                  <TextItemCardContentConsultaAcervo
+                    label='Tipo de acervo: '
+                    description={tipoAcervoNome(item.tipo)}
+                  />
+
+                  <TextItemCardContentConsultaAcervo label='Título: ' description={item.titulo} />
+
+                  <TextItemCardContentConsultaAcervo
+                    label='Autoria/Crédito: '
+                    description={item.creditoAutoria}
+                  />
+
+                  <TextItemCardContentConsultaAcervo
+                    label='Assunto: '
+                    description={item.assunto}
+                    ellipsis
+                  />
+
+                  <TextItemCardContentConsultaAcervo
+                    label='Descrição: '
+                    description={item.descricao}
+                    ellipsis
+                  />
+                  <TextItemCardContentConsultaAcervo label='Data: ' description={item.dataAcervo} />
+                </Row>
+              </Col>
+
+              <Row
+                justify='start'
+                style={{ width: '100%', bottom: 6, left: 6, position: 'absolute' }}
+              >
                 <Tag
                   color={`${Colors.BACKGROUND_CONTENT}`}
                   style={{
-                    left: 6,
-                    bottom: 6,
                     borderRadius: 10,
-                    position: 'absolute',
-                    color: `${Colors.TEXT}`,
+                    color: Colors.TEXT,
                   }}
                 >
                   {tagAcervo(item.tipo)}
                 </Tag>
-                <Space direction='vertical' size={5} style={{ marginTop: 4 }}>
-                  {item.tipo && <InfoTipoAcervoConsultaAcervo valor={tipoAcervoNome(item.tipo)} />}
-                  {item.titulo && <InfoTituloConsultaAcervo valor={item.titulo} />}
-                  {item.creditoAutoria && (
-                    <InfoCreditoAutorConsultaAcervo valor={item.creditoAutoria} />
-                  )}
-                  {item.assunto && <InfoAssuntoConsultaAcervo valor={item.assunto} />}
-                  {item.descricao && <InfoDescricaoConsultaAcervo valor={item.descricao} />}
-                  {item.dataAcervo && <InfoDataConsultaAcervo valor={item.dataAcervo} />}
-                </Space>
-              </Col>
-              <Col style={{ display: 'flex', alignItems: 'end' }}>
-                <Button type='link'>Detalhes</Button>
-              </Col>
-            </Row>
-          </List>
+              </Row>
+
+              <Row justify='end' style={{ width: '100%', bottom: 6, position: 'absolute' }}>
+                <Button type='link'>
+                  <Typography.Text strong underline style={{ color: Colors.CDEP_PRIMARY }}>
+                    Detalhes
+                  </Typography.Text>
+                </Button>
+              </Row>
+            </Col>
+          </Row>
         );
       }}
     />
