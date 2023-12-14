@@ -1,23 +1,22 @@
 import { URL_API_ACERVO } from '../constants/urls-api';
+import { FiltroTextoLivreTipoAcervoDTO } from '../dto/filtro-texto-livre-tipo-acervo-dto';
 import { IdNomeDTO } from '../dto/id-nome-dto';
+import { PaginacaoResultadoDTO } from '../dto/paginacao-resultado-dto';
 import { PesquisaAcervoDTO } from '../dto/pesquisa-acervo-dto';
 import { ApiResult, obterRegistro } from './api';
 
 const obterTiposAcervo = (): Promise<ApiResult<IdNomeDTO[]>> =>
   obterRegistro(`${URL_API_ACERVO}/tipos`);
 
-const pesquisarAcervos = (
+const pesquisarAcervosAreaPublica = (
   numeroPagina: number,
   numeroRegistros: number,
-  textoLivre?: string,
-  tipoAcervo?: number | null,
-  anoInicial?: number,
-  anoFinal?: number,
-): Promise<ApiResult<PesquisaAcervoDTO>> => {
-  const url = `${URL_API_ACERVO}/pesquisar-acervos?numeroPagina=${numeroPagina}&numeroRegistros=${numeroRegistros}`;
-  return obterRegistro(url, {
-    params: { textoLivre, tipoAcervo, anoInicial, anoFinal },
+  params: FiltroTextoLivreTipoAcervoDTO,
+) => {
+  const url = `${URL_API_ACERVO}/pesquisar-acervos`;
+  return obterRegistro<PaginacaoResultadoDTO<PesquisaAcervoDTO[]>>(url, {
+    params: { numeroPagina, numeroRegistros, ...params },
   });
 };
 
-export { obterTiposAcervo, pesquisarAcervos };
+export { obterTiposAcervo, pesquisarAcervosAreaPublica };

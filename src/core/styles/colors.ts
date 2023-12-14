@@ -6,6 +6,7 @@ const Colors = {
   TEXT: '#42474A',
   SUCCESS: '#297805',
   INFORMATION: '#086397',
+  BACKGROUND_FILTRO_AREA_PUBLICA: '#C3596E',
 };
 
 const BoxShadow = {
