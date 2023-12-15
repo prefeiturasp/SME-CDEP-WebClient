@@ -1,25 +1,20 @@
-import { Input, InputProps, Typography } from 'antd';
+import { Form, Input, Typography } from 'antd';
 import React from 'react';
+import { CDEP_INPUT_BUSCA_TEXTO_LIVRE } from '~/core/constants/ids/input';
 
-interface InputTipoAcervoConsultaProps {
-  inputProps?: InputProps;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-}
-
-const InputTipoAcervoConsulta: React.FC<InputTipoAcervoConsultaProps> = ({
-  inputProps,
-  onChange,
-}) => {
-  return (
-    <>
-      <Typography style={{ color: '#fff', fontWeight: 'bold' }}>Busca por texto livre</Typography>
-      <Input
-        placeholder='Busque por título, assunto, autor ou crédito'
-        {...inputProps}
-        onChange={onChange}
-      />
-    </>
-  );
-};
+const InputTipoAcervoConsulta: React.FC = () => (
+  <Form.Item
+    label={
+      <Typography style={{ fontWeight: 500, color: '#292929' }}>Busca por texto livre</Typography>
+    }
+    name='textoLivre'
+  >
+    <Input
+      type='text'
+      placeholder='Busque por título, assunto, autor ou crédito'
+      id={CDEP_INPUT_BUSCA_TEXTO_LIVRE}
+    />
+  </Form.Item>
+);
 
 export default InputTipoAcervoConsulta;

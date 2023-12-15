@@ -11,6 +11,10 @@ export const mapearDtoCadastrosAcervo = (dados: FormDefaultCadastroAcervoDTO) =>
     }));
   }
 
+  if (dados?.ano) {
+    dados.ano = String(dados.ano);
+  }
+
   if (dados?.altura) {
     dados.altura = formatarDuasCasasDecimais(dados.altura);
   }

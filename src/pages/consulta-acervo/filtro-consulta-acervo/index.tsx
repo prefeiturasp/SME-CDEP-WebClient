@@ -1,76 +1,90 @@
-import { Card, Col, Row, Space } from 'antd';
-import { debounce } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import { Col, Row, Typography } from 'antd';
+import useFormInstance from 'antd/es/form/hooks/useFormInstance';
+import React from 'react';
 import InputTipoAcervoConsulta from '~/components/cdep/input/busca-acervo';
-import SelectTipoAcervoConsulta from '~/components/cdep/input/tipo-acervo-consulta';
+import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
 import LimparBuscaButton from '~/components/lib/limpar-busca-button';
+import { CDEP_INPUT_ANO_FINAL, CDEP_INPUT_ANO_INICIAL } from '~/core/constants/ids/input';
 import { Colors } from '~/core/styles/colors';
+import { InputAno } from '~/pages/cadastros/acervo/form/form-fields';
 
-type FiltroConsultaAcervoProps = {
-  buscaTextoLivre: string;
-  buscaTipoAcervo: number | null;
-  setBuscaTextoLivre: React.Dispatch<React.SetStateAction<string>>;
-  setBuscaTipoAcervo: React.Dispatch<React.SetStateAction<number | null>>;
-};
-
-export const FiltroConsultaAcervo: React.FC<FiltroConsultaAcervoProps> = ({
-  buscaTextoLivre,
-  buscaTipoAcervo,
-  setBuscaTextoLivre,
-  setBuscaTipoAcervo,
-}) => {
-  const [internalValue, setInternalValue] = useState<string>(buscaTextoLivre);
-
-  useEffect(() => {
-    setInternalValue(buscaTextoLivre);
-  }, [buscaTextoLivre]);
-
-  const handleDebounceChange = useCallback(debounce(setBuscaTextoLivre, 300), [setBuscaTextoLivre]);
-
-  const handleInternalValueChange = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setInternalValue(event.target.value);
-      handleDebounceChange(event.target.value);
-    },
-    [setInternalValue, handleDebounceChange],
-  );
+export const FiltroConsultaAcervo: React.FC = () => {
+  const form = useFormInstance();
 
   return (
-    <Card
+    <Col
+      xs={24}
       style={{
-        margin: '0 16px',
-        backgroundColor: `${Colors.CDEP_PRIMARY}`,
+        position: 'sticky',
+        top: 72,
+        zIndex: 1,
+        backgroundColor: Colors.BACKGROUND_FILTRO_AREA_PUBLICA,
+        padding: '20px 60px',
       }}
     >
-      <Row gutter={16} justify='space-between'>
-        <Col span={12}>
-          <InputTipoAcervoConsulta
-            inputProps={{ value: internalValue }}
-            onChange={handleInternalValueChange}
+      <Row gutter={16}>
+        <Col xs={24}>
+          <Typography style={{ fontSize: 24, fontWeight: 'bold', color: '#292929' }}>
+            Faça sua busca
+          </Typography>
+        </Col>
+
+        <Col xs={24} sm={12}>
+          <InputTipoAcervoConsulta />
+        </Col>
+
+        <Col xs={24} sm={12}>
+          <SelectTipoAcervo
+            formItemProps={{
+              label: (
+                <Typography style={{ fontWeight: 500, color: '#292929' }}>
+                  Busca por tipos de acervos
+                </Typography>
+              ),
+            }}
           />
         </Col>
-        <Col span={12}>
-          <SelectTipoAcervoConsulta
-            selectProps={{
-              value: buscaTipoAcervo || undefined,
-              onClear: () => setBuscaTipoAcervo(null),
+
+        <Col xs={24} md={12} lg={6}>
+          <InputAno
+            formItemProps={{
+              rules: [{ required: false }],
+              name: 'anoInicial',
+              label: (
+                <Typography style={{ fontWeight: 500, color: '#292929' }}>Ano inicial</Typography>
+              ),
             }}
-            onSelect={(value) => setBuscaTipoAcervo(value)}
+            inputItemProps={{ placeholder: 'Ano inicial', id: CDEP_INPUT_ANO_INICIAL }}
+          />
+        </Col>
+
+        <Col xs={24} md={12} lg={6}>
+          <InputAno
+            formItemProps={{
+              rules: [{ required: false }],
+              name: 'anoFinal',
+              label: (
+                <Typography style={{ fontWeight: 500, color: '#292929' }}>Ano final</Typography>
+              ),
+            }}
+            inputItemProps={{ placeholder: 'Ano final', id: CDEP_INPUT_ANO_FINAL }}
           />
         </Col>
       </Row>
-      <Row justify='end' style={{ marginTop: 16 }}>
-        <Space size={16}>
-          <LimparBuscaButton
-            buttonProps={{
-              onClick: () => {
-                setBuscaTextoLivre('');
-                setBuscaTipoAcervo(null);
-              },
-            }}
-          />
-        </Space>
+
+      <Row>
+        <Col xs={24}>
+          <Row justify='end'>
+            <LimparBuscaButton
+              buttonProps={{
+                onClick: () => {
+                  form.resetFields();
+                },
+              }}
+            />
+          </Row>
+        </Col>
       </Row>
-    </Card>
+    </Col>
   );
 };
