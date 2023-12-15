@@ -42,16 +42,19 @@ const Header: React.FC<HeaderProps> = ({ logo, style = {} }) => {
             }}
           />
         )}
-        <Link to={ROUTES.PRINCIPAL}>
-          <Button
-            size='small'
-            type='text'
-            icon={<LoginOutlined size={18} />}
-            style={{ display: 'flex', alignItems: 'center' }}
-          >
-            Login
-          </Button>
-        </Link>
+
+        {!autenticado && (
+          <Link to={ROUTES.PRINCIPAL}>
+            <Button
+              size='small'
+              type='text'
+              icon={<LoginOutlined size={18} />}
+              style={{ display: 'flex', alignItems: 'center' }}
+            >
+              Login
+            </Button>
+          </Link>
+        )}
       </Row>
     </Layout.Header>
   );
