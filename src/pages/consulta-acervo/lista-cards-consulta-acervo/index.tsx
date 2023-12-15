@@ -150,7 +150,7 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
               marginBottom: '24px',
             }}
           >
-            <Col style={{ display: 'flex', alignContent: 'center' }}>
+            <Col style={{ display: 'flex', alignContent: 'center', width: '100%' }}>
               <Col>
                 <Image
                   alt='example'
@@ -190,6 +190,9 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                     description={item.descricao}
                     ellipsis
                   />
+
+                  <TextItemCardContentConsultaAcervo label='Ano: ' description={item.ano} />
+
                   <TextItemCardContentConsultaAcervo label='Data: ' description={item.dataAcervo} />
                 </Row>
               </Col>

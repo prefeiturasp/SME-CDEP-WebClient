@@ -29,23 +29,11 @@ export const FiltroConsultaAcervo: React.FC = () => {
           </Typography>
         </Col>
 
-        <Col xs={24} sm={12}>
+        <Col xs={24} md={8}>
           <InputTipoAcervoConsulta />
         </Col>
 
-        <Col xs={24} sm={12}>
-          <SelectTipoAcervo
-            formItemProps={{
-              label: (
-                <Typography style={{ fontWeight: 500, color: '#292929' }}>
-                  Busca por tipos de acervos
-                </Typography>
-              ),
-            }}
-          />
-        </Col>
-
-        <Col xs={24} md={12} lg={6}>
+        <Col xs={24} sm={6} md={4}>
           <InputAno
             formItemProps={{
               rules: [{ required: false }],
@@ -58,7 +46,7 @@ export const FiltroConsultaAcervo: React.FC = () => {
           />
         </Col>
 
-        <Col xs={24} md={12} lg={6}>
+        <Col xs={24} sm={6} md={4}>
           <InputAno
             formItemProps={{
               rules: [{ required: false }],
@@ -68,6 +56,18 @@ export const FiltroConsultaAcervo: React.FC = () => {
               ),
             }}
             inputItemProps={{ placeholder: 'Ano final', id: CDEP_INPUT_ANO_FINAL }}
+          />
+        </Col>
+
+        <Col xs={24} sm={12} md={8}>
+          <SelectTipoAcervo
+            formItemProps={{
+              label: (
+                <Typography style={{ fontWeight: 500, color: '#292929' }}>
+                  Busca por tipos de acervos
+                </Typography>
+              ),
+            }}
           />
         </Col>
       </Row>
