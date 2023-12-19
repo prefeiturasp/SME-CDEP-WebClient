@@ -1,4 +1,4 @@
-import { Col, Row, Typography } from 'antd';
+import { Button, Col, Row, Typography } from 'antd';
 import useFormInstance from 'antd/es/form/hooks/useFormInstance';
 import React from 'react';
 import InputTipoAcervoConsulta from '~/components/cdep/input/busca-acervo';
@@ -8,7 +8,10 @@ import { CDEP_INPUT_ANO_FINAL, CDEP_INPUT_ANO_INICIAL } from '~/core/constants/i
 import { Colors } from '~/core/styles/colors';
 import { InputAno } from '~/pages/cadastros/acervo/form/form-fields';
 
-export const FiltroConsultaAcervo: React.FC = () => {
+type FiltroConsultaAcervoProps = {
+  onClickBuscar: () => void;
+};
+export const FiltroConsultaAcervo: React.FC<FiltroConsultaAcervoProps> = ({ onClickBuscar }) => {
   const form = useFormInstance();
 
   return (
@@ -74,14 +77,27 @@ export const FiltroConsultaAcervo: React.FC = () => {
 
       <Row>
         <Col xs={24}>
-          <Row justify='end'>
-            <LimparBuscaButton
-              buttonProps={{
-                onClick: () => {
-                  form.resetFields();
-                },
-              }}
-            />
+          <Row justify='end' gutter={16}>
+            <Col>
+              <LimparBuscaButton
+                buttonProps={{
+                  onClick: () => {
+                    form.resetFields();
+                    onClickBuscar();
+                  },
+                }}
+              />
+            </Col>
+            <Col>
+              <Button
+                style={{ backgroundColor: '#8F2D40', color: 'white' }}
+                onClick={() => {
+                  onClickBuscar();
+                }}
+              >
+                Buscar
+              </Button>
+            </Col>
           </Row>
         </Col>
       </Row>
