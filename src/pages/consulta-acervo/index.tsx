@@ -2,7 +2,6 @@ import { Form } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import cdepLogoHorizontal from '~/assets/cdep-logo-horizontal.svg';
 import Header from '~/components/lib/header';
-import { FiltroConsultaAcervo } from './filtro-consulta-acervo';
 import { ListaCardsConsultaAcervo } from './lista-cards-consulta-acervo';
 
 export const ConsultaAcervo = () => {
@@ -22,7 +21,6 @@ export const ConsultaAcervo = () => {
         autoComplete='off'
         initialValues={{ anoInicial: '', anoFinal: '' }}
       >
-        <FiltroConsultaAcervo />
         <ListaCardsConsultaAcervo />
       </Form>
     </>

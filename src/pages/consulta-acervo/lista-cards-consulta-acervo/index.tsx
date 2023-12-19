@@ -3,7 +3,7 @@ import { Button, Col, Empty, Image, List, Row, Tag, Typography } from 'antd';
 import { useWatch } from 'antd/es/form/Form';
 import useFormInstance from 'antd/es/form/hooks/useFormInstance';
 import { PaginationConfig } from 'antd/es/pagination';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import cdepLogo from '~/assets/cdep-logo-centralizado.svg';
 import { FiltroTextoLivreTipoAcervoDTO } from '~/core/dto/filtro-texto-livre-tipo-acervo-dto';
 import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
@@ -12,6 +12,7 @@ import { TipoAcervoTag, TipoAcervoTagDisplay } from '~/core/enum/tipo-acervo-tag
 import { pesquisarAcervosAreaPublica } from '~/core/services/acervo-service';
 import { Colors } from '~/core/styles/colors';
 import TextItemCardContentConsultaAcervo from '../components/text-content-card';
+import { FiltroConsultaAcervo } from '../filtro-consulta-acervo';
 
 const tagAcervo = (tipo: TipoAcervo) => {
   switch (tipo) {
@@ -113,116 +114,121 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
     carregarDados(newListParams, params);
   };
 
-  useEffect(() => {
-    carregarDados({ ...listParams, current: 1 }, filtro);
-  }, [filtro]);
-
-  useEffect(() => {
+  const submit = () => {
     form.validateFields().then((values: FiltroTextoLivreTipoAcervoDTO) => {
-      setFiltro({ ...values });
+      const filtroConsulta = { ...values };
+      setFiltro(filtroConsulta);
+      carregarDados({ ...listParams, current: 1 }, filtroConsulta);
     });
-  }, [tipoAcervo, textoLivre, anoInicial, anoFinal]);
+  };
 
   return (
-    <List
-      pagination={{ ...listParams, onChange: onListChange }}
-      dataSource={dataSource}
-      loading={loading}
-      locale={{
-        emptyText: (
-          <Empty
-            description='Sem dados'
-            className='ant-empty-small'
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-          />
-        ),
-      }}
-      style={{ padding: '25px 60px' }}
-      renderItem={(item: PesquisaAcervoDTO, index) => {
-        return (
-          <Row
-            key={index}
-            style={{
-              display: 'flex',
-              borderRadius: 4,
-              border: `1px solid #ccc`,
-              justifyContent: 'space-between',
-              marginBottom: '24px',
-            }}
-          >
-            <Col style={{ display: 'flex', alignContent: 'center', width: '100%' }}>
-              <Col>
-                <Image
-                  alt='example'
-                  preview={false}
-                  style={{
-                    minHeight: 200,
-                    height: '100%',
-                    width: 200,
-                  }}
-                  src={item.enderecoImagem || cdepLogo}
-                  onContextMenu={desabilitarCliqueDireitoImagem}
-                />
-              </Col>
+    <>
+      <FiltroConsultaAcervo onClickBuscar={submit} />
 
-              <Col style={{ margin: '10px 15px 40px' }}>
-                <Row gutter={[6, 6]} style={{ display: 'grid' }} wrap>
-                  <TextItemCardContentConsultaAcervo
-                    label='Tipo de acervo: '
-                    description={tipoAcervoNome(item.tipo)}
+      <List
+        pagination={{ ...listParams, onChange: onListChange }}
+        dataSource={dataSource}
+        loading={loading}
+        locale={{
+          emptyText: (
+            <Empty
+              description='Sem dados'
+              className='ant-empty-small'
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            />
+          ),
+        }}
+        style={{ padding: '25px 60px' }}
+        renderItem={(item: PesquisaAcervoDTO, index) => {
+          return (
+            <Row
+              key={index}
+              style={{
+                display: 'flex',
+                borderRadius: 4,
+                border: `1px solid #ccc`,
+                justifyContent: 'space-between',
+                marginBottom: '24px',
+              }}
+            >
+              <Col style={{ display: 'flex', alignContent: 'center', width: '100%' }}>
+                <Col>
+                  <Image
+                    alt='example'
+                    preview={false}
+                    style={{
+                      minHeight: 200,
+                      height: '100%',
+                      width: 200,
+                    }}
+                    src={item.enderecoImagem || cdepLogo}
+                    onContextMenu={desabilitarCliqueDireitoImagem}
                   />
+                </Col>
 
-                  <TextItemCardContentConsultaAcervo label='Título: ' description={item.titulo} />
+                <Col style={{ margin: '10px 15px 40px' }}>
+                  <Row gutter={[6, 6]} style={{ display: 'grid' }} wrap>
+                    <TextItemCardContentConsultaAcervo
+                      label='Tipo de acervo: '
+                      description={tipoAcervoNome(item.tipo)}
+                    />
 
-                  <TextItemCardContentConsultaAcervo
-                    label='Autoria/Crédito: '
-                    description={item.creditoAutoria}
-                  />
+                    <TextItemCardContentConsultaAcervo label='Título: ' description={item.titulo} />
 
-                  <TextItemCardContentConsultaAcervo
-                    label='Assunto: '
-                    description={item.assunto}
-                    ellipsis
-                  />
+                    <TextItemCardContentConsultaAcervo
+                      label='Autoria/Crédito: '
+                      description={item.creditoAutoria}
+                    />
 
-                  <TextItemCardContentConsultaAcervo
-                    label='Descrição: '
-                    description={item.descricao}
-                    ellipsis
-                  />
+                    <TextItemCardContentConsultaAcervo
+                      label='Assunto: '
+                      description={item.assunto}
+                      ellipsis
+                    />
 
-                  <TextItemCardContentConsultaAcervo label='Ano: ' description={item.ano} />
+                    <TextItemCardContentConsultaAcervo
+                      label='Descrição: '
+                      description={item.descricao}
+                      ellipsis
+                    />
 
-                  <TextItemCardContentConsultaAcervo label='Data: ' description={item.dataAcervo} />
+                    <TextItemCardContentConsultaAcervo label='Ano: ' description={item.ano} />
+
+                    <TextItemCardContentConsultaAcervo
+                      label='Data: '
+                      description={item.dataAcervo}
+                    />
+                  </Row>
+                </Col>
+
+                <Row
+                  justify='start'
+                  style={{ width: '100%', bottom: 6, left: 6, position: 'absolute' }}
+                >
+                  <Tag
+                    color={`${Colors.BACKGROUND_CONTENT}`}
+                    style={{
+                      borderRadius: 10,
+                      color: Colors.TEXT,
+                    }}
+                  >
+                    {tagAcervo(item.tipo)}
+                  </Tag>
+                </Row>
+
+                <Row justify='end' style={{ width: '100%', bottom: 6, position: 'absolute' }}>
+                  <Button type='link'>
+                    <Typography.Text strong underline style={{ color: Colors.CDEP_PRIMARY }}>
+                      Detalhes
+                    </Typography.Text>
+                  </Button>
                 </Row>
               </Col>
-
-              <Row
-                justify='start'
-                style={{ width: '100%', bottom: 6, left: 6, position: 'absolute' }}
-              >
-                <Tag
-                  color={`${Colors.BACKGROUND_CONTENT}`}
-                  style={{
-                    borderRadius: 10,
-                    color: Colors.TEXT,
-                  }}
-                >
-                  {tagAcervo(item.tipo)}
-                </Tag>
-              </Row>
-
-              <Row justify='end' style={{ width: '100%', bottom: 6, position: 'absolute' }}>
-                <Button type='link'>
-                  <Typography.Text strong underline style={{ color: Colors.CDEP_PRIMARY }}>
-                    Detalhes
-                  </Typography.Text>
-                </Button>
-              </Row>
-            </Col>
-          </Row>
-        );
-      }}
-    />
+            </Row>
+          );
+        }}
+      />
+    </>
   );
 };
