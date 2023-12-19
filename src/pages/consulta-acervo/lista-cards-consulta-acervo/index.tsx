@@ -1,6 +1,5 @@
 import { Button, Col, Empty, Image, List, Row, Tag, Typography } from 'antd';
 
-import { useWatch } from 'antd/es/form/Form';
 import useFormInstance from 'antd/es/form/hooks/useFormInstance';
 import { PaginationConfig } from 'antd/es/pagination';
 import React, { useState } from 'react';
@@ -50,13 +49,6 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
 
   const [loading, setLoading] = useState<boolean>(false);
 
-  const [filtro, setFiltro] = useState<FiltroTextoLivreTipoAcervoDTO>({
-    textoLivre: '',
-    anoFinal: '',
-    anoInicial: '',
-    tipoAcervo: undefined,
-  });
-
   const [dataSource, setDataSource] = useState<PesquisaAcervoDTO[]>();
 
   const [listParams, setListParams] = useState<PaginationConfig>({
@@ -71,11 +63,6 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
     disabled: false,
     pageSizeOptions: [5, 10, 20, 50, 100],
   });
-
-  const tipoAcervo = useWatch('tipoAcervo', form);
-  const textoLivre = useWatch('textoLivre', form);
-  const anoInicial = useWatch('anoInicial', form);
-  const anoFinal = useWatch('anoFinal', form);
 
   const desabilitarCliqueDireitoImagem = (e: any) => {
     e.preventDefault();
@@ -117,7 +104,6 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
   const submit = () => {
     form.validateFields().then((values: FiltroTextoLivreTipoAcervoDTO) => {
       const filtroConsulta = { ...values };
-      setFiltro(filtroConsulta);
       carregarDados({ ...listParams, current: 1 }, filtroConsulta);
     });
   };
