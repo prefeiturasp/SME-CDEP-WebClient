@@ -12,7 +12,7 @@ import { ConsultaAcervoContext } from '../provider';
 export const FiltroConsultaAcervo: React.FC = () => {
   const form = useFormInstance();
 
-  const { onClickBuscar } = useContext(ConsultaAcervoContext);
+  const { onClickBuscar, limparDados } = useContext(ConsultaAcervoContext);
 
   return (
     <Col
@@ -82,8 +82,7 @@ export const FiltroConsultaAcervo: React.FC = () => {
               <LimparBuscaButton
                 buttonProps={{
                   onClick: () => {
-                    form.resetFields();
-                    onClickBuscar(form);
+                    limparDados(form);
                   },
                 }}
               />
