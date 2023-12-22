@@ -6,17 +6,18 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormAutor } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_AUTOR } from '~/core/constants/ids/select';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoCreditoAutoria } from '~/core/enum/tipo-credito-autoria';
 import { obterCreditoAutorResumido } from '~/core/services/credito-autor-service';
+
+const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Autor];
 
 type SelectAutorProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
   tipoAcervo: TipoAcervo;
 };
-
 const SelectAutor: React.FC<SelectAutorProps> = ({ selectProps, formItemProps, tipoAcervo }) => {
   const [required, setRequired] = useState<boolean>(false);
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
@@ -58,8 +59,8 @@ const SelectAutor: React.FC<SelectAutorProps> = ({ selectProps, formItemProps, t
   return (
     <Row wrap={false} align='middle'>
       <Form.Item
-        label='Autor'
-        name={AcervoFieldName[FieldAcervoEnum.Autor]}
+        label={fieldProps.label}
+        name={fieldProps.name}
         style={{ width: '100%', marginRight: '8px' }}
         rules={[{ required }]}
         {...formItemProps}
@@ -71,7 +72,7 @@ const SelectAutor: React.FC<SelectAutorProps> = ({ selectProps, formItemProps, t
           id={CDEP_SELECT_AUTOR}
           {...selectProps}
           options={options}
-          placeholder='Autor'
+          placeholder={fieldProps.label}
         />
       </Form.Item>
       <Button

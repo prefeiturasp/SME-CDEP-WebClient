@@ -1,14 +1,16 @@
 import { Form } from 'antd';
 import React from 'react';
 import JoditEditorSME from '~/components/lib/inputs/editor/index.tsx';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { PropsByFieldAcervoEnum, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+
+const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Descricao];
 
 type EditorDescricaoProps = {
   extra?: React.ReactNode;
 };
 const EditorDescricao: React.FC<EditorDescricaoProps> = ({ extra }) => {
   const config = {
-    placeholder: 'Descrição',
+    placeholder: fieldProps.label,
   };
   return (
     <Form.Item shouldUpdate>
@@ -17,8 +19,8 @@ const EditorDescricao: React.FC<EditorDescricaoProps> = ({ extra }) => {
 
         return (
           <Form.Item
-            name={AcervoFieldName[FieldAcervoEnum.Descricao]}
-            label='Descrição'
+            name={fieldProps.name}
+            label={fieldProps.label}
             rules={[{ required: true }]}
             extra={extra}
           >

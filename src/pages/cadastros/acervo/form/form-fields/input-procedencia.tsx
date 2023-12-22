@@ -1,8 +1,10 @@
 import { Form, Input } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { CDEP_INPUT_PROCEDENCIA } from '~/core/constants/ids/input';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
+
+const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Procedencia];
 
 type InputProcedenciaProps = {
   tipoAcervo?: TipoAcervo;
@@ -28,12 +30,17 @@ const InputProcedencia: React.FC<InputProcedenciaProps> = ({ tipoAcervo, extra }
 
   return (
     <Form.Item
-      label='Procedência'
-      name={AcervoFieldName[FieldAcervoEnum.Procedencia]}
+      label={fieldProps.label}
+      name={fieldProps.name}
       rules={[{ required, whitespace: true }]}
       extra={extra}
     >
-      <Input type='text' placeholder='Procedência' maxLength={200} id={CDEP_INPUT_PROCEDENCIA} />
+      <Input
+        type='text'
+        placeholder={fieldProps.label}
+        maxLength={200}
+        id={CDEP_INPUT_PROCEDENCIA}
+      />
     </Form.Item>
   );
 };

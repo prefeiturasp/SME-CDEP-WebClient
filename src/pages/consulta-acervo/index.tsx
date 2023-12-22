@@ -1,9 +1,10 @@
 import { Form } from 'antd';
 import { useForm } from 'antd/es/form/Form';
+import { Outlet } from 'react-router-dom';
 import cdepLogoHorizontal from '~/assets/cdep-logo-horizontal.svg';
 import Header from '~/components/lib/header';
 import { FiltroConsultaAcervo } from './filtro-consulta-acervo';
-import { ListaCardsConsultaAcervo } from './lista-cards-consulta-acervo';
+import ConsultaAcervoContextProvider from './provider';
 
 export const ConsultaAcervo = () => {
   const [form] = useForm();
@@ -22,8 +23,10 @@ export const ConsultaAcervo = () => {
         autoComplete='off'
         initialValues={{ anoInicial: '', anoFinal: '' }}
       >
-        <FiltroConsultaAcervo />
-        <ListaCardsConsultaAcervo />
+        <ConsultaAcervoContextProvider>
+          <FiltroConsultaAcervo />
+          <Outlet />
+        </ConsultaAcervoContextProvider>
       </Form>
     </>
   );

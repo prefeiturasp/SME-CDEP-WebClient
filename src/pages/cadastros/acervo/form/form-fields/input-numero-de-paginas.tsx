@@ -1,14 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import InputNumero from '~/components/lib/inputs/number';
 import { CDEP_INPUT_NUMERO_DE_PAGINAS } from '~/core/constants/ids/input';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
+
+const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.NumeroDePaginas];
 
 type InputNumeroDePaginasProps = {
   tipoAcervo: TipoAcervo;
   extra?: React.ReactNode;
 };
-
 const InputNumeroDePaginas: React.FC<InputNumeroDePaginasProps> = ({ tipoAcervo, extra }) => {
   const [required, setRequired] = useState<boolean>(false);
 
@@ -32,11 +33,11 @@ const InputNumeroDePaginas: React.FC<InputNumeroDePaginasProps> = ({ tipoAcervo,
       inputProps={{
         id: CDEP_INPUT_NUMERO_DE_PAGINAS,
         maxLength: 4,
-        placeholder: 'Número de páginas',
+        placeholder: fieldProps.label,
       }}
       formItemProps={{
-        label: 'Número de páginas',
-        name: AcervoFieldName[FieldAcervoEnum.NumeroDePaginas],
+        label: fieldProps.label,
+        name: fieldProps.name,
         rules: [{ required }],
         extra,
       }}

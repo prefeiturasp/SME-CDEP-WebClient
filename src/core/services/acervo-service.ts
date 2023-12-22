@@ -1,8 +1,10 @@
 import { URL_API_ACERVO } from '../constants/urls-api';
 import { FiltroTextoLivreTipoAcervoDTO } from '../dto/filtro-texto-livre-tipo-acervo-dto';
+import { ConsultaAcervoDetalhesDTO } from '../dto/form-cadastro-detalhes';
 import { IdNomeDTO } from '../dto/id-nome-dto';
 import { PaginacaoResultadoDTO } from '../dto/paginacao-resultado-dto';
 import { PesquisaAcervoDTO } from '../dto/pesquisa-acervo-dto';
+import { TipoAcervo } from '../enum/tipo-acervo';
 import { ApiResult, obterRegistro } from './api';
 
 const obterTiposAcervo = (): Promise<ApiResult<IdNomeDTO[]>> =>
@@ -19,4 +21,15 @@ const pesquisarAcervosAreaPublica = (
   });
 };
 
-export { obterTiposAcervo, pesquisarAcervosAreaPublica };
+const obterDetalhamentoPorTipoAcervoECodigoAreaPublica = (
+  codigo: ConsultaAcervoDetalhesDTO['codigo'] | ConsultaAcervoDetalhesDTO['codigoNovo'],
+  tipo: TipoAcervo,
+) =>
+  obterRegistro<ConsultaAcervoDetalhesDTO>(`${URL_API_ACERVO}/detalhar-acervo`, {
+    params: { codigo, tipo },
+  });
+export {
+  obterDetalhamentoPorTipoAcervoECodigoAreaPublica,
+  obterTiposAcervo,
+  pesquisarAcervosAreaPublica,
+};

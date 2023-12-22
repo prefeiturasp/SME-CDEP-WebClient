@@ -31,7 +31,7 @@ const Header: React.FC<HeaderProps> = ({ logo, style = {} }) => {
 
   return (
     <Layout.Header style={{ ...contentStyle, ...style }}>
-      <Link to={ROUTES.PRINCIPAL}>
+      <Link to={autenticado ? ROUTES.PRINCIPAL : ROUTES.LOGIN}>
         {logo || <img style={{ height: '75px' }} src={cdepLogo} alt='CDEP LOGO' />}
       </Link>
       <Row justify='end' style={{ width: '100%' }}>
@@ -42,16 +42,19 @@ const Header: React.FC<HeaderProps> = ({ logo, style = {} }) => {
             }}
           />
         )}
-        <Link to={ROUTES.PRINCIPAL}>
-          <Button
-            size='small'
-            type='text'
-            icon={<LoginOutlined size={18} />}
-            style={{ display: 'flex', alignItems: 'center' }}
-          >
-            Login
-          </Button>
-        </Link>
+
+        {!autenticado && (
+          <Link to={ROUTES.LOGIN}>
+            <Button
+              size='small'
+              type='text'
+              icon={<LoginOutlined size={18} />}
+              style={{ display: 'flex', alignItems: 'center' }}
+            >
+              Login
+            </Button>
+          </Link>
+        )}
       </Row>
     </Layout.Header>
   );

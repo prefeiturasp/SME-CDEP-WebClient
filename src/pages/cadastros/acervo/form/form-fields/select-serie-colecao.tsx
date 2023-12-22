@@ -6,14 +6,15 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormSerieColecao } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_SERIE_COLECAO } from '~/core/constants/ids/select';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { obterSerieColecaoResumido } from '~/core/services/serie-colecao-service';
+
+const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.SerieColecao];
 
 type SelectSerieColecaoProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
 };
-
 const SelectSerieColecao: React.FC<SelectSerieColecaoProps> = ({ selectProps, formItemProps }) => {
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
 
@@ -45,8 +46,8 @@ const SelectSerieColecao: React.FC<SelectSerieColecaoProps> = ({ selectProps, fo
   return (
     <Row wrap={false} align='middle'>
       <Form.Item
-        label='Série/Coleção'
-        name={AcervoFieldName[FieldAcervoEnum.SerieColecao]}
+        label={fieldProps.label}
+        name={fieldProps.name}
         style={{ width: '100%', marginRight: '8px' }}
         {...formItemProps}
       >
@@ -56,7 +57,7 @@ const SelectSerieColecao: React.FC<SelectSerieColecaoProps> = ({ selectProps, fo
           id={CDEP_SELECT_SERIE_COLECAO}
           {...selectProps}
           options={options}
-          placeholder='Série/Coleção'
+          placeholder={fieldProps.label}
         />
       </Form.Item>
       <Button

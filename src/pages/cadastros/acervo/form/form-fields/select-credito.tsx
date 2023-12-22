@@ -6,10 +6,12 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormCredito } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_CREDITO } from '~/core/constants/ids/select';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoCreditoAutoria } from '~/core/enum/tipo-credito-autoria';
 import { obterCreditoAutorResumido } from '~/core/services/credito-autor-service';
+
+const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Credito];
 
 type SelectCreditoProps = {
   selectProps?: SelectProps;
@@ -62,8 +64,8 @@ const SelectCredito: React.FC<SelectCreditoProps> = ({
   return (
     <Row wrap={false} align='middle'>
       <Form.Item
-        label='Crédito'
-        name={AcervoFieldName[FieldAcervoEnum.Credito]}
+        label={fieldProps.label}
+        name={fieldProps.name}
         rules={[{ required }]}
         style={{ width: '100%', marginRight: '8px' }}
         {...formItemProps}
@@ -75,7 +77,7 @@ const SelectCredito: React.FC<SelectCreditoProps> = ({
           id={CDEP_SELECT_CREDITO}
           {...selectProps}
           options={options}
-          placeholder='Crédito'
+          placeholder={fieldProps.label}
         />
       </Form.Item>
       <Button

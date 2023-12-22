@@ -6,6 +6,7 @@ import { ROUTES } from '~/core/enum/routes';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import PagNotFound from '~/pages/404';
 import FormAcervo from '~/pages/cadastros/acervo/form';
+import ImportarAcervo from '~/pages/cadastros/acervo/importar-acervo';
 import ListAcervo from '~/pages/cadastros/acervo/list';
 import Assunto from '~/pages/cadastros/assunto';
 import Autor from '~/pages/cadastros/autor';
@@ -13,6 +14,8 @@ import Credito from '~/pages/cadastros/credito';
 import Editora from '~/pages/cadastros/editora';
 import SerieColecao from '~/pages/cadastros/serie-colecao';
 import { ConsultaAcervo } from '~/pages/consulta-acervo';
+import { DetalhesConsultaAcervo } from '~/pages/consulta-acervo/detalhes';
+import { ListaCardsConsultaAcervo } from '~/pages/consulta-acervo/lista-cards-consulta-acervo';
 import CriarConta from '~/pages/criar-conta';
 import Home from '~/pages/home';
 import Inicial from '~/pages/inicial';
@@ -22,7 +25,6 @@ import Principal from '~/pages/principal/index';
 import RedefinirSenha from '~/pages/redefinir-senha';
 import RedefinirSenhaToken from '~/pages/redefinir-senha-token';
 import Auth from './config/auth';
-import ImportarAcervo from '~/pages/cadastros/acervo/importar-acervo';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
@@ -40,7 +42,10 @@ const RoutesConfig = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path={ROUTES.CONSULTA_ACERVO} element={<ConsultaAcervo />} />
+        <Route path={ROUTES.CONSULTA_ACERVO} element={<ConsultaAcervo />}>
+          <Route path='' element={<ListaCardsConsultaAcervo />} />
+          <Route path={ROUTES.CONSULTA_ACERVO_DETALHES} element={<DetalhesConsultaAcervo />} />
+        </Route>
 
         {autenticado ? (
           <>

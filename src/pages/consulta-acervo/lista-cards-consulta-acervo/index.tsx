@@ -1,17 +1,18 @@
 import { Button, Col, Empty, Image, List, Row, Tag, Typography } from 'antd';
 
-import { useWatch } from 'antd/es/form/Form';
 import useFormInstance from 'antd/es/form/hooks/useFormInstance';
-import { PaginationConfig } from 'antd/es/pagination';
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
 import cdepLogo from '~/assets/cdep-logo-centralizado.svg';
 import { FiltroTextoLivreTipoAcervoDTO } from '~/core/dto/filtro-texto-livre-tipo-acervo-dto';
 import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { ROUTES } from '~/core/enum/routes';
 import { TipoAcervo, TipoAcervoDisplay } from '~/core/enum/tipo-acervo';
 import { TipoAcervoTag, TipoAcervoTagDisplay } from '~/core/enum/tipo-acervo-tag';
-import { pesquisarAcervosAreaPublica } from '~/core/services/acervo-service';
 import { Colors } from '~/core/styles/colors';
 import TextItemCardContentConsultaAcervo from '../components/text-content-card';
+import { ConsultaAcervoContext } from '../provider';
 
 const tagAcervo = (tipo: TipoAcervo) => {
   switch (tipo) {
@@ -46,59 +47,12 @@ const tipoAcervoNome = (tipo: TipoAcervo) => {
 
 export const ListaCardsConsultaAcervo: React.FC = () => {
   const form = useFormInstance();
+  const navigate = useNavigate();
 
-  const [loading, setLoading] = useState<boolean>(false);
-
-  const [filtro, setFiltro] = useState<FiltroTextoLivreTipoAcervoDTO>({
-    textoLivre: '',
-    anoFinal: '',
-    anoInicial: '',
-    tipoAcervo: undefined,
-  });
-
-  const [dataSource, setDataSource] = useState<PesquisaAcervoDTO[]>();
-
-  const [listParams, setListParams] = useState<PaginationConfig>({
-    current: 1,
-    pageSize: 5,
-    showSizeChanger: true,
-    hideOnSinglePage: true,
-    defaultCurrent: 1,
-    position: 'bottom',
-    align: 'center',
-    locale: { items_per_page: '' },
-    disabled: false,
-    pageSizeOptions: [5, 10, 20, 50, 100],
-  });
-
-  const tipoAcervo = useWatch('tipoAcervo', form);
-  const textoLivre = useWatch('textoLivre', form);
-  const anoInicial = useWatch('anoInicial', form);
-  const anoFinal = useWatch('anoFinal', form);
+  const { dataSource, loading, listParams, carregarDados } = useContext(ConsultaAcervoContext);
 
   const desabilitarCliqueDireitoImagem = (e: any) => {
     e.preventDefault();
-  };
-
-  const carregarDados = (listParams: PaginationConfig, params: FiltroTextoLivreTipoAcervoDTO) => {
-    const numeroPagina = listParams?.current || 1;
-    const numeroRegistros = listParams?.pageSize || 5;
-
-    setLoading(true);
-    pesquisarAcervosAreaPublica(numeroPagina, numeroRegistros, params)
-      .then((response) => {
-        if (response.sucesso) {
-          setDataSource(response.dados.items);
-
-          setListParams({
-            ...listParams,
-            total: response.dados.totalRegistros,
-          });
-        } else {
-          setDataSource([]);
-        }
-      })
-      .finally(() => setLoading(false));
   };
 
   const onListChange = (current: number, pageSize: number) => {
@@ -112,16 +66,6 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
 
     carregarDados(newListParams, params);
   };
-
-  useEffect(() => {
-    carregarDados({ ...listParams, current: 1 }, filtro);
-  }, [filtro]);
-
-  useEffect(() => {
-    form.validateFields().then((values: FiltroTextoLivreTipoAcervoDTO) => {
-      setFiltro({ ...values });
-    });
-  }, [tipoAcervo, textoLivre, anoInicial, anoFinal]);
 
   return (
     <List
@@ -150,7 +94,7 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
               marginBottom: '24px',
             }}
           >
-            <Col style={{ display: 'flex', alignContent: 'center' }}>
+            <Col style={{ display: 'flex', alignContent: 'center', width: '100%' }}>
               <Col>
                 <Image
                   alt='example'
@@ -170,27 +114,46 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                   <TextItemCardContentConsultaAcervo
                     label='Tipo de acervo: '
                     description={tipoAcervoNome(item.tipo)}
+                    exibirLabelSemValor={false}
                   />
 
-                  <TextItemCardContentConsultaAcervo label='Título: ' description={item.titulo} />
+                  <TextItemCardContentConsultaAcervo
+                    label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Titulo].label}: `}
+                    description={item.titulo}
+                    exibirLabelSemValor={false}
+                  />
 
                   <TextItemCardContentConsultaAcervo
                     label='Autoria/Crédito: '
                     description={item.creditoAutoria}
+                    exibirLabelSemValor={false}
                   />
 
                   <TextItemCardContentConsultaAcervo
-                    label='Assunto: '
+                    label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Assunto].label}: `}
                     description={item.assunto}
+                    exibirLabelSemValor={false}
                     ellipsis
                   />
 
                   <TextItemCardContentConsultaAcervo
-                    label='Descrição: '
+                    label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Descricao].label}: `}
                     description={item.descricao}
+                    exibirLabelSemValor={false}
                     ellipsis
                   />
-                  <TextItemCardContentConsultaAcervo label='Data: ' description={item.dataAcervo} />
+
+                  <TextItemCardContentConsultaAcervo
+                    label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Ano].label}: `}
+                    description={item.ano}
+                    exibirLabelSemValor={false}
+                  />
+
+                  <TextItemCardContentConsultaAcervo
+                    label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.DataAcervo].label}: `}
+                    description={item.dataAcervo}
+                    exibirLabelSemValor={false}
+                  />
                 </Row>
               </Col>
 
@@ -210,7 +173,17 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
               </Row>
 
               <Row justify='end' style={{ width: '100%', bottom: 6, position: 'absolute' }}>
-                <Button type='link'>
+                <Button
+                  type='link'
+                  onClick={() => {
+                    navigate(ROUTES.CONSULTA_ACERVO_DETALHES, {
+                      state: {
+                        tipo: item.tipo,
+                        codigo: item.codigo,
+                      },
+                    });
+                  }}
+                >
                   <Typography.Text strong underline style={{ color: Colors.CDEP_PRIMARY }}>
                     Detalhes
                   </Typography.Text>
