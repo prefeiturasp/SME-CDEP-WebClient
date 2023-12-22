@@ -1,4 +1,4 @@
-import { Col, Form } from 'antd';
+import { Form } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { Outlet } from 'react-router-dom';
 import cdepLogoHorizontal from '~/assets/cdep-logo-horizontal.svg';
