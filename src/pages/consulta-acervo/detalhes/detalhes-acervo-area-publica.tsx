@@ -305,6 +305,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Descricao].label}: `}
                 description={dados.descricao}
                 ellipsis={!!field.ellipsis}
+                dangerouslyInnerHTML
               />
             );
             break;

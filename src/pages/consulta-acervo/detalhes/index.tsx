@@ -11,7 +11,6 @@ import { ROUTES } from '~/core/enum/routes';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { obterDetalhamentoPorTipoAcervoECodigoAreaPublica } from '~/core/services/acervo-service';
 import { Colors } from '~/core/styles/colors';
-import { ButtonEnviarParaMinhaSelecao } from '../components/button-enviar-para-minha-selecao';
 import { ImageGalleryDetalhesAcervo } from '../components/gallery';
 import DetalhesAcervoAreaPublica from './detalhes-acervo-area-publica';
 import { FieldsDetalhesArtesGraficas } from './form-fields-config/artes-graficas';
@@ -117,9 +116,9 @@ export const DetalhesConsultaAcervo: React.FC = () => {
                 </Typography.Text>
               </Button>
             </Col>
-            <Col>
+            {/* <Col>
               <ButtonEnviarParaMinhaSelecao />
-            </Col>
+            </Col> */}
           </Row>
         </Col>
 

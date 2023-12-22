@@ -134,6 +134,7 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                     description={item.assunto}
                     exibirLabelSemValor={false}
                     ellipsis
+                    exibirTooltip
                   />
 
                   <TextItemCardContentConsultaAcervo
@@ -141,6 +142,8 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                     description={item.descricao}
                     exibirLabelSemValor={false}
                     ellipsis
+                    exibirTooltip
+                    dangerouslyInnerHTML
                   />
 
                   <TextItemCardContentConsultaAcervo

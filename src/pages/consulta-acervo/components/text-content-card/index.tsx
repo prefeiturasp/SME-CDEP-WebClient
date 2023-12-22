@@ -6,6 +6,8 @@ type InfoTituloConsultaAcervoProps = {
   description: string;
   ellipsis?: boolean;
   exibirLabelSemValor?: boolean;
+  exibirTooltip?: boolean;
+  dangerouslyInnerHTML?: boolean;
 };
 
 const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcervoProps> = ({
@@ -13,8 +15,12 @@ const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcervoProps>
   description,
   ellipsis = false,
   exibirLabelSemValor = true,
+  exibirTooltip = false,
+  dangerouslyInnerHTML = false,
 }) => {
   if (!exibirLabelSemValor && !description) return <></>;
+
+  let conteudo: string | React.ReactNode = description;
 
   const getDescription = () => {
     if (description?.length > 250) return `${description.substring(0, 250)}...`;
@@ -22,13 +28,21 @@ const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcervoProps>
     return description;
   };
 
+  if (dangerouslyInnerHTML) {
+    conteudo = <Typography dangerouslySetInnerHTML={{ __html: description }} />;
+  }
+
   return (
     <Typography.Text strong ellipsis={ellipsis} style={{ width: '100%' }}>
       {label}
       <span style={{ fontWeight: 'normal' }}>
-        <Tooltip autoAdjustOverflow title={getDescription()}>
-          {description}
-        </Tooltip>
+        {exibirTooltip ? (
+          <Tooltip autoAdjustOverflow title={getDescription()}>
+            {conteudo}
+          </Tooltip>
+        ) : (
+          conteudo
+        )}
       </span>
     </Typography.Text>
   );
