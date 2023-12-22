@@ -5,14 +5,16 @@ type InfoTituloConsultaAcervoProps = {
   label: string;
   description: string;
   ellipsis?: boolean;
+  exibirLabelSemValor?: boolean;
 };
 
 const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcervoProps> = ({
   label,
   description,
   ellipsis = false,
+  exibirLabelSemValor = true,
 }) => {
-  if (!description) return <></>;
+  if (!exibirLabelSemValor && !description) return <></>;
 
   const getDescription = () => {
     if (description?.length > 250) return `${description.substring(0, 250)}...`;

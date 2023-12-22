@@ -1,0 +1,52 @@
+import { ReactImageGalleryItem } from 'react-image-gallery';
+import { FieldAcervoEnum } from '../enum/field-acervo-enum';
+
+export type ConsultaAcervoDetalhesDTO = {
+  titulo: string;
+  subTitulo: string;
+  codigo: string;
+  codigoNovo: string;
+  creditosAutores: string;
+  material: string;
+  idioma: string;
+  coautor: string;
+  editora: string;
+  serieColecao: string;
+  assunto: string;
+  ano: string;
+  tipoAutoria: string;
+  edicao: string;
+  numeroPagina: string;
+  volume: string;
+  tipoAnexo: string;
+  acessosDocumentos: string;
+  localizacao: string;
+  localizacaoCDD: string;
+  localizacaoPHA: string;
+  notasGerais: string;
+  isbn: string;
+  procedencia: string;
+  dataAcervo: string;
+  copiaDigital: string;
+  copia: string;
+  permiteUsoImagem: string;
+  conservacao: string;
+  descricao: string;
+  duracao: string;
+  quantidade: string;
+  dimensoes: string;
+  tecnica: string;
+  suporte: string;
+  formato: string;
+  tamanhoArquivo: string;
+  cromia: string;
+  resolucao: string;
+  acessibilidade: string;
+  disponibilizacao: string;
+  imagens: ReactImageGalleryItem[];
+};
+
+export type FieldAcervoDetalhesProps = {
+  fieldAcervo: FieldAcervoEnum;
+  ellipsis?: boolean;
+};

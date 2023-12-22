@@ -3,9 +3,11 @@ import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useState } from 'react';
 import Select from '~/components/lib/inputs/select';
 import { CDEP_SELECT_ESTADO_CONSERVACAO } from '~/core/constants/ids/select';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { obterConservacoes } from '~/core/services/conservacao-service';
+
+const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.EstadoConservacao];
 
 type SelectConservacaoProps = {
   selectProps?: SelectProps;
@@ -51,8 +53,8 @@ const SelectConservacao: React.FC<SelectConservacaoProps> = ({
 
   return (
     <Form.Item
-      label='Estado de conservação'
-      name={AcervoFieldName[FieldAcervoEnum.EstadoConservacao]}
+      label={fieldProps.label}
+      name={fieldProps.name}
       rules={[{ required }]}
       {...formItemProps}
     >
@@ -62,7 +64,7 @@ const SelectConservacao: React.FC<SelectConservacaoProps> = ({
         id={CDEP_SELECT_ESTADO_CONSERVACAO}
         {...selectProps}
         options={options}
-        placeholder='Estado de conservação'
+        placeholder={fieldProps.label}
       />
     </Form.Item>
   );

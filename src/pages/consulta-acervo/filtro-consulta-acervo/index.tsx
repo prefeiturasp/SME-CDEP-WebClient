@@ -1,18 +1,18 @@
 import { Button, Col, Row, Typography } from 'antd';
 import useFormInstance from 'antd/es/form/hooks/useFormInstance';
-import React from 'react';
+import React, { useContext } from 'react';
 import InputTipoAcervoConsulta from '~/components/cdep/input/busca-acervo';
 import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
 import LimparBuscaButton from '~/components/lib/limpar-busca-button';
 import { CDEP_INPUT_ANO_FINAL, CDEP_INPUT_ANO_INICIAL } from '~/core/constants/ids/input';
 import { Colors } from '~/core/styles/colors';
 import { InputAno } from '~/pages/cadastros/acervo/form/form-fields';
+import { ConsultaAcervoContext } from '../provider';
 
-type FiltroConsultaAcervoProps = {
-  onClickBuscar: () => void;
-};
-export const FiltroConsultaAcervo: React.FC<FiltroConsultaAcervoProps> = ({ onClickBuscar }) => {
+export const FiltroConsultaAcervo: React.FC = () => {
   const form = useFormInstance();
+
+  const { onClickBuscar } = useContext(ConsultaAcervoContext);
 
   return (
     <Col
@@ -20,7 +20,7 @@ export const FiltroConsultaAcervo: React.FC<FiltroConsultaAcervoProps> = ({ onCl
       style={{
         position: 'sticky',
         top: 72,
-        zIndex: 1,
+        zIndex: 5,
         backgroundColor: Colors.BACKGROUND_FILTRO_AREA_PUBLICA,
         padding: '20px 60px',
       }}
@@ -83,7 +83,7 @@ export const FiltroConsultaAcervo: React.FC<FiltroConsultaAcervoProps> = ({ onCl
                 buttonProps={{
                   onClick: () => {
                     form.resetFields();
-                    onClickBuscar();
+                    onClickBuscar(form);
                   },
                 }}
               />
@@ -92,7 +92,7 @@ export const FiltroConsultaAcervo: React.FC<FiltroConsultaAcervoProps> = ({ onCl
               <Button
                 style={{ backgroundColor: '#8F2D40', color: 'white' }}
                 onClick={() => {
-                  onClickBuscar();
+                  onClickBuscar(form);
                 }}
               >
                 Buscar

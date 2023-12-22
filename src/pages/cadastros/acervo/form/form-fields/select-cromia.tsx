@@ -3,16 +3,17 @@ import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useState } from 'react';
 import Select from '~/components/lib/inputs/select';
 import { CDEP_SELECT_CROMIA } from '~/core/constants/ids/select';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { obterListaCromia } from '~/core/services/cromia-service';
+
+const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Cromia];
 
 type SelectCromiaProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
   tipoAcervo?: TipoAcervo;
 };
-
 const SelectCromia: React.FC<SelectCromiaProps> = ({ selectProps, formItemProps, tipoAcervo }) => {
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
   const [required, setRequired] = useState<boolean>(true);
@@ -46,8 +47,8 @@ const SelectCromia: React.FC<SelectCromiaProps> = ({ selectProps, formItemProps,
 
   return (
     <Form.Item
-      label='Cromia'
-      name={AcervoFieldName[FieldAcervoEnum.Cromia]}
+      label={fieldProps.label}
+      name={fieldProps.name}
       rules={[{ required }]}
       {...formItemProps}
     >
@@ -56,7 +57,7 @@ const SelectCromia: React.FC<SelectCromiaProps> = ({ selectProps, formItemProps,
         allowClear
         id={CDEP_SELECT_CROMIA}
         options={options}
-        placeholder='Cromia'
+        placeholder={fieldProps.label}
         {...selectProps}
       />
     </Form.Item>

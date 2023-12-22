@@ -1,8 +1,10 @@
 import { Form, Radio as RadioAnt } from 'antd';
 import { AbstractCheckboxGroupProps } from 'antd/es/checkbox/Group';
 import React, { useEffect, useState } from 'react';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
+
+const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.AutorizacaoUsoImagem];
 
 type RadioAutorizacaoUsoImagemProps = {
   tipoAcervo?: TipoAcervo;
@@ -42,12 +44,7 @@ const RadioAutorizacaoUsoImagem: React.FC<RadioAutorizacaoUsoImagemProps> = ({
   }, []);
 
   return (
-    <Form.Item
-      label='Autorização do uso de imagem'
-      name={AcervoFieldName[FieldAcervoEnum.AutorizacaoUsoImagem]}
-      rules={[{ required }]}
-      extra={extra}
-    >
+    <Form.Item label={fieldProps.label} name={fieldProps.name} rules={[{ required }]} extra={extra}>
       <RadioAnt.Group options={options} />
     </Form.Item>
   );

@@ -9,7 +9,7 @@ import {
   FieldAcervoProps,
   FormPageConfigCadastroAcervoProps,
 } from '~/core/dto/form-cadastro-acervo';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import {
   EditorDescricao,
   InputAcessibilidade,
@@ -102,14 +102,18 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
           case FieldAcervoEnum.Titulo:
             input = (
               <InputTitulo
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Titulo])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Titulo].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.Subtitulo:
             input = (
               <InputSubtitulo
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Subtitulo])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Subtitulo].name,
+                )}
               />
             );
             break;
@@ -117,7 +121,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <InputTombo
                 tipoAcervo={fieldsConfig.tipo}
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Tombo])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Tombo].name,
+                )}
               />
             );
             break;
@@ -126,7 +132,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
               <SelectCredito
                 tipoAcervo={fieldsConfig.tipo}
                 formItemProps={{
-                  extra: obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Credito]),
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.Credito].name,
+                  ),
                 }}
               />
             );
@@ -134,14 +142,18 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
           case FieldAcervoEnum.CodigoAntigo:
             input = (
               <InputCodigoAntigo
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.CodigoAntigo])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.CodigoAntigo].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.CodigoNovo:
             input = (
               <InputCodigoNovo
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.CodigoNovo])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.CodigoNovo].name,
+                )}
               />
             );
             break;
@@ -150,7 +162,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
               <SelectMaterial
                 tipoAcervo={fieldsConfig.tipo}
                 formItemProps={{
-                  extra: obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Material]),
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.Material].name,
+                  ),
                 }}
               />
             );
@@ -159,7 +173,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <SelectIdioma
                 formItemProps={{
-                  extra: obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Idioma]),
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.Idioma].name,
+                  ),
                 }}
               />
             );
@@ -169,7 +185,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
               <SelectAutor
                 tipoAcervo={fieldsConfig.tipo}
                 formItemProps={{
-                  extra: obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Autor]),
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.Autor].name,
+                  ),
                 }}
               />
             );
@@ -178,7 +196,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <SelectCoautor
                 formItemProps={{
-                  extra: obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Coautor]),
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.Coautor].name,
+                  ),
                 }}
               />
             );
@@ -187,7 +207,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <SelectEditora
                 formItemProps={{
-                  extra: obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Editora]),
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.Editora].name,
+                  ),
                 }}
               />
             );
@@ -196,7 +218,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <SelectSerieColecao
                 formItemProps={{
-                  extra: obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.SerieColecao]),
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.SerieColecao].name,
+                  ),
                 }}
               />
             );
@@ -206,7 +230,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
               <SelectAssunto
                 tipoAcervo={fieldsConfig.tipo}
                 formItemProps={{
-                  extra: obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Assunto]),
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.Assunto].name,
+                  ),
                 }}
               />
             );
@@ -215,7 +241,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <InputAno
                 formItemProps={{
-                  extra: obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Ano]),
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.Ano].name,
+                  ),
                 }}
               />
             );
@@ -224,7 +252,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <InputTipoAutoria
                 formItemProps={{
-                  extra: obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.TipoAutoria]),
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.TipoAutoria].name,
+                  ),
                 }}
               />
             );
@@ -232,7 +262,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
           case FieldAcervoEnum.Edicao:
             input = (
               <InputEdicao
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Edicao])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Edicao].name,
+                )}
               />
             );
             break;
@@ -240,21 +272,27 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <InputNumeroDePaginas
                 tipoAcervo={fieldsConfig.tipo}
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.NumeroDePaginas])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.NumeroDePaginas].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.Volume:
             input = (
               <InputVolume
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Volume])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Volume].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.TipoDeAnexo:
             input = (
               <InputTipoAnexo
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.TipoDeAnexo])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.TipoDeAnexo].name,
+                )}
               />
             );
             break;
@@ -263,7 +301,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
               <SelectAcessoDocumento
                 formItemProps={{
                   extra: obterConteudoExtraPorCampo(
-                    AcervoFieldName[FieldAcervoEnum.AcessoDocumento],
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.AcessoDocumento].name,
                   ),
                 }}
               />
@@ -272,35 +310,45 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
           case FieldAcervoEnum.Localizacao:
             input = (
               <InputLocalizacao
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Localizacao])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Localizacao].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.LocalizacaoCDD:
             input = (
               <InputLocalizacaoCDD
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.LocalizacaoCDD])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.LocalizacaoCDD].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.LocalizacaoPHA:
             input = (
               <InputLocalizacaoPHA
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.LocalizacaoPHA])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.LocalizacaoPHA].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.NotasGerais:
             input = (
               <InputNotasGerais
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.NotasGerais])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.NotasGerais].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.ISBN:
             input = (
               <InputISBN
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.ISBN])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.ISBN].name,
+                )}
               />
             );
             break;
@@ -308,14 +356,18 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <InputProcedencia
                 tipoAcervo={fieldsConfig.tipo}
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Procedencia])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Procedencia].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.DataAcervo:
             input = (
               <InputDataAcervo
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.DataAcervo])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.DataAcervo].name,
+                )}
               />
             );
             break;
@@ -323,14 +375,18 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <RadioCopiaDigital
                 tipoAcervo={fieldsConfig.tipo}
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.CopiaDigital])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.CopiaDigital].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.Copia:
             input = (
               <InputCopia
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Copia])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Copia].name,
+                )}
               />
             );
             break;
@@ -339,7 +395,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
               <RadioAutorizacaoUsoImagem
                 tipoAcervo={fieldsConfig.tipo}
                 extra={obterConteudoExtraPorCampo(
-                  AcervoFieldName[FieldAcervoEnum.AutorizacaoUsoImagem],
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.AutorizacaoUsoImagem].name,
                 )}
               />
             );
@@ -350,7 +406,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
                 tipoAcervo={fieldsConfig.tipo}
                 formItemProps={{
                   extra: obterConteudoExtraPorCampo(
-                    AcervoFieldName[FieldAcervoEnum.EstadoConservacao],
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.EstadoConservacao].name,
                   ),
                 }}
               />
@@ -359,35 +415,45 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
           case FieldAcervoEnum.Descricao:
             input = (
               <EditorDescricao
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Descricao])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Descricao].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.Duracao:
             input = (
               <InputDuracao
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Duracao])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Duracao].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.Quantidade:
             input = (
               <InputQuantidade
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Quantidade])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Quantidade].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.DimensaoLargura:
             input = (
               <InputDimensaoLargura
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.DimensaoLargura])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.DimensaoLargura].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.DimensaoAltura:
             input = (
               <InputDimensaoAltura
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.DimensaoAltura])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.DimensaoAltura].name,
+                )}
               />
             );
             break;
@@ -395,7 +461,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <InputDimensaoDiametro
                 extra={obterConteudoExtraPorCampo(
-                  AcervoFieldName[FieldAcervoEnum.DimensaoDiametro],
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.DimensaoDiametro].name,
                 )}
               />
             );
@@ -404,7 +470,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <InputDimensaoProfundidade
                 extra={obterConteudoExtraPorCampo(
-                  AcervoFieldName[FieldAcervoEnum.DimensaoProfundidade],
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.DimensaoProfundidade].name,
                 )}
               />
             );
@@ -412,7 +478,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
           case FieldAcervoEnum.Tecnica:
             input = (
               <InputTecnica
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Tecnica])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Tecnica].name,
+                )}
               />
             );
             break;
@@ -421,7 +489,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
               <SelectSuporte
                 tipoAcervo={fieldsConfig.tipo}
                 formItemProps={{
-                  extra: obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Suporte]),
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.Suporte].name,
+                  ),
                 }}
               />
             );
@@ -430,7 +500,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <SelectFormatoImagem
                 formItemProps={{
-                  extra: obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.FormatoImagem]),
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.FormatoImagem].name,
+                  ),
                 }}
               />
             );
@@ -439,7 +511,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <InputTamanhoArquivo
                 tipoAcervo={fieldsConfig.tipo}
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.TamanhoArquivo])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.TamanhoArquivo].name,
+                )}
               />
             );
             break;
@@ -448,7 +522,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
               <SelectCromia
                 tipoAcervo={fieldsConfig.tipo}
                 formItemProps={{
-                  extra: obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Cromia]),
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.Cromia].name,
+                  ),
                 }}
               />
             );
@@ -456,14 +532,18 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
           case FieldAcervoEnum.Resolucao:
             input = (
               <InputResolucao
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Resolucao])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Resolucao].name,
+                )}
               />
             );
             break;
           case FieldAcervoEnum.Acessibilidade:
             input = (
               <InputAcessibilidade
-                extra={obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Acessibilidade])}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Acessibilidade].name,
+                )}
               />
             );
             break;
@@ -471,7 +551,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             input = (
               <InputDisponibilizacao
                 extra={obterConteudoExtraPorCampo(
-                  AcervoFieldName[FieldAcervoEnum.Disponibilizacao],
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.Disponibilizacao].name,
                 )}
               />
             );
@@ -481,9 +561,11 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
               <UploadArquivosCDEP
                 form={form}
                 formItemProps={{
-                  name: AcervoFieldName[FieldAcervoEnum.Anexos],
-                  label: 'Anexo',
-                  extra: obterConteudoExtraPorCampo(AcervoFieldName[FieldAcervoEnum.Anexos]),
+                  name: PropsByFieldAcervoEnum[FieldAcervoEnum.Anexos].name,
+                  label: PropsByFieldAcervoEnum[FieldAcervoEnum.Anexos].label,
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.Anexos].name,
+                  ),
                 }}
                 tipoAcervo={fieldsConfig.tipo}
               />

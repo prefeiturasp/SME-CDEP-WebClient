@@ -6,14 +6,15 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormEditora } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_EDITORA } from '~/core/constants/ids/select';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { obterEditoraResumido } from '~/core/services/editora-service';
+
+const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Editora];
 
 type SelectEditoraProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
 };
-
 const SelectEditora: React.FC<SelectEditoraProps> = ({ selectProps, formItemProps }) => {
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
   const [openModal, setOpenModal] = useState(false);
@@ -44,8 +45,8 @@ const SelectEditora: React.FC<SelectEditoraProps> = ({ selectProps, formItemProp
   return (
     <Row wrap={false} align='middle'>
       <Form.Item
-        label='Editora'
-        name={AcervoFieldName[FieldAcervoEnum.Editora]}
+        label={fieldProps.label}
+        name={fieldProps.name}
         style={{ width: '100%', marginRight: '8px' }}
         {...formItemProps}
       >
@@ -55,7 +56,7 @@ const SelectEditora: React.FC<SelectEditoraProps> = ({ selectProps, formItemProp
           id={CDEP_SELECT_EDITORA}
           {...selectProps}
           options={options}
-          placeholder='Editora'
+          placeholder={fieldProps.label}
         />
       </Form.Item>
       <Button
