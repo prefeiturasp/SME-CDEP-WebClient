@@ -1,6 +1,6 @@
 import { Form, Input } from 'antd';
 import React from 'react';
-import { CDEP_INPUT_ANO } from '~/core/constants/ids/input';
+import { CDEP_INPUT_EDICAO } from '~/core/constants/ids/input';
 import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 
 const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Edicao];
@@ -15,7 +15,7 @@ const InputEdicao: React.FC<InputEdicaoProps> = ({ extra }) => (
     rules={[{ whitespace: true }]}
     extra={extra}
   >
-    <Input type='text' placeholder={fieldProps.label} maxLength={15} id={CDEP_INPUT_ANO} />
+    <Input type='text' placeholder={fieldProps.label} maxLength={15} id={CDEP_INPUT_EDICAO} />
   </Form.Item>
 );
 
