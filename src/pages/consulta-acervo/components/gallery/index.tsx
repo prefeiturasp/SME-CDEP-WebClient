@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactImageGallery, { ReactImageGalleryItem } from 'react-image-gallery';
 import styled from 'styled-components';
-import cdepLogoFundoBiblioteca from '~/assets/cdep-fundo-login.svg';
+import cdepLogo from '~/assets/cdep-logo-centralizado.svg';
 
 const ImageGalleryContainer = styled.div`
   .image-gallery {
@@ -15,12 +15,14 @@ type ImageGalleryDetalhesAcervoProps = {
 export const ImageGalleryDetalhesAcervo: React.FC<ImageGalleryDetalhesAcervoProps> = ({
   imagens,
 }) => {
-  const items: ReactImageGalleryItem[] = imagens?.length
+  const temImagens = !!imagens?.length;
+
+  const items: ReactImageGalleryItem[] = temImagens
     ? imagens
     : [
         {
-          original: cdepLogoFundoBiblioteca,
-          thumbnail: cdepLogoFundoBiblioteca,
+          original: cdepLogo,
+          thumbnail: cdepLogo,
         },
       ];
   return (
@@ -30,6 +32,8 @@ export const ImageGalleryDetalhesAcervo: React.FC<ImageGalleryDetalhesAcervoProp
         autoPlay={false}
         showBullets={false}
         showPlayButton={false}
+        showFullscreenButton={temImagens}
+        showThumbnails={temImagens}
       />
     </ImageGalleryContainer>
   );

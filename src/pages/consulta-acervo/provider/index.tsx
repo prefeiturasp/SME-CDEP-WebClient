@@ -17,6 +17,7 @@ type ConsultaAcervoContextProps = {
   setListParams?: React.Dispatch<React.SetStateAction<PaginationConfig>>;
   carregarDados: (listParams: PaginationConfig, params: FiltroTextoLivreTipoAcervoDTO) => void;
   onClickBuscar: (form: FormInstance) => void;
+  limparDados: (form: FormInstance) => void;
 };
 
 const DEFAULT_VALUES: ConsultaAcervoContextProps = {
@@ -36,6 +37,7 @@ const DEFAULT_VALUES: ConsultaAcervoContextProps = {
   },
   carregarDados: () => {},
   onClickBuscar: () => {},
+  limparDados: () => {},
 };
 
 export const ConsultaAcervoContext = createContext<ConsultaAcervoContextProps>(DEFAULT_VALUES);
@@ -47,6 +49,12 @@ const ConsultaAcervoContextProvider: React.FC<PropsWithChildren> = ({ children }
   const [loading, setLoading] = useState<boolean>(DEFAULT_VALUES.loading);
 
   const [listParams, setListParams] = useState<PaginationConfig>(DEFAULT_VALUES.listParams);
+
+  const limparDados = (form: FormInstance) => {
+    form.resetFields();
+    setDataSource(DEFAULT_VALUES.dataSource);
+    setListParams(DEFAULT_VALUES.listParams);
+  };
 
   const carregarDados = (listParams: PaginationConfig, params: FiltroTextoLivreTipoAcervoDTO) => {
     const numeroPagina = listParams?.current || 1;
@@ -88,6 +96,7 @@ const ConsultaAcervoContextProvider: React.FC<PropsWithChildren> = ({ children }
         listParams,
         carregarDados,
         onClickBuscar,
+        limparDados,
       }}
     >
       {children}
