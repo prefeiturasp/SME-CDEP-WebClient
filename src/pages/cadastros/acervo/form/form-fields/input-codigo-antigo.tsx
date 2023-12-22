@@ -11,7 +11,9 @@ type InputCodigoAntigoProps = {
 const InputCodigoAntigo: React.FC<InputCodigoAntigoProps> = ({ extra }) => (
   <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
     {(form) => {
-      const codigoNovoEstaPreenchido = !!form.getFieldValue(fieldProps.name);
+      const codigoNovoEstaPreenchido = !!form.getFieldValue(
+        PropsByFieldAcervoEnum[FieldAcervoEnum.CodigoNovo].name,
+      );
 
       return (
         <Form.Item
