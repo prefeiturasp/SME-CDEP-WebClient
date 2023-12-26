@@ -9,10 +9,9 @@ export type ConsultaAcervoDetalhesDTO = {
   creditosAutores: string;
   material: string;
   idioma: string;
-  coautor: string;
   editora: string;
   serieColecao: string;
-  assunto: string;
+  assuntos: string;
   ano: string;
   tipoAutoria: string;
   edicao: string;
