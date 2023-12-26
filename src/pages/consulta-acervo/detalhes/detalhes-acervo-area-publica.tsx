@@ -123,7 +123,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             input = (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Assunto].label}: `}
-                description={dados.assunto}
+                description={dados.assuntos}
                 ellipsis={!!field.ellipsis}
               />
             );
