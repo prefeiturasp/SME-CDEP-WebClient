@@ -3,17 +3,18 @@ import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useState } from 'react';
 import Select from '~/components/lib/inputs/select';
 import { CDEP_SELECT_ESTADO_SUPORTE } from '~/core/constants/ids/select';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoSuporte } from '~/core/enum/tipo-suporte';
 import { obterListaSuporte } from '~/core/services/suporte-service';
+
+const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Suporte];
 
 type SelectSuporteProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
   tipoAcervo: TipoAcervo;
 };
-
 const SelectSuporte: React.FC<SelectSuporteProps> = ({
   selectProps,
   formItemProps,
@@ -54,8 +55,8 @@ const SelectSuporte: React.FC<SelectSuporteProps> = ({
 
   return (
     <Form.Item
-      label='Suporte'
-      name={AcervoFieldName[FieldAcervoEnum.Suporte]}
+      label={fieldProps.label}
+      name={fieldProps.name}
       rules={[{ required: true }]}
       {...formItemProps}
     >
@@ -65,7 +66,7 @@ const SelectSuporte: React.FC<SelectSuporteProps> = ({
         id={CDEP_SELECT_ESTADO_SUPORTE}
         {...selectProps}
         options={options}
-        placeholder='Suporte'
+        placeholder={fieldProps.label}
       />
     </Form.Item>
   );

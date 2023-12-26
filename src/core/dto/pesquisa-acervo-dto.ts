@@ -11,4 +11,5 @@ export type PesquisaAcervoDTO = {
   dataAcervo: string;
   tipoAcervoTag: TipoAcervoTag;
   enderecoImagem: string;
+  codigo: string;
 };

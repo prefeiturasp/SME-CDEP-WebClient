@@ -7,10 +7,12 @@ import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormAutor } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_COAUTOR } from '~/core/constants/ids/select';
 import { CoAutorDTO } from '~/core/dto/coautores-dto';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoCreditoAutoria } from '~/core/enum/tipo-credito-autoria';
 import { obterCreditoAutorResumido } from '~/core/services/credito-autor-service';
 import InputTipoAutoriaLista from './input-tipo-autoria-lista';
+
+const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Coautor];
 
 type SelectCoautorProps = {
   selectProps?: SelectProps;
@@ -50,8 +52,8 @@ const SelectCoautor: React.FC<SelectCoautorProps> = ({ selectProps, formItemProp
           <>
             <Row wrap={false} align='middle'>
               <Form.Item
-                label='Coautor'
-                name={AcervoFieldName[FieldAcervoEnum.Coautor]}
+                label={fieldProps.label}
+                name={fieldProps.name}
                 style={{ width: '100%', marginRight: '8px' }}
                 {...formItemProps}
                 shouldUpdate
@@ -64,7 +66,7 @@ const SelectCoautor: React.FC<SelectCoautorProps> = ({ selectProps, formItemProp
                   mode='multiple'
                   {...selectProps}
                   options={options}
-                  placeholder='Coautor'
+                  placeholder={fieldProps.label}
                   id={CDEP_SELECT_COAUTOR}
                   onChange={(value) => {
                     const novalistaTipoAutoria = value?.map((coAutor: CoAutorDTO) => {

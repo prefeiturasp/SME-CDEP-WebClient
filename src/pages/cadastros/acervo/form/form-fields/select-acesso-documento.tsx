@@ -3,14 +3,15 @@ import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useState } from 'react';
 import Select from '~/components/lib/inputs/select';
 import { CDEP_SELECT_ACESSO_DOCUMENTO } from '~/core/constants/ids/select';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { obterAcessoDocumento } from '~/core/services/acesso-documento-service';
+
+const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.AcessoDocumento];
 
 type SelectAcessoDocumentoProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
 };
-
 const SelectAcessoDocumento: React.FC<SelectAcessoDocumentoProps> = ({
   selectProps,
   formItemProps,
@@ -34,8 +35,8 @@ const SelectAcessoDocumento: React.FC<SelectAcessoDocumentoProps> = ({
 
   return (
     <Form.Item
-      label='Acesso do documento'
-      name={AcervoFieldName[FieldAcervoEnum.AcessoDocumento]}
+      label={fieldProps.label}
+      name={fieldProps.name}
       rules={[{ required: true }]}
       {...formItemProps}
     >
@@ -46,7 +47,7 @@ const SelectAcessoDocumento: React.FC<SelectAcessoDocumentoProps> = ({
         id={CDEP_SELECT_ACESSO_DOCUMENTO}
         {...selectProps}
         options={options}
-        placeholder='Acesso do documento'
+        placeholder={fieldProps.label}
       />
     </Form.Item>
   );

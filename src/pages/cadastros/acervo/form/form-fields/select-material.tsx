@@ -7,17 +7,18 @@ import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormMaterial } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_MATERIAL } from '~/core/constants/ids/select';
-import { AcervoFieldName, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoMaterial } from '~/core/enum/tipo-material-enum';
 import { obterMaterial } from '~/core/services/material-service';
+
+const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Material];
 
 type SelectMaterialProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
   tipoAcervo: TipoAcervo;
 };
-
 const SelectMaterial: React.FC<SelectMaterialProps> = ({
   selectProps,
   formItemProps,
@@ -83,8 +84,8 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({
   return (
     <Row wrap={false} align='middle'>
       <Form.Item
-        label='Material'
-        name={AcervoFieldName[FieldAcervoEnum.Material]}
+        label={fieldProps.label}
+        name={fieldProps.name}
         rules={[{ required }]}
         style={{ width: '100%', marginRight: habilitaBotaoAdicionar ? '8px' : '' }}
         {...formItemProps}
@@ -95,7 +96,7 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({
           id={CDEP_SELECT_MATERIAL}
           {...selectProps}
           options={options}
-          placeholder='Material'
+          placeholder={fieldProps.label}
         />
       </Form.Item>
       {habilitaBotaoAdicionar && (
