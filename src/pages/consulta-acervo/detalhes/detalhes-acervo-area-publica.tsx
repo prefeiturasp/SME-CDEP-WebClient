@@ -101,15 +101,6 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
               />
             );
             break;
-          case FieldAcervoEnum.Coautor:
-            input = (
-              <TextItemCardContentConsultaAcervo
-                label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Coautor].label}: `}
-                description={dados.coautor} // Validar
-                ellipsis={!!field.ellipsis}
-              />
-            );
-            break;
           case FieldAcervoEnum.Editora:
             input = (
               <TextItemCardContentConsultaAcervo
