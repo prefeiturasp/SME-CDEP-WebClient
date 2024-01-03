@@ -37,8 +37,8 @@ export type FormDefaultCadastroAcervoDTO = {
   auditoria: AuditoriaDTO;
   titulo: string;
   subTitulo: string;
-  codigo: string;
-  codigoNovo: string;
+  codigo: string | null;
+  codigoNovo: string | null;
   materialId: number;
   editoraId: number;
   idiomaId: number;
