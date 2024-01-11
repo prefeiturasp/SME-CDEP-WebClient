@@ -182,7 +182,7 @@ const ImportarAcervo: React.FC = () => {
                 items={[
                   {
                     key: '1',
-                    label: <div style={{ color: Colors.ERROR }}>Erro</div>,
+                    label: <div style={{ color: Colors.Suporte.Primary.ERROR }}>Erro</div>,
                     children: (
                       <TableImportacaoErro
                         obterDados={obterDados}
@@ -194,7 +194,7 @@ const ImportarAcervo: React.FC = () => {
                   },
                   {
                     key: '2',
-                    label: <div style={{ color: Colors.SUCCESS }}>Sucesso</div>,
+                    label: <div style={{ color: Colors.Suporte.Primary.SUCCESS }}>Sucesso</div>,
                     children: <TableImportacaoSucesso dataSource={dataSourceArquivoImportacao} />,
                   },
                 ]}
@@ -207,7 +207,7 @@ const ImportarAcervo: React.FC = () => {
       return (
         <Empty
           description={`Sem importação pendente para o acervo ${TipoAcervoDisplay[tipoAcervo]}`}
-          style={{ color: Colors.TEXT }}
+          style={{ color: Colors.Neutral.DARK }}
         />
       );
     }

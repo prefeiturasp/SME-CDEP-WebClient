@@ -29,8 +29,9 @@ export enum ROUTES {
   IDIOMA_EDITAR = '/cadastro/idioma/editar/:id',
   ACERVO = '/cadastro/acervo',
   ACERVO_NOVO = '/cadastro/acervo/novo',
-  ACERVO_EDITAR = '/cadastro/acervo/editar/:acervoId',
+  ACERVO_EDITAR = '/cadastro/acervo/editar/:id',
   CONSULTA_ACERVO = '/consulta-acervo',
   CONSULTA_ACERVO_DETALHES = '/consulta-acervo/detalhes',
   ACERVO_IMPORTAR = '/cadastro/acervo/importar',
+  SEM_PERMISSAO = '/sem-permissao',
 }

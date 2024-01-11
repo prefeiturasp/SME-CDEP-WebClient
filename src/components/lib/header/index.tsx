@@ -1,5 +1,5 @@
 import { LoginOutlined } from '@ant-design/icons';
-import { Button, Layout, Row } from 'antd';
+import { Button, Layout, Row, Space } from 'antd';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import cdepLogo from '~/assets/cdep-logo-centralizado.svg';
@@ -7,18 +7,19 @@ import { ROUTES } from '~/core/enum/routes';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import { store } from '~/core/redux';
 import { setDeslogar } from '~/core/redux/modules/auth/actions';
-import { BoxShadow } from '~/core/styles/colors';
+import { BoxShadow, Colors } from '~/core/styles/colors';
 import ExitButton from '../exit-button';
+import DropdownPerfil from '~/components/cdep/perfis';
 
 const contentStyle: React.CSSProperties = {
   position: 'sticky',
   top: 0,
   zIndex: 11,
   width: '100%',
-  height: '72px',
+  height: '70px',
   display: 'flex',
   alignItems: 'center',
-  backgroundColor: '#FFFFFF',
+  backgroundColor: Colors.Neutral.WHITE,
   boxShadow: BoxShadow.DEFAULT,
 };
 
@@ -35,15 +36,16 @@ const Header: React.FC<HeaderProps> = ({ logo, style = {} }) => {
         {logo || <img style={{ height: '75px' }} src={cdepLogo} alt='CDEP LOGO' />}
       </Link>
       <Row justify='end' style={{ width: '100%' }}>
-        {autenticado && (
-          <ExitButton
-            onClick={() => {
-              store.dispatch(setDeslogar());
-            }}
-          />
-        )}
-
-        {!autenticado && (
+        {autenticado ? (
+          <Space>
+            <DropdownPerfil />
+            <ExitButton
+              onClick={() => {
+                store.dispatch(setDeslogar());
+              }}
+            />
+          </Space>
+        ) : (
           <Link to={ROUTES.LOGIN}>
             <Button
               size='small'

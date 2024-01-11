@@ -1,8 +1,9 @@
-import { Spin, notification } from 'antd';
+import { Spin } from 'antd';
 import { FormInstance } from 'antd/es/form/Form';
 import { AxiosResponse, HttpStatusCode } from 'axios';
 import React, { PropsWithChildren, useState } from 'react';
 import Modal from '~/components/lib/modal';
+import { notification } from '~/components/lib/notification';
 import {
   CDEP_BUTTON_MODAL_ALTERAR,
   CDEP_BUTTON_MODAL_CANCELAR,

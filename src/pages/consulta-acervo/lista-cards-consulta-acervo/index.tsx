@@ -168,7 +168,7 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                   color={`${Colors.BACKGROUND_CONTENT}`}
                   style={{
                     borderRadius: 10,
-                    color: Colors.TEXT,
+                    color: Colors.Neutral.DARK,
                   }}
                 >
                   {tagAcervo(item.tipo)}
@@ -187,7 +187,11 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                     });
                   }}
                 >
-                  <Typography.Text strong underline style={{ color: Colors.CDEP_PRIMARY }}>
+                  <Typography.Text
+                    strong
+                    underline
+                    style={{ color: Colors.SystemSME.CDEP.PRIMARY }}
+                  >
                     Detalhes
                   </Typography.Text>
                 </Button>

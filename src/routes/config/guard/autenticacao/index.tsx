@@ -1,10 +1,10 @@
-import { useLocation, Navigate, Outlet } from 'react-router-dom';
+import { Navigate, Outlet, useLocation } from 'react-router-dom';
 
 import React from 'react';
-import { useAppSelector } from '~/core/hooks/use-redux';
 import { ROUTES } from '~/core/enum/routes';
+import { useAppSelector } from '~/core/hooks/use-redux';
 
-const Auth: React.FC = () => {
+const GuardAutenticacao: React.FC = () => {
   const location = useLocation();
 
   const autenticado = useAppSelector((state) => state.auth.autenticado);
@@ -14,4 +14,4 @@ const Auth: React.FC = () => {
   return <Outlet />;
 };
 
-export default Auth;
+export default GuardAutenticacao;

@@ -25,8 +25,8 @@ import { AutenticacaoDTO } from '~/core/dto/autenticacao-dto';
 import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 import { ValidateErrorEntity } from '~/core/dto/validate-error-entity';
 import { ROUTES } from '~/core/enum/routes';
-import { setDadosLogin } from '~/core/redux/modules/auth/actions';
 import { setSpinning } from '~/core/redux/modules/spin/actions';
+import { validarAutenticacao } from '~/core/utils/perfil';
 
 const Login = () => {
   const dispatch = useAppDispatch();
@@ -67,7 +67,7 @@ const Login = () => {
       .then((resposta) => {
         if (resposta?.data?.autenticado) {
           window.clarity('identify', resposta.data.usuarioLogin);
-          dispatch(setDadosLogin(resposta.data));
+          validarAutenticacao(resposta.data);
         }
       })
       .catch(validarExibirErros)

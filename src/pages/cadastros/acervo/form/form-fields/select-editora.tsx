@@ -1,13 +1,16 @@
 import { Button, Form, FormItemProps, Row, SelectProps } from 'antd';
 import { DefaultOptionType } from 'antd/es/select';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form';
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormEditora } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_EDITORA } from '~/core/constants/ids/select';
 import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { MenuEnum } from '~/core/enum/menu-enum';
 import { obterEditoraResumido } from '~/core/services/editora-service';
+import { obterPermissaoPorMenu } from '~/core/utils/perfil';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Editora];
 
@@ -16,6 +19,10 @@ type SelectEditoraProps = {
   formItemProps?: FormItemProps;
 };
 const SelectEditora: React.FC<SelectEditoraProps> = ({ selectProps, formItemProps }) => {
+  const { desabilitarCampos } = useContext(PermissaoContext);
+
+  const permissao = obterPermissaoPorMenu(MenuEnum.Editora);
+
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
   const [openModal, setOpenModal] = useState(false);
 
@@ -64,6 +71,7 @@ const SelectEditora: React.FC<SelectEditoraProps> = ({ selectProps, formItemProp
         block
         icon={<FaPlus />}
         onClick={() => setOpenModal(true)}
+        disabled={!permissao.podeIncluir || desabilitarCampos}
         style={{
           fontSize: 16,
           width: '43px',

@@ -29,7 +29,7 @@ export const DetalhesConsultaAcervo: React.FC = () => {
 
   const tipoAcervoState: TipoAcervo = state?.tipo;
 
-  const acervoId = paramsRoute?.acervoId ? Number(paramsRoute.acervoId) : 0;
+  const acervoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
   const [fields, setFields] = useState<FieldAcervoDetalhesProps[]>([]);
   const [dados, setDados] = useState<ConsultaAcervoDetalhesDTO>();
@@ -110,7 +110,7 @@ export const DetalhesConsultaAcervo: React.FC = () => {
                 <Typography.Text
                   strong
                   underline
-                  style={{ color: Colors.CDEP_PRIMARY, fontSize: 18 }}
+                  style={{ color: Colors.SystemSME.CDEP.PRIMARY, fontSize: 18 }}
                 >
                   Voltar
                 </Typography.Text>

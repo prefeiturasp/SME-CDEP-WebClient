@@ -21,7 +21,7 @@ export const FiltroConsultaAcervo: React.FC = () => {
         position: 'sticky',
         top: 72,
         zIndex: 5,
-        backgroundColor: Colors.BACKGROUND_FILTRO_AREA_PUBLICA,
+        backgroundColor: Colors.Components.BACKGROUND_FILTRO_AREA_PUBLICA,
         padding: '20px 60px',
       }}
     >

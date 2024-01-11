@@ -1,7 +1,7 @@
 import { SearchOutlined } from '@ant-design/icons';
 import { Button, Col, Input, Row } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { BreadcrumbCDEPProps } from '~/components/cdep/breadcrumb';
 import ButtonVoltar from '~/components/cdep/button/voltar';
@@ -11,6 +11,7 @@ import HeaderPage from '~/components/lib/header-page';
 import { CDEP_BUTTON_NOVO, CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { CadastroAuxiliarDTO } from '~/core/dto/cadastro-auxiliar-dto';
 import { ROUTES } from '~/core/enum/routes';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 export type ListPageProps = {
   title: string;
@@ -28,6 +29,8 @@ const ListCadastrosAuxiliares: React.FC<ListConfigCadastrosAuxiliaresProps> = ({
 }) => {
   const navigate = useNavigate();
 
+  const { permissao } = useContext(PermissaoContext);
+
   const [filters, setFilters] = useState({ nome: '' });
 
   const columns: ColumnsType<CadastroAuxiliarDTO> = [
@@ -39,7 +42,9 @@ const ListCadastrosAuxiliares: React.FC<ListConfigCadastrosAuxiliaresProps> = ({
 
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
-  const onClickNovo = () => navigate(`${breadcrumb.urlMainPage}/novo`);
+  const onClickNovo = () => {
+    if (permissao.podeIncluir) navigate(`${breadcrumb.urlMainPage}/novo`);
+  };
 
   const onClickEditar = (id: number) =>
     navigate(`${breadcrumb.urlMainPage}/editar/${id}`, { replace: true });
@@ -60,6 +65,7 @@ const ListCadastrosAuxiliares: React.FC<ListConfigCadastrosAuxiliaresProps> = ({
                 id={CDEP_BUTTON_NOVO}
                 style={{ fontWeight: 700 }}
                 onClick={() => onClickNovo()}
+                disabled={!permissao.podeIncluir}
               >
                 Novo
               </Button>

@@ -1,7 +1,7 @@
 import { Col, Form, Input, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
-import React from 'react';
+import React, { useContext } from 'react';
 import { FaFileExcel } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
@@ -21,10 +21,13 @@ import { CDEP_INPUT_CODIGO, CDEP_INPUT_TITULO } from '~/core/constants/ids/input
 import { URL_API_ACERVO } from '~/core/constants/urls-api';
 import { IdTipoTituloCreditoAutoriaCodigoAcervoDTO } from '~/core/dto/id-tipo-titulo-credito-autoria-codigo-acervo-dto';
 import { ROUTES } from '~/core/enum/routes';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 const ListAcervo: React.FC = () => {
   const navigate = useNavigate();
   const [form] = useForm();
+
+  const { permissao } = useContext(PermissaoContext);
 
   const columns: ColumnsType<IdTipoTituloCreditoAutoriaCodigoAcervoDTO> = [
     {
@@ -48,7 +51,9 @@ const ListAcervo: React.FC = () => {
 
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
-  const onClickNovo = () => navigate(ROUTES.ACERVO_NOVO);
+  const onClickNovo = () => {
+    if (permissao.podeIncluir) navigate(ROUTES.ACERVO_NOVO);
+  };
 
   const onClickEditar = (row: IdTipoTituloCreditoAutoriaCodigoAcervoDTO) =>
     navigate(`${ROUTES.ACERVO}/editar/${row.acervoId}`, {
@@ -56,7 +61,9 @@ const ListAcervo: React.FC = () => {
       replace: true,
     });
 
-  const onClickImportar = () => navigate(ROUTES.ACERVO_IMPORTAR);
+  const onClickImportar = () => {
+    if (permissao.podeIncluir) navigate(ROUTES.ACERVO_IMPORTAR);
+  };
 
   return (
     <Col>
@@ -71,12 +78,17 @@ const ListAcervo: React.FC = () => {
                 id={CDEP_BUTTON_IMPORTAR}
                 onClick={() => onClickImportar()}
                 icon={<FaFileExcel size={16} />}
+                disabled={!permissao.podeIncluir}
               >
                 Importar
               </ButtonSecundary>
             </Col>
             <Col>
-              <ButtonPrimary id={CDEP_BUTTON_NOVO} onClick={() => onClickNovo()}>
+              <ButtonPrimary
+                id={CDEP_BUTTON_NOVO}
+                onClick={() => onClickNovo()}
+                disabled={!permissao.podeIncluir}
+              >
                 Novo
               </ButtonPrimary>
             </Col>
