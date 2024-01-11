@@ -1,10 +1,11 @@
-import { Col, Form, Modal, Row, notification } from 'antd';
+import { Col, Form, Modal, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
 import Auditoria from '~/components/cdep/text/auditoria';
 import CardContent from '~/components/lib/card-content';
+import { notification } from '~/components/lib/notification';
 import {
   CDEP_BUTTON_MODAL_CANCELAR,
   CDEP_BUTTON_MODAL_SALVAR,
@@ -30,6 +31,7 @@ import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { confirmacao } from '~/core/services/alerta-service';
 import { alterarRegistro, inserirRegistro, obterRegistro } from '~/core/services/api';
 import { removerTudoQueNaoEhDigito } from '~/core/utils/functions';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { mapearDtoCadastrosAcervo } from '../utils';
 import FormContentCadastroAcervo from './form-content-cadastro-acervo';
 import { FieldsArtesGraficas } from './form-fields-config/artes-graficas';
@@ -56,9 +58,11 @@ const FormAcervo: React.FC<FormAcervoProps> = ({
 
   const [form] = useForm();
 
+  const { desabilitarCampos } = useContext(PermissaoContext);
+
   const state = location.state;
 
-  const acervoId = paramsRoute?.acervoId ? Number(paramsRoute.acervoId) : 0;
+  const acervoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
   const stateTipoAcervoId = state?.tipoAcervoId;
 
@@ -138,6 +142,19 @@ const FormAcervo: React.FC<FormAcervoProps> = ({
       } else {
         valoresSalvar.profundidade = null;
       }
+
+      if (valoresSalvar?.codigo) {
+        valoresSalvar.codigo;
+      } else {
+        valoresSalvar.codigo = null;
+      }
+
+      if (valoresSalvar?.codigoNovo) {
+        valoresSalvar.codigo;
+      } else {
+        valoresSalvar.codigoNovo = null;
+      }
+
       if (valoresSalvar?.coAutores?.length && valoresSalvar?.listaTipoAutoria?.length) {
         const coAutores = [...valoresSalvar.coAutores];
         const listaTipoAutoria = [...valoresSalvar.listaTipoAutoria];
@@ -278,6 +295,7 @@ const FormAcervo: React.FC<FormAcervoProps> = ({
         onFinish={onFinish}
         initialValues={formInitialValues}
         validateMessages={validateMessages}
+        disabled={desabilitarCampos}
       >
         {children}
       </Form>

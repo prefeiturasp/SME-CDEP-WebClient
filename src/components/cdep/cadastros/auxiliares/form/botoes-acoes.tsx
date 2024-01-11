@@ -1,6 +1,6 @@
 import { Button, Col, Form, Row } from 'antd';
 import { FormInstance } from 'rc-field-form/lib/interface';
-import React from 'react';
+import React, { useContext } from 'react';
 import ButtonExcluir from '~/components/cdep/button/excluir';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import {
@@ -9,6 +9,7 @@ import {
   CDEP_BUTTON_NOVO,
   CDEP_BUTTON_VOLTAR,
 } from '~/core/constants/ids/button/intex';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 type FormCadastrosAuxiliaresBotoesAcoesProps = {
   id: string | number;
@@ -25,6 +26,8 @@ const FormCadastrosAuxiliaresBotoesAcoes: React.FC<FormCadastrosAuxiliaresBotoes
   onClickExcluir,
   onClickCancelar,
 }) => {
+  const { permissao } = useContext(PermissaoContext);
+
   return (
     <Col span={24}>
       <Row gutter={[8, 8]}>
@@ -33,7 +36,11 @@ const FormCadastrosAuxiliaresBotoesAcoes: React.FC<FormCadastrosAuxiliaresBotoes
         </Col>
         {id ? (
           <Col>
-            <ButtonExcluir id={CDEP_BUTTON_EXCLUIR} onClick={onClickExcluir} />
+            <ButtonExcluir
+              id={CDEP_BUTTON_EXCLUIR}
+              onClick={onClickExcluir}
+              disabled={!permissao.podeExcluir}
+            />
           </Col>
         ) : (
           <></>

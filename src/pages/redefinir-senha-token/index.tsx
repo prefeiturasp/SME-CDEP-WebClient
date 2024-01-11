@@ -20,8 +20,8 @@ import { ERRO_RECUPERACAO_SENHA } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
 import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 import { ROUTES } from '~/core/enum/routes';
-import { setDadosLogin } from '~/core/redux/modules/auth/actions';
 import { setSpinning } from '~/core/redux/modules/spin/actions';
+import { validarAutenticacao } from '~/core/utils/perfil';
 import TokenExpirado from './token-expirado';
 
 const RedefinirSenhaToken = () => {
@@ -84,7 +84,7 @@ const RedefinirSenhaToken = () => {
       .alterarSenhaComTokenRecuperacao({ novaSenha: values.novaSenha, token })
       .then((resposta) => {
         if (resposta.status === HttpStatusCode.Ok) {
-          dispatch(setDadosLogin(resposta.data));
+          validarAutenticacao(resposta.data);
           navigate(ROUTES.PRINCIPAL);
         }
       })

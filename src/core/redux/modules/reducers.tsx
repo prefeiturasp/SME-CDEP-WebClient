@@ -1,11 +1,16 @@
 import { combineReducers } from 'redux';
 import auth from './auth/reducers';
+import perfil from './perfil/reducers';
+import roles from './roles/reducers';
 import spin from './spin/reducers';
+
 import { typeSetDeslogar } from './auth/actions';
 
 const appReducer = combineReducers({
   auth,
   spin,
+  perfil,
+  roles,
 });
 
 const rootReducer = (state: any, action: any) => {

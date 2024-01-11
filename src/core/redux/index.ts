@@ -13,7 +13,7 @@ setAutoFreeze(false);
 const persistConfig = {
   key: 'sme-cdep',
   storage,
-  whitelist: ['auth'],
+  whitelist: ['auth', 'perfil', 'roles'],
 };
 
 enableMapSet();

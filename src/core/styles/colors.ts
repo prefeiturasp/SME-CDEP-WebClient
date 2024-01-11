@@ -1,12 +1,77 @@
-const Colors = {
-  CDEP_PRIMARY: '#89162d',
-  CDEP_DARK_PRIMARY: '#6d1325',
+type SuporteType = {
+  INFO: string;
+  ERROR: string;
+  SUCCESS: string;
+  WARNING: string;
+};
+
+type SystemSMEType = {
+  PRIMARY: string;
+  PRIMARY_DARK: string;
+};
+type ColorsType = {
+  BACKGROUND_CONTENT: string;
+  Secondary: {
+    INFO: string;
+  };
+  SystemSME: {
+    CDEP: SystemSMEType;
+  };
+  Components: {
+    BACKGROUND_ALERT: string;
+    TOOLTIP: string;
+    BACKGROUND_FILTRO_AREA_PUBLICA: string;
+  };
+  Suporte: {
+    Primary: SuporteType;
+    Secondary: SuporteType;
+  };
+  Neutral: {
+    DARK: string;
+    MEDIUM: string;
+    LIGHT: string;
+    LIGHTEST: string;
+    WHITE: string;
+  };
+};
+
+const Colors: ColorsType = {
   BACKGROUND_CONTENT: '#F5F5F5',
-  ERROR: '#B40C02',
-  TEXT: '#42474A',
-  SUCCESS: '#297805',
-  INFORMATION: '#086397',
-  BACKGROUND_FILTRO_AREA_PUBLICA: '#C3596E',
+  Secondary: {
+    INFO: '#086397',
+  },
+  SystemSME: {
+    CDEP: {
+      PRIMARY: '#89162d',
+      PRIMARY_DARK: '#6d1325',
+    },
+  },
+  Components: {
+    BACKGROUND_ALERT: '#333638',
+    TOOLTIP: '#086397',
+    BACKGROUND_FILTRO_AREA_PUBLICA: '#C3596E',
+  },
+  Suporte: {
+    Primary: {
+      INFO: '#086397',
+      ERROR: '#B40C02',
+      SUCCESS: '#297805',
+      WARNING: '#C0640E',
+    },
+    Secondary: {
+      INFO: '#5BBCF2',
+      ERROR: '#FD756D',
+      SUCCESS: '#8DC773',
+      WARNING: '#EAAA5E',
+    },
+  },
+  Neutral: {
+    DARK: '#42474A',
+    MEDIUM: '#6F777C',
+    LIGHT: '#BFBFBF',
+    LIGHTEST: '#F5F6F8',
+    WHITE: '#FFFFFF',
+  },
 };
 
 const BoxShadow = {

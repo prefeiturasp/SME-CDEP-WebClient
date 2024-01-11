@@ -1,10 +1,11 @@
-import { Button, Col, Form, Row, notification } from 'antd';
+import { Button, Col, Form, Row } from 'antd';
 import { FormInstance } from 'rc-field-form';
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ButtonExcluir from '~/components/cdep/button/excluir';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import HeaderPage from '~/components/lib/header-page';
+import { notification } from '~/components/lib/notification';
 import {
   CDEP_BUTTON_CANCELAR,
   CDEP_BUTTON_EXCLUIR,
@@ -21,6 +22,7 @@ import { FormPageConfigCadastroAcervoProps } from '~/core/dto/form-cadastro-acer
 import { ROUTES } from '~/core/enum/routes';
 import { confirmacao } from '~/core/services/alerta-service';
 import { deletarRegistro } from '~/core/services/api';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 type FormHeaderCadastroAcervoProps = {
   fieldsConfig?: FormPageConfigCadastroAcervoProps;
@@ -30,7 +32,9 @@ const FormHeaderCadastroAcervo: React.FC<FormHeaderCadastroAcervoProps> = ({ fie
   const navigate = useNavigate();
   const paramsRoute = useParams();
 
-  const acervoId = paramsRoute?.acervoId || 0;
+  const { permissao } = useContext(PermissaoContext);
+
+  const acervoId = paramsRoute?.id || 0;
   const title = acervoId ? 'Editar Acervo' : 'Novo Acervo';
 
   const onClickVoltar = (form: FormInstance) => {
@@ -58,7 +62,7 @@ const FormHeaderCadastroAcervo: React.FC<FormHeaderCadastroAcervoProps> = ({ fie
   };
 
   const onClickExcluir = () => {
-    if (acervoId) {
+    if (acervoId && permissao.podeExcluir) {
       confirmacao({
         content: DESEJA_EXCLUIR_ACERVO,
         onOk() {
@@ -89,7 +93,11 @@ const FormHeaderCadastroAcervo: React.FC<FormHeaderCadastroAcervoProps> = ({ fie
           </Col>
           {acervoId ? (
             <Col>
-              <ButtonExcluir id={CDEP_BUTTON_EXCLUIR} onClick={onClickExcluir} />
+              <ButtonExcluir
+                id={CDEP_BUTTON_EXCLUIR}
+                onClick={onClickExcluir}
+                disabled={!permissao.podeExcluir}
+              />
             </Col>
           ) : (
             <></>
