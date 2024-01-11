@@ -104,7 +104,7 @@ const Login = () => {
               rules={[{ required: true }, { min: 5 }]}
             >
               <Input
-                placeholder='Informe o login'
+                placeholder='Informe o login!!!!!!!!!!!!!!!!!!!'
                 suffix={<span />}
                 maxLength={100}
                 id={CDEP_INPUT_LOGIN}
