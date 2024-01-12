@@ -1,13 +1,16 @@
 import { Button, Form, FormItemProps, Row, SelectProps } from 'antd';
 import { DefaultOptionType } from 'antd/es/select';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form';
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormSerieColecao } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_SERIE_COLECAO } from '~/core/constants/ids/select';
 import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { MenuEnum } from '~/core/enum/menu-enum';
 import { obterSerieColecaoResumido } from '~/core/services/serie-colecao-service';
+import { obterPermissaoPorMenu } from '~/core/utils/perfil';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.SerieColecao];
 
@@ -16,6 +19,10 @@ type SelectSerieColecaoProps = {
   formItemProps?: FormItemProps;
 };
 const SelectSerieColecao: React.FC<SelectSerieColecaoProps> = ({ selectProps, formItemProps }) => {
+  const { desabilitarCampos } = useContext(PermissaoContext);
+
+  const permissao = obterPermissaoPorMenu(MenuEnum.SerieColecao);
+
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
 
   const [openModal, setOpenModal] = useState(false);
@@ -65,6 +72,7 @@ const SelectSerieColecao: React.FC<SelectSerieColecaoProps> = ({ selectProps, fo
         block
         icon={<FaPlus />}
         onClick={() => setOpenModal(true)}
+        disabled={!permissao.podeIncluir || desabilitarCampos}
         style={{
           fontSize: 16,
           width: '43px',

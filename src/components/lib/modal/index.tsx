@@ -22,7 +22,7 @@ const Modal: React.FC<ModalProps> = ({ ...rest }) => (
     cancelButtonProps={{
       ...rest?.cancelButtonProps,
       type: 'text',
-      style: { color: Colors.TEXT },
+      style: { color: Colors.Neutral.DARK },
     }}
   />
 );

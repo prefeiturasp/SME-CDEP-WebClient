@@ -71,12 +71,11 @@ const MeusDados: React.FC = () => {
   const [form] = useForm();
 
   const auth = useAppSelector((store) => store.auth);
+  const perfil = useAppSelector((store) => store.perfil);
 
   const usuarioLogin = auth?.usuarioLogin;
-  const perfilUsuario = auth?.perfilUsuario;
   const usuarioNome = auth?.usuarioNome;
-
-  const perfilUsuarioPrincipal = perfilUsuario?.length ? perfilUsuario[0]?.perfilNome : '';
+  const perfilNome = perfil.perfilSelecionado?.perfilNome;
 
   const [meusDados, setMeusDados] = useState<DadosUsuarioDTO>();
 
@@ -125,7 +124,7 @@ const MeusDados: React.FC = () => {
             </Space>
             <Space direction='vertical' align='center' style={{ width: '100%' }}>
               <Typography.Text strong>{usuarioNome}</Typography.Text>
-              <Typography.Text>Perfil: {perfilUsuarioPrincipal} </Typography.Text>
+              <Typography.Text>Perfil: {perfilNome} </Typography.Text>
               <Typography.Text>Login: {meusDados?.login}</Typography.Text>
               <Typography.Text>CPF: {meusDados?.cpf}</Typography.Text>
             </Space>

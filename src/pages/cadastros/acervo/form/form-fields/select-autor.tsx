@@ -1,15 +1,18 @@
 import { Button, Form, FormItemProps, Row, SelectProps } from 'antd';
 import { DefaultOptionType } from 'antd/es/select';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form';
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormAutor } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_AUTOR } from '~/core/constants/ids/select';
 import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { MenuEnum } from '~/core/enum/menu-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoCreditoAutoria } from '~/core/enum/tipo-credito-autoria';
 import { obterCreditoAutorResumido } from '~/core/services/credito-autor-service';
+import { obterPermissaoPorMenu } from '~/core/utils/perfil';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Autor];
 
@@ -19,6 +22,10 @@ type SelectAutorProps = {
   tipoAcervo: TipoAcervo;
 };
 const SelectAutor: React.FC<SelectAutorProps> = ({ selectProps, formItemProps, tipoAcervo }) => {
+  const { desabilitarCampos } = useContext(PermissaoContext);
+
+  const permissao = obterPermissaoPorMenu(MenuEnum.Autor);
+
   const [required, setRequired] = useState<boolean>(false);
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
 
@@ -80,6 +87,7 @@ const SelectAutor: React.FC<SelectAutorProps> = ({ selectProps, formItemProps, t
         block
         icon={<FaPlus />}
         onClick={() => setOpenModal(true)}
+        disabled={!permissao.podeIncluir || desabilitarCampos}
         style={{
           fontSize: 16,
           width: '43px',

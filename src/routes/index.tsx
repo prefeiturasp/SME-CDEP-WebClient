@@ -4,7 +4,8 @@ import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import FormConfigCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form/form-config';
 import { ROUTES } from '~/core/enum/routes';
 import { useAppSelector } from '~/core/hooks/use-redux';
-import PagNotFound from '~/pages/404';
+import PageForbidden from '~/pages/403';
+import PageNotFound from '~/pages/404';
 import FormAcervo from '~/pages/cadastros/acervo/form';
 import ImportarAcervo from '~/pages/cadastros/acervo/importar-acervo';
 import ListAcervo from '~/pages/cadastros/acervo/list';
@@ -24,7 +25,9 @@ import MeusDados from '~/pages/meus-dados';
 import Principal from '~/pages/principal/index';
 import RedefinirSenha from '~/pages/redefinir-senha';
 import RedefinirSenhaToken from '~/pages/redefinir-senha-token';
-import Auth from './config/auth';
+import GuardAutenticacao from './config/guard/autenticacao';
+import GuardPermissao from './config/guard/permissao';
+import { MenuEnum } from '~/core/enum/menu-enum';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
@@ -32,8 +35,9 @@ const RoutesConfig = () => {
   const homePage = createElement(Home);
   const loginPage = createElement(Login);
   const criarContaPage = createElement(CriarConta);
-  const pagNotFound = createElement(PagNotFound);
+  const pageNotFound = createElement(PageNotFound);
   const principalPage = createElement(Principal);
+  const forbiddenPage = createElement(PageForbidden);
   const iniciallPage = createElement(Inicial);
   const meusDadosPage = createElement(MeusDados);
   const redefinirSenhaPage = createElement(RedefinirSenha);
@@ -48,54 +52,96 @@ const RoutesConfig = () => {
         </Route>
 
         {autenticado ? (
-          <>
+          <Route element={<GuardAutenticacao />}>
             <Route path={ROUTES.PRINCIPAL} element={principalPage}>
-              <Route element={<Auth />}>
-                <Route path={ROUTES.PRINCIPAL} element={iniciallPage} />
-                <Route path={ROUTES.MEUS_DADOS} element={meusDadosPage} />
+              <Route path='*' element={pageNotFound} />
+              <Route path={ROUTES.SEM_PERMISSAO} element={forbiddenPage} />
+              <Route path={ROUTES.PRINCIPAL} element={iniciallPage} />
+              <Route path={ROUTES.LOGIN} element={<Navigate to={ROUTES.PRINCIPAL} />} />
+              <Route path={ROUTES.MEUS_DADOS} element={meusDadosPage} />
 
-                <Route path={ROUTES.CREDITO}>
+              <Route path={ROUTES.CREDITO}>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Credito} />}>
                   <Route path='' element={<Credito />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Credito} />}>
                   <Route path={ROUTES.CREDITO_NOVO} element={<FormConfigCadastrosAuxiliares />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Credito} />}>
                   <Route path={ROUTES.CREDITO_EDITAR} element={<FormConfigCadastrosAuxiliares />} />
                 </Route>
-                <Route path={ROUTES.AUTOR}>
+              </Route>
+
+              <Route path={ROUTES.AUTOR}>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Autor} />}>
                   <Route path='' element={<Autor />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Autor} />}>
                   <Route path={ROUTES.AUTOR_NOVO} element={<FormConfigCadastrosAuxiliares />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Autor} />}>
                   <Route path={ROUTES.AUTOR_EDITAR} element={<FormConfigCadastrosAuxiliares />} />
                 </Route>
-                <Route path={ROUTES.EDITORA}>
+              </Route>
+
+              <Route path={ROUTES.EDITORA}>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Editora} />}>
                   <Route path='' element={<Editora />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Editora} />}>
                   <Route path={ROUTES.EDITORA_NOVO} element={<FormConfigCadastrosAuxiliares />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Editora} />}>
                   <Route path={ROUTES.EDITORA_EDITAR} element={<FormConfigCadastrosAuxiliares />} />
                 </Route>
-                <Route path={ROUTES.ASSUNTO}>
+              </Route>
+
+              <Route path={ROUTES.ASSUNTO}>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Assunto} />}>
                   <Route path='' element={<Assunto />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Assunto} />}>
                   <Route path={ROUTES.ASSUNTO_NOVO} element={<FormConfigCadastrosAuxiliares />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Assunto} />}>
                   <Route path={ROUTES.ASSUNTO_EDITAR} element={<FormConfigCadastrosAuxiliares />} />
                 </Route>
-                <Route path={ROUTES.SERIE_COLECAO}>
+              </Route>
+
+              <Route path={ROUTES.SERIE_COLECAO}>
+                <Route element={<GuardPermissao menuKey={MenuEnum.SerieColecao} />}>
                   <Route path='' element={<SerieColecao />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.SerieColecao} />}>
                   <Route
                     path={ROUTES.SERIE_COLECAO_NOVO}
                     element={<FormConfigCadastrosAuxiliares />}
                   />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.SerieColecao} />}>
                   <Route
                     path={ROUTES.SERIE_COLECAO_EDITAR}
                     element={<FormConfigCadastrosAuxiliares />}
                   />
                 </Route>
-                <Route path={ROUTES.ACERVO}>
+              </Route>
+
+              <Route path={ROUTES.ACERVO}>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Acervo} />}>
                   <Route path='' element={<ListAcervo />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Acervo} />}>
                   <Route path={ROUTES.ACERVO_NOVO} element={<FormAcervo />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Acervo} />}>
                   <Route path={ROUTES.ACERVO_EDITAR} element={<FormAcervo />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Acervo} />}>
                   <Route path={ROUTES.ACERVO_IMPORTAR} element={<ImportarAcervo />} />
                 </Route>
-                <Route path='*' element={pagNotFound} />
-                <Route path={ROUTES.LOGIN} element={<Navigate to={ROUTES.PRINCIPAL} />} />
               </Route>
             </Route>
-          </>
+          </Route>
         ) : (
           <>
             <Route path='*' element={<Navigate to={ROUTES.LOGIN} />} />

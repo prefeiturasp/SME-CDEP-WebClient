@@ -1,11 +1,12 @@
-import { Col, Form, Input, Spin, notification } from 'antd';
+import { Col, Form, Input, Spin } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import Auditoria from '~/components/cdep/text/auditoria';
 import CardContent from '~/components/lib/card-content';
 import HeaderPage from '~/components/lib/header-page';
 import Modal from '~/components/lib/modal';
+import { notification } from '~/components/lib/notification';
 import {
   CDEP_BUTTON_MODAL_CANCELAR,
   CDEP_BUTTON_MODAL_SALVAR,
@@ -26,6 +27,7 @@ import {
   inserirRegistro,
   obterRegistro,
 } from '~/core/services/api';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import FormCadastrosAuxiliaresBotoesAcoes from './botoes-acoes';
 
 const FormCadastrosAuxiliares: React.FC<FormCadastrosAuxiliaresProps> = ({
@@ -39,6 +41,8 @@ const FormCadastrosAuxiliares: React.FC<FormCadastrosAuxiliaresProps> = ({
   const navigate = useNavigate();
   const paramsRoute = useParams();
   const [form] = useForm();
+
+  const { desabilitarCampos, permissao } = useContext(PermissaoContext);
 
   const [formInitialValues, setFormInitialValues] = useState<CadastroAuxiliarDTO>(initialValues);
   const [loadingModal, setLoadingModal] = useState<boolean>(false);
@@ -130,7 +134,7 @@ const FormCadastrosAuxiliares: React.FC<FormCadastrosAuxiliaresProps> = ({
   };
 
   const onClickExcluir = () => {
-    if (id) {
+    if (id && permissao.podeExcluir) {
       confirmacao({
         content: DESEJA_EXCLUIR_ACERVO,
         onOk() {
@@ -182,6 +186,7 @@ const FormCadastrosAuxiliares: React.FC<FormCadastrosAuxiliaresProps> = ({
         onFinish={salvar}
         validateMessages={validateMessages}
         initialValues={formInitialValues}
+        disabled={desabilitarCampos}
       >
         {children}
       </Form>
@@ -199,7 +204,10 @@ const FormCadastrosAuxiliares: React.FC<FormCadastrosAuxiliaresProps> = ({
           centered
           destroyOnClose
           cancelButtonProps={{ disabled: loadingModal, id: CDEP_BUTTON_MODAL_CANCELAR }}
-          okButtonProps={{ disabled: loadingModal, id: CDEP_BUTTON_MODAL_SALVAR }}
+          okButtonProps={{
+            disabled: loadingModal,
+            id: CDEP_BUTTON_MODAL_SALVAR,
+          }}
           closable={!loadingModal}
           maskClosable={!loadingModal}
           keyboard={!loadingModal}
