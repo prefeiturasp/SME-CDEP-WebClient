@@ -7,10 +7,12 @@ const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Descricao];
 
 type EditorDescricaoProps = {
   extra?: React.ReactNode;
+  disabled: boolean;
 };
-const EditorDescricao: React.FC<EditorDescricaoProps> = ({ extra }) => {
+const EditorDescricao: React.FC<EditorDescricaoProps> = ({ extra, disabled = false }) => {
   const config = {
     placeholder: fieldProps.label,
+    disabled,
   };
   return (
     <Form.Item shouldUpdate>

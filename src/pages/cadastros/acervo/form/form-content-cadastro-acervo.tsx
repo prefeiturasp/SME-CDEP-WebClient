@@ -1,5 +1,5 @@
 import { Alert, Col, FormInstance } from 'antd';
-import React from 'react';
+import React, { useContext } from 'react';
 import UploadArquivosCDEP from '~/components/cdep/upload';
 import {
   AcervoLinhaRetornoCamposDTO,
@@ -58,6 +58,7 @@ import {
   SelectSerieColecao,
   SelectSuporte,
 } from './form-fields';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 type FormContentCadastroAcervoProps = {
   fieldsConfig: FormPageConfigCadastroAcervoProps | undefined;
@@ -69,6 +70,8 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
   form,
   errosAcervoLinhaRetorno,
 }) => {
+  const { desabilitarCampos } = useContext(PermissaoContext);
+
   if (!fieldsConfig?.fields?.length) return;
 
   const montarAlerta = (description: string, message: string) => (
@@ -418,6 +421,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
                 extra={obterConteudoExtraPorCampo(
                   PropsByFieldAcervoEnum[FieldAcervoEnum.Descricao].name,
                 )}
+                disabled={desabilitarCampos}
               />
             );
             break;

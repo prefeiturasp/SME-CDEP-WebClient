@@ -28,6 +28,7 @@ const DataTable = <T extends object>({ filters, url, columns, ...rest }: DataTab
       showSizeChanger: true,
       locale: { items_per_page: '' },
       pageSizeOptions: [10, 20, 50, 100],
+      position: ['bottomCenter'],
     },
     order: TipoOrdenacaoEnum.DATA,
   });
