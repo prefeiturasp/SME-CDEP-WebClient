@@ -127,9 +127,9 @@ export const DetalhesConsultaAcervo: React.FC = () => {
             <Flex gap='small'>
               <ImageGalleryDetalhesAcervo imagens={dados?.imagens} />
 
-              <Flex gap='small' wrap='wrap'>
+              <Col>
                 <DetalhesAcervoAreaPublica fields={fields} dados={dados} />
-              </Flex>
+              </Col>
             </Flex>
           </Row>
         </Col>
