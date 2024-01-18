@@ -1,53 +1,13 @@
-import { Button, Dropdown, List } from 'antd';
-import styled from 'styled-components';
-import { useAppSelector } from '~/core/hooks/use-redux';
-import { Colors } from '~/core/styles/colors';
-import autenticacaoService from '~/core/services/autenticacao-service';
-import { validarAutenticacao } from '~/core/utils/perfil';
-import { useState } from 'react';
-import { PerfilUsuarioDTO } from '~/core/dto/perfil-usuario-dto';
 import { DownOutlined, UpOutlined } from '@ant-design/icons';
+import { Button, Dropdown, MenuProps } from 'antd';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 import { ROUTES } from '~/core/enum/routes';
-
-const ItensPerfil = styled.div`
-  border-top-left-radius: 5px;
-  border-bottom-left-radius: 5px;
-  border-bottom-right-radius: 5px;
-  height: auto;
-  background: ${Colors.Neutral.WHITE};
-  border: solid ${Colors.Neutral.LIGHTEST} 1px;
-  position: absolute;
-`;
-
-const Item = styled.tr`
-  text-align: left;
-  width: 100%;
-  height: 100%;
-  vertical-align: middle !important;
-
-  &:not(:last-child) {
-    border-bottom: solid ${Colors.Neutral.LIGHTEST} 1px !important;
-  }
-
-  &:hover {
-    cursor: pointer;
-    background: #e7e6f8;
-    font-weight: bold !important;
-  }
-
-  td {
-    height: 35px;
-    font-size: 10px;
-    padding-left: 7px;
-    width: 145px;
-  }
-
-  i {
-    font-size: 14px;
-    color: ${Colors.Neutral.DARK};
-  }
-`;
+import { useAppSelector } from '~/core/hooks/use-redux';
+import autenticacaoService from '~/core/services/autenticacao-service';
+import { Colors } from '~/core/styles/colors';
+import { validarAutenticacao } from '~/core/utils/perfil';
 
 const ContainerPerfil = styled(Button)`
   background: ${Colors.Neutral.LIGHTEST};
@@ -77,35 +37,25 @@ const DropdownPerfil: React.FC = () => {
     });
   };
 
+  const items: MenuProps['items'] = auth.perfilUsuario.map((perfil) => ({
+    key: perfil?.perfil,
+    label: perfil?.perfilNome,
+  }));
+
   return (
     <div className='position-relative'>
       <Dropdown
-        placement='bottomRight'
         trigger={['click']}
         open={openDropdow}
         onOpenChange={(open) => {
           setOpenDropdow(open);
         }}
-        dropdownRender={() => (
-          <ItensPerfil className='list-inline'>
-            <List
-              dataSource={auth.perfilUsuario}
-              renderItem={(item: PerfilUsuarioDTO) => (
-                <Item
-                  key={item.perfil}
-                  onClick={() => {
-                    alterarPerfil(item.perfil);
-                    setOpenDropdow(false);
-                  }}
-                >
-                  <td style={{ width: '300px' }}>
-                    <p>{item.perfilNome}</p>
-                  </td>
-                </Item>
-              )}
-            />
-          </ItensPerfil>
-        )}
+        menu={{
+          items,
+          selectable: true,
+          onClick: (e) => alterarPerfil(e.key),
+          defaultSelectedKeys: [perfil.perfilSelecionado?.perfil || ''],
+        }}
       >
         <ContainerPerfil>
           <div
@@ -119,7 +69,7 @@ const DropdownPerfil: React.FC = () => {
           >
             <Texto style={{ fontWeight: 700 }}>{`RF: ${auth.usuarioLogin}`}</Texto>
             <Texto>{auth?.usuarioNome}</Texto>
-            <Texto>{perfil.perfilSelecionado?.perfilNome}</Texto>
+            <Texto>{perfil?.perfilSelecionado?.perfilNome}</Texto>
           </div>
           <div
             style={{
