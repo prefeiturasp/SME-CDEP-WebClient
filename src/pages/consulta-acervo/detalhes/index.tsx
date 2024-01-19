@@ -19,13 +19,15 @@ import { FieldsDetalhesBibliografico } from './form-fields-config/bibliografico'
 import { FieldsDetalhesDocumentacaoHistorica } from './form-fields-config/documentacao-historica';
 import { FieldsDetalhesFotografico } from './form-fields-config/fotografico';
 import { FieldsDetalhesTridimensional } from './form-fields-config/tridimensional';
+import { ButtonEnviarParaMinhaSelecao } from '../components/button-enviar-para-minha-selecao';
+import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
 
 export const DetalhesConsultaAcervo: React.FC = () => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
   const location = useLocation();
 
-  const state = location.state;
+  const state: PesquisaAcervoDTO = location.state;
 
   const tipoAcervoState: TipoAcervo = state?.tipo;
 
@@ -116,9 +118,9 @@ export const DetalhesConsultaAcervo: React.FC = () => {
                 </Typography.Text>
               </Button>
             </Col>
-            {/* <Col>
-              <ButtonEnviarParaMinhaSelecao />
-            </Col> */}
+            <Col>
+              <ButtonEnviarParaMinhaSelecao pesquisaAcervo={state} />
+            </Col>
           </Row>
         </Col>
 

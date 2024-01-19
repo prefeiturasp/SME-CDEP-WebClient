@@ -13,6 +13,8 @@ import { TipoAcervoTag, TipoAcervoTagDisplay } from '~/core/enum/tipo-acervo-tag
 import { Colors } from '~/core/styles/colors';
 import TextItemCardContentConsultaAcervo from '../components/text-content-card';
 import { ConsultaAcervoContext } from '../provider';
+import CheckboxSelecionarAcervo from '../components/selecionar-acervo';
+import { ButtonEnviarParaMinhaSelecao } from '../components/button-enviar-para-minha-selecao';
 
 const tagAcervo = (tipo: TipoAcervo) => {
   switch (tipo) {
@@ -68,138 +70,149 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
   };
 
   return (
-    <List
-      pagination={{ ...listParams, onChange: onListChange }}
-      dataSource={dataSource}
-      loading={loading}
-      locale={{
-        emptyText: (
-          <Empty
-            description='Sem dados'
-            className='ant-empty-small'
-            image={Empty.PRESENTED_IMAGE_SIMPLE}
-          />
-        ),
-      }}
-      style={{ padding: '25px 60px' }}
-      renderItem={(item: PesquisaAcervoDTO, index) => {
-        return (
-          <Row
-            key={index}
-            style={{
-              display: 'flex',
-              borderRadius: 4,
-              border: `1px solid #ccc`,
-              justifyContent: 'space-between',
-              marginBottom: '24px',
-            }}
-          >
-            <Col style={{ display: 'flex', alignContent: 'center', width: '100%' }}>
-              <Col>
-                <Image
-                  alt='example'
-                  preview={false}
-                  style={{
-                    minHeight: 200,
-                    height: '100%',
-                    width: 200,
-                  }}
-                  src={item.enderecoImagem || cdepLogo}
-                  onContextMenu={desabilitarCliqueDireitoImagem}
-                />
-              </Col>
+    <>
+      <Row justify='end' style={{ padding: '20px 60px' }}>
+        <Col>
+        {
+          dataSource.length > 0 && 
+          <ButtonEnviarParaMinhaSelecao />
+        }
+        </Col>
+      </Row>
 
-              <Col style={{ margin: '10px 15px 40px' }}>
-                <Row gutter={[6, 6]} style={{ display: 'grid' }} wrap>
-                  <TextItemCardContentConsultaAcervo
-                    label='Tipo de acervo: '
-                    description={tipoAcervoNome(item.tipo)}
-                    exibirLabelSemValor={false}
+      <List
+        pagination={{ ...listParams, onChange: onListChange }}
+        dataSource={dataSource}
+        loading={loading}
+        locale={{
+          emptyText: (
+            <Empty
+              description='Sem dados'
+              className='ant-empty-small'
+              image={Empty.PRESENTED_IMAGE_SIMPLE}
+            />
+          ),
+        }}
+        style={{ padding: '25px 60px' }}
+        renderItem={(item: PesquisaAcervoDTO, index) => {
+          return (
+            <Row
+              key={index}
+              style={{
+                display: 'flex',
+                borderRadius: 4,
+                border: `1px solid #ccc`,
+                justifyContent: 'space-between',
+                marginBottom: '24px',
+              }}
+            >
+              <Col style={{ display: 'flex', alignContent: 'center', width: '100%' }}>
+                <Col>
+                  <Image
+                    alt='example'
+                    preview={false}
+                    style={{
+                      minHeight: 200,
+                      height: '100%',
+                      width: 200,
+                    }}
+                    src={item.enderecoImagem || cdepLogo}
+                    onContextMenu={desabilitarCliqueDireitoImagem}
                   />
+                </Col>
+                <Col style={{ right: 13, top: 13, position: 'absolute' }}>
+                  <CheckboxSelecionarAcervo pesquisaAcervo={item} />
+                </Col>
 
-                  <TextItemCardContentConsultaAcervo
-                    label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Titulo].label}: `}
-                    description={item.titulo}
-                    exibirLabelSemValor={false}
-                  />
+                <Col style={{ margin: '10px 15px 40px' }}>
+                  <Row gutter={[6, 6]} style={{ display: 'grid' }} wrap>
+                    <TextItemCardContentConsultaAcervo
+                      label='Tipo de acervo: '
+                      description={tipoAcervoNome(item.tipo)}
+                      exibirLabelSemValor={false}
+                    />
 
-                  <TextItemCardContentConsultaAcervo
-                    label='Autoria/Crédito: '
-                    description={item.creditoAutoria}
-                    exibirLabelSemValor={false}
-                  />
+                    <TextItemCardContentConsultaAcervo
+                      label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Titulo].label}: `}
+                      description={item.titulo}
+                      exibirLabelSemValor={false}
+                    />
 
-                  <TextItemCardContentConsultaAcervo
-                    label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Assunto].label}: `}
-                    description={item.assunto}
-                    exibirLabelSemValor={false}
-                    ellipsis
-                    exibirTooltip
-                  />
+                    <TextItemCardContentConsultaAcervo
+                      label='Autoria/Crédito: '
+                      description={item.creditoAutoria}
+                      exibirLabelSemValor={false}
+                    />
 
-                  <TextItemCardContentConsultaAcervo
-                    label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Descricao].label}: `}
-                    description={item.descricao}
-                    exibirLabelSemValor={false}
-                    ellipsis
-                    exibirTooltip
-                    dangerouslyInnerHTML
-                  />
+                    <TextItemCardContentConsultaAcervo
+                      label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Assunto].label}: `}
+                      description={item.assunto}
+                      exibirLabelSemValor={false}
+                      ellipsis
+                      exibirTooltip
+                    />
 
-                  <TextItemCardContentConsultaAcervo
-                    label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Ano].label}: `}
-                    description={item.ano}
-                    exibirLabelSemValor={false}
-                  />
+                    <TextItemCardContentConsultaAcervo
+                      label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Descricao].label}: `}
+                      description={item.descricao}
+                      exibirLabelSemValor={false}
+                      ellipsis
+                      exibirTooltip
+                      dangerouslyInnerHTML
+                    />
 
-                  <TextItemCardContentConsultaAcervo
-                    label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.DataAcervo].label}: `}
-                    description={item.dataAcervo}
-                    exibirLabelSemValor={false}
-                  />
+                    <TextItemCardContentConsultaAcervo
+                      label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Ano].label}: `}
+                      description={item.ano}
+                      exibirLabelSemValor={false}
+                    />
+
+                    <TextItemCardContentConsultaAcervo
+                      label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.DataAcervo].label}: `}
+                      description={item.dataAcervo}
+                      exibirLabelSemValor={false}
+                    />
+                  </Row>
+                </Col>
+
+                <Row
+                  justify='start'
+                  style={{ width: '100%', bottom: 6, left: 6, position: 'absolute' }}
+                >
+                  <Tag
+                    color={`${Colors.BACKGROUND_CONTENT}`}
+                    style={{
+                      borderRadius: 10,
+                      color: Colors.Neutral.DARK,
+                    }}
+                  >
+                    {tagAcervo(item.tipo)}
+                  </Tag>
+                </Row>
+
+                <Row justify='end' style={{ width: '100%', bottom: 6, position: 'absolute' }}>
+                  <Button
+                    type='link'
+                    onClick={() => {
+                      navigate(ROUTES.CONSULTA_ACERVO_DETALHES, {
+                        state: item,
+                      });
+                    }}
+                  >
+                    <Typography.Text
+                      strong
+                      underline
+                      style={{ color: Colors.SystemSME.CDEP.PRIMARY }}
+                    >
+                      Detalhes
+                    </Typography.Text>
+                  </Button>
                 </Row>
               </Col>
-
-              <Row
-                justify='start'
-                style={{ width: '100%', bottom: 6, left: 6, position: 'absolute' }}
-              >
-                <Tag
-                  color={`${Colors.BACKGROUND_CONTENT}`}
-                  style={{
-                    borderRadius: 10,
-                    color: Colors.Neutral.DARK,
-                  }}
-                >
-                  {tagAcervo(item.tipo)}
-                </Tag>
-              </Row>
-
-              <Row justify='end' style={{ width: '100%', bottom: 6, position: 'absolute' }}>
-                <Button
-                  type='link'
-                  onClick={() => {
-                    navigate(ROUTES.CONSULTA_ACERVO_DETALHES, {
-                      state: {
-                        tipo: item.tipo,
-                        codigo: item.codigo,
-                      },
-                    });
-                  }}
-                >
-                  <Typography.Text
-                    strong
-                    underline
-                    style={{ color: Colors.SystemSME.CDEP.PRIMARY }}
-                  >
-                    Detalhes
-                  </Typography.Text>
-                </Button>
-              </Row>
-            </Col>
-          </Row>
-        );
-      }}
-    />
+            </Row>
+          );
+        }}
+      />
+    </>
   );
 };

@@ -10,4 +10,5 @@ export enum MenuEnum {
   Acervo,
   Material,
   Idioma,
+  Solicitacoes,
 }

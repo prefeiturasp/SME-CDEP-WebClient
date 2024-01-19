@@ -28,6 +28,7 @@ import RedefinirSenhaToken from '~/pages/redefinir-senha-token';
 import GuardAutenticacao from './config/guard/autenticacao';
 import GuardPermissao from './config/guard/permissao';
 import { MenuEnum } from '~/core/enum/menu-enum';
+import Solicitacoes from '~/pages/solicitacoes';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
@@ -139,6 +140,10 @@ const RoutesConfig = () => {
                 <Route element={<GuardPermissao menuKey={MenuEnum.Acervo} />}>
                   <Route path={ROUTES.ACERVO_IMPORTAR} element={<ImportarAcervo />} />
                 </Route>
+              </Route>
+
+              <Route path={ROUTES.SOLICITACOES}>
+                <Route path='' element={<Solicitacoes />} />
               </Route>
             </Route>
           </Route>
