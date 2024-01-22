@@ -146,11 +146,11 @@ export type ApiResult<T> = {
   mensagens: string[];
 };
 
-const tratarThen = <T>(response: AxiosResponse<T>): ApiResult<T> => {
+export const tratarThen = <T>(response: AxiosResponse<T>): ApiResult<T> => {
   return { sucesso: true, dados: response?.data, mensagens: [] };
 };
 
-const tratarCatch = (error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
+export const tratarCatch = (error: AxiosError<RetornoBaseDTO>): ApiResult<any> => {
   const mensagens = error?.response?.data?.mensagens?.length
     ? error?.response?.data?.mensagens
     : [];

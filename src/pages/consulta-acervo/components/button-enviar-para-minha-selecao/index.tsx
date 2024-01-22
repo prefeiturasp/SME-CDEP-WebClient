@@ -30,7 +30,7 @@ export const ButtonEnviarParaMinhaSelecao: React.FC<ButtonEnviarParaMinhaSelecao
       }
     }
 
-    navigate(ROUTES.SOLICITACOES);
+    navigate(ROUTES.SOLICITACAO);
   };
 
   return (

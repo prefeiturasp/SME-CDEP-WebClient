@@ -1,0 +1,38 @@
+import { Col, Row } from 'antd';
+import React from 'react';
+import { useNavigate } from 'react-router-dom';
+import ButtonVoltar from '~/components/cdep/button/voltar';
+import CardContent from '~/components/lib/card-content';
+import HeaderPage from '~/components/lib/header-page';
+import { CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
+import { ROUTES } from '~/core/enum/routes';
+import BtnEnviarSolicitacoes from './components/btn-enviar-solicitacao';
+import CardDadosSolicitante from './components/card-dados-solicitante';
+
+const EnviarSolicitacoes: React.FC = () => {
+  const navigate = useNavigate();
+
+  const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
+
+  return (
+    <Col>
+      <HeaderPage title='Solicitação'>
+        <Col span={24}>
+          <Row gutter={[8, 8]}>
+            <Col>
+              <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
+            </Col>
+            <Col>
+              <BtnEnviarSolicitacoes />
+            </Col>
+          </Row>
+        </Col>
+      </HeaderPage>
+      <CardContent>
+        <CardDadosSolicitante />
+      </CardContent>
+    </Col>
+  );
+};
+
+export default EnviarSolicitacoes;
