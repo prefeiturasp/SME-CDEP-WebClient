@@ -8,6 +8,7 @@ import { CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { ROUTES } from '~/core/enum/routes';
 import BtnEnviarSolicitacoes from './components/btn-enviar-solicitacao';
 import CardDadosSolicitante from './components/card-dados-solicitante';
+import ListaAcervosSolicitacao from './components/lista-acervos-solicitacao';
 
 const EnviarSolicitacoes: React.FC = () => {
   const navigate = useNavigate();
@@ -29,7 +30,14 @@ const EnviarSolicitacoes: React.FC = () => {
         </Col>
       </HeaderPage>
       <CardContent>
-        <CardDadosSolicitante />
+        <Row gutter={[16, 16]}>
+          <Col xs={24}>
+            <CardDadosSolicitante />
+          </Col>
+          <Col xs={24}>
+            <ListaAcervosSolicitacao />
+          </Col>
+        </Row>
       </CardContent>
     </Col>
   );
