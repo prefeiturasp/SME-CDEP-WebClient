@@ -1,7 +1,7 @@
 import { Col, Row, Tag } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import React, { useCallback, useContext, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ButtonPrimary from '~/components/lib/button/primary';
 import { CDEP_BUTTON_ADICIONAR_ACERVOS } from '~/core/constants/ids/button/intex';
 import { AcervoSolicitacaoItemRetornoDTO } from '~/core/dto/acervo-solicitacao-item-retorno-dto';
@@ -37,10 +37,17 @@ const columns: ColumnsType<AcervoSolicitacaoItemRetornoDTO> = [
       );
     },
   },
+  {
+    title: 'Situação',
+    dataIndex: 'situacao',
+  },
 ];
 
 const ListaAcervosSolicitacao: React.FC = () => {
   const navigate = useNavigate();
+  const paramsRoute = useParams();
+
+  const solicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
   const solicitacao = useAppSelector((state) => state.solicitacao);
 
@@ -68,6 +75,22 @@ const ListaAcervosSolicitacao: React.FC = () => {
     }
   }, [solicitacao, obterDados]);
 
+  const obterDadosPorId = useCallback(async () => {
+    const resposta = await acervoSolicitacaoService.obterPorId(solicitacaoId);
+
+    if (resposta.sucesso) {
+      setDataSource(resposta.dados);
+    } else {
+      setDataSource([]);
+    }
+  }, [setDataSource, solicitacaoId]);
+
+  useEffect(() => {
+    if (solicitacaoId && !solicitacao?.acervosSelecionados?.length) {
+      obterDadosPorId();
+    }
+  }, [solicitacao, obterDadosPorId, solicitacaoId]);
+
   return (
     <Row gutter={[16, 16]}>
       <Col xs={24}>
@@ -76,6 +99,7 @@ const ListaAcervosSolicitacao: React.FC = () => {
             <ButtonPrimary
               id={CDEP_BUTTON_ADICIONAR_ACERVOS}
               onClick={() => onClickAdicionarAcervos()}
+              disabled={!!solicitacaoId}
             >
               Adicionar acervos
             </ButtonPrimary>

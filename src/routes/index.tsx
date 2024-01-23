@@ -144,6 +144,7 @@ const RoutesConfig = () => {
 
               <Route path={ROUTES.SOLICITACAO}>
                 <Route path='' element={<EnviarSolicitacoes />} />
+                <Route path={ROUTES.SOLICITACAO_EDITAR} element={<EnviarSolicitacoes />} />
               </Route>
             </Route>
           </Route>

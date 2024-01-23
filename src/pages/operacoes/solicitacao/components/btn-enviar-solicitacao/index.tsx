@@ -1,29 +1,43 @@
 import Checkbox, { CheckboxChangeEvent } from 'antd/es/checkbox/Checkbox';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useMemo, useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { useNavigate, useParams } from 'react-router-dom';
 import Spin from '~/components/cdep/spin';
 import ButtonSecundary from '~/components/lib/button/secundary';
 import Modal from '~/components/lib/modal';
 import { CDEP_BUTTON_NOVO } from '~/core/constants/ids/button/intex';
+import { AcervoSolicitacaoItemCadastroDTO } from '~/core/dto/acervo-solicitacao-item-cadastro-dto';
+import { ROUTES } from '~/core/enum/routes';
+import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions';
 import { obterTermoDeCompromisso } from '~/core/services/acervo-service';
-import { tratarCatch, tratarThen } from '~/core/services/api';
+import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { AcervoSolicitacaoContext } from '../../provider';
+import { notification } from '~/components/lib/notification';
 
 const BtnEnviarSolicitacoes: React.FC = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const paramsRoute = useParams();
+
+  const solicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
+
   const { dataSource } = useContext(AcervoSolicitacaoContext);
 
   const [showModal, setShowModal] = useState(false);
   const [checked, setChecked] = useState(false);
-  const [dados, setDados] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const desabilitarBtnEnviarSolicitacao = !dataSource?.length;
+  const [dados, setDados] = useState<string>('');
+
+  const desabilitarBtnEnviarSolicitacao: boolean = useMemo(
+    () => !!solicitacaoId || !dataSource?.length,
+    [dataSource, solicitacaoId],
+  );
 
   const obterTermo = async () => {
     setLoading(true);
-    const resposta = await obterTermoDeCompromisso()
-      .then(tratarThen)
-      .catch(tratarCatch)
-      .finally(() => setLoading(false));
+    const resposta = await obterTermoDeCompromisso().finally(() => setLoading(false));
 
     if (resposta.sucesso) {
       setDados(resposta.dados);
@@ -39,15 +53,33 @@ const BtnEnviarSolicitacoes: React.FC = () => {
     setChecked(false);
   };
 
-  const validateFields = () => {
+  const validateFields = async () => {
     if (!checked) {
       return;
     }
 
-    console.log(dataSource);
-    // TODO - Consumir endpoint para enviar a solicitação e mapear dto com o dataSource acima para enviar no endpoint
+    const params: AcervoSolicitacaoItemCadastroDTO[] = dataSource.map((item) => ({
+      acervoId: item.acervoId,
+    }));
 
-    closeModal();
+    setLoading(true);
+    const resposta = await acervoSolicitacaoService
+      .inserir(params)
+      .finally(() => setLoading(false));
+
+    if (resposta.sucesso) {
+      dispatch(setAcervosSelecionados([]));
+
+      const solicitacaoId = resposta.dados;
+      navigate(`${ROUTES.SOLICITACAO}/${solicitacaoId}`);
+
+      notification.success({
+        message: 'Sucesso',
+        description: 'Solicitação realizada com sucesso.',
+      });
+
+      closeModal();
+    }
   };
 
   const onCancelModal = () => {
@@ -81,12 +113,17 @@ const BtnEnviarSolicitacoes: React.FC = () => {
         destroyOnClose
         okText='Prosseguir'
         okButtonProps={{ disabled: !checked }}
+        cancelButtonProps={{ disabled: loading }}
         width={669}
+        closable={!loading}
+        maskClosable={!loading}
+        keyboard={!loading}
+        confirmLoading={loading}
       >
         <Spin spinning={loading}>
           {dados && <div dangerouslySetInnerHTML={{ __html: dados }} />}
         </Spin>
-        <Checkbox checked={checked} onChange={handleCheckboxChange}>
+        <Checkbox checked={checked} onChange={handleCheckboxChange} disabled={loading}>
           Li e estou de acordo com os termos
         </Checkbox>
       </Modal>
