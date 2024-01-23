@@ -1,10 +1,9 @@
 import { produce } from 'immer';
-import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
 
 import { SetAcervosSelecionados, typeSetAcervosSelecionados } from './actions';
 
 type InitialValuesProps = {
-  acervosSelecionados: PesquisaAcervoDTO[];
+  acervosSelecionados: number[];
 };
 const initialValues: InitialValuesProps = {
   acervosSelecionados: [],

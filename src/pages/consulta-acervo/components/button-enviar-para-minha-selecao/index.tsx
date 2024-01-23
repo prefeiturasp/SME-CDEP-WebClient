@@ -22,10 +22,11 @@ export const ButtonEnviarParaMinhaSelecao: React.FC<ButtonEnviarParaMinhaSelecao
   const onClick = () => {
     if (pesquisaAcervo) {
       const temNaLista = acervosSelecionados.find(
-        (item) => item?.codigo === pesquisaAcervo?.codigo && item?.tipo == pesquisaAcervo?.tipo,
+        (acervoId) => pesquisaAcervo?.acervoId === acervoId,
       );
+
       if (!temNaLista) {
-        const newValues = [...acervosSelecionados, pesquisaAcervo];
+        const newValues = [...acervosSelecionados, pesquisaAcervo.acervoId];
         dispatch(setAcervosSelecionados(newValues));
       }
     }

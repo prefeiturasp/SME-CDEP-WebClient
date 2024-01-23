@@ -9,6 +9,7 @@ import { ROUTES } from '~/core/enum/routes';
 import BtnEnviarSolicitacoes from './components/btn-enviar-solicitacao';
 import CardDadosSolicitante from './components/card-dados-solicitante';
 import ListaAcervosSolicitacao from './components/lista-acervos-solicitacao';
+import AcervoSolicitacaoContextProvider from './provider';
 
 const EnviarSolicitacoes: React.FC = () => {
   const navigate = useNavigate();
@@ -16,30 +17,32 @@ const EnviarSolicitacoes: React.FC = () => {
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
   return (
-    <Col>
-      <HeaderPage title='Solicitação'>
-        <Col span={24}>
-          <Row gutter={[8, 8]}>
-            <Col>
-              <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
+    <AcervoSolicitacaoContextProvider>
+      <Col>
+        <HeaderPage title='Solicitação'>
+          <Col span={24}>
+            <Row gutter={[8, 8]}>
+              <Col>
+                <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
+              </Col>
+              <Col>
+                <BtnEnviarSolicitacoes />
+              </Col>
+            </Row>
+          </Col>
+        </HeaderPage>
+        <CardContent>
+          <Row gutter={[16, 16]}>
+            <Col xs={24}>
+              <CardDadosSolicitante />
             </Col>
-            <Col>
-              <BtnEnviarSolicitacoes />
+            <Col xs={24}>
+              <ListaAcervosSolicitacao />
             </Col>
           </Row>
-        </Col>
-      </HeaderPage>
-      <CardContent>
-        <Row gutter={[16, 16]}>
-          <Col xs={24}>
-            <CardDadosSolicitante />
-          </Col>
-          <Col xs={24}>
-            <ListaAcervosSolicitacao />
-          </Col>
-        </Row>
-      </CardContent>
-    </Col>
+        </CardContent>
+      </Col>
+    </AcervoSolicitacaoContextProvider>
   );
 };
 
