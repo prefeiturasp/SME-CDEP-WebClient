@@ -15,24 +15,19 @@ const CheckboxSelecionarAcervo: React.FC<CheckboxSelecionarAcervoProps> = ({ pes
   const acervosSelecionados = solicitacao?.acervosSelecionados;
 
   const selected = useMemo(
-    () =>
-      acervosSelecionados.find(
-        (item) => item?.codigo === pesquisaAcervo?.codigo && item?.tipo === pesquisaAcervo?.tipo,
-      ),
+    () => acervosSelecionados.find((acervoId) => acervoId === pesquisaAcervo?.acervoId),
     [acervosSelecionados, pesquisaAcervo],
   );
 
   const label = selected ? 'Selecionado' : 'Selecionar';
 
   const onChange = () => {
-    let newValues: PesquisaAcervoDTO[] = [];
+    let newValues: number[] = [];
 
     if (selected) {
-      newValues = acervosSelecionados.filter(
-        (item) => !(item?.codigo === pesquisaAcervo?.codigo && item?.tipo === pesquisaAcervo?.tipo),
-      );
+      newValues = acervosSelecionados.filter((acervoId) => pesquisaAcervo?.acervoId !== acervoId);
     } else {
-      newValues = [...acervosSelecionados, pesquisaAcervo];
+      newValues = [...acervosSelecionados, pesquisaAcervo.acervoId];
     }
 
     dispatch(setAcervosSelecionados(newValues));

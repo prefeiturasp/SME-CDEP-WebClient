@@ -7,10 +7,10 @@ import { PesquisaAcervoDTO } from '../dto/pesquisa-acervo-dto';
 import { TipoAcervo } from '../enum/tipo-acervo';
 import api, { ApiResult, obterRegistro } from './api';
 
- const obterTiposAcervo = (): Promise<ApiResult<IdNomeDTO[]>> =>
+const obterTiposAcervo = (): Promise<ApiResult<IdNomeDTO[]>> =>
   obterRegistro(`${URL_API_ACERVO}/tipos`);
 
- const pesquisarAcervosAreaPublica = (
+const pesquisarAcervosAreaPublica = (
   numeroPagina: number,
   numeroRegistros: number,
   params: FiltroTextoLivreTipoAcervoDTO,
@@ -21,7 +21,7 @@ import api, { ApiResult, obterRegistro } from './api';
   });
 };
 
- const obterDetalhamentoPorTipoAcervoECodigoAreaPublica = (
+const obterDetalhamentoPorTipoAcervoECodigoAreaPublica = (
   codigo: ConsultaAcervoDetalhesDTO['codigo'] | ConsultaAcervoDetalhesDTO['codigoNovo'],
   tipo: TipoAcervo,
 ) =>
@@ -29,8 +29,7 @@ import api, { ApiResult, obterRegistro } from './api';
     params: { codigo, tipo },
   });
 
- const obterTermoDeCompromisso = () =>
-  api.get<string>(`${URL_API_ACERVO}/termo-compromisso`);
+const obterTermoDeCompromisso = () => api.get<string>(`${URL_API_ACERVO}/termo-compromisso`);
 
 export {
   obterDetalhamentoPorTipoAcervoECodigoAreaPublica,

@@ -1,14 +1,14 @@
 import { Col, Row, Tag } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonPrimary from '~/components/lib/button/primary';
 import { CDEP_BUTTON_ADICIONAR_ACERVOS } from '~/core/constants/ids/button/intex';
-import { AcervoSolicitacaoItemConsultaDTO } from '~/core/dto/acervo-solicitacao-item-consulta-dto';
 import { AcervoSolicitacaoItemRetornoDTO } from '~/core/dto/acervo-solicitacao-item-retorno-dto';
 import { ROUTES } from '~/core/enum/routes';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
+import { AcervoSolicitacaoContext } from '../../provider';
 
 const columns: ColumnsType<AcervoSolicitacaoItemRetornoDTO> = [
   {
@@ -44,27 +44,23 @@ const ListaAcervosSolicitacao: React.FC = () => {
 
   const solicitacao = useAppSelector((state) => state.solicitacao);
 
-  const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemRetornoDTO[]>([]);
+  const { setDataSource, dataSource } = useContext(AcervoSolicitacaoContext);
 
   const onClickAdicionarAcervos = () => {
     navigate(ROUTES.CONSULTA_ACERVO);
   };
 
   const obterDados = useCallback(async () => {
-    const params: AcervoSolicitacaoItemConsultaDTO[] = solicitacao.acervosSelecionados.map(
-      (item) => ({
-        tipo: item?.tipo,
-        codigo: item?.codigo,
-      }),
+    const resposta = await acervoSolicitacaoService.obterItensDoAcervoPorFiltros(
+      solicitacao.acervosSelecionados,
     );
-    const resposta = await acervoSolicitacaoService.obterItensDoAcervoPorFiltros(params);
 
     if (resposta.sucesso) {
       setDataSource(resposta.dados);
     } else {
       setDataSource([]);
     }
-  }, [solicitacao]);
+  }, [setDataSource, solicitacao]);
 
   useEffect(() => {
     if (solicitacao?.acervosSelecionados?.length) {

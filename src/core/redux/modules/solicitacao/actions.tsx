@@ -1,13 +1,11 @@
-import { PesquisaAcervoDTO } from "~/core/dto/pesquisa-acervo-dto";
-
 export const typeSetAcervosSelecionados = '@solicitacao/setAcervosSelecionados';
 
 export interface SetAcervosSelecionados {
   type: typeof typeSetAcervosSelecionados;
-  payload: PesquisaAcervoDTO[];
+  payload: number[];
 }
 
-export const setAcervosSelecionados = (payload: PesquisaAcervoDTO[]): SetAcervosSelecionados => {
+export const setAcervosSelecionados = (payload: number[]): SetAcervosSelecionados => {
   return {
     type: typeSetAcervosSelecionados,
     payload,
