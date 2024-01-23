@@ -4,7 +4,7 @@ import { AcervoSolicitacaoItemRetornoDTO } from '../dto/acervo-solicitacao-item-
 import { obterRegistro } from './api';
 
 const obterItensDoAcervoPorFiltros = (acervosIds: number[]) =>
-  obterRegistro<AcervoSolicitacaoItemRetornoDTO[]>(`${URL_API_ACERVO_SOLICITACAO}`, {
+  obterRegistro<AcervoSolicitacaoItemRetornoDTO[]>(URL_API_ACERVO_SOLICITACAO, {
     params: { acervosIds },
     paramsSerializer: {
       serialize: (params) => {
