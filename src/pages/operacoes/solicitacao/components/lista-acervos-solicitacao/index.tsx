@@ -18,6 +18,7 @@ import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service
 import armazenamentoService from '~/core/services/armazenamento-service';
 import { downloadBlob } from '~/core/utils/functions';
 import { AcervoSolicitacaoContext } from '../../provider';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 const ContainerExpandedTable = styled.div`
   .ant-table-tbody tr.ant-table-expanded-row td {
@@ -44,6 +45,7 @@ const ListaAcervosSolicitacao: React.FC = () => {
   const solicitacao = useAppSelector((state) => state.solicitacao);
 
   const { setDataSource, dataSource } = useContext(AcervoSolicitacaoContext);
+  const { permissao } = useContext(PermissaoContext);
 
   const [expandedRowKey, setExpandedRowKey] = useState<number>(0);
 
@@ -229,7 +231,7 @@ const ListaAcervosSolicitacao: React.FC = () => {
             <ButtonPrimary
               id={CDEP_BUTTON_ADICIONAR_ACERVOS}
               onClick={() => onClickAdicionarAcervos()}
-              disabled={!!solicitacaoId}
+              disabled={!permissao?.podeIncluir || !!solicitacaoId}
             >
               Adicionar acervos
             </ButtonPrimary>

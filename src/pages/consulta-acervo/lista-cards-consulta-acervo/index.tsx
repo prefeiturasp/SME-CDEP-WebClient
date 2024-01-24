@@ -71,14 +71,15 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
 
   return (
     <>
-      <Row justify='end' style={{ padding: '20px 60px' }}>
-        <Col>
-        {
-          dataSource.length > 0 && 
-          <ButtonEnviarParaMinhaSelecao />
-        }
-        </Col>
-      </Row>
+      {dataSource.length > 0 ? (
+        <Row justify='end' style={{ padding: '20px 60px' }}>
+          <Col>
+            <ButtonEnviarParaMinhaSelecao />
+          </Col>
+        </Row>
+      ) : (
+        <></>
+      )}
 
       <List
         pagination={{ ...listParams, onChange: onListChange }}

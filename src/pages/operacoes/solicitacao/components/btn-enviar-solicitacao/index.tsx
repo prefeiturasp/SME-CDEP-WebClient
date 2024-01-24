@@ -13,6 +13,7 @@ import { obterTermoDeCompromisso } from '~/core/services/acervo-service';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { AcervoSolicitacaoContext } from '../../provider';
 import { notification } from '~/components/lib/notification';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 const BtnEnviarSolicitacoes: React.FC = () => {
   const navigate = useNavigate();
@@ -23,6 +24,7 @@ const BtnEnviarSolicitacoes: React.FC = () => {
   const solicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
   const { dataSource } = useContext(AcervoSolicitacaoContext);
+  const { permissao } = useContext(PermissaoContext);
 
   const [showModal, setShowModal] = useState(false);
   const [checked, setChecked] = useState(false);
@@ -31,8 +33,8 @@ const BtnEnviarSolicitacoes: React.FC = () => {
   const [dados, setDados] = useState<string>('');
 
   const desabilitarBtnEnviarSolicitacao: boolean = useMemo(
-    () => !!solicitacaoId || !dataSource?.length,
-    [dataSource, solicitacaoId],
+    () => !permissao?.podeIncluir || !!solicitacaoId || !dataSource?.length,
+    [dataSource, solicitacaoId, permissao],
   );
 
   const obterTermo = async () => {
@@ -45,7 +47,9 @@ const BtnEnviarSolicitacoes: React.FC = () => {
   };
 
   const onClickEnviar = () => {
-    setShowModal(true);
+    if (permissao?.podeIncluir) {
+      setShowModal(true);
+    }
   };
 
   const closeModal = () => {

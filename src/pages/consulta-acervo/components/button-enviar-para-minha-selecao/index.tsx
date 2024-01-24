@@ -44,7 +44,7 @@ export const ButtonEnviarParaMinhaSelecao: React.FC<ButtonEnviarParaMinhaSelecao
         alignItems: 'center',
       }}
       onClick={onClick}
-      disabled={acervosSelecionados.length == 0}
+      disabled={acervosSelecionados.length == 0 && !pesquisaAcervo?.acervoId}
     >
       Enviar para a minha seleção
     </ButtonPrimary>
