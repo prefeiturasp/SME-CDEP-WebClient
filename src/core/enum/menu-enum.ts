@@ -10,4 +10,6 @@ export enum MenuEnum {
   Acervo,
   Material,
   Idioma,
+  Operacoes,
+  Solicitacao,
 }

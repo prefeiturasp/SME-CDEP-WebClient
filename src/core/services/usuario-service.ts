@@ -1,4 +1,5 @@
 import { AxiosResponse } from 'axios';
+import { DadosSolicitanteDTO } from '../dto/dados-solicitante-dto';
 import { DadosUsuarioDTO } from '../dto/dados-usuario-dto';
 import { EnderecoUsuarioExternoDTO } from '../dto/endereco-usuario-externo-dto';
 import { RecuperacaoSenhaDTO } from '../dto/recuperacao-senha-dto';
@@ -46,6 +47,9 @@ const alterarSenhaComTokenRecuperacao = (
 const tokenRecuperacaoSenhaEstaValido = (token: string): Promise<AxiosResponse<boolean>> =>
   api.get(`${URL_DEFAULT}/valida-token-recuperacao-senha/${token}`);
 
+const obterDadosSolicitante = () =>
+  api.get<DadosSolicitanteDTO>(`${URL_DEFAULT}/dados-solicitante`);
+
 export default {
   alterarEmail,
   alterarSenha,
@@ -58,4 +62,5 @@ export default {
   solicitarRecuperacaoSenha,
   alterarSenhaComTokenRecuperacao,
   tokenRecuperacaoSenhaEstaValido,
+  obterDadosSolicitante,
 };
