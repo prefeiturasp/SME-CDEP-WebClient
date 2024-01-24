@@ -140,6 +140,12 @@ const RoutesConfig = () => {
                   <Route path={ROUTES.ACERVO_IMPORTAR} element={<ImportarAcervo />} />
                 </Route>
               </Route>
+
+              <Route path={ROUTES.ATENDIMENTO_SOLICITACOES}>
+                <Route element={<GuardPermissao menuKey={MenuEnum.AtendimentoSolicitacoes} />}>
+                  {/* TODO - remover comentario no proximo task <Route path='' element={<ListAtendimentos />} /> */}
+                </Route>
+              </Route>
             </Route>
           </Route>
         ) : (
