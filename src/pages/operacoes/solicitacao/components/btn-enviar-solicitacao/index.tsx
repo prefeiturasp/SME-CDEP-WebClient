@@ -87,8 +87,8 @@ const BtnEnviarSolicitacoes: React.FC = () => {
   };
 
   useEffect(() => {
-    obterTermo();
-  }, []);
+    if (showModal) obterTermo();
+  }, [showModal]);
 
   const handleCheckboxChange = (e: CheckboxChangeEvent) => {
     setChecked(e.target.checked);
