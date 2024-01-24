@@ -16,9 +16,16 @@ interface TableParams {
 type DataTableProps<T> = {
   filters?: any;
   url: string;
+  showOrderButton?: boolean;
 } & TableProps<T>;
 
-const DataTable = <T extends object>({ filters, url, columns, ...rest }: DataTableProps<T>) => {
+const DataTable = <T extends object>({
+  filters,
+  url,
+  columns,
+  showOrderButton = true,
+  ...rest
+}: DataTableProps<T>) => {
   const [data, setData] = useState<T[]>();
   const [loading, setLoading] = useState(false);
   const [tableParams, setTableParams] = useState<TableParams>({
@@ -105,7 +112,7 @@ const DataTable = <T extends object>({ filters, url, columns, ...rest }: DataTab
 
   return (
     <>
-      <ButtonOrdenacao onClick={onClickOrdenar} />
+      {showOrderButton && <ButtonOrdenacao onClick={onClickOrdenar} />}
       <Table
         columns={columns}
         rowKey='id'
