@@ -28,6 +28,7 @@ import RedefinirSenhaToken from '~/pages/redefinir-senha-token';
 import GuardAutenticacao from './config/guard/autenticacao';
 import GuardPermissao from './config/guard/permissao';
 import { MenuEnum } from '~/core/enum/menu-enum';
+import ListAtendimentos from '~/pages/cadastros/atendimento-solicitacoes/list';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
@@ -143,7 +144,7 @@ const RoutesConfig = () => {
 
               <Route path={ROUTES.ATENDIMENTO_SOLICITACOES}>
                 <Route element={<GuardPermissao menuKey={MenuEnum.AtendimentoSolicitacoes} />}>
-                  {/* TODO - remover comentario no proximo task <Route path='' element={<ListAtendimentos />} /> */}
+                  <Route path='' element={<ListAtendimentos />} />
                 </Route>
               </Route>
             </Route>
