@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { useForm, useWatch } from 'antd/es/form/Form';
 
-import { useAppDispatch } from '~/core/hooks/use-redux';
+import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
 import autenticacaoService from '~/core/services/autenticacao-service';
 
 import { AxiosError } from 'axios';
@@ -32,12 +32,16 @@ const Login = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+  const solicitacao = useAppSelector((state) => state.solicitacao);
+
   const [erroGeral, setErroGeral] = useState<string[]>();
 
   const [form] = useForm();
 
   const login = useWatch('login', form);
   const senha = useWatch('senha', form);
+
+  const temAcervosSelecionados = !!solicitacao.acervosSelecionados?.length;
 
   const validarExibirErros = (erro: AxiosError<RetornoBaseDTO>) => {
     if (erro?.response?.status === 401) {
@@ -68,6 +72,12 @@ const Login = () => {
         if (resposta?.data?.autenticado) {
           window.clarity('identify', resposta.data.usuarioLogin);
           validarAutenticacao(resposta.data);
+
+          if (temAcervosSelecionados) {
+            setTimeout(() => {
+              navigate(ROUTES.SOLICITACAO);
+            }, 100);
+          }
         }
       })
       .catch(validarExibirErros)

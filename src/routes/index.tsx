@@ -144,10 +144,13 @@ const RoutesConfig = () => {
 
               <Route path={ROUTES.SOLICITACAO}>
                 <Route element={<GuardPermissao menuKey={MenuEnum.Solicitacao} />}>
-                  <Route path='' element={<EnviarSolicitacoes />} />
+                  <Route path='' element={<EnviarSolicitacoes key='NOVA_SOLICITACAO' />} />
                 </Route>
                 <Route element={<GuardPermissao menuKey={MenuEnum.Solicitacao} />}>
-                  <Route path={ROUTES.SOLICITACAO_EDITAR} element={<EnviarSolicitacoes />} />
+                  <Route
+                    path={ROUTES.SOLICITACAO_EDITAR}
+                    element={<EnviarSolicitacoes key='EDITAR_SOLICITACAO' />}
+                  />
                 </Route>
               </Route>
             </Route>
