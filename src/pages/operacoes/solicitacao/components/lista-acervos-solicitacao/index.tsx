@@ -181,7 +181,7 @@ const ListaAcervosSolicitacao: React.FC = () => {
 
           return (
             <ButtonPrimary
-              id={`${CDEP_BUTTON_EXPANDIR_LINHA}/_${index}`}
+              id={`${CDEP_BUTTON_EXPANDIR_LINHA}_${index}`}
               icon={icone}
               style={{ display: 'flex', alignItems: 'center', gap: 3 }}
               onClick={() => {
@@ -226,7 +226,7 @@ const ListaAcervosSolicitacao: React.FC = () => {
           <FaTrashAlt
             cursor='pointer'
             fontSize={16}
-            id={`${CDEP_BUTTON_REMOVER_ACERVO}/_${index}`}
+            id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
             onClick={() => {
               removerAcervo(index, linha);
             }}
