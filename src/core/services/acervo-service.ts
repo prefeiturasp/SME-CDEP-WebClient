@@ -28,8 +28,12 @@ const obterDetalhamentoPorTipoAcervoECodigoAreaPublica = (
   obterRegistro<ConsultaAcervoDetalhesDTO>(`${URL_API_ACERVO}/detalhar-acervo`, {
     params: { codigo, tipo },
   });
+
+const obterTermoDeCompromisso = () => obterRegistro<string>(`${URL_API_ACERVO}/termo-compromisso`);
+
 export {
   obterDetalhamentoPorTipoAcervoECodigoAreaPublica,
+  obterTermoDeCompromisso,
   obterTiposAcervo,
   pesquisarAcervosAreaPublica,
 };
