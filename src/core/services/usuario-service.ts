@@ -5,7 +5,9 @@ import { RecuperacaoSenhaDTO } from '../dto/recuperacao-senha-dto';
 import { RetornoPerfilUsuarioDTO } from '../dto/retorno-perfil-usuario-dto';
 import { SenhaNovaDTO } from '../dto/senha-nova-dto';
 import { UsuarioExternoDTO } from '../dto/usuario-externo-dto';
-import api from './api';
+import api, { obterRegistro } from './api';
+import { ResponsavelDTO } from '../dto/responsavel-dto';
+
 
 const URL_DEFAULT = 'v1/usuario';
 
@@ -46,6 +48,9 @@ const alterarSenhaComTokenRecuperacao = (
 const tokenRecuperacaoSenhaEstaValido = (token: string): Promise<AxiosResponse<boolean>> =>
   api.get(`${URL_DEFAULT}/valida-token-recuperacao-senha/${token}`);
 
+const obterPerfisResponsaveis = () =>
+  obterRegistro<ResponsavelDTO[]>(`${URL_DEFAULT}/perfis/responsaveis`);
+
 export default {
   alterarEmail,
   alterarSenha,
@@ -58,4 +63,5 @@ export default {
   solicitarRecuperacaoSenha,
   alterarSenhaComTokenRecuperacao,
   tokenRecuperacaoSenhaEstaValido,
+  obterPerfisResponsaveis,
 };
