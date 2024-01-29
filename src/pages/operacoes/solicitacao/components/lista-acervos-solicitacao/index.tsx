@@ -1,4 +1,4 @@
-import { Col, Row, Tag, Tooltip } from 'antd';
+import { Button, Col, Row, Tag, Tooltip } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
@@ -223,14 +223,16 @@ const ListaAcervosSolicitacao: React.FC = () => {
       width: '100px',
       render: (_, linha, index: number) => (
         <Tooltip title='Remover acervo'>
-          <FaTrashAlt
-            cursor='pointer'
-            fontSize={16}
-            id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
-            onClick={() => {
-              removerAcervo(index, linha);
-            }}
-          />
+          <Button type='text' disabled={permissao.somenteConsulta}>
+            <FaTrashAlt
+              cursor='pointer'
+              fontSize={16}
+              id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
+              onClick={() => {
+                removerAcervo(index, linha);
+              }}
+            />
+          </Button>
         </Tooltip>
       ),
     });
