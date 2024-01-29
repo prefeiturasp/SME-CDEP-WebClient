@@ -12,4 +12,6 @@ export enum MenuEnum {
   Idioma,
   Gestao,
   AtendimentoSolicitacoes,
+  Operacoes,
+  Solicitacao,
 }

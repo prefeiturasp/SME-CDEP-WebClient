@@ -1,13 +1,13 @@
 import { AxiosResponse } from 'axios';
+import { DadosSolicitanteDTO } from '../dto/dados-solicitante-dto';
 import { DadosUsuarioDTO } from '../dto/dados-usuario-dto';
 import { EnderecoUsuarioExternoDTO } from '../dto/endereco-usuario-externo-dto';
 import { RecuperacaoSenhaDTO } from '../dto/recuperacao-senha-dto';
+import { ResponsavelDTO } from '../dto/responsavel-dto';
 import { RetornoPerfilUsuarioDTO } from '../dto/retorno-perfil-usuario-dto';
 import { SenhaNovaDTO } from '../dto/senha-nova-dto';
 import { UsuarioExternoDTO } from '../dto/usuario-externo-dto';
 import api, { obterRegistro } from './api';
-import { ResponsavelDTO } from '../dto/responsavel-dto';
-
 
 const URL_DEFAULT = 'v1/usuario';
 
@@ -51,6 +51,9 @@ const tokenRecuperacaoSenhaEstaValido = (token: string): Promise<AxiosResponse<b
 const obterPerfisResponsaveis = () =>
   obterRegistro<ResponsavelDTO[]>(`${URL_DEFAULT}/perfis/responsaveis`);
 
+const obterDadosSolicitante = () =>
+  api.get<DadosSolicitanteDTO>(`${URL_DEFAULT}/dados-solicitante`);
+
 export default {
   alterarEmail,
   alterarSenha,
@@ -64,4 +67,5 @@ export default {
   alterarSenhaComTokenRecuperacao,
   tokenRecuperacaoSenhaEstaValido,
   obterPerfisResponsaveis,
+  obterDadosSolicitante,
 };

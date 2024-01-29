@@ -4,8 +4,7 @@ import React, { useEffect, useState } from 'react';
 import Select from '~/components/lib/inputs/select';
 import { CDEP_SELECT_SOLICITACAO_SITUACOES } from '~/core/constants/ids/select';
 import { SituacaoItemDTO } from '~/core/dto/situacao-dto';
-
-import { obterSituacoesAcervo } from '~/core/services/acervo-solicitacao-service';
+import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 
 type SelectTipoSituacaoProps = {
   selectProps?: SelectProps;
@@ -16,11 +15,11 @@ const SelectTipoSituacao: React.FC<SelectTipoSituacaoProps> = ({ selectProps, fo
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
 
   const obterTipos = async () => {
-    const resposta = await obterSituacoesAcervo();
+    const resposta = await acervoSolicitacaoService.obterSituacoesAcervo();
     if (resposta.sucesso) {
       const newOptions = resposta.dados.map((item: SituacaoItemDTO) => ({
         label: item.nome,
-        value: item.id
+        value: item.id,
       }));
       setOptions(newOptions);
     } else {

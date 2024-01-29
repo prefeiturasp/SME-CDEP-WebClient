@@ -2,6 +2,7 @@ import { createElement } from 'react';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 
 import FormConfigCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form/form-config';
+import { MenuEnum } from '~/core/enum/menu-enum';
 import { ROUTES } from '~/core/enum/routes';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import PageForbidden from '~/pages/403';
@@ -22,12 +23,13 @@ import Home from '~/pages/home';
 import Inicial from '~/pages/inicial';
 import Login from '~/pages/login';
 import MeusDados from '~/pages/meus-dados';
+import EnviarSolicitacoes from '~/pages/operacoes/solicitacao';
 import Principal from '~/pages/principal/index';
 import RedefinirSenha from '~/pages/redefinir-senha';
 import RedefinirSenhaToken from '~/pages/redefinir-senha-token';
 import GuardAutenticacao from './config/guard/autenticacao';
 import GuardPermissao from './config/guard/permissao';
-import { MenuEnum } from '~/core/enum/menu-enum';
+
 import ListAtendimentos from '~/pages/cadastros/atendimento-solicitacoes/list';
 
 const RoutesConfig = () => {
@@ -139,6 +141,18 @@ const RoutesConfig = () => {
                 </Route>
                 <Route element={<GuardPermissao menuKey={MenuEnum.Acervo} />}>
                   <Route path={ROUTES.ACERVO_IMPORTAR} element={<ImportarAcervo />} />
+                </Route>
+              </Route>
+
+              <Route path={ROUTES.SOLICITACAO}>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Solicitacao} />}>
+                  <Route path='' element={<EnviarSolicitacoes key='NOVA_SOLICITACAO' />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Solicitacao} />}>
+                  <Route
+                    path={ROUTES.SOLICITACAO_EDITAR}
+                    element={<EnviarSolicitacoes key='EDITAR_SOLICITACAO' />}
+                  />
                 </Route>
               </Route>
 

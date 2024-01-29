@@ -1,7 +1,7 @@
 export type MinhaSolicitacaoDTO = {
-    id: number;
-    dataCriacao: string;
-    dataVisita: string;
-    situacao: string;
-    titulo: string;
-  };
+  id: number;
+  acervoSolicitacaoId: number;
+  dataCriacao: string;
+  dataVisita: string;
+  situacao: string;
+};
