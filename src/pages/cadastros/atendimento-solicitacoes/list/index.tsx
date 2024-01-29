@@ -1,7 +1,7 @@
-import { Col, DatePicker, Form, Input, Row } from 'antd';
-import { FormInstance, useForm } from 'antd/es/form/Form';
+import { Col, Form, Input, Row } from 'antd';
+import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
@@ -9,18 +9,16 @@ import ButtonSecundary from '~/components/lib/button/secundary';
 import CardContent from '~/components/lib/card-content';
 import DataTable from '~/components/lib/data-table';
 import HeaderPage from '~/components/lib/header-page';
-import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 
 import { CDEP_BUTTON_CANCELAR, CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
-import { CDEP_INPUT_DATA, CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
+import { CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
 import { URL_API_ACERVO_SOLICITACAO } from '~/core/constants/urls-api';
 import { ROUTES } from '~/core/enum/routes';
 import SelectTipoSituacao from '~/components/cdep/input/tipo-situacao';
 import SelectResponsaveis from '~/components/cdep/input/responsaveis';
 import dayjs from 'dayjs';
 import { SolicitacaoDTO } from '~/core/dto/solicitacao-dto';
-import DatePickerMultiplos from '~/components/cdep/data-lista';
-import DatePickerPeriodo from '~/components/cdep/data-lista';
+import { DatePickerPeriodo } from '~/components/cdep/data-lista';
 
 type FilterStateLocationProps = {
   tipoAcervo: number | null;
@@ -31,6 +29,17 @@ type FilterStateLocationProps = {
   dataVisitaFim: string | null;
   situacaoItem: number | null;
   responsavel: string | null;
+};
+
+const DEFAULT_VALUES: FilterStateLocationProps = {
+  acervoSolicitacaoId: null,
+  tipoAcervo: null,
+  dataSolicitacaoInicio: null,
+  dataSolicitacaoFim: null,
+  dataVisitaInicio: null,
+  dataVisitaFim: null,
+  situacaoItem: null,
+  responsavel: null,
 };
 
 const ListAtendimentos: React.FC = () => {
@@ -88,19 +97,11 @@ const ListAtendimentos: React.FC = () => {
   const onClickCancelar = () => {
     if (form.isFieldsTouched()) {
       form.resetFields();
+      setFilters(DEFAULT_VALUES);
     }
   };
 
-  const [filters, setFilters] = useState<FilterStateLocationProps>({
-    acervoSolicitacaoId: null,
-    tipoAcervo: null,
-    dataSolicitacaoInicio: null,
-    dataSolicitacaoFim: null,
-    dataVisitaInicio: null,
-    dataVisitaFim: null,
-    situacaoItem: null,
-    responsavel: null
-  });
+  const [filters, setFilters] = useState<FilterStateLocationProps>(DEFAULT_VALUES);
 
   const obterFiltros = () => {
     setFilters({
@@ -157,35 +158,35 @@ const ListAtendimentos: React.FC = () => {
                 <Col xs={24} sm={8}>
                   <SelectTipoAcervo
                     formItemProps={{ rules: [{ required: true }], name: 'tipoAcervo' }}
-                    selectProps={{onChange: obterFiltros}}
+                    selectProps={{ onChange: obterFiltros }}
                   />
                 </Col>
                 <Col xs={24} sm={8}>
                   <DatePickerPeriodo
-                    label='Data da solicitação'
-                    name='dataSolicitacao'
-                    changeFunction={obterFiltros}
+                    formItemProps={{
+                      label: 'Data da solicitação',
+                      name: 'dataSolicitacao',
+                    }}
+                    rangerPickerProps={{ onChange: obterFiltros }}
                   />
                 </Col>
 
                 <Col xs={24} sm={8}>
                   <DatePickerPeriodo
-                    label='Data da visita'
-                    name='dataVisita'
-                    changeFunction={obterFiltros}
+                    formItemProps={{
+                      label: 'Data da visita',
+                      name: 'dataVisita',
+                    }}
+                    rangerPickerProps={{ onChange: obterFiltros }}
                   />
                 </Col>
 
                 <Col xs={24} sm={8}>
-                  <SelectResponsaveis 
-                    selectProps={{onChange: obterFiltros}}
-                  />
+                  <SelectResponsaveis selectProps={{ onChange: obterFiltros }} />
                 </Col>
 
                 <Col xs={24} sm={8}>
-                  <SelectTipoSituacao 
-                    selectProps={{onChange: obterFiltros}}
-                  />
+                  <SelectTipoSituacao selectProps={{ onChange: obterFiltros }} />
                 </Col>
 
                 <Col span={24}>
