@@ -33,14 +33,14 @@ const SelectTipoSituacao: React.FC<SelectTipoSituacaoProps> = ({ selectProps, fo
   }, []);
 
   return (
-    <Form.Item label='Tipo de situação' name='situacaoItem' {...formItemProps}>
+    <Form.Item label='Situação do atendimento' name='situacaoItem' {...formItemProps}>
       <Select
         showSearch
         allowClear
         id={CDEP_SELECT_SOLICITACAO_SITUACOES}
         {...selectProps}
         options={options}
-        placeholder='Tipo de situação'
+        placeholder='Situação do atendimento'
       />
     </Form.Item>
   );

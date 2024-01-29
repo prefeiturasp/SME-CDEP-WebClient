@@ -29,14 +29,14 @@ const SelectResponsaveis: React.FC<SelectResponsaveisProps> = ({ selectProps, fo
   }, []);
 
   return (
-    <Form.Item label='Responsável' name='responsavel' {...formItemProps}>
+    <Form.Item label='Responsável pelo atendimento' name='responsavel' {...formItemProps}>
       <Select
         showSearch
         allowClear
         id={CDEP_SELECT_RESPONSAVEIS}
         {...selectProps}
         options={options}
-        placeholder='Responsável'
+        placeholder='Responsável pelo atendimento'
       />
     </Form.Item>
   );
