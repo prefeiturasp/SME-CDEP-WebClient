@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import dayjs from 'dayjs';
+import { dayjs } from '~/core/date/dayjs';
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import CardContent from '~/components/lib/card-content';

@@ -1,4 +1,4 @@
-import dayjs from 'dayjs';
+import { dayjs } from '~/core/date/dayjs';
 
 export const removerTudoQueNaoEhDigito = (value: any) => `${value}`.replace(/\D/g, '');
 
