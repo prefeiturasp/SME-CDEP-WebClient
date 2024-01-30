@@ -11,6 +11,7 @@ import FormAcervo from '~/pages/cadastros/acervo/form';
 import ImportarAcervo from '~/pages/cadastros/acervo/importar-acervo';
 import ListAcervo from '~/pages/cadastros/acervo/list';
 import Assunto from '~/pages/cadastros/assunto';
+import { ListAtendimentoSolicitacoes } from '~/pages/cadastros/atendimento-solicitacoes/list';
 import Autor from '~/pages/cadastros/autor';
 import Credito from '~/pages/cadastros/credito';
 import Editora from '~/pages/cadastros/editora';
@@ -144,10 +145,19 @@ const RoutesConfig = () => {
 
               <Route path={ROUTES.SOLICITACAO}>
                 <Route element={<GuardPermissao menuKey={MenuEnum.Solicitacao} />}>
-                  <Route path='' element={<EnviarSolicitacoes />} />
+                  <Route path='' element={<EnviarSolicitacoes key='NOVA_SOLICITACAO' />} />
                 </Route>
                 <Route element={<GuardPermissao menuKey={MenuEnum.Solicitacao} />}>
-                  <Route path={ROUTES.SOLICITACAO_EDITAR} element={<EnviarSolicitacoes />} />
+                  <Route
+                    path={ROUTES.SOLICITACAO_EDITAR}
+                    element={<EnviarSolicitacoes key='EDITAR_SOLICITACAO' />}
+                  />
+                </Route>
+              </Route>
+
+              <Route path={ROUTES.ATENDIMENTO_SOLICITACOES}>
+                <Route element={<GuardPermissao menuKey={MenuEnum.AtendimentoSolicitacoes} />}>
+                  <Route path='' element={<ListAtendimentoSolicitacoes />} />
                 </Route>
               </Route>
             </Route>

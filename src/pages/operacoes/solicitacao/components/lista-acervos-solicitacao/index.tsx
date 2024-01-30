@@ -1,7 +1,14 @@
-import { Col, Row, Tag } from 'antd';
+import { Button, Col, Row, Tag, Tooltip } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
-import { FaArrowDown, FaArrowUp, FaChevronDown, FaChevronUp, FaFileDownload } from 'react-icons/fa';
+import {
+  FaArrowDown,
+  FaArrowUp,
+  FaChevronDown,
+  FaChevronUp,
+  FaFileDownload,
+  FaTrashAlt,
+} from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ButtonPrimary from '~/components/lib/button/primary';
@@ -9,16 +16,18 @@ import {
   CDEP_BUTTON_ADICIONAR_ACERVOS,
   CDEP_BUTTON_DOWNLOAD_ARQUIVO,
   CDEP_BUTTON_EXPANDIR_LINHA,
+  CDEP_BUTTON_REMOVER_ACERVO,
 } from '~/core/constants/ids/button/intex';
 import { AcervoSolicitacaoItemRetornoCadastroDTO } from '~/core/dto/acervo-solicitacao-item-retorno-cadastro-dto';
 import { ArquivoCodigoNomeDTO } from '~/core/dto/arquivo-codigo-nome-dto';
 import { ROUTES } from '~/core/enum/routes';
-import { useAppSelector } from '~/core/hooks/use-redux';
+import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
+import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import armazenamentoService from '~/core/services/armazenamento-service';
 import { downloadBlob } from '~/core/utils/functions';
-import { AcervoSolicitacaoContext } from '../../provider';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
+import { AcervoSolicitacaoContext } from '../../provider';
 
 const ContainerExpandedTable = styled.div`
   .ant-table-tbody tr.ant-table-expanded-row td {
@@ -39,6 +48,7 @@ const ContainerExpandedTable = styled.div`
 const ListaAcervosSolicitacao: React.FC = () => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
+  const dispatch = useAppDispatch();
 
   const solicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
@@ -171,7 +181,7 @@ const ListaAcervosSolicitacao: React.FC = () => {
 
           return (
             <ButtonPrimary
-              id={`${CDEP_BUTTON_EXPANDIR_LINHA}/_${index}`}
+              id={`${CDEP_BUTTON_EXPANDIR_LINHA}_${index}`}
               icon={icone}
               style={{ display: 'flex', alignItems: 'center', gap: 3 }}
               onClick={() => {
@@ -192,6 +202,41 @@ const ListaAcervosSolicitacao: React.FC = () => {
     });
   }
 
+  const removerAcervo = (index: number, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => {
+    const acervos = [...dataSource];
+    acervos.splice(index, 1);
+    setDataSource(acervos);
+
+    const acervosSelecionados = [...solicitacao.acervosSelecionados];
+
+    const novaListaAcervosSelecionados = acervosSelecionados.filter(
+      (acervoId) => acervoId !== linha?.acervoId,
+    );
+
+    dispatch(setAcervosSelecionados(novaListaAcervosSelecionados));
+  };
+
+  if (!solicitacaoId) {
+    columns.push({
+      title: 'Ações',
+      align: 'center',
+      width: '100px',
+      render: (_, linha, index: number) => (
+        <Tooltip title='Remover acervo'>
+          <Button type='text' disabled={permissao.somenteConsulta}>
+            <FaTrashAlt
+              cursor='pointer'
+              fontSize={16}
+              id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
+              onClick={() => {
+                removerAcervo(index, linha);
+              }}
+            />
+          </Button>
+        </Tooltip>
+      ),
+    });
+  }
   const onClickDownload = (arquivo: ArquivoCodigoNomeDTO) => {
     armazenamentoService.obterArquivoParaDownload(arquivo?.codigo).then((resposta) => {
       downloadBlob(resposta.data, arquivo?.nome);

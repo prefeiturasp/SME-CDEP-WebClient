@@ -1,6 +1,6 @@
 import { Table } from 'antd';
 import { ColumnsType } from 'antd/es/table';
-import dayjs from 'dayjs';
+import { dayjs } from '~/core/date/dayjs';
 import React from 'react';
 import { ImportacaoArquivoRetornoDTO } from '~/core/dto/importacao-arquivo-retorno-dto';
 
