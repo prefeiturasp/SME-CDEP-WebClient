@@ -110,7 +110,7 @@ const BtnEnviarSolicitacoes: React.FC = () => {
 
       <Modal
         open={showModal}
-        title='Termos de compromisso'
+        title='TERMO DE COMPROMISSO DO PESQUISADOR CDEP'
         onOk={validateFields}
         onCancel={onCancelModal}
         centered
