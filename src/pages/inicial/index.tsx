@@ -19,6 +19,14 @@ const Inicial: React.FC = () => {
       dataIndex: 'acervoSolicitacaoId',
     },
     {
+      title: 'Tipo de Acervo',
+      dataIndex: 'tipoAcervo',
+    },
+    {
+      title: 'Titulo',
+      dataIndex: 'titulo',
+    },
+    {
       title: 'Data da solicitação',
       dataIndex: 'dataCriacao',
       render: (dataCriacao: string) => (dataCriacao ? dayjs(dataCriacao).format('DD/MM/YYYY') : ''),
