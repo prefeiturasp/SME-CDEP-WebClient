@@ -15,9 +15,12 @@ const SelectResponsaveis: React.FC<SelectResponsaveisProps> = ({ selectProps, fo
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
 
   const obterResponsaveis = async () => {
-    const resposta = await usuarioService.obterPerfisResponsaveis(); 
-    if (resposta) {
-      const newOptions = resposta.dados.map((item: ResponsavelDTO) => ({ label: item.nome, value: item.login }));
+    const resposta = await usuarioService.obterPerfisResponsaveis();
+    if (resposta.sucesso) {
+      const newOptions = resposta.dados.map((item: ResponsavelDTO) => ({
+        label: item.nome,
+        value: item.login,
+      }));
       setOptions(newOptions);
     } else {
       setOptions([]);

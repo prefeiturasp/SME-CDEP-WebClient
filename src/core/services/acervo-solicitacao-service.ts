@@ -5,7 +5,7 @@ import queryString from 'query-string';
 import { AcervoSolicitacaoItemCadastroDTO } from '../dto/acervo-solicitacao-item-cadastro-dto';
 import { AcervoSolicitacaoItemRetornoCadastroDTO } from '../dto/acervo-solicitacao-item-retorno-cadastro-dto';
 import { AcervoSolicitacaoItemRetornoDTO } from '../dto/acervo-solicitacao-item-retorno-dto';
-import { SituacaoItemDTO } from '../dto/situacao-dto';
+import { SituacaoItemDTO } from '~/core/dto/situacao-item-dto';
 import { inserirRegistro } from './api';
 
 const obterItensDoAcervoPorFiltros = (acervosIds: number[]) =>
@@ -29,7 +29,7 @@ const obterPorId = (acervoSolicitacaoId: number | string) =>
     `${URL_API_ACERVO_SOLICITACAO}/${acervoSolicitacaoId}`,
   );
 
-const obterSituacoesAcervo = () =>
+const obterSituacoesAtendimento = () =>
   obterRegistro<SituacaoItemDTO[]>(`${URL_API_ACERVO_SOLICITACAO}/situacoes`);
 
-export default { obterItensDoAcervoPorFiltros, inserir, obterPorId, obterSituacoesAcervo };
+export default { obterItensDoAcervoPorFiltros, inserir, obterPorId, obterSituacoesAtendimento };

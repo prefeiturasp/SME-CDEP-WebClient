@@ -1,17 +1,14 @@
-import { FormItemProps, DatePicker, Form } from "antd";
-import { RangePickerProps } from "antd/es/date-picker";
-import { FC } from "react";
+import { DatePicker, Form, FormItemProps } from 'antd';
+import { RangePickerProps as RangePickerAntProps } from 'antd/es/date-picker';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
+import { FC } from 'react';
 
-type DatePickerPeriodoProps = {
+type RangePickerProps = {
   formItemProps?: FormItemProps;
-  rangerPickerProps?: RangePickerProps;
+  rangerPickerProps?: RangePickerAntProps;
 };
 
-export const DatePickerPeriodo: FC<DatePickerPeriodoProps> = ({
-  formItemProps,
-  rangerPickerProps,
-}) => {
+export const RangePicker: FC<RangePickerProps> = ({ formItemProps, rangerPickerProps }) => {
   const { RangePicker } = DatePicker;
   const dateFormat = 'DD/MM/YYYY';
 

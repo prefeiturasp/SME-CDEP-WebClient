@@ -3,19 +3,21 @@ import { DefaultOptionType } from 'antd/es/select';
 import React, { useEffect, useState } from 'react';
 import Select from '~/components/lib/inputs/select';
 import { CDEP_SELECT_SOLICITACAO_SITUACOES } from '~/core/constants/ids/select';
-import { SituacaoItemDTO } from '~/core/dto/situacao-dto';
+import { SituacaoItemDTO } from '~/core/dto/situacao-item-dto';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 
-type SelectTipoSituacaoProps = {
+type SelectSituacaoAtendimentoProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
 };
-
-const SelectTipoSituacao: React.FC<SelectTipoSituacaoProps> = ({ selectProps, formItemProps }) => {
+export const SelectSituacaoAtendimento: React.FC<SelectSituacaoAtendimentoProps> = ({
+  selectProps,
+  formItemProps,
+}) => {
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
 
-  const obterTipos = async () => {
-    const resposta = await acervoSolicitacaoService.obterSituacoesAcervo();
+  const obterDados = async () => {
+    const resposta = await acervoSolicitacaoService.obterSituacoesAtendimento();
     if (resposta.sucesso) {
       const newOptions = resposta.dados.map((item: SituacaoItemDTO) => ({
         label: item.nome,
@@ -28,7 +30,7 @@ const SelectTipoSituacao: React.FC<SelectTipoSituacaoProps> = ({ selectProps, fo
   };
 
   useEffect(() => {
-    obterTipos();
+    obterDados();
   }, []);
 
   return (
@@ -44,5 +46,3 @@ const SelectTipoSituacao: React.FC<SelectTipoSituacaoProps> = ({ selectProps, fo
     </Form.Item>
   );
 };
-
-export default SelectTipoSituacao;

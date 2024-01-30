@@ -10,17 +10,17 @@ import CardContent from '~/components/lib/card-content';
 import DataTable from '~/components/lib/data-table';
 import HeaderPage from '~/components/lib/header-page';
 
+import SelectResponsaveis from '~/components/cdep/input/responsaveis';
+import { SelectSituacaoAtendimento } from '~/components/cdep/input/situacao-atendimento';
+import { RangePicker } from '~/components/cdep/range-picker';
 import { CDEP_BUTTON_CANCELAR, CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
 import { URL_API_ACERVO_SOLICITACAO } from '~/core/constants/urls-api';
-import { ROUTES } from '~/core/enum/routes';
-import SelectTipoSituacao from '~/components/cdep/input/tipo-situacao';
-import SelectResponsaveis from '~/components/cdep/input/responsaveis';
-import dayjs from 'dayjs';
+import { dayjs } from '~/core/date/dayjs';
 import { SolicitacaoDTO } from '~/core/dto/solicitacao-dto';
-import { DatePickerPeriodo } from '~/components/cdep/data-lista';
+import { ROUTES } from '~/core/enum/routes';
 
-type FilterStateLocationProps = {
+type FiltroSolicitacaoProps = {
   tipoAcervo: number | null;
   acervoSolicitacaoId: number | null;
   dataSolicitacaoInicio: string | null;
@@ -31,7 +31,7 @@ type FilterStateLocationProps = {
   responsavel: string | null;
 };
 
-const DEFAULT_VALUES: FilterStateLocationProps = {
+const DEFAULT_VALUES: FiltroSolicitacaoProps = {
   acervoSolicitacaoId: null,
   tipoAcervo: null,
   dataSolicitacaoInicio: null,
@@ -42,55 +42,52 @@ const DEFAULT_VALUES: FilterStateLocationProps = {
   responsavel: null,
 };
 
-const ListAtendimentos: React.FC = () => {
+const columns: ColumnsType<SolicitacaoDTO> = [
+  {
+    title: 'N° da solicitação',
+    dataIndex: 'acervoSolicitacaoId',
+    align: 'center',
+  },
+  {
+    title: 'Tipo de acervo',
+    dataIndex: 'tipoAcervo',
+    align: 'center',
+  },
+  {
+    title: 'Data da solicitação',
+    dataIndex: 'dataCriacao',
+    align: 'center',
+    render: (dataCriacao: string) => dayjs(dataCriacao).format('DD/MM/YYYY - HH:mm'),
+  },
+  {
+    title: 'Solicitante',
+    dataIndex: 'solicitante',
+    align: 'center',
+  },
+  {
+    title: 'Data da visita',
+    dataIndex: 'dataVisita',
+    align: 'center',
+    render: (dataVisita: string) =>
+      dataVisita ? dayjs(dataVisita).format('DD/MM/YYYY - HH:mm') : <></>,
+  },
+  {
+    title: 'Responsável pelo atendimento',
+    dataIndex: 'responsavel',
+    align: 'center',
+  },
+  {
+    title: 'Situação do Atendimento',
+    dataIndex: 'situacao',
+    align: 'center',
+  },
+];
+
+export const ListAtendimentoSolicitacoes: React.FC = () => {
   const navigate = useNavigate();
   const [form] = useForm();
 
-  const columns: ColumnsType<SolicitacaoDTO> = [
-    {
-      title: 'N° da solicitação',
-      dataIndex: 'acervoSolicitacaoId',
-      align: 'center',
-    },
-    {
-      title: 'Tipo de acervo',
-      dataIndex: 'tipoAcervo',
-      align: 'center',
-    },
-    {
-      title: 'Data da solicitação',
-      dataIndex: 'dataCriacao',
-      align: 'center',
-      render: (dataCriacao: string) => dayjs(dataCriacao).format('DD/MM/YYYY - HH:mm'),
-    },
-    {
-      title: 'Solicitante',
-      dataIndex: 'solicitante',
-      align: 'center',
-    },
-    {
-      title: 'Data da visita',
-      dataIndex: 'dataVisita',
-      align: 'center',
-      render: (dataVisita: string) => {
-        if (dataVisita) {
-          return dayjs(dataVisita).format('DD/MM/YYYY - HH:mm');
-        } else {
-          return;
-        }
-      },
-    },
-    {
-      title: 'Responsável pelo atendimento',
-      dataIndex: 'responsavel',
-      align: 'center',
-    },
-    {
-      title: 'Situação do Atendimento',
-      dataIndex: 'situacao',
-      align: 'center',
-    },
-  ];
+  const [filters, setFilters] = useState<FiltroSolicitacaoProps>(DEFAULT_VALUES);
 
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
@@ -100,8 +97,6 @@ const ListAtendimentos: React.FC = () => {
       setFilters(DEFAULT_VALUES);
     }
   };
-
-  const [filters, setFilters] = useState<FilterStateLocationProps>(DEFAULT_VALUES);
 
   const obterFiltros = () => {
     setFilters({
@@ -132,6 +127,7 @@ const ListAtendimentos: React.FC = () => {
                   id={CDEP_BUTTON_CANCELAR}
                   onClick={() => onClickCancelar()}
                   style={{ fontWeight: 700 }}
+                  disabled={!form.isFieldsTouched()}
                 >
                   Cancelar
                 </ButtonSecundary>
@@ -145,7 +141,7 @@ const ListAtendimentos: React.FC = () => {
           <Form.Item shouldUpdate>
             {() => (
               <Row gutter={[16, 8]}>
-                <Col xs={24} sm={8}>
+                <Col xs={24} md={8}>
                   <Form.Item label='N° da solicitação' name='acervoSolicitacaoId'>
                     <Input
                       type='text'
@@ -155,14 +151,14 @@ const ListAtendimentos: React.FC = () => {
                     />
                   </Form.Item>
                 </Col>
-                <Col xs={24} sm={8}>
+                <Col xs={24} md={8}>
                   <SelectTipoAcervo
-                    formItemProps={{ rules: [{ required: true }], name: 'tipoAcervo' }}
+                    formItemProps={{ name: 'tipoAcervo' }}
                     selectProps={{ onChange: obterFiltros }}
                   />
                 </Col>
-                <Col xs={24} sm={8}>
-                  <DatePickerPeriodo
+                <Col xs={24} md={8}>
+                  <RangePicker
                     formItemProps={{
                       label: 'Data da solicitação',
                       name: 'dataSolicitacao',
@@ -171,8 +167,8 @@ const ListAtendimentos: React.FC = () => {
                   />
                 </Col>
 
-                <Col xs={24} sm={8}>
-                  <DatePickerPeriodo
+                <Col xs={24} md={8}>
+                  <RangePicker
                     formItemProps={{
                       label: 'Data da visita',
                       name: 'dataVisita',
@@ -181,16 +177,17 @@ const ListAtendimentos: React.FC = () => {
                   />
                 </Col>
 
-                <Col xs={24} sm={8}>
+                <Col xs={24} md={8}>
                   <SelectResponsaveis selectProps={{ onChange: obterFiltros }} />
                 </Col>
 
-                <Col xs={24} sm={8}>
-                  <SelectTipoSituacao selectProps={{ onChange: obterFiltros }} />
+                <Col xs={24} md={8}>
+                  <SelectSituacaoAtendimento selectProps={{ onChange: obterFiltros }} />
                 </Col>
 
-                <Col span={24}>
+                <Col xs={24}>
                   <DataTable
+                    showOrderButton={false}
                     filters={filters}
                     url={`${URL_API_ACERVO_SOLICITACAO}/atendimento-solicitacoes`}
                     columns={columns}
@@ -204,5 +201,3 @@ const ListAtendimentos: React.FC = () => {
     </Col>
   );
 };
-
-export default ListAtendimentos;

@@ -10,13 +10,9 @@ import NotificationStorage from './components/lib/notification/index';
 import { App as AppAntd } from 'antd';
 
 import 'antd/dist/reset.css';
-import 'dayjs/locale/pt-br';
 
-import dayjs from 'dayjs';
 import GlobalStyle from '~/core/styles/global';
 import Spin from './components/cdep/spin';
-
-dayjs.locale('pt-br');
 
 declare global {
   interface Window {

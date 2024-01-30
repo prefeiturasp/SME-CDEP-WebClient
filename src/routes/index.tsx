@@ -11,6 +11,7 @@ import FormAcervo from '~/pages/cadastros/acervo/form';
 import ImportarAcervo from '~/pages/cadastros/acervo/importar-acervo';
 import ListAcervo from '~/pages/cadastros/acervo/list';
 import Assunto from '~/pages/cadastros/assunto';
+import { ListAtendimentoSolicitacoes } from '~/pages/cadastros/atendimento-solicitacoes/list';
 import Autor from '~/pages/cadastros/autor';
 import Credito from '~/pages/cadastros/credito';
 import Editora from '~/pages/cadastros/editora';
@@ -29,8 +30,6 @@ import RedefinirSenha from '~/pages/redefinir-senha';
 import RedefinirSenhaToken from '~/pages/redefinir-senha-token';
 import GuardAutenticacao from './config/guard/autenticacao';
 import GuardPermissao from './config/guard/permissao';
-
-import ListAtendimentos from '~/pages/cadastros/atendimento-solicitacoes/list';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
@@ -158,7 +157,7 @@ const RoutesConfig = () => {
 
               <Route path={ROUTES.ATENDIMENTO_SOLICITACOES}>
                 <Route element={<GuardPermissao menuKey={MenuEnum.AtendimentoSolicitacoes} />}>
-                  <Route path='' element={<ListAtendimentos />} />
+                  <Route path='' element={<ListAtendimentoSolicitacoes />} />
                 </Route>
               </Route>
             </Route>

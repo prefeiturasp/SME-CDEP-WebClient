@@ -34,7 +34,7 @@ export enum ROUTES {
   CONSULTA_ACERVO_DETALHES = '/consulta-acervo/detalhes',
   ACERVO_IMPORTAR = '/cadastro/acervo/importar',
   SEM_PERMISSAO = '/sem-permissao',
-  ATENDIMENTO_SOLICITACOES = '/atendimento-solicitacoes',
   SOLICITACAO = '/acervo/solicitacao',
   SOLICITACAO_EDITAR = '/acervo/solicitacao/:id',
+  ATENDIMENTO_SOLICITACOES = '/atendimento-solicitacoes',
 }

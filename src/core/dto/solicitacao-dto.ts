@@ -1,4 +1,4 @@
-import { MinhaSolicitacaoDTO } from "./minha-solicitacao-dto";
+import { MinhaSolicitacaoDTO } from './minha-solicitacao-dto';
 
 export type SolicitacaoDTO = {
   responsavel: string;

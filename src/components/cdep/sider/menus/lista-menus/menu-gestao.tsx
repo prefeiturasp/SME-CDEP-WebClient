@@ -7,7 +7,7 @@ import { PermissaoEnum } from '~/core/enum/permissao-enum';
 export const MENU_GESTAO: MenuItemCDEPProps = {
   key: MenuEnum.Gestao,
   title: 'Gestão',
-  icon: <FaClipboard  size={24} />,
+  icon: <FaClipboard size={24} />,
   children: [
     {
       key: MenuEnum.AtendimentoSolicitacoes,

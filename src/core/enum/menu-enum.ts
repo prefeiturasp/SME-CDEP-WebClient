@@ -10,8 +10,8 @@ export enum MenuEnum {
   Acervo,
   Material,
   Idioma,
-  Gestao,
-  AtendimentoSolicitacoes,
   Operacoes,
   Solicitacao,
+  Gestao,
+  AtendimentoSolicitacoes,
 }

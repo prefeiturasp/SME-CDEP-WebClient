@@ -1,6 +1,6 @@
 import { Form, FormItemProps, Input, InputProps } from 'antd';
 import { Rule } from 'antd/es/form';
-import dayjs from 'dayjs';
+import { dayjs } from '~/core/date/dayjs';
 import React from 'react';
 import { CDEP_INPUT_ANO } from '~/core/constants/ids/input';
 import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
