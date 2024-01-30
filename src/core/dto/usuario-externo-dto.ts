@@ -15,4 +15,5 @@ export interface UsuarioExternoDTO {
   confirmarSenha: string;
   tipo: TipoUsuario;
   bairro: string;
+  instituicao: string;
 }
