@@ -26,6 +26,7 @@ import {
   CDEP_INPUT_COMPLEMENTO,
   CDEP_INPUT_EMAIL,
   CDEP_INPUT_ENDERECO,
+  CDEP_INPUT_INSTITUICAO_EMPRESA,
   CDEP_INPUT_NUMERO,
   CDEP_INPUT_SENHA,
   CDEP_INPUT_TELEFONE,
@@ -44,6 +45,7 @@ import ModalEditTelefoneButton from './components/modal-edit-telefone/modal-edit
 import { LISTA_TIPO_USUARIO } from '~/core/constants/lista-tipo-usuario';
 import ModalEditTipoUsuarioButton from './components/modal-edit-tipo-usuario/modal-edit-tipo-usuario-button';
 import InputTipoUsuario from '~/components/cdep/input/tipo-usuario';
+import InputInstituicao from '~/components/cdep/input/instituicao';
 
 export const DadosPerfil = styled.div`
   color: #a4a4a4;
@@ -242,6 +244,12 @@ const MeusDados: React.FC = () => {
                         />
                         <ModalEditTipoUsuarioButton formPreview={form} />
                       </Row>
+                    </Col>
+                    <Col span={24}>
+                      <InputInstituicao
+                        inputProps={{ id: CDEP_INPUT_INSTITUICAO_EMPRESA, disabled: true }}
+                        formItemProps={{ required: false }}
+                      />
                     </Col>
                   </>
                 )}
