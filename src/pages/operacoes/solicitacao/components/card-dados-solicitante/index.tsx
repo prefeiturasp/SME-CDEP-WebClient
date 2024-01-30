@@ -1,7 +1,7 @@
 import { Card, Col, Divider, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { DadosSolicitanteDTO } from '~/core/dto/dados-solicitante-dto';
-import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
+import { TipoUsuario, TipoUsuarioDisplay } from '~/core/enum/tipo-usuario-enum';
 import { tratarCatch, tratarThen } from '~/core/services/api';
 import usuarioService from '~/core/services/usuario-service';
 import { Colors } from '~/core/styles/colors';
@@ -13,6 +13,7 @@ const CardDadosSolicitante: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(false);
 
   const ehExterno = dados?.tipo && dados?.tipo > TipoUsuario.CORESSO;
+  const descricaoTipoUsuario = dados && dados?.tipo > -1 ? TipoUsuarioDisplay[dados.tipo] : '';
 
   const obterDados = async () => {
     setLoading(true);
@@ -75,9 +76,7 @@ const CardDadosSolicitante: React.FC = () => {
               </Row>
               <Row>
                 <Text strong>Tipo do Usuário: </Text>
-                <Text style={{ marginLeft: 4 }}>
-                  {dados?.tipo ? TipoUsuario[dados?.tipo] : 'Tipo desconhecido'}
-                </Text>
+                <Text style={{ marginLeft: 4 }}>{descricaoTipoUsuario}</Text>
               </Row>
             </Col>
             {ehExterno ? (
