@@ -12,6 +12,8 @@ const CardDadosSolicitante: React.FC = () => {
   const [dados, setDados] = useState<DadosSolicitanteDTO>();
   const [loading, setLoading] = useState<boolean>(false);
 
+  const ehExterno = dados?.tipo && dados?.tipo > TipoUsuario.CORESSO;
+
   const obterDados = async () => {
     setLoading(true);
 
@@ -53,14 +55,20 @@ const CardDadosSolicitante: React.FC = () => {
           <Row justify='space-between' wrap={false}>
             <Col>
               <Title level={5}>{dados?.nome}</Title>
-              <Row>
-                <Text strong>CPF: </Text>
-                <Text style={{ marginLeft: 4 }}>{dados?.cpf}</Text>
-              </Row>
-              <Row>
-                <Text strong>Telefone: </Text>
-                <Text style={{ marginLeft: 4 }}>{dados?.telefone}</Text>
-              </Row>
+              {ehExterno ? (
+                <>
+                  <Row>
+                    <Text strong>CPF: </Text>
+                    <Text style={{ marginLeft: 4 }}>{dados?.cpf}</Text>
+                  </Row>
+                  <Row>
+                    <Text strong>Telefone: </Text>
+                    <Text style={{ marginLeft: 4 }}>{dados?.telefone}</Text>
+                  </Row>
+                </>
+              ) : (
+                <></>
+              )}
               <Row>
                 <Text strong>E-mail: </Text>
                 <Text style={{ marginLeft: 4 }}>{dados?.email}</Text>
@@ -72,18 +80,26 @@ const CardDadosSolicitante: React.FC = () => {
                 </Text>
               </Row>
             </Col>
-            <Divider
-              type='vertical'
-              style={{ borderColor: Colors.BACKGROUND_CONTENT, height: 100 }}
-            />
+            {ehExterno ? (
+              <Divider
+                type='vertical'
+                style={{ borderColor: Colors.BACKGROUND_CONTENT, height: 100 }}
+              />
+            ) : (
+              <></>
+            )}
           </Row>
         </Col>
-        <Col xs={12}>
-          <Row>
-            <Text strong>Endereço:</Text>
-            <Text style={{ marginLeft: 4 }}>{dados?.endereco}</Text>
-          </Row>
-        </Col>
+        {ehExterno ? (
+          <Col xs={12}>
+            <Row>
+              <Text strong>Endereço:</Text>
+              <Text style={{ marginLeft: 4 }}>{dados?.endereco}</Text>
+            </Row>
+          </Col>
+        ) : (
+          <></>
+        )}
       </Row>
     </Card>
   );
