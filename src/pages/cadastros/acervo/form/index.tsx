@@ -30,7 +30,6 @@ import { ROUTES } from '~/core/enum/routes';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { confirmacao } from '~/core/services/alerta-service';
 import { alterarRegistro, inserirRegistro, obterRegistro } from '~/core/services/api';
-import { removerTudoQueNaoEhDigito } from '~/core/utils/functions';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { mapearDtoCadastrosAcervo } from '../utils';
 import FormContentCadastroAcervo from './form-content-cadastro-acervo';
@@ -120,27 +119,6 @@ const FormAcervo: React.FC<FormAcervoProps> = ({
 
       if (valoresSalvar?.ano) {
         valoresSalvar.ano = Number(valoresSalvar.ano);
-      }
-
-      if (valoresSalvar?.altura) {
-        valoresSalvar.altura = removerTudoQueNaoEhDigito(valoresSalvar.altura);
-      } else {
-        valoresSalvar.altura = null;
-      }
-      if (valoresSalvar?.largura) {
-        valoresSalvar.largura = removerTudoQueNaoEhDigito(valoresSalvar.largura);
-      } else {
-        valoresSalvar.largura = null;
-      }
-      if (valoresSalvar?.diametro) {
-        valoresSalvar.diametro = removerTudoQueNaoEhDigito(valoresSalvar.diametro);
-      } else {
-        valoresSalvar.diametro = null;
-      }
-      if (valoresSalvar?.profundidade) {
-        valoresSalvar.profundidade = removerTudoQueNaoEhDigito(valoresSalvar.profundidade);
-      } else {
-        valoresSalvar.profundidade = null;
       }
 
       if (valoresSalvar?.codigo) {

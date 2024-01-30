@@ -5,3 +5,11 @@ export enum TipoUsuario {
   PROFESSOR = 3,
   POPULACAO_GERAL = 4,
 }
+
+export const TipoUsuarioDisplay: Record<TipoUsuario, string> = {
+  [TipoUsuario.CORESSO]: 'Servidor SME',
+  [TipoUsuario.SERVIDOR_PUBLICO]: 'Servidor público',
+  [TipoUsuario.ESTUDANTE]: 'Estudante',
+  [TipoUsuario.PROFESSOR]: 'Professor',
+  [TipoUsuario.POPULACAO_GERAL]: 'População em geral',
+};

@@ -1,7 +1,7 @@
 import { Card, Col, Divider, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { DadosSolicitanteDTO } from '~/core/dto/dados-solicitante-dto';
-import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
+import { TipoUsuario, TipoUsuarioDisplay } from '~/core/enum/tipo-usuario-enum';
 import { tratarCatch, tratarThen } from '~/core/services/api';
 import usuarioService from '~/core/services/usuario-service';
 import { Colors } from '~/core/styles/colors';
@@ -11,6 +11,9 @@ const { Title, Text } = Typography;
 const CardDadosSolicitante: React.FC = () => {
   const [dados, setDados] = useState<DadosSolicitanteDTO>();
   const [loading, setLoading] = useState<boolean>(false);
+
+  const ehExterno = dados?.tipo && dados?.tipo > TipoUsuario.CORESSO;
+  const descricaoTipoUsuario = dados && dados?.tipo > -1 ? TipoUsuarioDisplay[dados.tipo] : '';
 
   const obterDados = async () => {
     setLoading(true);
@@ -53,37 +56,49 @@ const CardDadosSolicitante: React.FC = () => {
           <Row justify='space-between' wrap={false}>
             <Col>
               <Title level={5}>{dados?.nome}</Title>
-              <Row>
-                <Text strong>CPF: </Text>
-                <Text style={{ marginLeft: 4 }}>{dados?.cpf}</Text>
-              </Row>
-              <Row>
-                <Text strong>Telefone: </Text>
-                <Text style={{ marginLeft: 4 }}>{dados?.telefone}</Text>
-              </Row>
+              {ehExterno ? (
+                <>
+                  <Row>
+                    <Text strong>CPF: </Text>
+                    <Text style={{ marginLeft: 4 }}>{dados?.cpf}</Text>
+                  </Row>
+                  <Row>
+                    <Text strong>Telefone: </Text>
+                    <Text style={{ marginLeft: 4 }}>{dados?.telefone}</Text>
+                  </Row>
+                </>
+              ) : (
+                <></>
+              )}
               <Row>
                 <Text strong>E-mail: </Text>
                 <Text style={{ marginLeft: 4 }}>{dados?.email}</Text>
               </Row>
               <Row>
                 <Text strong>Tipo do Usuário: </Text>
-                <Text style={{ marginLeft: 4 }}>
-                  {dados?.tipo ? TipoUsuario[dados?.tipo] : 'Tipo desconhecido'}
-                </Text>
+                <Text style={{ marginLeft: 4 }}>{descricaoTipoUsuario}</Text>
               </Row>
             </Col>
-            <Divider
-              type='vertical'
-              style={{ borderColor: Colors.BACKGROUND_CONTENT, height: 100 }}
-            />
+            {ehExterno ? (
+              <Divider
+                type='vertical'
+                style={{ borderColor: Colors.BACKGROUND_CONTENT, height: 100 }}
+              />
+            ) : (
+              <></>
+            )}
           </Row>
         </Col>
-        <Col xs={12}>
-          <Row>
-            <Text strong>Endereço:</Text>
-            <Text style={{ marginLeft: 4 }}>{dados?.endereco}</Text>
-          </Row>
-        </Col>
+        {ehExterno ? (
+          <Col xs={12}>
+            <Row>
+              <Text strong>Endereço:</Text>
+              <Text style={{ marginLeft: 4 }}>{dados?.endereco}</Text>
+            </Row>
+          </Col>
+        ) : (
+          <></>
+        )}
       </Row>
     </Card>
   );
