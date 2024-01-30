@@ -19,11 +19,11 @@ const Inicial: React.FC = () => {
       dataIndex: 'acervoSolicitacaoId',
     },
     {
-      title: 'Tipo de Acervo',
+      title: 'Tipo de acervo',
       dataIndex: 'tipoAcervo',
     },
     {
-      title: 'Titulo',
+      title: 'Título',
       dataIndex: 'titulo',
     },
     {
