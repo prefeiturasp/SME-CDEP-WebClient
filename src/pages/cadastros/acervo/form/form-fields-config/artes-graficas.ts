@@ -23,10 +23,6 @@ export const FieldsArtesGraficas: FieldAcervoProps[] = [
     sm: 12,
   },
   {
-    fieldAcervo: FieldAcervoEnum.DataAcervo,
-    sm: 12,
-  },
-  {
     fieldAcervo: FieldAcervoEnum.CopiaDigital,
     sm: 12,
   },
