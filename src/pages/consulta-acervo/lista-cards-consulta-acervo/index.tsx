@@ -139,25 +139,21 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                     <TextItemCardContentConsultaAcervo
                       label='Tipo de acervo: '
                       description={tipoAcervoNome(item.tipo)}
-                      exibirLabelSemValor={false}
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Titulo].label}: `}
                       description={item.titulo}
-                      exibirLabelSemValor={false}
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label='Autoria/Crédito: '
                       description={item.creditoAutoria}
-                      exibirLabelSemValor={false}
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Assunto].label}: `}
                       description={item.assunto}
-                      exibirLabelSemValor={false}
                       ellipsis
                       exibirTooltip
                     />
@@ -165,7 +161,6 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Descricao].label}: `}
                       description={item.descricao}
-                      exibirLabelSemValor={false}
                       ellipsis
                       exibirTooltip
                       dangerouslyInnerHTML
@@ -174,13 +169,11 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Ano].label}: `}
                       description={item.ano}
-                      exibirLabelSemValor={false}
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.DataAcervo].label}: `}
                       description={item.dataAcervo}
-                      exibirLabelSemValor={false}
                     />
                   </Row>
                 </Col>

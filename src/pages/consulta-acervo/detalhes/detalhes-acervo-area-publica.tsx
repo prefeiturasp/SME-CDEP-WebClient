@@ -21,7 +21,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
 
         switch (field.fieldAcervo) {
           case FieldAcervoEnum.Titulo:
-            input = (
+            input = dados.titulo && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Titulo].label}: `}
                 description={dados.titulo}
@@ -30,7 +30,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Subtitulo:
-            input = (
+            input = dados.subTitulo && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Subtitulo].label}: `}
                 description={dados.subTitulo}
@@ -39,7 +39,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Tombo:
-            input = (
+            input = dados.codigo && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Tombo].label}: `}
                 description={dados.codigo}
@@ -48,7 +48,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Credito:
-            input = (
+            input = dados.creditosAutores && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Credito].label}: `}
                 description={dados.creditosAutores}
@@ -57,7 +57,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.CodigoAntigo:
-            input = (
+            input = dados.codigo && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.CodigoAntigo].label}: `}
                 description={dados.codigo}
@@ -66,7 +66,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.CodigoNovo:
-            input = (
+            input = dados.codigoNovo && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.CodigoNovo].label}: `}
                 description={dados.codigoNovo}
@@ -75,7 +75,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Material:
-            input = (
+            input = dados.material && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Material].label}: `}
                 description={dados.material}
@@ -84,7 +84,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Idioma:
-            input = (
+            input = dados.idioma && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Idioma].label}: `}
                 description={dados.idioma}
@@ -93,7 +93,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Autor:
-            input = (
+            input = dados.creditosAutores && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Autor].label}: `}
                 description={dados.creditosAutores}
@@ -102,7 +102,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Editora:
-            input = (
+            input = dados.editora && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Editora].label}: `}
                 description={dados.editora}
@@ -111,7 +111,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.SerieColecao:
-            input = (
+            input = dados.serieColecao && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.SerieColecao].label}: `}
                 description={dados.serieColecao}
@@ -120,7 +120,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Assunto:
-            input = (
+            input = dados.assuntos && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Assunto].label}: `}
                 description={dados.assuntos}
@@ -129,7 +129,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Ano:
-            input = (
+            input = dados.ano && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Ano].label}: `}
                 description={dados.ano}
@@ -138,7 +138,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.TipoAutoria:
-            input = (
+            input = dados.tipoAutoria && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.TipoAutoria].label}: `}
                 description={dados.tipoAutoria}
@@ -147,7 +147,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Edicao:
-            input = (
+            input = dados.edicao && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Edicao].label}: `}
                 description={dados.edicao}
@@ -156,7 +156,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.NumeroDePaginas:
-            input = (
+            input = dados.numeroPagina && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.NumeroDePaginas].label}: `}
                 description={dados.numeroPagina}
@@ -165,7 +165,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Volume:
-            input = (
+            input = dados.volume && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Volume].label}: `}
                 description={dados.volume}
@@ -174,7 +174,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.TipoDeAnexo:
-            input = (
+            input = dados.tipoAnexo && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.TipoDeAnexo].label}: `}
                 description={dados.tipoAnexo}
@@ -183,7 +183,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.AcessoDocumento:
-            input = (
+            input = dados.acessosDocumentos && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.AcessoDocumento].label}: `}
                 description={dados.acessosDocumentos}
@@ -192,7 +192,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Localizacao:
-            input = (
+            input = dados.localizacao && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Localizacao].label}: `}
                 description={dados.localizacao}
@@ -201,7 +201,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.LocalizacaoCDDPHA:
-            input = (
+            input = dados.localizacao && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.LocalizacaoCDDPHA].label}: `}
                 description={dados.localizacao}
@@ -210,7 +210,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.NotasGerais:
-            input = (
+            input = dados.notasGerais && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.NotasGerais].label}: `}
                 description={dados.notasGerais}
@@ -219,7 +219,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.ISBN:
-            input = (
+            input = dados.isbn && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.ISBN].label}: `}
                 description={dados.isbn}
@@ -228,7 +228,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Procedencia:
-            input = (
+            input = dados.procedencia && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Procedencia].label}: `}
                 description={dados.procedencia}
@@ -237,7 +237,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.DataAcervo:
-            input = (
+            input = dados.dataAcervo && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.DataAcervo].label}: `}
                 description={dados.dataAcervo}
@@ -246,7 +246,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.CopiaDigital:
-            input = (
+            input = dados.copiaDigital && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.CopiaDigital].label}: `}
                 description={dados.copiaDigital}
@@ -255,7 +255,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Copia:
-            input = (
+            input = dados.copia && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Copia].label}: `}
                 description={dados.copia}
@@ -264,7 +264,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.AutorizacaoUsoImagem:
-            input = (
+            input = dados.permiteUsoImagem && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.AutorizacaoUsoImagem].label}: `}
                 description={dados.permiteUsoImagem}
@@ -273,7 +273,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.EstadoConservacao:
-            input = (
+            input = dados.conservacao && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.EstadoConservacao].label}: `}
                 description={dados.conservacao}
@@ -282,7 +282,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Descricao:
-            input = (
+            input = dados.descricao && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Descricao].label}: `}
                 description={dados.descricao}
@@ -292,7 +292,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Duracao:
-            input = (
+            input = dados.duracao && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Duracao].label}: `}
                 description={dados.duracao}
@@ -301,7 +301,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Quantidade:
-            input = (
+            input = dados.quantidade && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Quantidade].label}: `}
                 description={dados.quantidade}
@@ -310,7 +310,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Dimensoes:
-            input = (
+            input = dados.dimensoes && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Dimensoes].label}: `}
                 description={dados.dimensoes}
@@ -319,7 +319,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Tecnica:
-            input = (
+            input = dados.tecnica && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Tecnica].label}: `}
                 description={dados.tecnica}
@@ -328,7 +328,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Suporte:
-            input = (
+            input = dados.suporte && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Suporte].label}: `}
                 description={dados.suporte}
@@ -337,7 +337,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.FormatoImagem:
-            input = (
+            input = dados.formato && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.FormatoImagem].label}: `}
                 description={dados.formato}
@@ -355,7 +355,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Cromia:
-            input = (
+            input = dados.cromia && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Cromia].label}: `}
                 description={dados.cromia}
@@ -364,7 +364,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Resolucao:
-            input = (
+            input = dados.resolucao && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Resolucao].label}: `}
                 description={dados.resolucao}
@@ -373,7 +373,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Acessibilidade:
-            input = (
+            input = dados.acessibilidade && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Acessibilidade].label}: `}
                 description={dados.acessibilidade}
@@ -382,7 +382,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             );
             break;
           case FieldAcervoEnum.Disponibilizacao:
-            input = (
+            input = dados.disponibilizacao && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Disponibilizacao].label}: `}
                 description={dados.disponibilizacao}
