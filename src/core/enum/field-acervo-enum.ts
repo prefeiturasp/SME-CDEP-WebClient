@@ -290,11 +290,11 @@ const FieldAcervoNameLabel: FieldAcervoNameLabelProps = {
   },
   CodigoAntigo: {
     name: 'codigo',
-    label: 'Codigo antigo',
+    label: 'Código antigo',
   },
   CodigoNovo: {
     name: 'codigoNovo',
-    label: 'Codigo novo',
+    label: 'Código atual',
   },
   Dimensoes: {
     name: 'dimensoes',
