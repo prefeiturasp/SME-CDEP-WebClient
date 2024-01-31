@@ -200,20 +200,11 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
               />
             );
             break;
-          case FieldAcervoEnum.LocalizacaoCDD:
+          case FieldAcervoEnum.LocalizacaoCDDPHA:
             input = (
               <TextItemCardContentConsultaAcervo
-                label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.LocalizacaoCDD].label}: `}
-                description={dados.localizacaoCDD}
-                ellipsis={!!field.ellipsis}
-              />
-            );
-            break;
-          case FieldAcervoEnum.LocalizacaoPHA:
-            input = (
-              <TextItemCardContentConsultaAcervo
-                label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.LocalizacaoPHA].label}: `}
-                description={dados.localizacaoPHA}
+                label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.LocalizacaoCDDPHA].label}: `}
+                description={dados.localizacao}
                 ellipsis={!!field.ellipsis}
               />
             );

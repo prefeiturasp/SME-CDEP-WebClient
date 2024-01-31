@@ -45,10 +45,7 @@ export const FieldsDetalhesBibliografico: FieldAcervoDetalhesProps[] = [
     fieldAcervo: FieldAcervoEnum.Idioma,
   },
   {
-    fieldAcervo: FieldAcervoEnum.LocalizacaoCDD,
-  },
-  {
-    fieldAcervo: FieldAcervoEnum.LocalizacaoPHA,
+    fieldAcervo: FieldAcervoEnum.LocalizacaoCDDPHA,
   },
   {
     fieldAcervo: FieldAcervoEnum.NotasGerais,
