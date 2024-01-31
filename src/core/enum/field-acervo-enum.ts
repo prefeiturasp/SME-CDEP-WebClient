@@ -298,7 +298,7 @@ const FieldAcervoNameLabel: FieldAcervoNameLabelProps = {
   },
   Dimensoes: {
     name: 'dimensoes',
-    label: 'Dimensões',
+    label: 'Dimensões (cm)',
   },
   LocalizacaoCDDPHA: {
     name: 'localizacao',
