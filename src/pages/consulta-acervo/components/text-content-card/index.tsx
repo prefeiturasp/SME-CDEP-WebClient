@@ -14,7 +14,7 @@ const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcervoProps>
   label,
   description,
   ellipsis = false,
-  exibirLabelSemValor = true,
+  exibirLabelSemValor = false,
   exibirTooltip = false,
   dangerouslyInnerHTML = false,
 }) => {

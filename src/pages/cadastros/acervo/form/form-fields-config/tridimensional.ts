@@ -17,10 +17,6 @@ export const FieldsTridimensional: FieldAcervoProps[] = [
     sm: 12,
   },
   {
-    fieldAcervo: FieldAcervoEnum.DataAcervo,
-    sm: 12,
-  },
-  {
     fieldAcervo: FieldAcervoEnum.EstadoConservacao,
     sm: 12,
   },

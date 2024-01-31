@@ -47,6 +47,7 @@ export enum FieldAcervoEnum {
   CodigoAntigo,
   CodigoNovo,
   Dimensoes,
+  LocalizacaoCDDPHA,
 }
 
 type FieldAcervoNameLabelType = {
@@ -103,6 +104,7 @@ type FieldAcervoNameLabelProps = {
   CodigoAntigo: FieldAcervoNameLabelType;
   CodigoNovo: FieldAcervoNameLabelType;
   Dimensoes: FieldAcervoNameLabelType;
+  LocalizacaoCDDPHA: FieldAcervoNameLabelType;
 };
 
 const FieldAcervoNameLabel: FieldAcervoNameLabelProps = {
@@ -288,15 +290,19 @@ const FieldAcervoNameLabel: FieldAcervoNameLabelProps = {
   },
   CodigoAntigo: {
     name: 'codigo',
-    label: 'Codigo antigo',
+    label: 'Código antigo',
   },
   CodigoNovo: {
     name: 'codigoNovo',
-    label: 'Codigo novo',
+    label: 'Código atual',
   },
   Dimensoes: {
     name: 'dimensoes',
-    label: 'Dimensões',
+    label: 'Dimensões (cm)',
+  },
+  LocalizacaoCDDPHA: {
+    name: 'localizacao',
+    label: 'Localização',
   },
 };
 
@@ -353,4 +359,5 @@ export const PropsByFieldAcervoEnum: Record<FieldAcervoEnum, FieldAcervoNameLabe
   [FieldAcervoEnum.CodigoAntigo]: FieldAcervoNameLabel.CodigoAntigo,
   [FieldAcervoEnum.CodigoNovo]: FieldAcervoNameLabel.CodigoNovo,
   [FieldAcervoEnum.Dimensoes]: FieldAcervoNameLabel.Dimensoes,
+  [FieldAcervoEnum.LocalizacaoCDDPHA]: FieldAcervoNameLabel.LocalizacaoCDDPHA,
 };
