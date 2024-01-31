@@ -43,6 +43,7 @@ export type ConsultaAcervoDetalhesDTO = {
   acessibilidade: string;
   disponibilizacao: string;
   imagens: ReactImageGalleryItem[];
+  enderecoImagemPadrao: string;
 };
 
 export type FieldAcervoDetalhesProps = {

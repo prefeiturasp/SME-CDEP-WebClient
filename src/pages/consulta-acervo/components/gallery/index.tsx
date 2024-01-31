@@ -1,19 +1,25 @@
 import React from 'react';
 import ReactImageGallery, { ReactImageGalleryItem } from 'react-image-gallery';
 import styled from 'styled-components';
-import cdepLogo from '~/assets/cdep-logo-centralizado.svg';
 
-const ImageGalleryContainer = styled.div`
+type ImageGalleryContainerProps = {
+  temImagens: boolean;
+};
+const ImageGalleryContainer = styled.div<ImageGalleryContainerProps>`
   .image-gallery {
-    width: 400px !important;
+    width: ${(props) => (props.temImagens ? '400px' : '200px')}!important;
   }
+  display: flex;
+  align-items: center;
 `;
 
 type ImageGalleryDetalhesAcervoProps = {
   imagens?: ReactImageGalleryItem[];
+  enderecoImagemPadrao: string;
 };
 export const ImageGalleryDetalhesAcervo: React.FC<ImageGalleryDetalhesAcervoProps> = ({
   imagens,
+  enderecoImagemPadrao,
 }) => {
   const temImagens = !!imagens?.length;
 
@@ -21,12 +27,12 @@ export const ImageGalleryDetalhesAcervo: React.FC<ImageGalleryDetalhesAcervoProp
     ? imagens
     : [
         {
-          original: cdepLogo,
-          thumbnail: cdepLogo,
+          original: enderecoImagemPadrao,
+          thumbnail: enderecoImagemPadrao,
         },
       ];
   return (
-    <ImageGalleryContainer>
+    <ImageGalleryContainer temImagens={temImagens}>
       <ReactImageGallery
         items={items}
         autoPlay={false}

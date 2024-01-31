@@ -3,7 +3,7 @@ import { Button, Col, Empty, Image, List, Row, Tag, Typography } from 'antd';
 import useFormInstance from 'antd/es/form/hooks/useFormInstance';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
-import cdepLogo from '~/assets/cdep-logo-centralizado.svg';
+import styled from 'styled-components';
 import { FiltroTextoLivreTipoAcervoDTO } from '~/core/dto/filtro-texto-livre-tipo-acervo-dto';
 import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
 import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
@@ -11,10 +11,16 @@ import { ROUTES } from '~/core/enum/routes';
 import { TipoAcervo, TipoAcervoDisplay } from '~/core/enum/tipo-acervo';
 import { TipoAcervoTag, TipoAcervoTagDisplay } from '~/core/enum/tipo-acervo-tag';
 import { Colors } from '~/core/styles/colors';
+import { ButtonEnviarParaMinhaSelecao } from '../components/button-enviar-para-minha-selecao';
+import CheckboxSelecionarAcervo from '../components/selecionar-acervo';
 import TextItemCardContentConsultaAcervo from '../components/text-content-card';
 import { ConsultaAcervoContext } from '../provider';
-import CheckboxSelecionarAcervo from '../components/selecionar-acervo';
-import { ButtonEnviarParaMinhaSelecao } from '../components/button-enviar-para-minha-selecao';
+
+const ImageContainer = styled.div`
+  .ant-image {
+    text-align: center;
+  }
+`;
 
 const tagAcervo = (tipo: TipoAcervo) => {
   switch (tipo) {
@@ -108,18 +114,21 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
               }}
             >
               <Col style={{ display: 'flex', alignContent: 'center', width: '100%' }}>
-                <Col>
-                  <Image
-                    alt='example'
-                    preview={false}
-                    style={{
-                      minHeight: 200,
-                      height: '100%',
-                      width: 200,
-                    }}
-                    src={item.enderecoImagem || cdepLogo}
-                    onContextMenu={desabilitarCliqueDireitoImagem}
-                  />
+                <Col style={{ display: 'flex', alignItems: 'center' }}>
+                  <ImageContainer>
+                    <Image
+                      alt='example'
+                      preview={false}
+                      style={{
+                        minHeight: 200,
+                        height: '100%',
+                        width: item.enderecoImagem ? 200 : 100,
+                      }}
+                      width={200}
+                      src={item.enderecoImagem || item.enderecoImagemPadrao}
+                      onContextMenu={desabilitarCliqueDireitoImagem}
+                    />
+                  </ImageContainer>
                 </Col>
                 <Col style={{ right: 13, top: 13, position: 'absolute' }}>
                   <CheckboxSelecionarAcervo pesquisaAcervo={item} />

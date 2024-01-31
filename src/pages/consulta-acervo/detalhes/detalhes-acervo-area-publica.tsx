@@ -397,7 +397,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
 
         if (input) {
           return (
-            <Col xs={24} key={field.fieldAcervo} style={{ marginBottom: 8 }}>
+            <Col xs={24} key={field.fieldAcervo} style={{ marginBottom: 8, paddingLeft: 32 }}>
               {input}
             </Col>
           );
