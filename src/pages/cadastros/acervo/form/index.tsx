@@ -117,10 +117,6 @@ const FormAcervo: React.FC<FormAcervoProps> = ({
     if (fieldsConfig) {
       let response = null;
 
-      if (valoresSalvar?.ano) {
-        valoresSalvar.ano = Number(valoresSalvar.ano);
-      }
-
       if (valoresSalvar?.codigo) {
         valoresSalvar.codigo;
       } else {
