@@ -23,14 +23,6 @@ export const FieldsAudiovisual: FieldAcervoProps[] = [
     sm: 12,
   },
   {
-    fieldAcervo: FieldAcervoEnum.DataAcervo,
-    sm: 12,
-  },
-  {
-    fieldAcervo: FieldAcervoEnum.Copia,
-    sm: 12,
-  },
-  {
     fieldAcervo: FieldAcervoEnum.AutorizacaoUsoImagem,
     sm: 12,
   },
@@ -43,6 +35,10 @@ export const FieldsAudiovisual: FieldAcervoProps[] = [
   },
   {
     fieldAcervo: FieldAcervoEnum.Suporte,
+    sm: 12,
+  },
+  {
+    fieldAcervo: FieldAcervoEnum.Copia,
     sm: 12,
   },
   {

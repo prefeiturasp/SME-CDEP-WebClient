@@ -98,7 +98,7 @@ export const DetalhesConsultaAcervo: React.FC = () => {
         padding: '20px 60px',
       }}
     >
-      <Row gutter={[16, 16]}>
+      <Row gutter={[30, 30]}>
         <Col xs={24}>
           <Row gutter={[16, 16]}>
             <Col>
@@ -127,7 +127,10 @@ export const DetalhesConsultaAcervo: React.FC = () => {
         <Col xs={24}>
           <Row gutter={[16, 16]}>
             <Flex gap='small'>
-              <ImageGalleryDetalhesAcervo imagens={dados?.imagens} />
+              <ImageGalleryDetalhesAcervo
+                imagens={dados?.imagens}
+                enderecoImagemPadrao={dados?.enderecoImagemPadrao || ''}
+              />
 
               <Col>
                 <DetalhesAcervoAreaPublica fields={fields} dados={dados} />

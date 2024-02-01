@@ -15,6 +15,7 @@ import InputEstado from '~/components/cdep/input/estado';
 import InputNumero from '~/components/cdep/input/numero';
 import SenhaCadastro from '~/components/cdep/input/senha-cadastro';
 import InputTelefone from '~/components/cdep/input/telefone';
+import InputInstituicao from '~/components/cdep/input/instituicao';
 import { CDEP_BUTTON_CADASTRAR, CDEP_BUTTON_CANCELAR } from '~/core/constants/ids/button/intex';
 import {
   CDEP_INPUT_BAIRRO,
@@ -29,6 +30,7 @@ import {
   CDEP_INPUT_NUMERO,
   CDEP_INPUT_SENHA,
   CDEP_INPUT_TELEFONE,
+  CDEP_INPUT_INSTITUICAO_EMPRESA,
 } from '~/core/constants/ids/input';
 import { CDEP_SELECT_TIPO_USUARIO, CDEP_SELECT_UF } from '~/core/constants/ids/select';
 import { LISTA_TIPO_USUARIO } from '~/core/constants/lista-tipo-usuario';
@@ -234,6 +236,9 @@ const CriarConta = () => {
                 placeholder='Selecione o tipo'
               />
             </Form.Item>
+          </Col>
+          <Col span={24}>
+            <InputInstituicao inputProps={{ id: CDEP_INPUT_INSTITUICAO_EMPRESA }} />
           </Col>
           <Col span={24}>
             <SenhaCadastro inputProps={{ id: CDEP_INPUT_SENHA }} />
