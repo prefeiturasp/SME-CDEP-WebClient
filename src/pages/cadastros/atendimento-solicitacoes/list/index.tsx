@@ -111,6 +111,11 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
     });
   };
 
+  const onClickDetalheSolicitacao = (row: SolicitacaoDTO) =>
+    navigate(`${ROUTES.DETALHES_SOLICITACAO}/${row.acervoSolicitacaoId}`, {
+      replace: true,
+    });
+
   return (
     <Col>
       <HeaderPage title='Atendimento de Solicitações'>
@@ -191,6 +196,11 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
                     filters={filters}
                     url={`${URL_API_ACERVO_SOLICITACAO}/atendimento-solicitacoes`}
                     columns={columns}
+                    onRow={(row) => ({
+                      onClick: () => {
+                        onClickDetalheSolicitacao(row);
+                      },
+                    })}
                   />
                 </Col>
               </Row>
