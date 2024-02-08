@@ -163,8 +163,8 @@ const DetalhesSolicitacao: React.FC = () => {
                   </Col>
 
                   <Col xs={24} md={8}>
-                      <SelectSituacaoAtendimento 
-                      disabled
+                      <SelectSituacaoAtendimento
+                        selectProps={{disabled: true}}
                       />
                   </Col>
 

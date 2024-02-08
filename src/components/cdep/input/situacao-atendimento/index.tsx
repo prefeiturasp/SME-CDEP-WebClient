@@ -9,12 +9,10 @@ import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service
 type SelectSituacaoAtendimentoProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
-  disabled?: boolean;
 };
 export const SelectSituacaoAtendimento: React.FC<SelectSituacaoAtendimentoProps> = ({
   selectProps,
   formItemProps,
-  disabled,
 }) => {
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
 
@@ -44,7 +42,6 @@ export const SelectSituacaoAtendimento: React.FC<SelectSituacaoAtendimentoProps>
         {...selectProps}
         options={options}
         placeholder='Situação do atendimento'
-        disabled={disabled}
       />
     </Form.Item>
   );
