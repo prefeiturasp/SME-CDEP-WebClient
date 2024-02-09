@@ -1,5 +1,5 @@
 import { URL_API_ACERVO_SOLICITACAO, URL_API_ACERVO_SOLICITACAO_DETALHES } from '../constants/urls-api';
-import { obterRegistro } from './api';
+import { alterarRegistro, obterRegistro } from './api';
 
 import queryString from 'query-string';
 import { AcervoSolicitacaoItemCadastroDTO } from '../dto/acervo-solicitacao-item-cadastro-dto';
@@ -36,4 +36,7 @@ const obterSituacoesAtendimento = () =>
 const obterDetalhesAcervoSolicitacao = (acervoSolicitacaoId?:string) =>
   obterRegistro<DetalhesSolicitacaoDTO>(`${URL_API_ACERVO_SOLICITACAO_DETALHES}/${acervoSolicitacaoId}`);
 
-export default { obterItensDoAcervoPorFiltros, inserir, obterPorId, obterSituacoesAtendimento, obterDetalhesAcervoSolicitacao };
+const alterarDataVisitaAcervo = (params?:any) =>
+  alterarRegistro<any>(`${URL_API_ACERVO_SOLICITACAO}/alterar-data-visita`, params);
+
+export default { obterItensDoAcervoPorFiltros, inserir, obterPorId, obterSituacoesAtendimento, obterDetalhesAcervoSolicitacao, alterarDataVisitaAcervo };

@@ -18,7 +18,7 @@ export type DetalhesSolicitacaoDTO = {
     tipo?: string | null;
   }
 
-  type ItensDetalhesSolicitacaoDTO = {
+  export type ItensDetalhesSolicitacaoDTO = {
     id?: number | null;
     codigo?: string | null;
     tipoAcervo?: string | null;

@@ -1,4 +1,4 @@
-import { Button, Col, Row, Tag, Tooltip } from 'antd';
+import { Button, Col, DatePicker, Row, Tag, Tooltip } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
@@ -28,6 +28,7 @@ import armazenamentoService from '~/core/services/armazenamento-service';
 import { downloadBlob } from '~/core/utils/functions';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { AcervoSolicitacaoContext } from '../../provider';
+import dayjs, { Dayjs } from 'dayjs';
 
 const ContainerExpandedTable = styled.div`
   .ant-table-tbody tr.ant-table-expanded-row td {
@@ -49,6 +50,7 @@ const ListaAcervosSolicitacao: React.FC = () => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
   const dispatch = useAppDispatch();
+  const [dataVisitasEditaveis, setDataVisitasEditaveis] = useState<{ [key: number]: string | null }>({});
 
   const solicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
@@ -158,49 +160,105 @@ const ListaAcervosSolicitacao: React.FC = () => {
       title: 'Situação',
       dataIndex: 'situacao',
     },
+    ...(temArquivos
+      ? [
+          {
+            title: 'Anexo',
+            dataIndex: 'anexo',
+            render: (_:any, linha: AcervoSolicitacaoItemRetornoCadastroDTO, index: number) => {
+              const qtdAquivos = linha?.arquivos?.length || 0;
+  
+              if (!qtdAquivos) return <>Sem anexo</>;
+  
+              if (qtdAquivos > 1) {
+                const expandido = expandedRowKey === linha?.acervoId;
+  
+                let icone = expandido ? <FaArrowUp /> : <FaArrowDown />;
+                if (qtdAquivos && qtdAquivos > 1) {
+                  icone = expandido ? <FaChevronUp /> : <FaChevronDown />;
+                }
+  
+                return (
+                  <ButtonPrimary
+                    id={`${CDEP_BUTTON_EXPANDIR_LINHA}_${index}`}
+                    icon={icone}
+                    style={{ display: 'flex', alignItems: 'center', gap: 3 }}
+                    onClick={() => {
+                      onClickExpandir(!expandido, linha, qtdAquivos);
+                    }}
+                  >
+                    Expandir arquivos
+                  </ButtonPrimary>
+                );
+              }
+  
+              const arquivo = linha?.arquivos?.[0]?.codigo ? linha.arquivos[0] : null;
+  
+              if (!arquivo) return <></>;
+  
+              return buttonDownload(arquivo);
+            },
+          },
+        ]
+      : []),
+    {
+      title: 'Tipo de atendimento',
+      dataIndex: 'tipoAtendimento',
+    },
+    {
+      title: 'Data de visita',
+      dataIndex: 'dataVisita',
+      render: (dataVisita: string, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => {
+        const isEditable = linha.alteraDataVisita === true;
+  
+        return isEditable ? (
+          <DatePicker
+            value={dataVisitasEditaveis[linha.acervoId] ? dayjs(dataVisitasEditaveis[linha.acervoId], 'DD-MM-YYYY') : dayjs(null, 'DD-MM-YYYY')}
+            onChange={(date:any) => handleDataVisitaChange(date, linha)}
+            format="DD-MM-YYYY" 
+          />
+        ) : (
+          dataVisita
+        );
+      },
+    },
+    {
+      title: 'Ações',
+      dataIndex: 'acoes',
+      render: (_, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => (
+        <ButtonPrimary
+          id={CDEP_BUTTON_ADICIONAR_ACERVOS}
+          onClick={() => onClickSalvarDataVisita(linha)}
+          disabled={!dataVisitasEditaveis[linha.acervoId]}
+        >
+          Confirmar
+        </ButtonPrimary>
+      ),
+    },
   ];
 
-  if (temArquivos) {
-    columns.push({
-      title: 'Anexo',
-      dataIndex: 'anexo',
-      width: '100px',
-      align: 'center',
-      render: (_, linha: AcervoSolicitacaoItemRetornoCadastroDTO, index: number) => {
-        const qtdAquivos = linha?.arquivos?.length || 0;
+  const handleDataVisitaChange = (date: Dayjs | null, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => {
+    setDataVisitasEditaveis((prevDataVisitas) => ({
+      ...prevDataVisitas,
+      [linha.acervoId]: date ? date.format() : null,
+    }));
+  };
 
-        if (!qtdAquivos) return <>Sem anexo</>;
-
-        if (qtdAquivos > 1) {
-          const expandido = expandedRowKey === linha?.acervoId;
-
-          let icone = expandido ? <FaArrowUp /> : <FaArrowDown />;
-          if (qtdAquivos && qtdAquivos > 1) {
-            icone = expandido ? <FaChevronUp /> : <FaChevronDown />;
-          }
-
-          return (
-            <ButtonPrimary
-              id={`${CDEP_BUTTON_EXPANDIR_LINHA}_${index}`}
-              icon={icone}
-              style={{ display: 'flex', alignItems: 'center', gap: 3 }}
-              onClick={() => {
-                onClickExpandir(!expandido, linha, qtdAquivos);
-              }}
-            >
-              Expandir arquivos
-            </ButtonPrimary>
-          );
-        }
-
-        const arquivo = linha?.arquivos?.[0]?.codigo ? linha.arquivos[0] : null;
-
-        if (!arquivo) return <></>;
-
-        return buttonDownload(arquivo);
-      },
-    });
-  }
+  const onClickSalvarDataVisita = (linha: AcervoSolicitacaoItemRetornoCadastroDTO) => {
+    const dataVisitaEditavel = dataVisitasEditaveis[linha.acervoId];
+    if (dataVisitaEditavel) {
+      acervoSolicitacaoService.alterarDataVisitaAcervo({
+        id: linha.id,
+        dataVisita: dataVisitaEditavel
+      })
+      .then(()=>obterDadosPorId())
+      setDataVisitasEditaveis((prevDataVisitas) => {
+        const newDataVisitas = { ...prevDataVisitas };
+        delete newDataVisitas[linha.acervoId];
+        return newDataVisitas;
+      });
+    }
+  };
 
   const removerAcervo = (index: number, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => {
     const acervos = [...dataSource];
@@ -280,7 +338,7 @@ const ListaAcervosSolicitacao: React.FC = () => {
             >
               Adicionar acervos
             </ButtonPrimary>
-          </Col>
+          </Col>         
         </Row>
       </Col>
       <Col xs={24}>

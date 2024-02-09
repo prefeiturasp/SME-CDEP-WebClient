@@ -9,9 +9,11 @@ import { SelectSituacaoAtendimento } from '~/components/cdep/input/situacao-aten
 import { useForm } from 'antd/es/form/Form';
 import HeaderPage from '~/components/lib/header-page';
 import ButtonVoltar from '~/components/cdep/button/voltar';
-import { DetalhesSolicitacaoDTO } from '~/core/dto/acervo-detalhes-solicitacao-dto';
+import { DetalhesSolicitacaoDTO, ItensDetalhesSolicitacaoDTO } from '~/core/dto/acervo-detalhes-solicitacao-dto';
 import { CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
 import { formatarDataParaDDMMYYYY } from '~/core/utils/functions';
+import Table, { ColumnsType } from 'antd/es/table';
+import dayjs from 'dayjs';
 
 const DEFAULT_VALUES: DetalhesSolicitacaoDTO = {
   id: null,
@@ -37,6 +39,29 @@ const DetalhesSolicitacao: React.FC = () => {
   const solicitacaoId = paramsRoute?.id ? paramsRoute.id : '0';
   const [dados, setDados] = useState<DetalhesSolicitacaoDTO>();
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
+  const columns: ColumnsType<ItensDetalhesSolicitacaoDTO> = [
+    {
+      title: 'N° do tombo/código',
+      dataIndex: 'id',
+      align: 'center',
+    },
+    {
+      title: 'Título',
+      dataIndex: 'codigo',
+      align: 'center',
+    },
+    {
+      title: 'Data da solicitação',
+      dataIndex: 'dataCriacao',
+      align: 'center',
+      render: (dataCriacao: string) => dayjs(dataCriacao).format('DD/MM/YYYY - HH:mm'),
+    },
+    {
+      title: 'Tipo de atendimento',
+      dataIndex: 'situacao',
+      align: 'center',
+    },    
+  ];
 
   const obterDados = useCallback(async () => {
     const resposta = await acervoSolicitacaoService.obterDetalhesAcervoSolicitacao(solicitacaoId);
@@ -52,8 +77,7 @@ const DetalhesSolicitacao: React.FC = () => {
         dataSolicitacao: formatarDataParaDDMMYYYY(data?.dataSolicitacao),
         dataVisita: formatarDataParaDDMMYYYY(data?.itens?.[0]?.dataVisita),
         responsavel: data?.responsavel,
-        situacao: data?.situacao, 
-        acervo: `${data?.itens?.[0].codigo} - ${data?.itens?.[0].tipoAcervo}`
+        situacao: data?.situacao,
       });
     } else {
       setDados(DEFAULT_VALUES);
@@ -166,22 +190,17 @@ const DetalhesSolicitacao: React.FC = () => {
                       <SelectSituacaoAtendimento
                         selectProps={{disabled: true}}
                       />
-                  </Col>
-
-                  <Col xs={24} md={8}>
-                    <Form.Item label='Acervo' name='acervo'>
-                      <Input
-                        type='text'
-                        placeholder='Titulo do Acervo'
-                        disabled
-                      />
-                    </Form.Item>
-                  </Col>  
-
+                  </Col>                  
                 </Row>
               )}
             </Form.Item>
           </Form>        
+        </Col>
+        <Col xs={24}>
+          <Table            
+            columns={columns}
+            dataSource={dados?.itens}            
+          />
         </Col>
       </Row>
     </Col>
