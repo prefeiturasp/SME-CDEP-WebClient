@@ -1,7 +1,7 @@
-import { Col, Form, Input, Row } from 'antd';
+import { Button, Col, Form, Input, Row } from 'antd';
 import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
+import { CDEP_BUTTON_ASSUMIR_ATENDIMENTO, CDEP_BUTTON_CANCELAR, CDEP_BUTTON_CANCELAR_ATENDIMENTO, CDEP_BUTTON_CONFIRMAR, CDEP_BUTTON_FINALIZAR, CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { ROUTES } from '~/core/enum/routes';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import SelectResponsaveis from '~/components/cdep/input/responsaveis';
@@ -68,16 +68,72 @@ const DetalhesSolicitacao: React.FC = () => {
   return (
     <Col>
       <Row gutter={[16, 16]}>
-        <HeaderPage title='Atendimento de Solicitações'>
-          <Col span={24}>
-            <Row gutter={[8, 8]}>
-              <Col>
-                <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
-              </Col>            
-            </Row>
-          </Col>
-        </HeaderPage>        
-        <Col xs={24}>
+      <HeaderPage title='Atendimento de Solicitações'>
+        <Col span={24}>
+          <Row gutter={[8, 8]}>
+            <Col>
+              <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
+            </Col>            
+            <Col>
+              <Button
+                block
+                htmlType='submit'
+                id={CDEP_BUTTON_CANCELAR}
+                style={{ fontWeight: 700 }}
+                disabled
+              >
+                Cancelar
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                block
+                type='primary'
+                htmlType='submit'
+                id={CDEP_BUTTON_ASSUMIR_ATENDIMENTO}
+                style={{ fontWeight: 700 }}
+                disabled
+              >
+                Assumir atendimento
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                block
+                htmlType='submit'
+                id={CDEP_BUTTON_CONFIRMAR}
+                style={{ fontWeight: 700 }}
+                disabled
+              >
+                Confirmar
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                block
+
+                htmlType='submit'
+                id={CDEP_BUTTON_FINALIZAR}
+                style={{ fontWeight: 700 }}
+                disabled
+              >
+                Finalizar
+              </Button>
+            </Col>
+            <Col>
+              <Button
+                block
+                id={CDEP_BUTTON_CANCELAR_ATENDIMENTO}
+                style={{ fontWeight: 700 }}
+                disabled
+              >
+                Cancelar atendimento
+              </Button>
+            </Col>
+          </Row>
+        </Col>
+      </HeaderPage>         
+      <Col xs={24}>
         <Form form={form} layout='vertical' autoComplete='off'  initialValues={dados}>
             <Form.Item shouldUpdate>
               {() => (
