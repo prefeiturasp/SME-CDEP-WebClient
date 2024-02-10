@@ -177,10 +177,12 @@ export const alterarRegistro = async <T>(
   params?: any,
   config?: AxiosRequestConfig,
 ): Promise<ApiResult<T>> => {
+  store.dispatch(setSpinning(true));
   return api
     .put(url, params, config)
     .then(tratarThen<T>)
-    .catch(tratarCatch);
+    .catch(tratarCatch)
+    .finally(() => store.dispatch(setSpinning(false)));
 };
 
 export const inserirRegistro = async <T>(

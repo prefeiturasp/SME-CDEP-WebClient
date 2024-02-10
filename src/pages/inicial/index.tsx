@@ -43,9 +43,7 @@ const Inicial: React.FC = () => {
   ];
 
   const onClickEditar = (row: MinhaSolicitacaoDTO) =>
-    navigate(`${ROUTES.SOLICITACAO}/${row.acervoSolicitacaoId}`, {
-      replace: true,
-    });
+    navigate(`${ROUTES.SOLICITACAO}/${row.acervoSolicitacaoId}`);
 
   return (
     <Col>

@@ -5,11 +5,15 @@ import { AcervoSolicitacaoItemRetornoCadastroDTO } from '~/core/dto/acervo-solic
 type AcervoSolicitacaoContextProps = {
   dataSource: AcervoSolicitacaoItemRetornoCadastroDTO[];
   setDataSource: React.Dispatch<React.SetStateAction<AcervoSolicitacaoItemRetornoCadastroDTO[]>>;
+  podeCancelarSolicitacao: boolean;
+  setPodeCancelarSolicitacao: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
 const DEFAULT_VALUES: AcervoSolicitacaoContextProps = {
   dataSource: [],
   setDataSource: () => {},
+  podeCancelarSolicitacao: false,
+  setPodeCancelarSolicitacao: () => {},
 };
 
 export const AcervoSolicitacaoContext =
@@ -17,12 +21,15 @@ export const AcervoSolicitacaoContext =
 
 const AcervoSolicitacaoContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemRetornoCadastroDTO[]>([]);
+  const [podeCancelarSolicitacao, setPodeCancelarSolicitacao] = useState<boolean>(false);
 
   return (
     <AcervoSolicitacaoContext.Provider
       value={{
         dataSource,
         setDataSource,
+        podeCancelarSolicitacao,
+        setPodeCancelarSolicitacao,
       }}
     >
       {children}

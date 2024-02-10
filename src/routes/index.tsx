@@ -30,7 +30,7 @@ import RedefinirSenha from '~/pages/redefinir-senha';
 import RedefinirSenhaToken from '~/pages/redefinir-senha-token';
 import GuardAutenticacao from './config/guard/autenticacao';
 import GuardPermissao from './config/guard/permissao';
-import DetalhesSolicitacao from '~/pages/operacoes/solicitacao/components/detalhes-solicitacao';
+import { DetalhesSolicitacao } from '~/pages/operacoes/solicitacao/components/detalhes-solicitacao';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
