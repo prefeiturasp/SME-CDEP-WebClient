@@ -112,7 +112,7 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
   };
 
   const onClickDetalheSolicitacao = (row: SolicitacaoDTO) =>
-    navigate(`${ROUTES.DETALHES_SOLICITACAO}/${row.acervoSolicitacaoId}`, {
+    navigate(`${ROUTES.ATENDIMENTO_SOLICITACOES}/${row.acervoSolicitacaoId}`, {
       replace: true,
     });
 
@@ -127,11 +127,8 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
             <Col>
               <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
                 <ButtonSecundary
-                  block
-                  type='default'
                   id={CDEP_BUTTON_CANCELAR}
                   onClick={() => onClickCancelar()}
-                  style={{ fontWeight: 700 }}
                   disabled={!form.isFieldsTouched()}
                 >
                   Cancelar

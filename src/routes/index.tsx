@@ -30,7 +30,7 @@ import RedefinirSenha from '~/pages/redefinir-senha';
 import RedefinirSenhaToken from '~/pages/redefinir-senha-token';
 import GuardAutenticacao from './config/guard/autenticacao';
 import GuardPermissao from './config/guard/permissao';
-import { DetalhesSolicitacao } from '~/pages/operacoes/solicitacao/components/detalhes-solicitacao';
+import { FormAtendimentoSolicitacoes } from '~/pages/cadastros/atendimento-solicitacoes/form';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
@@ -154,17 +154,17 @@ const RoutesConfig = () => {
                     element={<EnviarSolicitacoes key='EDITAR_SOLICITACAO' />}
                   />
                 </Route>
-                <Route element={<GuardPermissao menuKey={MenuEnum.Solicitacao} />}>
-                  <Route
-                    path={ROUTES.DETALHES_SOLICITACAO}
-                    element={<DetalhesSolicitacao key='DETALHES_SOLICITACAO' />}
-                  />
-                </Route>
               </Route>
 
               <Route path={ROUTES.ATENDIMENTO_SOLICITACOES}>
                 <Route element={<GuardPermissao menuKey={MenuEnum.AtendimentoSolicitacoes} />}>
                   <Route path='' element={<ListAtendimentoSolicitacoes />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.AtendimentoSolicitacoes} />}>
+                  <Route
+                    path={ROUTES.ATENDIMENTO_SOLICITACOES_EDITAR}
+                    element={<FormAtendimentoSolicitacoes />}
+                  />
                 </Route>
               </Route>
             </Route>
