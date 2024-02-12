@@ -12,6 +12,7 @@ import { AcervoSolicitacaoItemRetornoDTO } from '../dto/acervo-solicitacao-item-
 import { AcervoSolicitacaoRetornoCadastroDTO } from '../dto/acervo-solicitacao-retorno-cadastro-dto';
 import { AlterarDataVisitaAcervoSolicitacaoItemDTO } from '../dto/alterar-data-visita-acervo-solicitacao-item-dto';
 import { inserirRegistro } from './api';
+import { AcervoSolicitacaoConfirmarDTO } from '../dto/acervo-solicitacao-confirmar-dto';
 
 const obterItensDoAcervoPorFiltros = (acervosIds: number[]) =>
   obterRegistro<AcervoSolicitacaoItemRetornoDTO[]>(URL_API_ACERVO_SOLICITACAO, {
@@ -55,6 +56,9 @@ const cancelarItemAtendimento = (acervoSolicitacaoItemId: number) =>
     `${URL_API_ACERVO_SOLICITACAO}/${acervoSolicitacaoItemId}/cancelar-item-atendimento`,
   );
 
+const confirmarAtendimento = (params: AcervoSolicitacaoConfirmarDTO) =>
+  alterarRegistro<boolean>(`${URL_API_ACERVO_SOLICITACAO}/confirmar-atendimento`, params);
+
 export default {
   obterItensDoAcervoPorFiltros,
   inserir,
@@ -64,4 +68,5 @@ export default {
   alterarDataVisitaDoItemAtendimento,
   cancelarAtendimento,
   cancelarItemAtendimento,
+  confirmarAtendimento,
 };

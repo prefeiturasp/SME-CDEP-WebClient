@@ -2,14 +2,17 @@ import { Button, Col, Form, Input, Row, Space } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
+import { cloneDeep } from 'lodash';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import SelectResponsaveis from '~/components/cdep/input/responsaveis';
+import ButtonPrimary from '~/components/lib/button/primary';
 import ButtonSecundary from '~/components/lib/button/secundary';
 import CardContent from '~/components/lib/card-content';
 import DataTable from '~/components/lib/data-table';
 import HeaderPage from '~/components/lib/header-page';
+import { notification } from '~/components/lib/notification';
 import {
   CDEP_BUTTON_ASSUMIR_ATENDIMENTO,
   CDEP_BUTTON_CANCELAR,
@@ -21,6 +24,7 @@ import {
 import { CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
 import { DESEJA_CANCELAR_ALTERACOES } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
+import { AcervoSolicitacaoConfirmarDTO } from '~/core/dto/acervo-solicitacao-confirmar-dto';
 import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detalhe-dto';
 import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solicitacao-item-detalhe-resumido-dto';
 
@@ -64,6 +68,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const usuarioLogin = auth?.usuarioLogin;
 
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
+  const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemDetalheResumidoDTO[]>([]);
 
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
@@ -89,6 +94,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         dataSolicitacao,
       };
       setFormInitialValues(dadosMapeados);
+      setDataSource(dadosMapeados.itens);
     }
   }, [acervoSolicitacaoId]);
 
@@ -130,6 +136,20 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     form.setFieldValue('responsavel', usuarioLogin);
   };
 
+  const onClickConfirmarAtendimento = async () => {
+    const params: AcervoSolicitacaoConfirmarDTO = {
+      id: acervoSolicitacaoId,
+      itens: cloneDeep(dataSource),
+    };
+    const resposta = await acervoSolicitacaoService.confirmarAtendimento(params);
+    if (resposta.sucesso) {
+      notification.success({
+        message: 'Sucesso',
+        description: 'Atendimento confirmado com sucesso',
+      });
+    }
+  };
+
   return (
     <Col>
       <Form
@@ -163,17 +183,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 <Button
                   block
                   htmlType='submit'
-                  id={CDEP_BUTTON_CONFIRMAR}
-                  style={{ fontWeight: 700 }}
-                  disabled
-                >
-                  Confirmar
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  block
-                  htmlType='submit'
                   id={CDEP_BUTTON_FINALIZAR}
                   style={{ fontWeight: 700 }}
                   disabled
@@ -190,6 +199,11 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 >
                   Cancelar atendimento
                 </Button>
+              </Col>
+              <Col>
+                <ButtonPrimary id={CDEP_BUTTON_CONFIRMAR} onClick={onClickConfirmarAtendimento}>
+                  Confirmar
+                </ButtonPrimary>
               </Col>
             </Row>
           </Col>
@@ -271,11 +285,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
             </Row>
           </Col>
           <Col xs={24}>
-            <DataTable
-              columns={columns}
-              dataSource={formInitialValues?.itens}
-              showOrderButton={false}
-            />
+            <DataTable columns={columns} dataSource={dataSource} showOrderButton={false} />
           </Col>
         </CardContent>
       </Form>
