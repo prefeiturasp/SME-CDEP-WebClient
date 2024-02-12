@@ -31,6 +31,10 @@ export const mapearDtoCadastrosAcervo = (dados: FormDefaultCadastroAcervoDTO) =>
     dados.assuntosIds = [];
   }
 
+  if (!dados?.acessoDocumentosIds?.length) {
+    dados.acessoDocumentosIds = [];
+  }
+
   const temCoAutores =
     !!dados?.coAutores?.length &&
     !!dados?.coAutores?.filter((item) => item?.creditoAutorId)?.length;
