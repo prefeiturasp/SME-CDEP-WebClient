@@ -6,13 +6,14 @@ import { alterarRegistro, obterRegistro } from './api';
 
 import queryString from 'query-string';
 import { SituacaoItemDTO } from '~/core/dto/situacao-item-dto';
+import { AcervoSolicitacaoConfirmarDTO } from '../dto/acervo-solicitacao-confirmar-dto';
 import { AcervoSolicitacaoDetalheDTO } from '../dto/acervo-solicitacao-detalhe-dto';
 import { AcervoSolicitacaoItemCadastroDTO } from '../dto/acervo-solicitacao-item-cadastro-dto';
 import { AcervoSolicitacaoItemRetornoDTO } from '../dto/acervo-solicitacao-item-retorno-dto';
 import { AcervoSolicitacaoRetornoCadastroDTO } from '../dto/acervo-solicitacao-retorno-cadastro-dto';
 import { AlterarDataVisitaAcervoSolicitacaoItemDTO } from '../dto/alterar-data-visita-acervo-solicitacao-item-dto';
+import { TipoAtendimentoDTO } from '../dto/tipo-atendimento-dto';
 import { inserirRegistro } from './api';
-import { AcervoSolicitacaoConfirmarDTO } from '../dto/acervo-solicitacao-confirmar-dto';
 
 const obterItensDoAcervoPorFiltros = (acervosIds: number[]) =>
   obterRegistro<AcervoSolicitacaoItemRetornoDTO[]>(URL_API_ACERVO_SOLICITACAO, {
@@ -36,7 +37,10 @@ const obterPorId = (acervoSolicitacaoId: number | string) =>
   );
 
 const obterSituacoesAtendimento = () =>
-  obterRegistro<SituacaoItemDTO[]>(`${URL_API_ACERVO_SOLICITACAO}/situacoes`);
+  obterRegistro<SituacaoItemDTO[]>(`${URL_API_ACERVO_SOLICITACAO}/situacoes-item`);
+
+const obterTipoAtendimento = () =>
+  obterRegistro<TipoAtendimentoDTO[]>(`${URL_API_ACERVO_SOLICITACAO}/tipo-atendimento`);
 
 const obterDetalhesAcervoSolicitacao = (acervoSolicitacaoId: number) =>
   obterRegistro<AcervoSolicitacaoDetalheDTO>(
@@ -69,4 +73,5 @@ export default {
   cancelarAtendimento,
   cancelarItemAtendimento,
   confirmarAtendimento,
+  obterTipoAtendimento,
 };

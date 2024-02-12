@@ -3,12 +3,11 @@ import React, { useCallback, useEffect, useState } from 'react';
 import CDEPLogoBranco from '~/assets/cdep-logo-centralizado-branco.svg';
 
 import { cloneDeep } from 'lodash';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { ROUTES } from '~/core/enum/routes';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import SiderSME, { MenuItemSMEProps } from '../../lib/sider';
 import { MenuItemCDEPProps, menus } from './menus';
-import { Link } from 'react-router-dom';
 
 const SiderCDEP: React.FC = () => {
   const navigate = useNavigate();
