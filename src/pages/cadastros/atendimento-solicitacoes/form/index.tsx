@@ -111,7 +111,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       title: 'Tipo de atendimento',
       dataIndex: 'tipoAtendimento',
       width: '35%',
-      render: (value, record: AcervoSolicitacaoItemDetalheResumidoDTO, index) => {
+      render: (value) => {
         if (value) {
           return TipoAtendimentoEnum?.[value];
         }
