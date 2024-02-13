@@ -3,4 +3,5 @@ import { AcervoSolicitacaoItemConfirmarDTO } from './acervo-solicitacao-item-con
 export type AcervoSolicitacaoConfirmarDTO = {
   id: number;
   itens: AcervoSolicitacaoItemConfirmarDTO[];
+  responsavelRf: string;
 };

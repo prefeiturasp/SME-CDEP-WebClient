@@ -100,7 +100,7 @@ const DataTable = <T extends object>({
   );
 
   useEffect(() => {
-    fetchData(tableParams);
+    fetchData({ ...tableParams, pagination: { ...tableParams.pagination, current: 1 } });
     setTableState({
       reloadData: () => {
         fetchData(tableParams);

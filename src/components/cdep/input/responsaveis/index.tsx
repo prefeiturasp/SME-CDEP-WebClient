@@ -32,7 +32,7 @@ const SelectResponsaveis: React.FC<SelectResponsaveisProps> = ({ selectProps, fo
   }, []);
 
   return (
-    <Form.Item label='Responsável' name='responsavel' {...formItemProps}>
+    <Form.Item label='Responsável' name='responsavelRf' {...formItemProps}>
       <Select
         showSearch
         allowClear

@@ -8,6 +8,7 @@ import { FaAlignJustify, FaStream } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 
 import MenuItem from 'antd/es/menu/MenuItem';
+import { Colors } from '~/core/styles/colors';
 import MenuContextProvider, { MenuContext } from './provider';
 import {
   SiderContainer,
@@ -98,7 +99,7 @@ const SiderChildrenProvider: React.FC<MenuSMEProps> = ({
       collapsed={collapsed}
       key={menuItem?.key}
       title={
-        <SiderMenuGroup collapsed={collapsed}>
+        <SiderMenuGroup collapsed={collapsed} style={{ color: Colors.Neutral.WHITE }}>
           <SiderIconContainer collapsed={collapsed}>{menuItem?.icon}</SiderIconContainer>
           <SiderMenuTitle collapsed={collapsed}>{menuItem?.title}</SiderMenuTitle>
           {collapsed && (
