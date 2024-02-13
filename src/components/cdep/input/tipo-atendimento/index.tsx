@@ -34,7 +34,15 @@ export const SelectTipoAtendimento: React.FC<SelectTipoAtendimentoProps> = ({
   }, []);
 
   return (
-    <Form.Item name='tipoAtendimento' {...formItemProps}>
+    <Form.Item
+      name='tipoAtendimento'
+      {...formItemProps}
+      rules={[
+        {
+          required: true,
+        },
+      ]}
+    >
       <Select
         allowClear
         id={CDEP_SELECT_SOLICITACAO_SITUACOES}
