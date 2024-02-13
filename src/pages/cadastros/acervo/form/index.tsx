@@ -129,6 +129,12 @@ const FormAcervo: React.FC<FormAcervoProps> = ({
         valoresSalvar.codigoNovo = null;
       }
 
+      if (valoresSalvar?.numeroPagina) {
+        valoresSalvar.numeroPagina;
+      } else {
+        valoresSalvar.numeroPagina = null;
+      }
+
       if (valoresSalvar?.coAutores?.length && valoresSalvar?.listaTipoAutoria?.length) {
         const coAutores = [...valoresSalvar.coAutores];
         const listaTipoAutoria = [...valoresSalvar.listaTipoAutoria];
