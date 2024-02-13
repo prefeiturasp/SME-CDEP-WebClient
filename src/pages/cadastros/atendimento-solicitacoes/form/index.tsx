@@ -18,6 +18,7 @@ import {
   CDEP_BUTTON_ASSUMIR_ATENDIMENTO,
   CDEP_BUTTON_CANCELAR,
   CDEP_BUTTON_CANCELAR_ATENDIMENTO,
+  CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO,
   CDEP_BUTTON_CONFIRMAR,
   CDEP_BUTTON_FINALIZAR,
   CDEP_BUTTON_VOLTAR,
@@ -32,8 +33,11 @@ import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solic
 
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import 'dayjs/locale/pt-br';
-import DataTableContextProvider from '~/components/lib/data-table/provider';
 import { ROUTES } from '~/core/enum/routes';
+import {
+  SituacaoSolicitacaoItemEnum,
+  SituacaoSolicitacaoItemEnumDisplay,
+} from '~/core/enum/situacao-item-atendimento-enum';
 import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
@@ -55,8 +59,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const [dataVisitasEditaveis, setDataVisitasEditaveis] = useState<{
     [key: number]: Dayjs;
   }>();
-
-  Form.useWatch('tipoAtendimento', form);
 
   const usuarioLogin = auth?.usuarioLogin;
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
@@ -155,7 +157,43 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
           : '';
       },
     },
+    {
+      title: 'Ações',
+      align: 'center',
+      width: '100px',
+      render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => (
+        <ButtonPrimary
+          type='text'
+          id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
+          onClick={() => onClickCancelarItemAtendimento(linha.id)}
+          disabled={
+            linha.situacao ===
+              SituacaoSolicitacaoItemEnumDisplay[SituacaoSolicitacaoItemEnum.CANCELADO] ||
+            linha.situacao ===
+              SituacaoSolicitacaoItemEnumDisplay[
+                SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE
+              ]
+          }
+        >
+          Cancelar item
+        </ButtonPrimary>
+      ),
+    },
   ];
+
+  const onClickCancelarItemAtendimento = async (acervoSolicitacaoItemId: number) => {
+    const resultado = await acervoSolicitacaoService.cancelarItemAtendimento(
+      acervoSolicitacaoItemId,
+    );
+
+    if (resultado.sucesso) {
+      notification.success({
+        message: 'Sucesso',
+        description: 'Item cancelado com sucesso',
+      });
+      carregarDados();
+    }
+  };
 
   const onChangeDataVisita = (date: Dayjs, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
     setDataVisitasEditaveis((prevDataVisitas) => ({
@@ -178,6 +216,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
           message: 'Sucesso',
           description: 'Data inserida/alterada com sucesso',
         });
+        carregarDados();
       }
 
       setDataVisitasEditaveis((prevDataVisitas) => {
@@ -249,7 +288,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   };
 
   const onClickAssumirAtendimento = () => {
-    form.setFieldValue('responsavel', usuarioLogin);
+    form.setFieldValue('responsavelRf', usuarioLogin);
   };
 
   const onClickConfirmarAtendimento = async () => {
@@ -262,7 +301,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     const params: AcervoSolicitacaoConfirmarDTO = {
       id: acervoSolicitacaoId,
       itens: cloneDeep(valoresParaSalvar),
-      responsavelRf: form.getFieldValue('responsavel'),
+      responsavelRf: form.getFieldValue('responsavelRf'),
     };
 
     const resposta = await acervoSolicitacaoService.confirmarAtendimento(params);
@@ -412,9 +451,13 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
             </Row>
           </Col>
           <Col xs={24}>
-            <DataTableContextProvider>
-              <DataTable columns={columns} dataSource={dataSource} showOrderButton={false} />
-            </DataTableContextProvider>
+            <Form.Item shouldUpdate>
+              {() => {
+                return (
+                  <DataTable columns={columns} dataSource={dataSource} showOrderButton={false} />
+                );
+              }}
+            </Form.Item>
           </Col>
         </CardContent>
       </Form>
