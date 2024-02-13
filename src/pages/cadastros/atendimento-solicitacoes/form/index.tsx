@@ -32,7 +32,7 @@ import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solic
 
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import 'dayjs/locale/pt-br';
-import DataTableContextProvider, { DataTableContext } from '~/components/lib/data-table/provider';
+import DataTableContextProvider from '~/components/lib/data-table/provider';
 import { ROUTES } from '~/core/enum/routes';
 import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
 import { useAppSelector } from '~/core/hooks/use-redux';
@@ -42,17 +42,13 @@ import { formatarDataPorFormato, formatterCPFMask, maskTelefone } from '~/core/u
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 export const FormAtendimentoSolicitacoes: React.FC = () => {
-  const [form] = useForm();
+  const dataAtual = dayjs();
 
+  const [form] = useForm();
   const navigate = useNavigate();
   const paramsRoute = useParams();
-  const { tableState } = useContext(DataTableContext);
-
-  const { desabilitarCampos } = useContext(PermissaoContext);
-
   const auth = useAppSelector((store) => store.auth);
-
-  const usuarioLogin = auth?.usuarioLogin;
+  const { desabilitarCampos } = useContext(PermissaoContext);
 
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
   const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemDetalheResumidoDTO[]>([]);
@@ -60,41 +56,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     [key: number]: Dayjs;
   }>();
 
-  const dataAtual = dayjs();
-  const tipoAtendimentoWatch = Form.useWatch('tipoAtendimento', form);
+  Form.useWatch('tipoAtendimento', form);
 
+  const usuarioLogin = auth?.usuarioLogin;
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
-
-  const onChangeDataVisita = (date: Dayjs, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-    setDataVisitasEditaveis((prevDataVisitas) => ({
-      ...prevDataVisitas,
-      [linha.id]: date,
-    }));
-  };
-
-  const onClickSalvarDataVisita = async (linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-    const dataVisitaEditavel = dataVisitasEditaveis?.[linha.id];
-
-    if (dataVisitaEditavel) {
-      const resultado = await acervoSolicitacaoService.alterarDataVisitaDoItemAtendimento({
-        id: linha.id,
-        dataVisita: dataVisitaEditavel,
-      });
-
-      if (resultado.sucesso) {
-        notification.success({
-          message: 'Sucesso',
-          description: 'Data inserida/alterada com sucesso',
-        });
-      }
-
-      setDataVisitasEditaveis((prevDataVisitas) => {
-        const newDataVisitas = { ...prevDataVisitas };
-        delete newDataVisitas[linha.id];
-        return newDataVisitas;
-      });
-    }
-  };
 
   const columns: ColumnsType<AcervoSolicitacaoItemDetalheResumidoDTO> = [
     {
@@ -111,7 +76,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       title: 'Tipo de atendimento',
       dataIndex: 'tipoAtendimento',
       width: '35%',
-      render: (value) => {
+      render: (value, record) => {
         if (value) {
           return TipoAtendimentoEnum?.[value];
         }
@@ -119,6 +84,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         return (
           <SelectTipoAtendimento
             formItemProps={{
+              name: ['tipoAtendimento', `${record.id}`],
               style: {
                 margin: 0,
                 width: '80%',
@@ -140,7 +106,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 allowClear={false}
                 value={value}
                 onChange={(date: any) => {
-                  form.setFieldValue('dataVisita', date);
+                  form.setFieldValue(['dataVisita', `${record.id}`], date);
                   onChangeDataVisita(date, record);
                 }}
                 format='DD/MM/YYYY'
@@ -180,14 +146,47 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
           return datePicker(value, exibirConfirmar);
         }
 
+        const getTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${record.id}`]);
+
         return dataVisita
           ? formatarDataPorFormato(dataVisita, 'DD/MM/YYYY - HH:mm')
-          : tipoAtendimentoWatch === TipoAtendimentoEnum.Presencial
+          : getTipoAtendimento === TipoAtendimentoEnum.Presencial
           ? datePicker()
           : '';
       },
     },
   ];
+
+  const onChangeDataVisita = (date: Dayjs, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
+    setDataVisitasEditaveis((prevDataVisitas) => ({
+      ...prevDataVisitas,
+      [linha.id]: date,
+    }));
+  };
+
+  const onClickSalvarDataVisita = async (linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
+    const dataVisitaEditavel = dataVisitasEditaveis?.[linha.id];
+
+    if (dataVisitaEditavel) {
+      const resultado = await acervoSolicitacaoService.alterarDataVisitaDoItemAtendimento({
+        id: linha.id,
+        dataVisita: dataVisitaEditavel,
+      });
+
+      if (resultado.sucesso) {
+        notification.success({
+          message: 'Sucesso',
+          description: 'Data inserida/alterada com sucesso',
+        });
+      }
+
+      setDataVisitasEditaveis((prevDataVisitas) => {
+        const newDataVisitas = { ...prevDataVisitas };
+        delete newDataVisitas[linha.id];
+        return newDataVisitas;
+      });
+    }
+  };
 
   const carregarDados = useCallback(async () => {
     const resposta = await acervoSolicitacaoService.obterDetalhesAcervoSolicitacao(
@@ -256,8 +255,8 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const onClickConfirmarAtendimento = async () => {
     const valoresParaSalvar = dataSource.map((item) => ({
       ...item,
-      dataVisita: form.getFieldValue('dataVisita'),
-      tipoAtendimento: form.getFieldValue('tipoAtendimento'),
+      dataVisita: form.getFieldValue(['dataVisita', `${item.id}`]),
+      tipoAtendimento: form.getFieldValue(['tipoAtendimento', `${item.id}`]),
     }));
 
     const params: AcervoSolicitacaoConfirmarDTO = {
@@ -274,7 +273,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         description: 'Atendimento confirmado com sucesso',
       });
 
-      tableState.reloadData();
+      carregarDados();
     }
   };
 
