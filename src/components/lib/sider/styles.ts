@@ -55,6 +55,7 @@ export const SiderSubMenuContainer = styled(SubMenu)<SiderSubMenuStylePros>`
       width: 100%;
       line-height: 20px !important;
       height: ${(props) => (props?.collapsed ? '60px' : '40px')} !important;
+      color: ${(props) => props?.theme?.token?.colorTextLabel};
 
       ${(props) => props?.isSubMenu && `padding-left: 22px !important;`}
     }

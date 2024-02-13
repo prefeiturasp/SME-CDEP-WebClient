@@ -63,6 +63,11 @@ const cancelarItemAtendimento = (acervoSolicitacaoItemId: number) =>
 const confirmarAtendimento = (params: AcervoSolicitacaoConfirmarDTO) =>
   alterarRegistro<boolean>(`${URL_API_ACERVO_SOLICITACAO}/confirmar-atendimento`, params);
 
+const finalizarAtendimento = (acervoSolicitacaoId: number) =>
+  alterarRegistro<boolean>(
+    `${URL_API_ACERVO_SOLICITACAO}/${acervoSolicitacaoId}/finalizar-atendimento`,
+  );
+
 export default {
   obterItensDoAcervoPorFiltros,
   inserir,
@@ -74,4 +79,5 @@ export default {
   cancelarItemAtendimento,
   confirmarAtendimento,
   obterTipoAtendimento,
+  finalizarAtendimento,
 };

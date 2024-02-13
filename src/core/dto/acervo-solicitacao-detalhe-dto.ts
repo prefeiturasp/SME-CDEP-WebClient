@@ -8,5 +8,6 @@ export type AcervoSolicitacaoDetalheDTO = {
   dataSolicitacao: string;
   responsavel: string;
   situacao: string;
+  situacaoId: number;
   itens: AcervoSolicitacaoItemDetalheResumidoDTO[];
 };

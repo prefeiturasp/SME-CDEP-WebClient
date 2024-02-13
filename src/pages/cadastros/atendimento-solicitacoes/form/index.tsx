@@ -2,7 +2,7 @@ import { Button, Col, DatePicker, Form, Input, Row, Space } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
 import { cloneDeep } from 'lodash';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import SelectResponsaveis from '~/components/cdep/input/responsaveis';
@@ -34,13 +34,13 @@ import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import 'dayjs/locale/pt-br';
 import { AcervoSolicitacaoItemConfirmarDTO } from '~/core/dto/acervo-solicitacao-item-confirmar-dto';
 import { ROUTES } from '~/core/enum/routes';
+import { SituacaoSolicitacaoEnum } from '~/core/enum/situacao-atendimento-enum';
 import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
 import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
 import { formatarDataPorFormato, formatterCPFMask, maskTelefone } from '~/core/utils/functions';
-import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 export const FormAtendimentoSolicitacoes: React.FC = () => {
   const dataAtual = dayjs();
@@ -49,7 +49,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
   const auth = useAppSelector((store) => store.auth);
-  const { desabilitarCampos } = useContext(PermissaoContext);
 
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
   const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemDetalheResumidoDTO[]>([]);
@@ -59,6 +58,8 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
   const usuarioLogin = auth?.usuarioLogin;
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
+  const desabilitarCampos =
+    formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.FINALIZADO_ATENDIMENTO;
 
   const validarSituacaoLinha = (situacaoId: number) => {
     switch (situacaoId) {
@@ -164,7 +165,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
           type='text'
           id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
           onClick={() => onClickCancelarItemAtendimento(linha.id)}
-          disabled={validarSituacaoLinha(linha.situacaoId)}
+          disabled={validarSituacaoLinha(linha.situacaoId) || desabilitarCampos}
         >
           Cancelar item
         </ButtonPrimary>
@@ -294,6 +295,22 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     });
   };
 
+  const onClickFinalizarAtendimento = () => {
+    confirmacao({
+      content: 'Deseja realmente finalizar o atendimento?',
+      onOk: async () => {
+        const resultado = await acervoSolicitacaoService.finalizarAtendimento(acervoSolicitacaoId);
+
+        if (resultado.sucesso) {
+          notification.success({
+            message: 'Sucesso',
+            description: 'Atendimento finalizado com sucesso',
+          });
+        }
+      },
+    });
+  };
+
   return (
     <Col>
       <Form
@@ -329,7 +346,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                   htmlType='submit'
                   id={CDEP_BUTTON_FINALIZAR}
                   style={{ fontWeight: 700 }}
-                  disabled
+                  disabled={
+                    formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA
+                  }
+                  onClick={onClickFinalizarAtendimento}
                 >
                   Finalizar
                 </Button>
