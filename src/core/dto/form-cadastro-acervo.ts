@@ -45,7 +45,7 @@ export type FormDefaultCadastroAcervoDTO = {
   serieColecaoId: number;
   ano: string;
   edicao: string;
-  numeroPagina: string;
+  numeroPagina: number;
   acessoDocumentosIds: number[];
   volume: string;
   tipoAnexo: string;
