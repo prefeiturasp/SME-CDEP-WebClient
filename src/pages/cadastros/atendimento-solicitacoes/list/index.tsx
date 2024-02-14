@@ -179,7 +179,10 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
                 </Col>
 
                 <Col xs={24} md={8}>
-                  <SelectResponsaveis selectProps={{ onChange: obterFiltros }} />
+                  <SelectResponsaveis
+                    formItemProps={{ name: 'responsavel' }}
+                    selectProps={{ onChange: obterFiltros }}
+                  />
                 </Col>
 
                 <Col xs={24} md={8}>
