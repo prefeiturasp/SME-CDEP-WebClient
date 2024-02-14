@@ -43,6 +43,7 @@ import { ROUTES } from '~/core/enum/routes';
 import { SituacaoSolicitacaoEnum } from '~/core/enum/situacao-atendimento-enum';
 import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
 import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
+import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
@@ -63,6 +64,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   }>();
 
   const usuarioLogin = auth?.usuarioLogin;
+  const ehUsuarioInterno = formInitialValues?.dadosSolicitante.tipoId === TipoUsuario.CORESSO;
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
   const desabilitarCampos =
     formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.FINALIZADO_ATENDIMENTO;
@@ -253,7 +255,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   }, [form, formInitialValues]);
 
   const onClickVoltar = () => {
-    if (form.isFieldsTouched() || !!form.getFieldValue(['responsavelRf'])) {
+    if (form.isFieldsTouched()) {
       confirmacao({
         content: DESEJA_SAIR_MODO_EDICAO,
         onOk() {
@@ -298,35 +300,48 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   };
 
   const onClickConfirmarAtendimento = async () => {
-    form.validateFields().then(async () => {
-      const valoresFiltrado = dataSource.filter(
-        (item) =>
-          item.situacaoId != SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE &&
-          item.situacaoId != SituacaoSolicitacaoItemEnum.CANCELADO,
-      );
+    if (form.isFieldsTouched()) {
+      form.validateFields().then(async () => {
+        const valoresFiltrado = dataSource.filter(
+          (item) =>
+            item.situacaoId != SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE &&
+            item.situacaoId != SituacaoSolicitacaoItemEnum.CANCELADO,
+        );
 
-      const valoresParaSalvar = valoresFiltrado.map((item: AcervoSolicitacaoItemConfirmarDTO) => ({
-        id: item.id,
-        dataVisita: form.getFieldValue(['dataVisita', `${item.id}`]),
-        tipoAtendimento: form.getFieldValue(['tipoAtendimento', `${item.id}`]),
-      }));
+        const valoresParaSalvar = valoresFiltrado.map((item: AcervoSolicitacaoItemConfirmarDTO) => {
+          let novaDataVisita;
+          const valorTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${item.id}`]);
 
-      const params: AcervoSolicitacaoConfirmarDTO = {
-        id: acervoSolicitacaoId,
-        itens: cloneDeep(valoresParaSalvar),
-        responsavelRf: form.getFieldValue('responsavelRf'),
-      };
+          if (valorTipoAtendimento === TipoAtendimentoEnum.Email) {
+            novaDataVisita = undefined;
+          } else {
+            novaDataVisita = form.getFieldValue(['dataVisita', `${item.id}`]) ?? item.dataVisita;
+          }
 
-      const resposta = await acervoSolicitacaoService.confirmarAtendimento(params);
-
-      if (resposta.sucesso) {
-        notification.success({
-          message: 'Sucesso',
-          description: 'Atendimento confirmado com sucesso',
+          return {
+            id: item.id,
+            dataVisita: novaDataVisita,
+            tipoAtendimento: valorTipoAtendimento,
+          };
         });
-        carregarDados();
-      }
-    });
+
+        const params: AcervoSolicitacaoConfirmarDTO = {
+          id: acervoSolicitacaoId,
+          itens: cloneDeep(valoresParaSalvar),
+          responsavelRf: form.getFieldValue('responsavelRf'),
+        };
+
+        const resposta = await acervoSolicitacaoService.confirmarAtendimento(params);
+
+        if (resposta.sucesso) {
+          notification.success({
+            message: 'Sucesso',
+            description: 'Atendimento confirmado com sucesso',
+          });
+          carregarDados();
+        }
+      });
+    }
   };
 
   const onClickFinalizarAtendimento = () => {
@@ -401,9 +416,17 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 </Button>
               </Col>
               <Col>
-                <ButtonPrimary id={CDEP_BUTTON_CONFIRMAR} onClick={onClickConfirmarAtendimento}>
-                  Confirmar
-                </ButtonPrimary>
+                <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
+                  {() => (
+                    <ButtonPrimary
+                      id={CDEP_BUTTON_CONFIRMAR}
+                      onClick={onClickConfirmarAtendimento}
+                      disabled={!form.isFieldsTouched()}
+                    >
+                      Confirmar
+                    </ButtonPrimary>
+                  )}
+                </Form.Item>
               </Col>
             </Row>
           </Col>
@@ -429,17 +452,21 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 </Form.Item>
               </Col>
 
-              <Col xs={24} md={8}>
-                <Form.Item label='CPF' name={['dadosSolicitante', 'cpf']}>
-                  <Input type='text' placeholder='CPF' disabled />
-                </Form.Item>
-              </Col>
+              {ehUsuarioInterno && (
+                <>
+                  <Col xs={24} md={8}>
+                    <Form.Item label='CPF' name={['dadosSolicitante', 'cpf']}>
+                      <Input type='text' placeholder='CPF' disabled />
+                    </Form.Item>
+                  </Col>
 
-              <Col xs={24} md={8}>
-                <Form.Item label='Telefone' name={['dadosSolicitante', 'telefone']}>
-                  <Input type='text' placeholder='telefone' disabled />
-                </Form.Item>
-              </Col>
+                  <Col xs={24} md={8}>
+                    <Form.Item label='Telefone' name={['dadosSolicitante', 'telefone']}>
+                      <Input type='text' placeholder='telefone' disabled />
+                    </Form.Item>
+                  </Col>
+                </>
+              )}
 
               <Col xs={24} md={8}>
                 <Form.Item label='E-mail' name={['dadosSolicitante', 'email']}>
@@ -447,11 +474,13 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 </Form.Item>
               </Col>
 
-              <Col xs={24} md={16}>
-                <Form.Item label='Endereço' name={['dadosSolicitante', 'endereco']}>
-                  <Input type='text' placeholder='Endereço' disabled />
-                </Form.Item>
-              </Col>
+              {ehUsuarioInterno && (
+                <Col xs={24} md={16}>
+                  <Form.Item label='Endereço' name={['dadosSolicitante', 'endereco']}>
+                    <Input type='text' placeholder='Endereço' disabled />
+                  </Form.Item>
+                </Col>
+              )}
 
               <Col xs={24} md={8}>
                 <Form.Item label='Data da solicitação' name='dataSolicitacao'>

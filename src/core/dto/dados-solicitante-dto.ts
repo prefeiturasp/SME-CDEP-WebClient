@@ -7,4 +7,5 @@ export type DadosSolicitanteDTO = {
   endereco: string;
   email: string;
   tipo: TipoUsuario;
+  tipoId: TipoUsuario;
 };
