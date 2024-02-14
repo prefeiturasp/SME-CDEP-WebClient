@@ -1,12 +1,16 @@
-import { useEffect, useState } from 'react';
-
 import { Table } from 'antd';
-import type { TablePaginationConfig, TableProps } from 'antd/es/table';
+import { TablePaginationConfig, TableProps } from 'antd/es/table';
+import { AxiosError } from 'axios';
 import queryString from 'query-string';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import ButtonOrdenacao from '~/components/cdep/button/ordenacao';
 import { PaginacaoResultadoDTO } from '~/core/dto/paginacao-resultado-dto';
+import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 import { TipoOrdenacaoEnum } from '~/core/enum/tipo-ordenacao';
 import api from '~/core/services/api';
+import { scrollNoInicio } from '~/core/utils/functions';
+import { openNotificationErrors } from '../notification';
+import { DataTableContext } from './provider';
 
 interface TableParams {
   pagination?: TablePaginationConfig;
@@ -15,7 +19,7 @@ interface TableParams {
 
 type DataTableProps<T> = {
   filters?: any;
-  url: string;
+  url?: string;
   showOrderButton?: boolean;
 } & TableProps<T>;
 
@@ -26,6 +30,8 @@ const DataTable = <T extends object>({
   showOrderButton = true,
   ...rest
 }: DataTableProps<T>) => {
+  const { setTableState } = useContext(DataTableContext);
+
   const [data, setData] = useState<T[]>();
   const [loading, setLoading] = useState(false);
   const [tableParams, setTableParams] = useState<TableParams>({
@@ -34,55 +40,73 @@ const DataTable = <T extends object>({
       pageSize: 10,
       showSizeChanger: true,
       locale: { items_per_page: '' },
+      disabled: false,
       pageSizeOptions: [10, 20, 50, 100],
       position: ['bottomCenter'],
     },
     order: TipoOrdenacaoEnum.DATA,
   });
 
-  const fetchData = (newParams: TableParams) => {
-    setLoading(true);
-    let urlQuery = '';
+  const fetchData = useCallback(
+    (newParams: TableParams) => {
+      if (!url) return;
 
-    if (url.includes('?')) {
-      urlQuery = `${url}&`;
-    } else {
-      urlQuery = `${url}?`;
-    }
+      setLoading(true);
+      let urlQuery = '';
 
-    urlQuery = `${urlQuery}numeroPagina=${newParams?.pagination?.current}&numeroRegistros=${newParams?.pagination?.pageSize}&ordenacao=${newParams.order}`;
+      if (url.includes('?')) {
+        urlQuery = `${url}&`;
+      } else {
+        urlQuery = `${url}?`;
+      }
 
-    api
-      .get<PaginacaoResultadoDTO<T[]>>(urlQuery, {
-        params: filters,
-        paramsSerializer: {
-          serialize: (params) => {
-            return queryString.stringify(params, {
-              arrayFormat: 'bracket',
-              skipEmptyString: true,
-              skipNull: true,
-            });
-          },
-        },
-      })
-      .then((response) => {
-        if (response?.data.items) {
-          setData(response.data.items);
-          setTableParams({
-            ...newParams,
-            pagination: {
-              ...newParams.pagination,
-              total: response.data.totalRegistros,
+      urlQuery = `${urlQuery}numeroPagina=${newParams?.pagination?.current}&numeroRegistros=${newParams?.pagination?.pageSize}&ordenacao=${newParams.order}`;
+
+      api
+        .get<PaginacaoResultadoDTO<T[]>>(urlQuery, {
+          params: filters,
+          paramsSerializer: {
+            serialize: (params) => {
+              return queryString.stringify(params, {
+                arrayFormat: 'bracket',
+                skipEmptyString: true,
+                skipNull: true,
+              });
             },
-          });
-        }
-      })
-      .finally(() => setLoading(false));
-  };
+          },
+        })
+        .then((response) => {
+          if (response?.data.items) {
+            setData(response.data.items);
+            setTableParams({
+              ...newParams,
+              pagination: {
+                ...newParams.pagination,
+                total: response.data.totalRegistros,
+              },
+            });
+          }
+        })
+        .catch((error: AxiosError<RetornoBaseDTO>) => {
+          const mensagens = error?.response?.data?.mensagens?.length
+            ? error?.response?.data?.mensagens
+            : [];
+
+          openNotificationErrors(mensagens);
+        })
+        .finally(() => setLoading(false));
+    },
+    [url, filters],
+  );
 
   useEffect(() => {
-    fetchData(tableParams);
-  }, [JSON.stringify(filters)]);
+    fetchData({ ...tableParams, pagination: { ...tableParams.pagination, current: 1 } });
+    setTableState({
+      reloadData: () => {
+        fetchData(tableParams);
+      },
+    });
+  }, [JSON.stringify(filters), fetchData]);
 
   const handleTableChange = (pagination: TablePaginationConfig) => {
     const newParams = {
@@ -99,6 +123,15 @@ const DataTable = <T extends object>({
     }
   };
 
+  const handleTableChangeDefaultTable = (pagination: TablePaginationConfig) => {
+    const newParams = {
+      ...tableParams,
+      pagination,
+    };
+
+    setTableParams(newParams);
+  };
+
   const onClickOrdenar = (ordenacaoNova: TipoOrdenacaoEnum) => {
     const newParams = {
       ...tableParams,
@@ -110,20 +143,24 @@ const DataTable = <T extends object>({
     fetchData(newParams);
   };
 
+  useEffect(() => {
+    scrollNoInicio();
+  }, [tableParams.pagination?.current, !tableParams.pagination?.pageSize]);
+
   return (
     <>
       {showOrderButton && <ButtonOrdenacao onClick={onClickOrdenar} />}
       <Table
         columns={columns}
         rowKey='id'
-        dataSource={data}
         pagination={tableParams.pagination}
         loading={loading}
-        onChange={handleTableChange}
+        onChange={url ? handleTableChange : handleTableChangeDefaultTable}
         bordered
         locale={{ emptyText: 'Sem dados' }}
         size='small'
         {...rest}
+        dataSource={url ? data : rest.dataSource}
       />
     </>
   );

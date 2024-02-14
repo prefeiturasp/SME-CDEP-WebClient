@@ -65,19 +65,18 @@ const columns: ColumnsType<SolicitacaoDTO> = [
     align: 'center',
   },
   {
-    title: 'Data da visita',
-    dataIndex: 'dataVisita',
-    align: 'center',
-    render: (dataVisita: string) =>
-      dataVisita ? dayjs(dataVisita).format('DD/MM/YYYY - HH:mm') : <></>,
-  },
-  {
     title: 'Responsável pelo atendimento',
     dataIndex: 'responsavel',
     align: 'center',
   },
   {
-    title: 'Situação do Atendimento',
+    title: 'Data da visita',
+    dataIndex: 'dataVisita',
+    align: 'center',
+    render: (dataVisita: string) => (dataVisita ? dayjs(dataVisita).format('DD/MM/YYYY') : <></>),
+  },
+  {
+    title: 'Situação do Item',
     dataIndex: 'situacao',
     align: 'center',
   },
@@ -111,6 +110,11 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
     });
   };
 
+  const onClickDetalheSolicitacao = (row: SolicitacaoDTO) =>
+    navigate(`${ROUTES.ATENDIMENTO_SOLICITACOES}/${row.acervoSolicitacaoId}`, {
+      replace: true,
+    });
+
   return (
     <Col>
       <HeaderPage title='Atendimento de Solicitações'>
@@ -122,11 +126,8 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
             <Col>
               <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
                 <ButtonSecundary
-                  block
-                  type='default'
                   id={CDEP_BUTTON_CANCELAR}
                   onClick={() => onClickCancelar()}
-                  style={{ fontWeight: 700 }}
                   disabled={!form.isFieldsTouched()}
                 >
                   Cancelar
@@ -191,6 +192,11 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
                     filters={filters}
                     url={`${URL_API_ACERVO_SOLICITACAO}/atendimento-solicitacoes`}
                     columns={columns}
+                    onRow={(row) => ({
+                      onClick: () => {
+                        onClickDetalheSolicitacao(row);
+                      },
+                    })}
                   />
                 </Col>
               </Row>

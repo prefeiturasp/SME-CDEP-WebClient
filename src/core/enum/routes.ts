@@ -37,4 +37,5 @@ export enum ROUTES {
   SOLICITACAO = '/acervo/solicitacao',
   SOLICITACAO_EDITAR = '/acervo/solicitacao/:id',
   ATENDIMENTO_SOLICITACOES = '/atendimento-solicitacoes',
+  ATENDIMENTO_SOLICITACOES_EDITAR = '/atendimento-solicitacoes/:id',
 }

@@ -11,7 +11,11 @@ export const ERRO_RECUPERACAO_SENHA = 'Erro ao tentar recuperar senha';
 export const DESEJA_CANCELAR_ALTERACOES_AO_SAIR_DA_PAGINA =
   'Você não salvou as informações preenchidas, saindo desta página elas serão perdidas. Deseja realmente cancelar as alterações?';
 export const DESEJA_EXCLUIR_ACERVO = 'Deseja realmente excluir o acervo?';
+export const DESEJA_CANCELAR_ITEM = 'Deseja realmente cancelar este item?';
+export const DESEJA_CANCELAR_ATENDIMENTO = 'Deseja realmente cancelar o atendimento?';
+export const DESEJA_FINALIZAR_ATENDIMENTO = 'Deseja realmente finalizar o atendimento?';
 export const ACERVO_EXCLUIDO_SUCESSO = 'Acervo excluído com sucesso';
 export const ACERVO_EXCLUIR_LINHA = 'Deseja realmente excluir esta linha?';
 export const DESEJA_DESCARTAR_DADOS_PLANILHA_ATUAL_E_CARREGAR_SELECIONADA =
   'Deseja realmente descartar os dados da planilha atual e carregar os dados da planilha selecionada?';
+export const DESEJA_SAIR_MODO_EDICAO = 'Você tem certeza que deseja fechar o modo de edição?';

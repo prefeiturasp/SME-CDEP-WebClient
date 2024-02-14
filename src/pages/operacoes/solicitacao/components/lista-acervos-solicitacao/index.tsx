@@ -1,4 +1,4 @@
-import { Button, Col, Row, Tag, Tooltip } from 'antd';
+import { Button, Col, DatePicker, Row, Tag, Tooltip } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
@@ -12,12 +12,15 @@ import {
 import { useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ButtonPrimary from '~/components/lib/button/primary';
+import { notification } from '~/components/lib/notification';
 import {
   CDEP_BUTTON_ADICIONAR_ACERVOS,
+  CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO,
   CDEP_BUTTON_DOWNLOAD_ARQUIVO,
   CDEP_BUTTON_EXPANDIR_LINHA,
   CDEP_BUTTON_REMOVER_ACERVO,
 } from '~/core/constants/ids/button/intex';
+import { Dayjs, dayjs } from '~/core/date/dayjs';
 import { AcervoSolicitacaoItemRetornoCadastroDTO } from '~/core/dto/acervo-solicitacao-item-retorno-cadastro-dto';
 import { ArquivoCodigoNomeDTO } from '~/core/dto/arquivo-codigo-nome-dto';
 import { ROUTES } from '~/core/enum/routes';
@@ -50,17 +53,22 @@ const ListaAcervosSolicitacao: React.FC = () => {
   const paramsRoute = useParams();
   const dispatch = useAppDispatch();
 
+  const [dataVisitasEditaveis, setDataVisitasEditaveis] = useState<{
+    [key: number]: Dayjs;
+  }>();
+
   const solicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
   const solicitacao = useAppSelector((state) => state.solicitacao);
 
-  const { setDataSource, dataSource } = useContext(AcervoSolicitacaoContext);
+  const { setDataSource, dataSource, setPodeCancelarSolicitacao } =
+    useContext(AcervoSolicitacaoContext);
   const { permissao } = useContext(PermissaoContext);
 
   const [expandedRowKey, setExpandedRowKey] = useState<number>(0);
 
   const temArquivos: boolean = useMemo(
-    () => !!dataSource?.find((item) => !!item?.arquivos?.length),
+    () => (dataSource?.length ? !!dataSource?.find((item) => !!item?.arquivos?.length) : false),
     [dataSource],
   );
 
@@ -90,11 +98,13 @@ const ListaAcervosSolicitacao: React.FC = () => {
     const resposta = await acervoSolicitacaoService.obterPorId(solicitacaoId);
 
     if (resposta.sucesso) {
-      setDataSource(resposta.dados);
+      setDataSource(resposta.dados.itens);
+      setPodeCancelarSolicitacao(resposta.dados.podeCancelarSolicitacao);
     } else {
       setDataSource([]);
+      setPodeCancelarSolicitacao(false);
     }
-  }, [setDataSource, solicitacaoId]);
+  }, [setDataSource, setPodeCancelarSolicitacao, solicitacaoId]);
 
   useEffect(() => {
     if (solicitacaoId && !solicitacao?.acervosSelecionados?.length) {
@@ -104,9 +114,10 @@ const ListaAcervosSolicitacao: React.FC = () => {
 
   const buttonDownload = (arquivo: ArquivoCodigoNomeDTO) => (
     <ButtonPrimary
+      type='text'
       id={CDEP_BUTTON_DOWNLOAD_ARQUIVO}
       icon={<FaFileDownload />}
-      style={{ display: 'flex', alignItems: 'center', gap: 3 }}
+      style={{ display: 'flex', alignItems: 'center', gap: 3, fontWeight: 700 }}
       onClick={() => {
         onClickDownload(arquivo);
       }}
@@ -124,6 +135,38 @@ const ListaAcervosSolicitacao: React.FC = () => {
       setExpandedRowKey(linha.acervoId);
     } else {
       setExpandedRowKey(0);
+    }
+  };
+
+  const onChangeDataVisita = (date: Dayjs, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => {
+    setDataVisitasEditaveis((prevDataVisitas) => ({
+      ...prevDataVisitas,
+      [linha.acervoId]: date,
+    }));
+  };
+
+  const onClickSalvarDataVisita = async (linha: AcervoSolicitacaoItemRetornoCadastroDTO) => {
+    const dataVisitaEditavel = dataVisitasEditaveis?.[linha.acervoId];
+
+    if (dataVisitaEditavel) {
+      const resultado = await acervoSolicitacaoService.alterarDataVisitaDoItemAtendimento({
+        id: linha.id,
+        dataVisita: dataVisitaEditavel,
+      });
+
+      if (resultado.sucesso) {
+        notification.success({
+          message: 'Sucesso',
+          description: 'Data inserida/alterada com sucesso',
+        });
+        obterDadosPorId();
+      }
+
+      setDataVisitasEditaveis((prevDataVisitas) => {
+        const newDataVisitas = { ...prevDataVisitas };
+        delete newDataVisitas[linha.acervoId];
+        return newDataVisitas;
+      });
     }
   };
 
@@ -158,14 +201,16 @@ const ListaAcervosSolicitacao: React.FC = () => {
       title: 'Situação',
       dataIndex: 'situacao',
     },
+    {
+      title: 'Tipo de atendimento',
+      dataIndex: 'tipoAtendimento',
+    },
   ];
 
   if (temArquivos) {
     columns.push({
       title: 'Anexo',
       dataIndex: 'anexo',
-      width: '100px',
-      align: 'center',
       render: (_, linha: AcervoSolicitacaoItemRetornoCadastroDTO, index: number) => {
         const qtdAquivos = linha?.arquivos?.length || 0;
 
@@ -202,6 +247,54 @@ const ListaAcervosSolicitacao: React.FC = () => {
     });
   }
 
+  columns.push({
+    title: 'Data de visita',
+    dataIndex: 'dataVisita',
+    width: dataVisitasEditaveis && Object.keys(dataVisitasEditaveis).length ? 270 : 150,
+    render: (dataVisita: string, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => {
+      if (linha?.alteraDataVisita) {
+        let value = undefined;
+
+        if (dataVisitasEditaveis?.[linha.acervoId]) {
+          value = dataVisitasEditaveis[linha.acervoId];
+        }
+
+        if (!dataVisitasEditaveis?.[linha.acervoId] && dataVisita) {
+          value = dayjs(dataVisita);
+        }
+
+        const exibirConfirmar = !!dataVisitasEditaveis?.[linha.acervoId];
+
+        return (
+          <Row gutter={[8, 8]} align='middle'>
+            <Col>
+              <DatePicker
+                allowClear={false}
+                value={value}
+                onChange={(date: any) => onChangeDataVisita(date, linha)}
+                format='DD/MM/YYYY'
+                style={{ width: '100%' }}
+              />
+            </Col>
+            {exibirConfirmar && (
+              <Col>
+                <ButtonPrimary
+                  id={CDEP_BUTTON_ADICIONAR_ACERVOS}
+                  onClick={() => onClickSalvarDataVisita(linha)}
+                  disabled={!dataVisitasEditaveis?.[linha.acervoId]}
+                >
+                  Confirmar
+                </ButtonPrimary>
+              </Col>
+            )}
+          </Row>
+        );
+      }
+
+      return dataVisita ? dayjs(dataVisita).format('DD/MM/YYYY - HH:mm') : '';
+    },
+  });
+
   const removerAcervo = (index: number, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => {
     const acervos = [...dataSource];
     acervos.splice(index, 1);
@@ -214,6 +307,20 @@ const ListaAcervosSolicitacao: React.FC = () => {
     );
 
     dispatch(setAcervosSelecionados(novaListaAcervosSelecionados));
+  };
+
+  const onClickCancelarItemAtendimento = async (acervoSolicitacaoItemId: number) => {
+    const resultado = await acervoSolicitacaoService.cancelarItemAtendimento(
+      acervoSolicitacaoItemId,
+    );
+
+    if (resultado.sucesso) {
+      notification.success({
+        message: 'Sucesso',
+        description: 'Item cancelado com sucesso',
+      });
+      obterDadosPorId();
+    }
   };
 
   if (!solicitacaoId) {
@@ -236,7 +343,24 @@ const ListaAcervosSolicitacao: React.FC = () => {
         </Tooltip>
       ),
     });
+  } else {
+    columns.push({
+      title: 'Ações',
+      align: 'center',
+      width: '100px',
+      render: (_, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => (
+        <ButtonPrimary
+          type='text'
+          id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
+          onClick={() => onClickCancelarItemAtendimento(linha.id)}
+          disabled={!linha.alteraDataVisita}
+        >
+          Cancelar item
+        </ButtonPrimary>
+      ),
+    });
   }
+
   const onClickDownload = (arquivo: ArquivoCodigoNomeDTO) => {
     armazenamentoService.obterArquivoParaDownload(arquivo?.codigo).then((resposta) => {
       downloadBlob(resposta.data, arquivo?.nome);
