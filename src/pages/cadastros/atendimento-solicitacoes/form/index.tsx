@@ -64,7 +64,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   }>();
 
   const usuarioLogin = auth?.usuarioLogin;
-  const ehUsuarioInterno = formInitialValues?.dadosSolicitante.tipoId === TipoUsuario.CORESSO;
+  const ehUsuarioExteno = formInitialValues?.dadosSolicitante.tipoId != TipoUsuario.CORESSO;
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
   const desabilitarCampos =
     formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.FINALIZADO_ATENDIMENTO;
@@ -100,15 +100,16 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     {
       title: 'Título',
       dataIndex: 'titulo',
-      width: '10%',
     },
     {
       title: 'Situação',
       dataIndex: 'situacao',
+      width: '15%',
     },
     {
       title: 'Tipo de atendimento',
       dataIndex: 'tipoAtendimento',
+      width: '10%',
       render: (value, linha) => {
         if (value && validarSituacaoLinha(linha.situacaoId)) {
           return TipoAtendimentoEnum?.[value];
@@ -132,27 +133,29 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     {
       title: 'Data da visita',
       dataIndex: 'dataVisita',
+      width: '10%',
       render: (dataVisita: string, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
         const getTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${linha.id}`]);
 
         const datePicker = (value?: Dayjs | undefined) => (
-          <Row gutter={[8, 8]} align='middle'>
-            <Col>
-              <DatePicker
-                allowClear={false}
-                value={value}
-                onChange={(date: any) => {
-                  form.setFieldValue(['dataVisita', `${linha.id}`], date);
-                  onChangeDataVisita(date, linha);
-                }}
-                format='DD/MM/YYYY'
-                style={{ width: '100%' }}
-                placeholder='Selecione uma data'
-                locale={localeDatePicker}
-                minDate={dataAtual}
-              />
-            </Col>
-          </Row>
+          <Form.Item
+            initialValue={value}
+            name={`${['dataVisita', linha.id]}`}
+            style={{ margin: 0 }}
+          >
+            <DatePicker
+              allowClear={false}
+              onChange={(date: any) => {
+                form.setFieldValue(['dataVisita', `${linha.id}`], date);
+                onChangeDataVisita(date, linha);
+              }}
+              format='DD/MM/YYYY'
+              style={{ width: '100%' }}
+              placeholder='Selecione uma data'
+              locale={localeDatePicker}
+              minDate={dataAtual}
+            />
+          </Form.Item>
         );
 
         const mostrarCampoDatePicker = (value?: Dayjs) =>
@@ -178,7 +181,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     {
       title: 'Ações',
       align: 'center',
-      width: '100px',
+      width: '10%',
       render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => (
         <ButtonPrimary
           type='text'
@@ -452,7 +455,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 </Form.Item>
               </Col>
 
-              {ehUsuarioInterno && (
+              {ehUsuarioExteno && (
                 <>
                   <Col xs={24} md={8}>
                     <Form.Item label='CPF' name={['dadosSolicitante', 'cpf']}>
@@ -474,7 +477,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 </Form.Item>
               </Col>
 
-              {ehUsuarioInterno && (
+              {ehUsuarioExteno && (
                 <Col xs={24} md={16}>
                   <Form.Item label='Endereço' name={['dadosSolicitante', 'endereco']}>
                     <Input type='text' placeholder='Endereço' disabled />
