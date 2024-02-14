@@ -65,19 +65,18 @@ const columns: ColumnsType<SolicitacaoDTO> = [
     align: 'center',
   },
   {
-    title: 'Data da visita',
-    dataIndex: 'dataVisita',
-    align: 'center',
-    render: (dataVisita: string) =>
-      dataVisita ? dayjs(dataVisita).format('DD/MM/YYYY - HH:mm') : <></>,
-  },
-  {
     title: 'Responsável pelo atendimento',
     dataIndex: 'responsavel',
     align: 'center',
   },
   {
-    title: 'Situação do Atendimento',
+    title: 'Data da visita',
+    dataIndex: 'dataVisita',
+    align: 'center',
+    render: (dataVisita: string) => (dataVisita ? dayjs(dataVisita).format('DD/MM/YYYY') : <></>),
+  },
+  {
+    title: 'Situação do Item',
     dataIndex: 'situacao',
     align: 'center',
   },

@@ -23,7 +23,13 @@ import {
   CDEP_BUTTON_VOLTAR,
 } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
-import { DESEJA_CANCELAR_ALTERACOES } from '~/core/constants/mensagens';
+import {
+  DESEJA_CANCELAR_ALTERACOES,
+  DESEJA_CANCELAR_ATENDIMENTO,
+  DESEJA_CANCELAR_ITEM,
+  DESEJA_FINALIZAR_ATENDIMENTO,
+  DESEJA_SAIR_MODO_EDICAO,
+} from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
 import { Dayjs, dayjs } from '~/core/date/dayjs';
 import { AcervoSolicitacaoConfirmarDTO } from '~/core/dto/acervo-solicitacao-confirmar-dto';
@@ -60,6 +66,17 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
   const desabilitarCampos =
     formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.FINALIZADO_ATENDIMENTO;
+
+  const podeCancelarAtendimento = () => {
+    if (
+      formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.AGUARDANDO_VISITA ||
+      formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.AGUARDANDO_ATENDIMENTO
+    ) {
+      return false;
+    }
+
+    return true;
+  };
 
   const validarSituacaoLinha = (situacaoId: number) => {
     switch (situacaoId) {
@@ -100,7 +117,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         return (
           <SelectTipoAtendimento
             formItemProps={{
-              initialValue: value,
+              initialValue: value === 0 ? null : value,
               name: ['tipoAtendimento', `${linha.id}`],
               style: {
                 margin: 0,
@@ -175,7 +192,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
   const onClickCancelarItemAtendimento = async (acervoSolicitacaoItemId: number) => {
     confirmacao({
-      content: 'Deseja realmente cancelar este item?',
+      content: DESEJA_CANCELAR_ITEM,
       onOk: async () => {
         const resultado = await acervoSolicitacaoService.cancelarItemAtendimento(
           acervoSolicitacaoItemId,
@@ -236,9 +253,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   }, [form, formInitialValues]);
 
   const onClickVoltar = () => {
-    if (form.isFieldsTouched()) {
+    if (form.isFieldsTouched() || !!form.getFieldValue(['responsavelRf'])) {
       confirmacao({
-        content: 'Você tem certeza que deseja fechar o modo de edição?',
+        content: DESEJA_SAIR_MODO_EDICAO,
         onOk() {
           navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
         },
@@ -257,6 +274,23 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         },
       });
     }
+  };
+
+  const onClickCancelarAtendimento = async () => {
+    confirmacao({
+      content: DESEJA_CANCELAR_ATENDIMENTO,
+      onOk() {
+        acervoSolicitacaoService.cancelarAtendimento(acervoSolicitacaoId).then((resposta) => {
+          if (resposta.sucesso) {
+            navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
+            notification.success({
+              message: 'Sucesso',
+              description: 'Atendimento cancelado com sucesso',
+            });
+          }
+        });
+      },
+    });
   };
 
   const onClickAssumirAtendimento = () => {
@@ -297,16 +331,17 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
   const onClickFinalizarAtendimento = () => {
     confirmacao({
-      content: 'Deseja realmente finalizar o atendimento?',
-      onOk: async () => {
-        const resultado = await acervoSolicitacaoService.finalizarAtendimento(acervoSolicitacaoId);
-
-        if (resultado.sucesso) {
-          notification.success({
-            message: 'Sucesso',
-            description: 'Atendimento finalizado com sucesso',
-          });
-        }
+      content: DESEJA_FINALIZAR_ATENDIMENTO,
+      onOk() {
+        acervoSolicitacaoService.finalizarAtendimento(acervoSolicitacaoId).then((resposta) => {
+          if (resposta.sucesso) {
+            navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
+            notification.success({
+              message: 'Sucesso',
+              description: 'Atendimento finalizado com sucesso',
+            });
+          }
+        });
       },
     });
   };
@@ -359,7 +394,8 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                   block
                   id={CDEP_BUTTON_CANCELAR_ATENDIMENTO}
                   style={{ fontWeight: 700 }}
-                  disabled
+                  disabled={podeCancelarAtendimento()}
+                  onClick={onClickCancelarAtendimento}
                 >
                   Cancelar atendimento
                 </Button>
