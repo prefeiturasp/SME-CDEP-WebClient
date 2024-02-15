@@ -15,12 +15,12 @@ export const InputCodigoTombo: React.FC<InputCodigoTomboProps> = ({
   setDadosCodigoTombo,
 }) => {
   const form = useFormInstance();
-  const codigoTombo = Form.useWatch('codigoTombo', form);
+  const codigo = Form.useWatch('codigo', form);
   const [loading, setLoading] = useState<boolean>(false);
 
   const buscarTomboCodigo = async () => {
     setLoading(true);
-    obterCodigoTombo(codigoTombo).then((resposta) => {
+    obterCodigoTombo(codigo).then((resposta) => {
       if (resposta.sucesso) {
         const dados = resposta?.dados;
 
@@ -34,7 +34,7 @@ export const InputCodigoTombo: React.FC<InputCodigoTomboProps> = ({
   return (
     <Form.Item
       label='N° do tombo/código'
-      name='codigoTombo'
+      name='codigo'
       rules={[{ required: true }]}
       {...formItemProps}
     >

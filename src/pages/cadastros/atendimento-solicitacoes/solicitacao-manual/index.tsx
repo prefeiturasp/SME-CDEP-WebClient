@@ -36,7 +36,7 @@ export const SolicitacaoManual: React.FC = () => {
   const columns: ColumnsType<AcervoSolicitacaoManualDTO> = [
     {
       title: 'N° do tombo/código',
-      dataIndex: 'codigoTombo',
+      dataIndex: 'codigo',
       width: '10%',
     },
     {

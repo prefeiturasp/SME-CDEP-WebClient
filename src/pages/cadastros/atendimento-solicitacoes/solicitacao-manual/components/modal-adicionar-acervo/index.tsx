@@ -59,7 +59,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
 
       const novoItem = {
         id: dadosCodigoTombo?.id,
-        codigoTombo: dadosCodigoTombo?.codigo,
+        codigo: dadosCodigoTombo?.codigo,
         titulo: dadosCodigoTombo?.nome,
         tipoAtendimento: tipoAtendimentoNome,
         situacao: situacaoNome,

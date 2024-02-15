@@ -1,6 +1,6 @@
 export type AcervoSolicitacaoManualDTO = {
   id: number | undefined;
-  codigoTombo: string | undefined;
+  codigo: string | undefined;
   titulo: string | undefined;
   situacao: string;
   dataVisita?: string;
