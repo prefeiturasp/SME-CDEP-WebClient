@@ -1,8 +1,10 @@
-import { Col, Form, Input, Row } from 'antd';
+import { Col, DatePicker, Form, Input, Row } from 'antd';
+import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
-import React, { useCallback, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import 'dayjs/locale/pt-br';
+import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import ButtonPrimary from '~/components/lib/button/primary';
 import ButtonSecundary from '~/components/lib/button/secundary';
@@ -16,30 +18,25 @@ import {
 } from '~/core/constants/ids/button/intex';
 import { DESEJA_CANCELAR_ALTERACOES, DESEJA_SAIR_MODO_EDICAO } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
-import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detalhe-dto';
-import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solicitacao-item-detalhe-resumido-dto';
-
-import 'dayjs/locale/pt-br';
+import { AcervoSolicitacaoManualDTO } from '~/core/dto/acervo-solicitacao-manual-dto';
 import { ROUTES } from '~/core/enum/routes';
-import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
-import { formatarDataPorFormato, formatterCPFMask, maskTelefone } from '~/core/utils/functions';
+import ModalAdicionarAcervo from './components/modal-adicionar-acervo';
 import { InputRfCpf } from './components/rf-cpf';
 
 export const SolicitacaoManual: React.FC = () => {
   const [form] = useForm();
   const navigate = useNavigate();
-  const paramsRoute = useParams();
+  const nome = Form.useWatch('nome', form);
+  const rfCpfWatch = Form.useWatch('rfCpf', form)?.length;
 
-  const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
-  const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemDetalheResumidoDTO[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [dataSource, setDataSource] = useState<AcervoSolicitacaoManualDTO[]>([]);
 
-  const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
-
-  const columns: ColumnsType<AcervoSolicitacaoItemDetalheResumidoDTO> = [
+  const columns: ColumnsType<AcervoSolicitacaoManualDTO> = [
     {
       title: 'N° do tombo/código',
-      dataIndex: 'codigo',
+      dataIndex: 'codigoTombo',
       width: '10%',
     },
     {
@@ -68,41 +65,9 @@ export const SolicitacaoManual: React.FC = () => {
     },
   ];
 
-  const carregarDados = useCallback(async () => {
-    const resposta = await acervoSolicitacaoService.obterDetalhesAcervoSolicitacao(
-      acervoSolicitacaoId,
-    );
-
-    if (resposta.sucesso) {
-      const dadosSolicitante = resposta.dados.dadosSolicitante;
-      dadosSolicitante.cpf = dadosSolicitante?.cpf ? formatterCPFMask(dadosSolicitante.cpf) : '';
-      dadosSolicitante.telefone = dadosSolicitante?.telefone
-        ? maskTelefone(dadosSolicitante.telefone)
-        : '';
-
-      const dataSolicitacao = resposta.dados.dataSolicitacao
-        ? formatarDataPorFormato(resposta.dados.dataSolicitacao, 'DD/MM/YYYY - HH:mm')
-        : '';
-
-      const dadosMapeados: AcervoSolicitacaoDetalheDTO = {
-        ...resposta.dados,
-        dadosSolicitante,
-        dataSolicitacao,
-      };
-      setFormInitialValues(dadosMapeados);
-      setDataSource(dadosMapeados.itens);
-    }
-  }, [acervoSolicitacaoId]);
-
-  useEffect(() => {
-    if (acervoSolicitacaoId) {
-      carregarDados();
-    }
-  }, [carregarDados, acervoSolicitacaoId]);
-
   useEffect(() => {
     form.resetFields();
-  }, [form, formInitialValues]);
+  }, [form]);
 
   const onClickVoltar = () => {
     if (form.isFieldsTouched()) {
@@ -130,13 +95,7 @@ export const SolicitacaoManual: React.FC = () => {
 
   return (
     <Col>
-      <Form
-        form={form}
-        layout='vertical'
-        autoComplete='off'
-        validateMessages={validateMessages}
-        initialValues={formInitialValues}
-      >
+      <Form form={form} layout='vertical' autoComplete='off' validateMessages={validateMessages}>
         <HeaderPage title='Atendimento de Solicitações'>
           <Col span={24}>
             <Row gutter={[8, 8]}>
@@ -168,51 +127,65 @@ export const SolicitacaoManual: React.FC = () => {
               </Col>
 
               <Col xs={24} md={16}>
-                <Form.Item label='Nome do solicitante' name={['dadosSolicitante', 'nome']}>
+                <Form.Item label='Nome do solicitante' name='nome'>
                   <Input type='text' placeholder='Nome do solicitante' disabled />
                 </Form.Item>
               </Col>
 
-              <Col xs={24} md={8}>
-                <Form.Item label='Telefone' name={['dadosSolicitante', 'telefone']}>
+              <Col xs={24} md={12}>
+                <Form.Item label='Telefone' name='telefone'>
                   <Input type='text' placeholder='Telefone' disabled />
                 </Form.Item>
               </Col>
 
-              <Col xs={24} md={8}>
-                <Form.Item label='E-mail' name={['dadosSolicitante', 'email']}>
+              <Col xs={24} md={12}>
+                <Form.Item label='E-mail' name='email'>
                   <Input type='text' placeholder='E-mail' disabled />
                 </Form.Item>
               </Col>
 
               <Col xs={24} md={16}>
-                <Form.Item label='Endereço' name={['dadosSolicitante', 'endereco']}>
+                <Form.Item label='Endereço' name='endereco'>
                   <Input type='text' placeholder='Endereço' disabled />
                 </Form.Item>
               </Col>
 
               <Col xs={24} md={8}>
                 <Form.Item label='Data da solicitação' name='dataSolicitacao'>
-                  <Input type='text' placeholder='Data da solicitação' disabled />
+                  <DatePicker
+                    style={{ width: '100%' }}
+                    format='DD/MM/YYYY'
+                    placeholder='Selecione uma data'
+                    locale={localeDatePicker}
+                    disabled={!nome || !rfCpfWatch}
+                  />
                 </Form.Item>
               </Col>
             </Row>
           </Col>
+
           <Row gutter={[16, 16]}>
             <Col xs={24}>
               <Row justify='end'>
                 <Col>
                   <ButtonPrimary
                     id={CDEP_BUTTON_ADICIONAR_ACERVOS}
-                    onClick={() => {
-                      alert('ABRIR MODAL');
-                    }}
+                    onClick={() => setIsModalOpen(true)}
+                    disabled={!nome || !rfCpfWatch}
                   >
                     Adicionar acervos
                   </ButtonPrimary>
                 </Col>
               </Row>
             </Col>
+
+            <ModalAdicionarAcervo
+              isModalOpen={isModalOpen}
+              dataSource={dataSource}
+              setDataSource={setDataSource}
+              setIsModalOpen={setIsModalOpen}
+            />
+
             <Col xs={24}>
               <Form.Item shouldUpdate>
                 {() => {
