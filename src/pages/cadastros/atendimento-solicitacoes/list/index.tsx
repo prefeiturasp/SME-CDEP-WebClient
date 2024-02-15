@@ -13,7 +13,12 @@ import HeaderPage from '~/components/lib/header-page';
 import SelectResponsaveis from '~/components/cdep/input/responsaveis';
 import { SelectSituacaoAtendimento } from '~/components/cdep/input/situacao-atendimento';
 import { RangePicker } from '~/components/cdep/range-picker';
-import { CDEP_BUTTON_CANCELAR, CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
+import ButtonPrimary from '~/components/lib/button/primary';
+import {
+  CDEP_BUTTON_CANCELAR,
+  CDEP_BUTTON_NOVA_SOLICITACAO,
+  CDEP_BUTTON_VOLTAR,
+} from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
 import { URL_API_ACERVO_SOLICITACAO } from '~/core/constants/urls-api';
 import { dayjs } from '~/core/date/dayjs';
@@ -133,6 +138,16 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
                   Cancelar
                 </ButtonSecundary>
               </Form.Item>
+            </Col>
+            <Col>
+              <ButtonPrimary
+                id={CDEP_BUTTON_NOVA_SOLICITACAO}
+                onClick={() => {
+                  navigate(ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL);
+                }}
+              >
+                Nova solicitação
+              </ButtonPrimary>
             </Col>
           </Row>
         </Col>

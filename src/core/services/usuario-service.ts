@@ -54,6 +54,9 @@ const obterPerfisResponsaveis = () =>
 const obterDadosSolicitante = () =>
   api.get<DadosSolicitanteDTO>(`${URL_DEFAULT}/dados-solicitante`);
 
+const obterRfCpf = (rFCpf: string) =>
+  obterRegistro<DadosSolicitanteDTO>(`${URL_DEFAULT}/${rFCpf}/dados-solicitante`);
+
 export default {
   alterarEmail,
   alterarSenha,
@@ -68,4 +71,5 @@ export default {
   tokenRecuperacaoSenhaEstaValido,
   obterPerfisResponsaveis,
   obterDadosSolicitante,
+  obterRfCpf,
 };
