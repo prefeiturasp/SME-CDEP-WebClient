@@ -233,7 +233,7 @@ export const SolicitacaoManual: React.FC = () => {
 
         const valoresParaSalvar: AcervoSolicitacaoManualItemDTO[] = dataSource.map((item) => {
           return {
-            id: item.id,
+            id: item.id || 0,
             acervoId: item.acervoId,
             tipoAtendimento: item.tipoAtendimentoId,
             situacao: item.situacaoId,
