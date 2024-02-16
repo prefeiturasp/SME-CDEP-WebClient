@@ -39,7 +39,7 @@ export const InputRfCpf: React.FC<InputRfCpfProps> = ({ inputProps, formItemProp
         loading={loading}
         onSearch={buscarRfCpf}
         maxLength={11}
-        placeholder='Informe o CPF'
+        placeholder='Informe o RF ou CPF'
         {...inputProps}
       />
     </Form.Item>

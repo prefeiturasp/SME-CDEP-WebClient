@@ -16,7 +16,6 @@ import {
 } from '~/core/enum/situacao-atendimento-manual-enum';
 import { TipoAtendimentoEnum, TipoAtendimentoEnumDisplay } from '~/core/enum/tipo-atendimento-enum';
 import { confirmacao } from '~/core/services/alerta-service';
-import { formatarDataParaDDMMYYYY } from '~/core/utils/functions';
 
 type ModalAdicionarAcervoProps = {
   modalProps?: ModalProps;
@@ -25,6 +24,7 @@ type ModalAdicionarAcervoProps = {
   dataSource?: any;
   setIsModalOpen: (isOpen: boolean) => void;
   setDataSource: (data: AcervoSolicitacaoManualDTO[]) => void;
+  initialValuesModal: AcervoSolicitacaoManualDTO | undefined;
 };
 
 export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
@@ -34,13 +34,16 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   setIsModalOpen,
   setDataSource,
   dataSource,
+  initialValuesModal,
 }) => {
-  const [form] = useForm();
   const minDate = dayjs();
+  const [form] = useForm();
 
   const tipoAtendimento = Form.useWatch('tipoAtendimento', form);
+
   const [dadosCodigoTombo, setDadosCodigoTombo] = useState<CodigoTomboDTO>();
 
+  const mostrarSeTiverData = initialValuesModal?.dataVisita;
   const ehPresencial = tipoAtendimento === TipoAtendimentoEnum.Presencial;
 
   const onFinish = () => {
@@ -63,7 +66,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
         titulo: dadosCodigoTombo?.nome,
         tipoAtendimento: tipoAtendimentoNome,
         situacao: situacaoNome,
-        dataVisita: formatarDataParaDDMMYYYY(resposta?.dataVisita),
+        dataVisita: resposta?.dataVisita,
       };
 
       setDataSource([...dataSource, novoItem]);
@@ -87,10 +90,10 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   };
 
   useEffect(() => {
-    if (isModalOpen) {
-      form.resetFields();
+    if (initialValuesModal && isModalOpen) {
+      form.setFieldsValue({ ...initialValuesModal });
     }
-  }, [isModalOpen]);
+  }, [isModalOpen, initialValuesModal]);
 
   return (
     <Modal
@@ -122,7 +125,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
             <Col xs={12}>
               <SelectTipoAtendimento formItemProps={{ label: 'Tipo de atendimento' }} />
             </Col>
-            {ehPresencial && (
+            {(ehPresencial || !!mostrarSeTiverData) && (
               <Col xs={12}>
                 <Form.Item
                   label='Data da visita'

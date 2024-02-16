@@ -1,9 +1,10 @@
-import { Col, DatePicker, Form, Input, Row } from 'antd';
+import { Button, Col, DatePicker, Form, Input, Row, Tooltip } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
 import 'dayjs/locale/pt-br';
 import React, { useEffect, useState } from 'react';
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import ButtonPrimary from '~/components/lib/button/primary';
@@ -14,24 +15,32 @@ import HeaderPage from '~/components/lib/header-page';
 import {
   CDEP_BUTTON_ADICIONAR_ACERVOS,
   CDEP_BUTTON_CANCELAR,
+  CDEP_BUTTON_EDITAR,
+  CDEP_BUTTON_REMOVER_ACERVO,
   CDEP_BUTTON_VOLTAR,
 } from '~/core/constants/ids/button/intex';
 import { DESEJA_CANCELAR_ALTERACOES, DESEJA_SAIR_MODO_EDICAO } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
 import { AcervoSolicitacaoManualDTO } from '~/core/dto/acervo-solicitacao-manual-dto';
 import { ROUTES } from '~/core/enum/routes';
+import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
+import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions';
 import { confirmacao } from '~/core/services/alerta-service';
+import { formatarDataParaDDMMYYYY } from '~/core/utils/functions';
 import ModalAdicionarAcervo from './components/modal-adicionar-acervo';
 import { InputRfCpf } from './components/rf-cpf';
 
 export const SolicitacaoManual: React.FC = () => {
   const [form] = useForm();
   const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const nome = Form.useWatch('nome', form);
   const rfCpfWatch = Form.useWatch('rfCpf', form)?.length;
 
+  const solicitacao = useAppSelector((state) => state.solicitacao);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [dataSource, setDataSource] = useState<AcervoSolicitacaoManualDTO[]>([]);
+  const [initialValuesModal, setInitialValuesModal] = useState<AcervoSolicitacaoManualDTO>();
 
   const columns: ColumnsType<AcervoSolicitacaoManualDTO> = [
     {
@@ -57,13 +66,63 @@ export const SolicitacaoManual: React.FC = () => {
       title: 'Data da visita',
       dataIndex: 'dataVisita',
       width: '10%',
+      render: (value) => {
+        return formatarDataParaDDMMYYYY(value);
+      },
     },
     {
       title: 'Ações',
       align: 'center',
       width: '10%',
+      render: (_, linha, index: number) => (
+        <Row align='middle'>
+          <Col xs={12}>
+            <Tooltip title='Editar acervo'>
+              <Button type='text'>
+                <FaEdit
+                  cursor='pointer'
+                  fontSize={16}
+                  id={CDEP_BUTTON_EDITAR}
+                  onClick={() => {
+                    setInitialValuesModal(linha);
+                    setIsModalOpen(true);
+                  }}
+                />
+              </Button>
+            </Tooltip>
+          </Col>
+          <Col xs={12}>
+            <Tooltip title='Remover acervo'>
+              <Button type='text'>
+                <FaTrashAlt
+                  cursor='pointer'
+                  fontSize={16}
+                  id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
+                  onClick={() => {
+                    removerAcervo(index, linha);
+                  }}
+                />
+              </Button>
+            </Tooltip>
+          </Col>
+        </Row>
+      ),
     },
   ];
+
+  const removerAcervo = (index: number, linha: AcervoSolicitacaoManualDTO) => {
+    const acervos = [...dataSource];
+    acervos.splice(index, 1);
+    setDataSource(acervos);
+
+    const acervosSelecionados = [...solicitacao.acervosSelecionados];
+
+    const novaListaAcervosSelecionados = acervosSelecionados.filter(
+      (acervoId) => acervoId !== linha?.id,
+    );
+
+    dispatch(setAcervosSelecionados(novaListaAcervosSelecionados));
+  };
 
   useEffect(() => {
     form.resetFields();
@@ -88,6 +147,7 @@ export const SolicitacaoManual: React.FC = () => {
         content: DESEJA_CANCELAR_ALTERACOES,
         onOk() {
           form.resetFields();
+          setDataSource([]);
         },
       });
     }
@@ -170,7 +230,10 @@ export const SolicitacaoManual: React.FC = () => {
                 <Col>
                   <ButtonPrimary
                     id={CDEP_BUTTON_ADICIONAR_ACERVOS}
-                    onClick={() => setIsModalOpen(true)}
+                    onClick={() => {
+                      setInitialValuesModal(undefined);
+                      setIsModalOpen(true);
+                    }}
                     disabled={!nome || !rfCpfWatch}
                   >
                     Adicionar acervos
@@ -184,6 +247,7 @@ export const SolicitacaoManual: React.FC = () => {
               dataSource={dataSource}
               setDataSource={setDataSource}
               setIsModalOpen={setIsModalOpen}
+              initialValuesModal={initialValuesModal}
             />
 
             <Col xs={24}>
