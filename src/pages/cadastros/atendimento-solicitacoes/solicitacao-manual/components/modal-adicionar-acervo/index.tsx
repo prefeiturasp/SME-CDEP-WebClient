@@ -39,12 +39,12 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   const minDate = dayjs();
   const [form] = useForm();
 
-  const tipoAtendimento = Form.useWatch('tipoAtendimento', form);
-
+  const tipoAtendimentoWatch = Form.useWatch('tipoAtendimento', form);
   const [dadosCodigoTombo, setDadosCodigoTombo] = useState<CodigoTomboDTO>();
 
   const mostrarSeTiverData = initialValuesModal?.dataVisita;
-  const ehPresencial = tipoAtendimento === TipoAtendimentoEnum.Presencial;
+  const ehPresencialWatch = tipoAtendimentoWatch === TipoAtendimentoEnum.Presencial;
+  const temDataEhPresencial = !!mostrarSeTiverData && ehPresencialWatch;
 
   const onFinish = () => {
     form.validateFields().then((resposta) => {
@@ -96,7 +96,10 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   useEffect(() => {
     form.resetFields();
     if (initialValuesModal && isModalOpen) {
-      form.setFieldsValue({ ...initialValuesModal });
+      form.setFieldsValue({
+        ...initialValuesModal,
+        tipoAtendimento: initialValuesModal.tipoAtendimentoId,
+      });
     }
   }, [form, isModalOpen, initialValuesModal]);
 
@@ -130,7 +133,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
             <Col xs={12}>
               <SelectTipoAtendimento formItemProps={{ label: 'Tipo de atendimento' }} />
             </Col>
-            {(ehPresencial || !!mostrarSeTiverData) && (
+            {(temDataEhPresencial || ehPresencialWatch) && (
               <Col xs={12}>
                 <Form.Item
                   label='Data da visita'
