@@ -63,7 +63,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
         : SituacaoSolicitacaoManualEnum.AGUARDANDO_VISITA;
 
       const novoItem = {
-        id: dadosCodigoTombo?.id,
+        acervoId: dadosCodigoTombo?.id,
         codigo: dadosCodigoTombo?.codigo,
         titulo: dadosCodigoTombo?.nome,
         tipoAtendimento: tipoAtendimentoNome,

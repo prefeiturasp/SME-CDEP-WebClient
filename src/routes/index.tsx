@@ -172,6 +172,12 @@ const RoutesConfig = () => {
                       element={<SolicitacaoManual />}
                     />
                   </Route>
+                  <Route element={<GuardPermissao menuKey={MenuEnum.AtendimentoSolicitacoes} />}>
+                    <Route
+                      path={ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL_EDITAR}
+                      element={<SolicitacaoManual />}
+                    />
+                  </Route>
                 </Route>
               </Route>
             </Route>

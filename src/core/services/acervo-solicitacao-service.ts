@@ -65,17 +65,25 @@ const confirmarAtendimento = (params: AcervoSolicitacaoConfirmarDTO) =>
   alterarRegistro<boolean>(`${URL_API_ACERVO_SOLICITACAO}/confirmar-atendimento`, params);
 
 const confirmarAtendimentoManual = (params: AcervoSolicitacaoManualConfirmarDTO) =>
-  inserirRegistro(`${URL_API_ACERVO_SOLICITACAO}/inserir-manual`, params);
+  inserirRegistro<number>(`${URL_API_ACERVO_SOLICITACAO}/inserir-manual`, params);
+
+const alterarAtendimentoManual = (params: AcervoSolicitacaoManualConfirmarDTO) =>
+  alterarRegistro<number>(`${URL_API_ACERVO_SOLICITACAO}/alterar-manual`, params);
 
 const finalizarAtendimento = (acervoSolicitacaoId: number) =>
   alterarRegistro<boolean>(
     `${URL_API_ACERVO_SOLICITACAO}/${acervoSolicitacaoId}/finalizar-atendimento`,
   );
 
+const obterDetalhesAcervoSolicitacaoManual = (acervoSolicitacaoId: number | undefined) =>
+  obterRegistro(`${URL_API_ACERVO_SOLICITACAO_DETALHES}/${acervoSolicitacaoId}`);
+
 export default {
   obterItensDoAcervoPorFiltros,
   inserir,
   obterPorId,
+  alterarAtendimentoManual,
+  obterDetalhesAcervoSolicitacaoManual,
   confirmarAtendimentoManual,
   obterSituacoesAtendimento,
   obterDetalhesAcervoSolicitacao,

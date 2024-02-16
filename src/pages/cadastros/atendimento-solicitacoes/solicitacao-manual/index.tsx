@@ -2,11 +2,12 @@ import { Button, Col, DatePicker, Form, Input, Row, Tooltip, notification } from
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
+import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import { cloneDeep } from 'lodash';
 import React, { useEffect, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import ButtonPrimary from '~/components/lib/button/primary';
 import ButtonSecundary from '~/components/lib/button/secundary';
@@ -36,6 +37,7 @@ import {
   AcervoSolicitacaoManualItemDTO,
 } from '~/core/dto/acervo-solicitacao-manual-dto';
 import { ROUTES } from '~/core/enum/routes';
+import { TipoAtendimentoEnumDisplay } from '~/core/enum/tipo-atendimento-enum';
 import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
 import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
@@ -47,17 +49,22 @@ import { InputRfCpf } from './components/rf-cpf';
 export const SolicitacaoManual: React.FC = () => {
   const [form] = useForm();
   const navigate = useNavigate();
+  const params = useParams();
+
   const dispatch = useAppDispatch();
   const nome = Form.useWatch('nome', form);
   const rfCpfWatch = Form.useWatch('rfCpf', form)?.length;
 
   const solicitacao = useAppSelector((state) => state.solicitacao);
-  const [usuarioId, setUsuarioId] = useState<number | null>(null);
+  const [acervoSolicitacaoId, setAcervoSolicitacaoId] = useState<number>();
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [usuarioId, setUsuarioId] = useState<number | null>(null);
   const [dataSource, setDataSource] = useState<AcervoSolicitacaoManualDTO[]>([]);
   const [initialValuesModal, setInitialValuesModal] = useState<AcervoSolicitacaoManualDTO | null>(
     null,
   );
+
+  const solicitacaoId = params?.id || 0;
 
   const columns: ColumnsType<AcervoSolicitacaoManualDTO> = [
     {
@@ -91,41 +98,71 @@ export const SolicitacaoManual: React.FC = () => {
       title: 'Ações',
       align: 'center',
       width: '10%',
-      render: (_, linha, index: number) => (
-        <Row>
-          <Col xs={12} md={10}>
-            <Tooltip title='Editar acervo'>
-              <Button type='text'>
-                <FaEdit
-                  cursor='pointer'
-                  fontSize={16}
-                  id={CDEP_BUTTON_EDITAR}
-                  onClick={() => {
-                    setInitialValuesModal(linha);
-                    setIsModalOpen(true);
-                  }}
-                />
-              </Button>
-            </Tooltip>
-          </Col>
-          <Col xs={12} md={10}>
-            <Tooltip title='Remover acervo'>
-              <Button type='text'>
-                <FaTrashAlt
-                  cursor='pointer'
-                  fontSize={16}
-                  id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
-                  onClick={() => {
-                    removerAcervo(index, linha);
-                  }}
-                />
-              </Button>
-            </Tooltip>
-          </Col>
-        </Row>
-      ),
+      render: (_, linha, index: number) => {
+        return (
+          <Row>
+            <Col xs={12} md={10}>
+              <Tooltip title='Editar acervo'>
+                <Button type='text'>
+                  <FaEdit
+                    cursor='pointer'
+                    fontSize={16}
+                    id={CDEP_BUTTON_EDITAR}
+                    onClick={() => {
+                      setInitialValuesModal(linha);
+                      setIsModalOpen(true);
+                    }}
+                  />
+                </Button>
+              </Tooltip>
+            </Col>
+            {!linha.id && (
+              <Col xs={12} md={10}>
+                <Tooltip title='Remover acervo'>
+                  <Button type='text'>
+                    <FaTrashAlt
+                      cursor='pointer'
+                      fontSize={16}
+                      id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
+                      onClick={() => {
+                        removerAcervo(index, linha);
+                      }}
+                    />
+                  </Button>
+                </Tooltip>
+              </Col>
+            )}
+          </Row>
+        );
+      },
     },
   ];
+
+  const carregarDados = () => {
+    acervoSolicitacaoService
+      .obterDetalhesAcervoSolicitacaoManual(acervoSolicitacaoId)
+      .then((resposta) => {
+        const dados = resposta?.dados;
+        const dadosSolicitante = dados?.dadosSolicitante;
+
+        const novoItem = dados.itens.map((item) => {
+          return {
+            ...item,
+            tipoAtendimento: TipoAtendimentoEnumDisplay[item.tipoAtendimento],
+          };
+        });
+
+        setDataSource(novoItem);
+        form.setFieldsValue({
+          rfCpf: dados.responsavelRf,
+          nome: dadosSolicitante.nome,
+          telefone: dadosSolicitante.telefone,
+          email: dadosSolicitante.email,
+          endereco: dadosSolicitante.endereco,
+          dataSolicitacao: dayjs(dados?.dataSolicitacao),
+        });
+      });
+  };
 
   const removerAcervo = (index: number, linha: AcervoSolicitacaoManualDTO) => {
     const acervos = [...dataSource];
@@ -183,6 +220,12 @@ export const SolicitacaoManual: React.FC = () => {
     });
   };
 
+  useEffect(() => {
+    if (acervoSolicitacaoId) {
+      carregarDados();
+    }
+  }, [acervoSolicitacaoId]);
+
   const onClickConfirmarAtendimento = async () => {
     if (form.isFieldsTouched()) {
       form.validateFields().then(async () => {
@@ -190,7 +233,8 @@ export const SolicitacaoManual: React.FC = () => {
 
         const valoresParaSalvar: AcervoSolicitacaoManualItemDTO[] = dataSource.map((item) => {
           return {
-            acervoId: item.id,
+            id: item.id,
+            acervoId: item.acervoId,
             tipoAtendimento: item.tipoAtendimentoId,
             situacao: item.situacaoId,
             dataVisita: item.dataVisita || null,
@@ -203,12 +247,25 @@ export const SolicitacaoManual: React.FC = () => {
           itens: cloneDeep(valoresParaSalvar),
         };
 
-        const resposta = await acervoSolicitacaoService.confirmarAtendimentoManual(params);
-
-        if (resposta.sucesso) {
-          notification.success({
-            message: 'Sucesso',
-            description: 'Atendimento confirmado com sucesso',
+        if (solicitacaoId) {
+          acervoSolicitacaoService.alterarAtendimentoManual(params).then((resposta) => {
+            setAcervoSolicitacaoId(resposta.dados);
+            navigate(`${ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL}/${resposta.dados}`);
+            notification.success({
+              message: 'Sucesso',
+              description: 'Atendimento confirmado com sucesso',
+            });
+            form.resetFields();
+          });
+        } else {
+          acervoSolicitacaoService.confirmarAtendimentoManual(params).then((resposta) => {
+            setAcervoSolicitacaoId(resposta.dados);
+            navigate(`${ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL}/${resposta.dados}`);
+            notification.success({
+              message: 'Sucesso',
+              description: 'Atendimento confirmado com sucesso',
+            });
+            form.resetFields();
           });
         }
       });

@@ -3,6 +3,7 @@ import { TipoAtendimentoEnum } from '../enum/tipo-atendimento-enum';
 
 export type AcervoSolicitacaoManualDTO = {
   id: number | null;
+  acervoId: number | null;
   codigo: string | null;
   titulo: string | null;
   situacao: string;
@@ -13,6 +14,7 @@ export type AcervoSolicitacaoManualDTO = {
 };
 
 export type AcervoSolicitacaoManualItemDTO = {
+  id?: number | null;
   acervoId: number | null;
   situacao: number | null;
   dataVisita?: string | null;
