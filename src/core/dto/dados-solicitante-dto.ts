@@ -8,4 +8,5 @@ export type DadosSolicitanteDTO = {
   email: string;
   tipo: TipoUsuario;
   tipoId: TipoUsuario;
+  id: number;
 };

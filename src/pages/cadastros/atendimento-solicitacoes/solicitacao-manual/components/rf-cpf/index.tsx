@@ -1,15 +1,20 @@
 import { Form, FormItemProps, Input, InputProps } from 'antd';
 import useFormInstance from 'antd/es/form/hooks/useFormInstance';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
 import usuarioService from '~/core/services/usuario-service';
 
 type InputRfCpfProps = {
   inputProps?: InputProps;
   formItemProps?: FormItemProps;
+  setUsuarioId: Dispatch<SetStateAction<number | null>>;
 };
 
-export const InputRfCpf: React.FC<InputRfCpfProps> = ({ inputProps, formItemProps }) => {
+export const InputRfCpf: React.FC<InputRfCpfProps> = ({
+  inputProps,
+  formItemProps,
+  setUsuarioId,
+}) => {
   const form = useFormInstance();
   const rfCpf = Form.useWatch('rfCpf', form);
   const [loading, setLoading] = useState<boolean>(false);
@@ -20,6 +25,8 @@ export const InputRfCpf: React.FC<InputRfCpfProps> = ({ inputProps, formItemProp
       if (resposta.sucesso) {
         const dataAtual = dayjs();
         const dados = resposta?.dados;
+
+        setUsuarioId(dados.id);
 
         form.setFieldsValue({
           nome: dados.nome,

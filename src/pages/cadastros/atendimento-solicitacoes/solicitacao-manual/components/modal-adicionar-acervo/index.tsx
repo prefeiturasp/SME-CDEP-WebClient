@@ -24,7 +24,7 @@ type ModalAdicionarAcervoProps = {
   dataSource?: any;
   setIsModalOpen: (isOpen: boolean) => void;
   setDataSource: (data: AcervoSolicitacaoManualDTO[]) => void;
-  initialValuesModal: AcervoSolicitacaoManualDTO | undefined;
+  initialValuesModal: AcervoSolicitacaoManualDTO | null;
 };
 
 export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
@@ -48,24 +48,28 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
 
   const onFinish = () => {
     form.validateFields().then((resposta) => {
-      const tipoAtendimentoNome =
-        resposta?.tipoAtendimento === TipoAtendimentoEnum.Email
-          ? TipoAtendimentoEnumDisplay[TipoAtendimentoEnum.Email]
-          : TipoAtendimentoEnumDisplay[TipoAtendimentoEnum.Presencial];
+      const ehEmail = resposta?.tipoAtendimento === TipoAtendimentoEnum.Email;
 
-      const situacaoNome =
-        resposta?.tipoAtendimento === TipoAtendimentoEnum.Email
-          ? SituacaoSolicitacaoManualEnumDisplay[
-              SituacaoSolicitacaoManualEnum.FINALIZADO_MANUALMENTE
-            ]
-          : SituacaoSolicitacaoManualEnumDisplay[SituacaoSolicitacaoManualEnum.AGUARDANDO_VISITA];
+      const tipoAtendimentoNome = ehEmail
+        ? TipoAtendimentoEnumDisplay[TipoAtendimentoEnum.Email]
+        : TipoAtendimentoEnumDisplay[TipoAtendimentoEnum.Presencial];
+
+      const situacaoNome = ehEmail
+        ? SituacaoSolicitacaoManualEnumDisplay[SituacaoSolicitacaoManualEnum.FINALIZADO_MANUALMENTE]
+        : SituacaoSolicitacaoManualEnumDisplay[SituacaoSolicitacaoManualEnum.AGUARDANDO_VISITA];
+
+      const situacaoId = ehEmail
+        ? SituacaoSolicitacaoManualEnum.FINALIZADO_MANUALMENTE
+        : SituacaoSolicitacaoManualEnum.AGUARDANDO_VISITA;
 
       const novoItem = {
         id: dadosCodigoTombo?.id,
         codigo: dadosCodigoTombo?.codigo,
         titulo: dadosCodigoTombo?.nome,
         tipoAtendimento: tipoAtendimentoNome,
+        tipoAtendimentoId: resposta?.tipoAtendimento,
         situacao: situacaoNome,
+        situacaoId,
         dataVisita: resposta?.dataVisita,
       };
 
@@ -90,10 +94,11 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   };
 
   useEffect(() => {
+    form.resetFields();
     if (initialValuesModal && isModalOpen) {
       form.setFieldsValue({ ...initialValuesModal });
     }
-  }, [isModalOpen, initialValuesModal]);
+  }, [form, isModalOpen, initialValuesModal]);
 
   return (
     <Modal
