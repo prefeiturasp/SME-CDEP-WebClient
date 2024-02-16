@@ -2,7 +2,7 @@ import { Col, DatePicker, Form, Input, ModalProps, Row } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import { FormProps, useForm } from 'antd/es/form/Form';
 import dayjs from 'dayjs';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento';
 import { InputCodigoTombo } from '~/components/cdep/input/tombo-codigo';
 import Modal from '~/components/lib/modal';
@@ -81,12 +81,20 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
         },
       });
     } else {
+      form.resetFields();
       setIsModalOpen(false);
     }
   };
 
+  useEffect(() => {
+    if (isModalOpen) {
+      form.resetFields();
+    }
+  }, [isModalOpen]);
+
   return (
     <Modal
+      destroyOnClose
       open={isModalOpen}
       okText='Adicionar'
       title='Inserir acervo à solicitação'
@@ -116,7 +124,15 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
             </Col>
             {ehPresencial && (
               <Col xs={12}>
-                <Form.Item label='Data da visita' name='dataVisita'>
+                <Form.Item
+                  label='Data da visita'
+                  name='dataVisita'
+                  rules={[
+                    {
+                      required: true,
+                    },
+                  ]}
+                >
                   <DatePicker
                     style={{ width: '100%' }}
                     format='DD/MM/YYYY'
