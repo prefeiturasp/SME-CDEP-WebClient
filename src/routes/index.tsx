@@ -166,18 +166,18 @@ const RoutesConfig = () => {
                     path={ROUTES.ATENDIMENTO_SOLICITACOES_EDITAR}
                     element={<FormAtendimentoSolicitacoes />}
                   />
-                  <Route element={<GuardPermissao menuKey={MenuEnum.AtendimentoSolicitacoes} />}>
-                    <Route
-                      path={ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL}
-                      element={<SolicitacaoManual />}
-                    />
-                  </Route>
-                  <Route element={<GuardPermissao menuKey={MenuEnum.AtendimentoSolicitacoes} />}>
-                    <Route
-                      path={ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL_EDITAR}
-                      element={<SolicitacaoManual />}
-                    />
-                  </Route>
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.AtendimentoSolicitacoes} />}>
+                  <Route
+                    path={ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL}
+                    element={<SolicitacaoManual />}
+                  />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.AtendimentoSolicitacoes} />}>
+                  <Route
+                    path={ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL_EDITAR}
+                    element={<SolicitacaoManual />}
+                  />
                 </Route>
               </Route>
             </Route>

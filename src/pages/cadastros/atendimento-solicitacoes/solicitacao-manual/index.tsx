@@ -4,7 +4,7 @@ import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import { useForm, useWatch } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
 import _, { cloneDeep } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
@@ -49,6 +49,7 @@ import { confirmacao } from '~/core/services/alerta-service';
 import { formatarDataParaDDMMYYYY, maskTelefone } from '~/core/utils/functions';
 import { ModalAdicionarAcervo } from './components/modal-adicionar-acervo';
 import { InputRfCpf } from './components/rf-cpf';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 export const SolicitacaoManual: React.FC = () => {
   const [form] = useForm();
@@ -59,6 +60,8 @@ export const SolicitacaoManual: React.FC = () => {
 
   const nome = useWatch(['dadosSolicitante', 'nome'], form);
   const rfCpfWatch = useWatch(['dadosSolicitante', 'login'], form)?.length;
+
+  const { desabilitarCampos } = useContext(PermissaoContext);
 
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
@@ -332,7 +335,7 @@ export const SolicitacaoManual: React.FC = () => {
 
   useEffect(() => {
     form.resetFields();
-  }, [form]);
+  }, [form, formInitialValues]);
 
   return (
     <Col>
@@ -342,6 +345,7 @@ export const SolicitacaoManual: React.FC = () => {
         autoComplete='off'
         validateMessages={validateMessages}
         initialValues={formInitialValues}
+        disabled={desabilitarCampos}
       >
         <HeaderPage title='Atendimento de Solicitações'>
           <Col span={24}>
@@ -374,7 +378,7 @@ export const SolicitacaoManual: React.FC = () => {
                       <ButtonSecundary
                         id={CDEP_BUTTON_FINALIZAR}
                         style={{ fontWeight: 700 }}
-                        disabled={!!temItemSemId}
+                        disabled={!!temItemSemId || desabilitarCampos}
                         onClick={onClickFinalizarAtendimento}
                       >
                         Finalizar
@@ -434,7 +438,7 @@ export const SolicitacaoManual: React.FC = () => {
                     format='DD/MM/YYYY'
                     placeholder='Selecione uma data'
                     locale={localeDatePicker}
-                    disabled={!nome || !rfCpfWatch}
+                    disabled={!nome || !rfCpfWatch || desabilitarCampos}
                     maxDate={maxDate}
                   />
                 </Form.Item>
@@ -452,7 +456,7 @@ export const SolicitacaoManual: React.FC = () => {
                       setInitialValuesModal(undefined);
                       setIsModalOpen(true);
                     }}
-                    disabled={!nome || !rfCpfWatch}
+                    disabled={!nome || !rfCpfWatch || desabilitarCampos}
                   >
                     Adicionar acervos
                   </ButtonPrimary>
