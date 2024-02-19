@@ -1,7 +1,7 @@
 import { Col, Form, Input, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
@@ -24,6 +24,7 @@ import { URL_API_ACERVO_SOLICITACAO } from '~/core/constants/urls-api';
 import { dayjs } from '~/core/date/dayjs';
 import { SolicitacaoDTO } from '~/core/dto/solicitacao-dto';
 import { ROUTES } from '~/core/enum/routes';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 type FiltroSolicitacaoProps = {
   tipoAcervo: number | null;
@@ -91,6 +92,8 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
   const navigate = useNavigate();
   const [form] = useForm();
 
+  const { permissao } = useContext(PermissaoContext);
+
   const [filters, setFilters] = useState<FiltroSolicitacaoProps>(DEFAULT_VALUES);
 
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
@@ -145,6 +148,7 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
                 onClick={() => {
                   navigate(ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL);
                 }}
+                disabled={!permissao?.podeIncluir}
               >
                 Nova solicitação
               </ButtonPrimary>
