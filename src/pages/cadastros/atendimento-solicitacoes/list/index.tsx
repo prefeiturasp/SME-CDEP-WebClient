@@ -13,7 +13,12 @@ import HeaderPage from '~/components/lib/header-page';
 import SelectResponsaveis from '~/components/cdep/input/responsaveis';
 import { SelectSituacaoAtendimento } from '~/components/cdep/input/situacao-atendimento';
 import { RangePicker } from '~/components/cdep/range-picker';
-import { CDEP_BUTTON_CANCELAR, CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
+import ButtonPrimary from '~/components/lib/button/primary';
+import {
+  CDEP_BUTTON_CANCELAR,
+  CDEP_BUTTON_NOVA_SOLICITACAO,
+  CDEP_BUTTON_VOLTAR,
+} from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
 import { URL_API_ACERVO_SOLICITACAO } from '~/core/constants/urls-api';
 import { dayjs } from '~/core/date/dayjs';
@@ -65,19 +70,18 @@ const columns: ColumnsType<SolicitacaoDTO> = [
     align: 'center',
   },
   {
-    title: 'Data da visita',
-    dataIndex: 'dataVisita',
-    align: 'center',
-    render: (dataVisita: string) =>
-      dataVisita ? dayjs(dataVisita).format('DD/MM/YYYY - HH:mm') : <></>,
-  },
-  {
     title: 'Responsável pelo atendimento',
     dataIndex: 'responsavel',
     align: 'center',
   },
   {
-    title: 'Situação do Atendimento',
+    title: 'Data da visita',
+    dataIndex: 'dataVisita',
+    align: 'center',
+    render: (dataVisita: string) => (dataVisita ? dayjs(dataVisita).format('DD/MM/YYYY') : <></>),
+  },
+  {
+    title: 'Situação do Item',
     dataIndex: 'situacao',
     align: 'center',
   },
@@ -111,6 +115,11 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
     });
   };
 
+  const onClickDetalheSolicitacao = (row: SolicitacaoDTO) =>
+    navigate(`${ROUTES.ATENDIMENTO_SOLICITACOES}/${row.acervoSolicitacaoId}`, {
+      replace: true,
+    });
+
   return (
     <Col>
       <HeaderPage title='Atendimento de Solicitações'>
@@ -122,16 +131,23 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
             <Col>
               <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
                 <ButtonSecundary
-                  block
-                  type='default'
                   id={CDEP_BUTTON_CANCELAR}
                   onClick={() => onClickCancelar()}
-                  style={{ fontWeight: 700 }}
                   disabled={!form.isFieldsTouched()}
                 >
                   Cancelar
                 </ButtonSecundary>
               </Form.Item>
+            </Col>
+            <Col>
+              <ButtonPrimary
+                id={CDEP_BUTTON_NOVA_SOLICITACAO}
+                onClick={() => {
+                  navigate(ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL);
+                }}
+              >
+                Nova solicitação
+              </ButtonPrimary>
             </Col>
           </Row>
         </Col>
@@ -178,7 +194,10 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
                 </Col>
 
                 <Col xs={24} md={8}>
-                  <SelectResponsaveis selectProps={{ onChange: obterFiltros }} />
+                  <SelectResponsaveis
+                    formItemProps={{ name: 'responsavel' }}
+                    selectProps={{ onChange: obterFiltros }}
+                  />
                 </Col>
 
                 <Col xs={24} md={8}>
@@ -191,6 +210,11 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
                     filters={filters}
                     url={`${URL_API_ACERVO_SOLICITACAO}/atendimento-solicitacoes`}
                     columns={columns}
+                    onRow={(row) => ({
+                      onClick: () => {
+                        onClickDetalheSolicitacao(row);
+                      },
+                    })}
                   />
                 </Col>
               </Row>

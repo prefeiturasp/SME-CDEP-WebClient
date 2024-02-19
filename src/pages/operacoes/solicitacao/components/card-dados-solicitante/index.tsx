@@ -1,7 +1,7 @@
 import { Card, Col, Divider, Row, Typography } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { DadosSolicitanteDTO } from '~/core/dto/dados-solicitante-dto';
-import { TipoUsuario, TipoUsuarioDisplay } from '~/core/enum/tipo-usuario-enum';
+import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
 import { tratarCatch, tratarThen } from '~/core/services/api';
 import usuarioService from '~/core/services/usuario-service';
 import { Colors } from '~/core/styles/colors';
@@ -12,8 +12,7 @@ const CardDadosSolicitante: React.FC = () => {
   const [dados, setDados] = useState<DadosSolicitanteDTO>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const ehExterno = dados?.tipo && dados?.tipo > TipoUsuario.CORESSO;
-  const descricaoTipoUsuario = dados && dados?.tipo > -1 ? TipoUsuarioDisplay[dados.tipo] : '';
+  const ehExterno = dados?.tipoId && dados?.tipoId > TipoUsuario.CORESSO;
 
   const obterDados = async () => {
     setLoading(true);
@@ -60,7 +59,7 @@ const CardDadosSolicitante: React.FC = () => {
                 <>
                   <Row>
                     <Text strong>CPF: </Text>
-                    <Text style={{ marginLeft: 4 }}>{dados?.cpf}</Text>
+                    <Text style={{ marginLeft: 4 }}>{dados?.login}</Text>
                   </Row>
                   <Row>
                     <Text strong>Telefone: </Text>
@@ -76,7 +75,7 @@ const CardDadosSolicitante: React.FC = () => {
               </Row>
               <Row>
                 <Text strong>Tipo do Usuário: </Text>
-                <Text style={{ marginLeft: 4 }}>{descricaoTipoUsuario}</Text>
+                <Text style={{ marginLeft: 4 }}>{dados?.tipo}</Text>
               </Row>
             </Col>
             {ehExterno ? (

@@ -20,6 +20,7 @@ export const CDEPTheme: ThemeConfigSME = {
     borderRadius: 4,
     controlHeight: 38,
     colorError: Colors.Suporte.Primary.ERROR,
+    colorTextLabel: Colors.Neutral.WHITE,
   },
   components: {
     Button: {

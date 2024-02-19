@@ -1,0 +1,494 @@
+import { StopOutlined } from '@ant-design/icons';
+import { Button, Col, DatePicker, Form, Input, Row, Tooltip, notification } from 'antd';
+import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
+import { useForm, useWatch } from 'antd/es/form/Form';
+import { ColumnsType } from 'antd/es/table';
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br';
+import React, { useCallback, useEffect, useState } from 'react';
+import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { useNavigate, useParams } from 'react-router-dom';
+import ButtonVoltar from '~/components/cdep/button/voltar';
+import ButtonPrimary from '~/components/lib/button/primary';
+import ButtonSecundary from '~/components/lib/button/secundary';
+import CardContent from '~/components/lib/card-content';
+import DataTable from '~/components/lib/data-table';
+import HeaderPage from '~/components/lib/header-page';
+import {
+  CDEP_BUTTON_ADICIONAR_ACERVOS,
+  CDEP_BUTTON_CANCELAR,
+  CDEP_BUTTON_CANCELAR_ATENDIMENTO,
+  CDEP_BUTTON_CONFIRMAR,
+  CDEP_BUTTON_EDITAR,
+  CDEP_BUTTON_FINALIZAR,
+  CDEP_BUTTON_REMOVER_ACERVO,
+  CDEP_BUTTON_VOLTAR,
+} from '~/core/constants/ids/button/intex';
+import {
+  DESEJA_CANCELAR_ALTERACOES,
+  DESEJA_CANCELAR_ATENDIMENTO,
+  DESEJA_CANCELAR_ITEM,
+  DESEJA_FINALIZAR_ATENDIMENTO,
+  DESEJA_REMOVER_ACERVO,
+  DESEJA_SAIR_MODO_EDICAO,
+} from '~/core/constants/mensagens';
+import { validateMessages } from '~/core/constants/validate-messages';
+import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detalhe-dto';
+import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solicitacao-item-detalhe-resumido-dto';
+import {
+  AcervoSolicitacaoItemManualDTO,
+  AcervoSolicitacaoManualDTO,
+} from '~/core/dto/acervo-solicitacao-manual-dto';
+import { ROUTES } from '~/core/enum/routes';
+import {
+  SituacaoSolicitacaoItemEnum,
+  SituacaoSolicitacaoItemEnumDisplay,
+} from '~/core/enum/situacao-item-atendimento-enum';
+import { TipoAtendimentoEnum, TipoAtendimentoEnumDisplay } from '~/core/enum/tipo-atendimento-enum';
+import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
+import { confirmacao } from '~/core/services/alerta-service';
+import { formatarDataParaDDMMYYYY, maskTelefone } from '~/core/utils/functions';
+import { ModalAdicionarAcervo } from './components/modal-adicionar-acervo';
+import { InputRfCpf } from './components/rf-cpf';
+
+export const SolicitacaoManual: React.FC = () => {
+  const [form] = useForm();
+
+  const navigate = useNavigate();
+  const paramsRoute = useParams();
+
+  const nome = useWatch(['dadosSolicitante', 'nome'], form);
+  const rfCpfWatch = useWatch(['dadosSolicitante', 'login'], form)?.length;
+
+  const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
+
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemDetalheResumidoDTO[]>([]);
+  const [initialValuesModal, setInitialValuesModal] =
+    useState<AcervoSolicitacaoItemDetalheResumidoDTO>();
+  const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
+
+  const columns: ColumnsType<AcervoSolicitacaoItemDetalheResumidoDTO> = [
+    {
+      title: 'N° do tombo/código',
+      dataIndex: 'codigo',
+      width: '10%',
+    },
+    {
+      title: 'Título',
+      dataIndex: 'titulo',
+    },
+    {
+      title: 'Situação',
+      dataIndex: 'situacaoId',
+      width: '15%',
+      render: (situacaoId: SituacaoSolicitacaoItemEnum) =>
+        SituacaoSolicitacaoItemEnumDisplay[situacaoId],
+    },
+    {
+      title: 'Tipo de atendimento',
+      dataIndex: 'tipoAtendimento',
+      width: '10%',
+      render: (tipoAtendimento: TipoAtendimentoEnum) => TipoAtendimentoEnumDisplay[tipoAtendimento],
+    },
+    {
+      title: 'Data da visita',
+      dataIndex: 'dataVisita',
+      width: '10%',
+      render: (dataVisita) => formatarDataParaDDMMYYYY(dataVisita),
+    },
+    {
+      title: 'Ações',
+      align: 'center',
+      width: '10%',
+      render: (_, linha, index: number) => {
+        return (
+          <Row>
+            <Col xs={12} md={10}>
+              <Tooltip title='Editar acervo'>
+                <Button type='text'>
+                  <FaEdit
+                    cursor='pointer'
+                    fontSize={16}
+                    id={CDEP_BUTTON_EDITAR}
+                    onClick={() => {
+                      setInitialValuesModal(linha);
+                      setIsModalOpen(true);
+                    }}
+                  />
+                </Button>
+              </Tooltip>
+            </Col>
+            {linha.id ? (
+              <Col xs={12} md={10}>
+                <Tooltip title='Cancelar acervo'>
+                  <Button type='text'>
+                    <StopOutlined
+                      id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
+                      onClick={() => {
+                        onClickCancelarItemAtendimento(linha.id);
+                      }}
+                    />
+                  </Button>
+                </Tooltip>
+              </Col>
+            ) : (
+              <Col xs={12} md={10}>
+                <Tooltip title='Remover acervo'>
+                  <Button type='text'>
+                    <FaTrashAlt
+                      cursor='pointer'
+                      fontSize={16}
+                      id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
+                      onClick={() => {
+                        confirmacao({
+                          content: DESEJA_REMOVER_ACERVO,
+                          onOk() {
+                            removerAcervo(index);
+                          },
+                        });
+                      }}
+                    />
+                  </Button>
+                </Tooltip>
+              </Col>
+            )}
+          </Row>
+        );
+      },
+    },
+  ];
+
+  const carregarDados = useCallback(async () => {
+    const resposta = await acervoSolicitacaoService.obterDetalhesParaAtendimentoSolicitacoesPorId(
+      acervoSolicitacaoId,
+    );
+
+    if (resposta.sucesso) {
+      const dadosSolicitante = resposta.dados.dadosSolicitante;
+      dadosSolicitante.telefone = dadosSolicitante?.telefone
+        ? maskTelefone(dadosSolicitante.telefone)
+        : '';
+
+      const dataSolicitacao = resposta.dados.dataSolicitacao
+        ? dayjs(resposta.dados.dataSolicitacao)
+        : '';
+
+      const dadosMapeados: AcervoSolicitacaoDetalheDTO = {
+        ...resposta.dados,
+        dadosSolicitante,
+        dataSolicitacao,
+      };
+      setFormInitialValues(dadosMapeados);
+      setDataSource(dadosMapeados.itens);
+    }
+  }, [acervoSolicitacaoId]);
+
+  useEffect(() => {
+    if (acervoSolicitacaoId) {
+      carregarDados();
+    }
+  }, [carregarDados, acervoSolicitacaoId]);
+
+  useEffect(() => {
+    form.resetFields();
+  }, [form, formInitialValues]);
+
+  const removerAcervo = (index: number) => {
+    const acervos = [...dataSource];
+    acervos.splice(index, 1);
+    setDataSource(acervos);
+  };
+
+  const onClickVoltar = () => {
+    if (form.isFieldsTouched()) {
+      confirmacao({
+        content: DESEJA_SAIR_MODO_EDICAO,
+        onOk() {
+          navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
+        },
+      });
+    } else {
+      navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
+    }
+  };
+
+  const onClickCancelar = () => {
+    if (form.isFieldsTouched()) {
+      confirmacao({
+        content: DESEJA_CANCELAR_ALTERACOES,
+        onOk() {
+          form.resetFields();
+          setDataSource([]);
+        },
+      });
+    }
+  };
+
+  const onClickCancelarAtendimento = async () => {
+    confirmacao({
+      content: DESEJA_CANCELAR_ATENDIMENTO,
+      onOk() {
+        // acervoSolicitacaoService.cancelarAtendimento(acervoSolicitacaoId).then((resposta) => {
+        //   if (resposta.sucesso) {
+        //     navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
+        //     notification.success({
+        //       message: 'Sucesso',
+        //       description: 'Atendimento cancelado com sucesso',
+        //     });
+        //   }
+        // });
+      },
+    });
+  };
+
+  const onClickCancelarItemAtendimento = async (acervoSolicitacaoItemId: number) => {
+    confirmacao({
+      content: DESEJA_CANCELAR_ITEM,
+      onOk: async () => {
+        const resultado = await acervoSolicitacaoService.cancelarItemAtendimento(
+          acervoSolicitacaoItemId,
+        );
+
+        if (resultado.sucesso) {
+          notification.success({
+            message: 'Sucesso',
+            description: 'Item cancelado com sucesso',
+          });
+          carregarDados();
+        }
+      },
+    });
+  };
+
+  const onClickConfirmarAtendimento = async () => {
+    if (form.isFieldsTouched()) {
+      form.validateFields().then(async () => {
+        const values = form.getFieldsValue(true);
+
+        const dataSolicitacao = values?.dataSolicitacao;
+
+        const endpoint = acervoSolicitacaoId
+          ? acervoSolicitacaoService.alterarAtendimentoManual
+          : acervoSolicitacaoService.confirmarAtendimentoManual;
+
+        const itens: AcervoSolicitacaoItemManualDTO[] = dataSource.map(
+          (item: AcervoSolicitacaoItemDetalheResumidoDTO): AcervoSolicitacaoItemManualDTO => {
+            const linha: AcervoSolicitacaoItemManualDTO = {
+              acervoId: item.acervoId,
+              tipoAtendimento: item.tipoAtendimento,
+            };
+
+            if (item.id) {
+              linha.id = item.id;
+            }
+
+            if (item.dataVisita) {
+              linha.dataVisita = item.dataVisita;
+            }
+
+            return linha;
+          },
+        );
+
+        const params: AcervoSolicitacaoManualDTO = {
+          usuarioId: values?.dadosSolicitante?.id,
+          dataSolicitacao,
+          itens,
+        };
+
+        if (acervoSolicitacaoId) {
+          params.id = acervoSolicitacaoId;
+        }
+
+        endpoint(params).then((resposta) => {
+          if (resposta.sucesso) {
+            notification.success({
+              message: 'Sucesso',
+              description: 'Atendimento confirmado com sucesso',
+            });
+
+            const newId = resposta.dados;
+            navigate(`${ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL}/${newId}`);
+          }
+        });
+      });
+    }
+  };
+
+  const onClickFinalizarAtendimento = () => {
+    confirmacao({
+      content: DESEJA_FINALIZAR_ATENDIMENTO,
+      onOk() {
+        // acervoSolicitacaoService.finalizarAtendimento(acervoSolicitacaoId).then((resposta) => {
+        //   if (resposta.sucesso) {
+        //     navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
+        //     notification.success({
+        //       message: 'Sucesso',
+        //       description: 'Atendimento finalizado com sucesso',
+        //     });
+        //   }
+        // });
+      },
+    });
+  };
+
+  useEffect(() => {
+    form.resetFields();
+  }, [form]);
+
+  return (
+    <Col>
+      <Form
+        form={form}
+        layout='vertical'
+        autoComplete='off'
+        validateMessages={validateMessages}
+        initialValues={formInitialValues}
+      >
+        <HeaderPage title='Atendimento de Solicitações'>
+          <Col span={24}>
+            <Row gutter={[8, 8]}>
+              <Col>
+                <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
+              </Col>
+              <Col>
+                <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
+                  {() => (
+                    <ButtonSecundary
+                      id={CDEP_BUTTON_CANCELAR}
+                      onClick={() => onClickCancelar()}
+                      disabled={!form.isFieldsTouched()}
+                    >
+                      Cancelar
+                    </ButtonSecundary>
+                  )}
+                </Form.Item>
+              </Col>
+              <Col>
+                <Button
+                  block
+                  htmlType='submit'
+                  id={CDEP_BUTTON_FINALIZAR}
+                  style={{ fontWeight: 700 }}
+                  disabled
+                  onClick={onClickFinalizarAtendimento}
+                >
+                  Finalizar
+                </Button>
+              </Col>
+              <Col>
+                <Button
+                  block
+                  id={CDEP_BUTTON_CANCELAR_ATENDIMENTO}
+                  style={{ fontWeight: 700 }}
+                  disabled
+                  // disabled={podeCancelarAtendimento()}
+                  onClick={onClickCancelarAtendimento}
+                >
+                  Cancelar solicitação
+                </Button>
+              </Col>
+              <Col>
+                <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
+                  {() => (
+                    <ButtonPrimary
+                      id={CDEP_BUTTON_CONFIRMAR}
+                      onClick={onClickConfirmarAtendimento}
+                      disabled={!form.isFieldsTouched()}
+                    >
+                      Confirmar
+                    </ButtonPrimary>
+                  )}
+                </Form.Item>
+              </Col>
+            </Row>
+          </Col>
+        </HeaderPage>
+
+        <CardContent>
+          <Col xs={24}>
+            <Row gutter={[16, 8]}>
+              <Col xs={24} md={8}>
+                <InputRfCpf inputProps={{ disabled: !!acervoSolicitacaoId }} />
+              </Col>
+
+              <Col xs={24} md={16}>
+                <Form.Item label='Nome do solicitante' name={['dadosSolicitante', 'nome']}>
+                  <Input type='text' placeholder='Nome do solicitante' disabled />
+                </Form.Item>
+              </Col>
+
+              <Col xs={24} md={12}>
+                <Form.Item label='Telefone' name={['dadosSolicitante', 'telefone']}>
+                  <Input type='text' placeholder='Telefone' disabled />
+                </Form.Item>
+              </Col>
+
+              <Col xs={24} md={12}>
+                <Form.Item label='E-mail' name={['dadosSolicitante', 'email']}>
+                  <Input type='text' placeholder='E-mail' disabled />
+                </Form.Item>
+              </Col>
+
+              <Col xs={24} md={16}>
+                <Form.Item label='Endereço' name={['dadosSolicitante', 'endereco']}>
+                  <Input type='text' placeholder='Endereço' disabled />
+                </Form.Item>
+              </Col>
+
+              <Col xs={24} md={8}>
+                <Form.Item label='Data da solicitação' name='dataSolicitacao'>
+                  <DatePicker
+                    style={{ width: '100%' }}
+                    format='DD/MM/YYYY'
+                    placeholder='Selecione uma data'
+                    locale={localeDatePicker}
+                    disabled={!nome || !rfCpfWatch}
+                  />
+                </Form.Item>
+              </Col>
+            </Row>
+          </Col>
+
+          <Row gutter={[16, 16]}>
+            <Col xs={24}>
+              <Row justify='end'>
+                <Col>
+                  <ButtonPrimary
+                    id={CDEP_BUTTON_ADICIONAR_ACERVOS}
+                    onClick={() => {
+                      setInitialValuesModal(undefined);
+                      setIsModalOpen(true);
+                    }}
+                    disabled={!nome || !rfCpfWatch}
+                  >
+                    Adicionar acervos
+                  </ButtonPrimary>
+                </Col>
+              </Row>
+            </Col>
+
+            <ModalAdicionarAcervo
+              dataSource={dataSource}
+              isModalOpen={isModalOpen}
+              setDataSource={setDataSource}
+              setIsModalOpen={setIsModalOpen}
+              initialValuesModal={initialValuesModal}
+            />
+
+            <Col xs={24}>
+              <Form.Item shouldUpdate>
+                {() => {
+                  return (
+                    <DataTable columns={columns} dataSource={dataSource} showOrderButton={false} />
+                  );
+                }}
+              </Form.Item>
+            </Col>
+          </Row>
+        </CardContent>
+      </Form>
+    </Col>
+  );
+};

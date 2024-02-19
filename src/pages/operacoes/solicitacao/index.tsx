@@ -10,6 +10,7 @@ import BtnEnviarSolicitacoes from './components/btn-enviar-solicitacao';
 import CardDadosSolicitante from './components/card-dados-solicitante';
 import ListaAcervosSolicitacao from './components/lista-acervos-solicitacao';
 import AcervoSolicitacaoContextProvider from './provider';
+import BtnCancelarSolicitacoes from './components/btn-cancelar-solicitacao';
 
 const EnviarSolicitacoes: React.FC = () => {
   const navigate = useNavigate();
@@ -24,6 +25,9 @@ const EnviarSolicitacoes: React.FC = () => {
             <Row gutter={[8, 8]}>
               <Col>
                 <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
+              </Col>
+              <Col>
+                <BtnCancelarSolicitacoes />
               </Col>
               <Col>
                 <BtnEnviarSolicitacoes />
