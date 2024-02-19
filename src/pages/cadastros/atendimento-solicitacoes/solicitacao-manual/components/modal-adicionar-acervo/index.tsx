@@ -1,13 +1,15 @@
 import { Col, DatePicker, Form, Input, ModalProps, Row } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
-import { FormProps, useForm, useWatch } from 'antd/es/form/Form';
+import { FormInstance, FormProps, useForm, useWatch } from 'antd/es/form/Form';
 import dayjs from 'dayjs';
 import React, { useEffect } from 'react';
 import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento';
 import { InputCodigoTombo } from '~/components/cdep/input/tombo-codigo';
 import Modal from '~/components/lib/modal';
+import { notification } from '~/components/lib/notification';
 import { DESEJA_CANCELAR_ALTERACOES } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
+import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detalhe-dto';
 import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solicitacao-item-detalhe-resumido-dto';
 import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
 import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
@@ -19,8 +21,7 @@ type ModalAdicionarAcervoProps = {
   isModalOpen: boolean;
   setIsModalOpen: (isOpen: boolean) => void;
   initialValuesModal?: AcervoSolicitacaoItemDetalheResumidoDTO;
-  dataSource?: AcervoSolicitacaoItemDetalheResumidoDTO[];
-  setDataSource: React.Dispatch<React.SetStateAction<AcervoSolicitacaoItemDetalheResumidoDTO[]>>;
+  formSolicitacaoManual: FormInstance;
 };
 
 export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
@@ -28,9 +29,8 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   formProps,
   isModalOpen,
   setIsModalOpen,
-  setDataSource,
-  dataSource,
   initialValuesModal,
+  formSolicitacaoManual,
 }) => {
   const minDate = dayjs();
   const [form] = useForm();
@@ -51,17 +51,38 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
         : SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA;
 
       const novoItem: AcervoSolicitacaoItemDetalheResumidoDTO = {
-        id: 0,
+        id: initialValuesModal?.id || 0,
         codigo: values?.dadosCodigoTombo?.codigo,
         acervoId: values?.dadosCodigoTombo?.id,
         titulo: values?.dadosCodigoTombo?.nome,
         tipoAtendimento: values?.tipoAtendimento,
-        dataVisita: values?.dataVisita,
+        dataVisita: ehEmail ? '' : values?.dataVisita,
         situacaoId,
       };
 
+      const valuesFormSolicitacaoManual: AcervoSolicitacaoDetalheDTO =
+        formSolicitacaoManual.getFieldsValue(true);
+
+      const dataSource: AcervoSolicitacaoItemDetalheResumidoDTO[] = valuesFormSolicitacaoManual
+        .itens?.length
+        ? valuesFormSolicitacaoManual.itens
+        : [];
+
+      const itemDuplicado = dataSource.find(
+        (item) => item?.id && item.acervoId === novoItem.acervoId,
+      );
+
+      if (itemDuplicado) {
+        notification.error({
+          message: 'Erro',
+          description: 'N° do tombo/código duplicado',
+        });
+
+        return;
+      }
+
       if (!dataSource?.length) {
-        setDataSource([novoItem]);
+        formSolicitacaoManual.setFieldValue('itens', [novoItem]);
       } else {
         const indexByAcervoId = dataSource?.findIndex(
           (item) => item.acervoId === novoItem?.acervoId,
@@ -72,9 +93,9 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
 
         if (dataSource?.length && index > -1) {
           dataSource[index] = { ...novoItem };
-          setDataSource([...dataSource]);
+          formSolicitacaoManual.setFieldValue('itens', [...dataSource]);
         } else {
-          setDataSource([...dataSource, novoItem]);
+          formSolicitacaoManual.setFieldValue('itens', [...dataSource, novoItem]);
         }
       }
 
@@ -106,8 +127,12 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
         id: initialValuesModal.acervoId,
       };
       form.setFieldValue('dadosCodigoTombo', dadosCodigoTombo);
-      form.setFieldValue('dataVisita', initialValuesModal.dataVisita);
-      form.setFieldValue('tipoAtendimento', initialValuesModal.tipoAtendimento);
+
+      if (initialValuesModal?.dataVisita) {
+        form.setFieldValue('dataVisita', dayjs(initialValuesModal.dataVisita));
+      }
+
+      form.setFieldValue('tipoAtendimento', initialValuesModal?.tipoAtendimento);
     }
   }, [form, isModalOpen, initialValuesModal]);
 
@@ -129,7 +154,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
         {...formProps}
       >
         <Col>
-          <InputCodigoTombo />
+          <InputCodigoTombo inputProps={{ disabled: !!initialValuesModal?.id }} />
         </Col>
         <Col>
           <Form.Item

@@ -1,3 +1,4 @@
+import { Dayjs } from '~/core/date/dayjs';
 import { TipoAtendimentoEnum } from '../enum/tipo-atendimento-enum';
 
 export type AcervoSolicitacaoItemManualDTO = {
@@ -10,7 +11,7 @@ export type AcervoSolicitacaoItemManualDTO = {
 export type AcervoSolicitacaoManualDTO = {
   id?: number;
   usuarioId?: number;
-  dataSolicitacao: string;
+  dataSolicitacao: string | Dayjs;
   itens: AcervoSolicitacaoItemManualDTO[];
 };
 
