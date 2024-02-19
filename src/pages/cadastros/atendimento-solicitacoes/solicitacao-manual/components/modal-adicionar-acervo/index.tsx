@@ -1,30 +1,26 @@
 import { Col, DatePicker, Form, Input, ModalProps, Row } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
-import { FormProps, useForm } from 'antd/es/form/Form';
+import { FormProps, useForm, useWatch } from 'antd/es/form/Form';
 import dayjs from 'dayjs';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento';
 import { InputCodigoTombo } from '~/components/cdep/input/tombo-codigo';
 import Modal from '~/components/lib/modal';
 import { DESEJA_CANCELAR_ALTERACOES } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
-import { AcervoSolicitacaoManualDTO } from '~/core/dto/acervo-solicitacao-manual-dto';
-import { CodigoTomboDTO } from '~/core/dto/codigo-tombo-dto';
-import {
-  SituacaoSolicitacaoManualEnum,
-  SituacaoSolicitacaoManualEnumDisplay,
-} from '~/core/enum/situacao-atendimento-manual-enum';
-import { TipoAtendimentoEnum, TipoAtendimentoEnumDisplay } from '~/core/enum/tipo-atendimento-enum';
+import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solicitacao-item-detalhe-resumido-dto';
+import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
+import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
 import { confirmacao } from '~/core/services/alerta-service';
 
 type ModalAdicionarAcervoProps = {
   modalProps?: ModalProps;
   formProps?: FormProps;
   isModalOpen: boolean;
-  dataSource?: any;
   setIsModalOpen: (isOpen: boolean) => void;
-  setDataSource: (data: AcervoSolicitacaoManualDTO[]) => void;
-  initialValuesModal: AcervoSolicitacaoManualDTO | null;
+  initialValuesModal?: AcervoSolicitacaoItemDetalheResumidoDTO;
+  dataSource?: AcervoSolicitacaoItemDetalheResumidoDTO[];
+  setDataSource: React.Dispatch<React.SetStateAction<AcervoSolicitacaoItemDetalheResumidoDTO[]>>;
 };
 
 export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
@@ -39,41 +35,49 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   const minDate = dayjs();
   const [form] = useForm();
 
-  const tipoAtendimentoWatch = Form.useWatch('tipoAtendimento', form);
-  const [dadosCodigoTombo, setDadosCodigoTombo] = useState<CodigoTomboDTO>();
+  const tipoAtendimentoWatch = useWatch('tipoAtendimento', form);
 
-  const mostrarSeTiverData = initialValuesModal?.dataVisita;
+  const mostrarSeTiverData = !!initialValuesModal?.dataVisita;
   const ehPresencialWatch = tipoAtendimentoWatch === TipoAtendimentoEnum.Presencial;
-  const temDataEhPresencial = !!mostrarSeTiverData && ehPresencialWatch;
+  const temDataEhPresencial = mostrarSeTiverData && ehPresencialWatch;
 
   const onFinish = () => {
-    form.validateFields().then((resposta) => {
-      const ehEmail = resposta?.tipoAtendimento === TipoAtendimentoEnum.Email;
-
-      const tipoAtendimentoNome = ehEmail
-        ? TipoAtendimentoEnumDisplay[TipoAtendimentoEnum.Email]
-        : TipoAtendimentoEnumDisplay[TipoAtendimentoEnum.Presencial];
-
-      const situacaoNome = ehEmail
-        ? SituacaoSolicitacaoManualEnumDisplay[SituacaoSolicitacaoManualEnum.FINALIZADO_MANUALMENTE]
-        : SituacaoSolicitacaoManualEnumDisplay[SituacaoSolicitacaoManualEnum.AGUARDANDO_VISITA];
+    form.validateFields().then(() => {
+      const values = form.getFieldsValue(true);
+      const ehEmail = values?.tipoAtendimento === TipoAtendimentoEnum.Email;
 
       const situacaoId = ehEmail
-        ? SituacaoSolicitacaoManualEnum.FINALIZADO_MANUALMENTE
-        : SituacaoSolicitacaoManualEnum.AGUARDANDO_VISITA;
+        ? SituacaoSolicitacaoItemEnum.FINALIZADO_MANUALMENTE
+        : SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA;
 
-      const novoItem = {
-        acervoId: dadosCodigoTombo?.id,
-        codigo: dadosCodigoTombo?.codigo,
-        titulo: dadosCodigoTombo?.nome,
-        tipoAtendimento: tipoAtendimentoNome,
-        tipoAtendimentoId: resposta?.tipoAtendimento,
-        situacao: situacaoNome,
+      const novoItem: AcervoSolicitacaoItemDetalheResumidoDTO = {
+        id: 0,
+        codigo: values?.dadosCodigoTombo?.codigo,
+        acervoId: values?.dadosCodigoTombo?.id,
+        titulo: values?.dadosCodigoTombo?.nome,
+        tipoAtendimento: values?.tipoAtendimento,
+        dataVisita: values?.dataVisita,
         situacaoId,
-        dataVisita: resposta?.dataVisita,
       };
 
-      setDataSource([...dataSource, novoItem]);
+      if (!dataSource?.length) {
+        setDataSource([novoItem]);
+      } else {
+        const indexByAcervoId = dataSource?.findIndex(
+          (item) => item.acervoId === novoItem?.acervoId,
+        );
+        const indexById = dataSource?.findIndex((item) => item.id === initialValuesModal?.id);
+
+        const index = indexById || indexByAcervoId;
+
+        if (dataSource?.length && index > -1) {
+          dataSource[index] = { ...novoItem };
+          setDataSource([...dataSource]);
+        } else {
+          setDataSource([...dataSource, novoItem]);
+        }
+      }
+
       setIsModalOpen(false);
     });
   };
@@ -96,10 +100,14 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   useEffect(() => {
     form.resetFields();
     if (initialValuesModal && isModalOpen) {
-      form.setFieldsValue({
-        ...initialValuesModal,
-        tipoAtendimento: initialValuesModal.tipoAtendimentoId,
-      });
+      const dadosCodigoTombo = {
+        codigo: initialValuesModal.codigo,
+        nome: initialValuesModal.titulo,
+        id: initialValuesModal.acervoId,
+      };
+      form.setFieldValue('dadosCodigoTombo', dadosCodigoTombo);
+      form.setFieldValue('dataVisita', initialValuesModal.dataVisita);
+      form.setFieldValue('tipoAtendimento', initialValuesModal.tipoAtendimento);
     }
   }, [form, isModalOpen, initialValuesModal]);
 
@@ -121,10 +129,14 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
         {...formProps}
       >
         <Col>
-          <InputCodigoTombo setDadosCodigoTombo={setDadosCodigoTombo} />
+          <InputCodigoTombo />
         </Col>
         <Col>
-          <Form.Item label='Título do acervo' name='titulo' rules={[{ required: true }]}>
+          <Form.Item
+            label='Título do acervo'
+            name={['dadosCodigoTombo', 'nome']}
+            rules={[{ required: true }]}
+          >
             <Input placeholder='Título do acervo' disabled />
           </Form.Item>
         </Col>
@@ -160,5 +172,3 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
     </Modal>
   );
 };
-
-export default ModalAdicionarAcervo;

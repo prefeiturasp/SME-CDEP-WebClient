@@ -1,11 +1,11 @@
+import { StopOutlined } from '@ant-design/icons';
 import { Button, Col, DatePicker, Form, Input, Row, Tooltip, notification } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
-import { useForm } from 'antd/es/form/Form';
+import { useForm, useWatch } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
-import { cloneDeep } from 'lodash';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
@@ -27,46 +27,48 @@ import {
 import {
   DESEJA_CANCELAR_ALTERACOES,
   DESEJA_CANCELAR_ATENDIMENTO,
+  DESEJA_CANCELAR_ITEM,
   DESEJA_FINALIZAR_ATENDIMENTO,
+  DESEJA_REMOVER_ACERVO,
   DESEJA_SAIR_MODO_EDICAO,
 } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
-import { AcervoSolicitacaoManualConfirmarDTO } from '~/core/dto/acervo-solicitacao-manual-confirmar-dto';
+import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detalhe-dto';
+import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solicitacao-item-detalhe-resumido-dto';
 import {
+  AcervoSolicitacaoItemManualDTO,
   AcervoSolicitacaoManualDTO,
-  AcervoSolicitacaoManualItemDTO,
 } from '~/core/dto/acervo-solicitacao-manual-dto';
 import { ROUTES } from '~/core/enum/routes';
-import { TipoAtendimentoEnumDisplay } from '~/core/enum/tipo-atendimento-enum';
-import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
-import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions';
+import {
+  SituacaoSolicitacaoItemEnum,
+  SituacaoSolicitacaoItemEnumDisplay,
+} from '~/core/enum/situacao-item-atendimento-enum';
+import { TipoAtendimentoEnum, TipoAtendimentoEnumDisplay } from '~/core/enum/tipo-atendimento-enum';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
-import { formatarDataParaDDMMYYYY } from '~/core/utils/functions';
-import ModalAdicionarAcervo from './components/modal-adicionar-acervo';
+import { formatarDataParaDDMMYYYY, maskTelefone } from '~/core/utils/functions';
+import { ModalAdicionarAcervo } from './components/modal-adicionar-acervo';
 import { InputRfCpf } from './components/rf-cpf';
 
 export const SolicitacaoManual: React.FC = () => {
   const [form] = useForm();
+
   const navigate = useNavigate();
-  const params = useParams();
+  const paramsRoute = useParams();
 
-  const dispatch = useAppDispatch();
-  const nome = Form.useWatch('nome', form);
-  const rfCpfWatch = Form.useWatch('rfCpf', form)?.length;
+  const nome = useWatch(['dadosSolicitante', 'nome'], form);
+  const rfCpfWatch = useWatch(['dadosSolicitante', 'login'], form)?.length;
 
-  const solicitacao = useAppSelector((state) => state.solicitacao);
-  const [acervoSolicitacaoId, setAcervoSolicitacaoId] = useState<number>();
+  const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
+
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [usuarioId, setUsuarioId] = useState<number | null>(null);
-  const [dataSource, setDataSource] = useState<AcervoSolicitacaoManualDTO[]>([]);
-  const [initialValuesModal, setInitialValuesModal] = useState<AcervoSolicitacaoManualDTO | null>(
-    null,
-  );
+  const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemDetalheResumidoDTO[]>([]);
+  const [initialValuesModal, setInitialValuesModal] =
+    useState<AcervoSolicitacaoItemDetalheResumidoDTO>();
+  const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
 
-  const solicitacaoId = params?.id || 0;
-
-  const columns: ColumnsType<AcervoSolicitacaoManualDTO> = [
+  const columns: ColumnsType<AcervoSolicitacaoItemDetalheResumidoDTO> = [
     {
       title: 'N° do tombo/código',
       dataIndex: 'codigo',
@@ -78,21 +80,22 @@ export const SolicitacaoManual: React.FC = () => {
     },
     {
       title: 'Situação',
-      dataIndex: 'situacao',
+      dataIndex: 'situacaoId',
       width: '15%',
+      render: (situacaoId: SituacaoSolicitacaoItemEnum) =>
+        SituacaoSolicitacaoItemEnumDisplay[situacaoId],
     },
     {
       title: 'Tipo de atendimento',
       dataIndex: 'tipoAtendimento',
       width: '10%',
+      render: (tipoAtendimento: TipoAtendimentoEnum) => TipoAtendimentoEnumDisplay[tipoAtendimento],
     },
     {
       title: 'Data da visita',
       dataIndex: 'dataVisita',
       width: '10%',
-      render: (value) => {
-        return formatarDataParaDDMMYYYY(value);
-      },
+      render: (dataVisita) => formatarDataParaDDMMYYYY(dataVisita),
     },
     {
       title: 'Ações',
@@ -116,7 +119,20 @@ export const SolicitacaoManual: React.FC = () => {
                 </Button>
               </Tooltip>
             </Col>
-            {!linha.id && (
+            {linha.id ? (
+              <Col xs={12} md={10}>
+                <Tooltip title='Cancelar acervo'>
+                  <Button type='text'>
+                    <StopOutlined
+                      id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
+                      onClick={() => {
+                        onClickCancelarItemAtendimento(linha.id);
+                      }}
+                    />
+                  </Button>
+                </Tooltip>
+              </Col>
+            ) : (
               <Col xs={12} md={10}>
                 <Tooltip title='Remover acervo'>
                   <Button type='text'>
@@ -125,7 +141,12 @@ export const SolicitacaoManual: React.FC = () => {
                       fontSize={16}
                       id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
                       onClick={() => {
-                        removerAcervo(index, linha);
+                        confirmacao({
+                          content: DESEJA_REMOVER_ACERVO,
+                          onOk() {
+                            removerAcervo(index);
+                          },
+                        });
                       }}
                     />
                   </Button>
@@ -138,44 +159,45 @@ export const SolicitacaoManual: React.FC = () => {
     },
   ];
 
-  const carregarDados = () => {
-    acervoSolicitacaoService
-      .obterDetalhesAcervoSolicitacaoManual(acervoSolicitacaoId)
-      .then((resposta) => {
-        const dados = resposta?.dados;
-        const dadosSolicitante = dados?.dadosSolicitante;
+  const carregarDados = useCallback(async () => {
+    const resposta = await acervoSolicitacaoService.obterDetalhesParaAtendimentoSolicitacoesPorId(
+      acervoSolicitacaoId,
+    );
 
-        const novoItem = dados.itens.map((item) => {
-          return {
-            ...item,
-            tipoAtendimento: TipoAtendimentoEnumDisplay[item.tipoAtendimento],
-          };
-        });
+    if (resposta.sucesso) {
+      const dadosSolicitante = resposta.dados.dadosSolicitante;
+      dadosSolicitante.telefone = dadosSolicitante?.telefone
+        ? maskTelefone(dadosSolicitante.telefone)
+        : '';
 
-        setDataSource(novoItem);
-        form.setFieldsValue({
-          rfCpf: dados.responsavelRf,
-          nome: dadosSolicitante.nome,
-          telefone: dadosSolicitante.telefone,
-          email: dadosSolicitante.email,
-          endereco: dadosSolicitante.endereco,
-          dataSolicitacao: dayjs(dados?.dataSolicitacao),
-        });
-      });
-  };
+      const dataSolicitacao = resposta.dados.dataSolicitacao
+        ? dayjs(resposta.dados.dataSolicitacao)
+        : '';
 
-  const removerAcervo = (index: number, linha: AcervoSolicitacaoManualDTO) => {
+      const dadosMapeados: AcervoSolicitacaoDetalheDTO = {
+        ...resposta.dados,
+        dadosSolicitante,
+        dataSolicitacao,
+      };
+      setFormInitialValues(dadosMapeados);
+      setDataSource(dadosMapeados.itens);
+    }
+  }, [acervoSolicitacaoId]);
+
+  useEffect(() => {
+    if (acervoSolicitacaoId) {
+      carregarDados();
+    }
+  }, [carregarDados, acervoSolicitacaoId]);
+
+  useEffect(() => {
+    form.resetFields();
+  }, [form, formInitialValues]);
+
+  const removerAcervo = (index: number) => {
     const acervos = [...dataSource];
     acervos.splice(index, 1);
     setDataSource(acervos);
-
-    const acervosSelecionados = [...solicitacao.acervosSelecionados];
-
-    const novaListaAcervosSelecionados = acervosSelecionados.filter(
-      (acervoId) => acervoId !== linha?.id,
-    );
-
-    dispatch(setAcervosSelecionados(novaListaAcervosSelecionados));
   };
 
   const onClickVoltar = () => {
@@ -220,54 +242,76 @@ export const SolicitacaoManual: React.FC = () => {
     });
   };
 
-  useEffect(() => {
-    if (acervoSolicitacaoId) {
-      carregarDados();
-    }
-  }, [acervoSolicitacaoId]);
+  const onClickCancelarItemAtendimento = async (acervoSolicitacaoItemId: number) => {
+    confirmacao({
+      content: DESEJA_CANCELAR_ITEM,
+      onOk: async () => {
+        const resultado = await acervoSolicitacaoService.cancelarItemAtendimento(
+          acervoSolicitacaoItemId,
+        );
+
+        if (resultado.sucesso) {
+          notification.success({
+            message: 'Sucesso',
+            description: 'Item cancelado com sucesso',
+          });
+          carregarDados();
+        }
+      },
+    });
+  };
 
   const onClickConfirmarAtendimento = async () => {
     if (form.isFieldsTouched()) {
       form.validateFields().then(async () => {
-        const dataSolicitacao = form.getFieldValue('dataSolicitacao');
+        const values = form.getFieldsValue(true);
 
-        const valoresParaSalvar: AcervoSolicitacaoManualItemDTO[] = dataSource.map((item) => {
-          return {
-            id: item.id || 0,
-            acervoId: item.acervoId,
-            tipoAtendimento: item.tipoAtendimentoId,
-            situacao: item.situacaoId,
-            dataVisita: item.dataVisita || null,
-          };
-        });
+        const dataSolicitacao = values?.dataSolicitacao;
 
-        const params: AcervoSolicitacaoManualConfirmarDTO = {
-          usuarioId,
+        const endpoint = acervoSolicitacaoId
+          ? acervoSolicitacaoService.alterarAtendimentoManual
+          : acervoSolicitacaoService.confirmarAtendimentoManual;
+
+        const itens: AcervoSolicitacaoItemManualDTO[] = dataSource.map(
+          (item: AcervoSolicitacaoItemDetalheResumidoDTO): AcervoSolicitacaoItemManualDTO => {
+            const linha: AcervoSolicitacaoItemManualDTO = {
+              acervoId: item.acervoId,
+              tipoAtendimento: item.tipoAtendimento,
+            };
+
+            if (item.id) {
+              linha.id = item.id;
+            }
+
+            if (item.dataVisita) {
+              linha.dataVisita = item.dataVisita;
+            }
+
+            return linha;
+          },
+        );
+
+        const params: AcervoSolicitacaoManualDTO = {
+          usuarioId: values?.dadosSolicitante?.id,
           dataSolicitacao,
-          itens: cloneDeep(valoresParaSalvar),
+          itens,
         };
 
-        if (solicitacaoId) {
-          acervoSolicitacaoService.alterarAtendimentoManual(params).then((resposta) => {
-            setAcervoSolicitacaoId(resposta.dados);
-            navigate(`${ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL}/${resposta.dados}`);
-            notification.success({
-              message: 'Sucesso',
-              description: 'Atendimento confirmado com sucesso',
-            });
-            form.resetFields();
-          });
-        } else {
-          acervoSolicitacaoService.confirmarAtendimentoManual(params).then((resposta) => {
-            setAcervoSolicitacaoId(resposta.dados);
-            navigate(`${ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL}/${resposta.dados}`);
-            notification.success({
-              message: 'Sucesso',
-              description: 'Atendimento confirmado com sucesso',
-            });
-            form.resetFields();
-          });
+        if (acervoSolicitacaoId) {
+          params.id = acervoSolicitacaoId;
         }
+
+        endpoint(params).then((resposta) => {
+          if (resposta.sucesso) {
+            notification.success({
+              message: 'Sucesso',
+              description: 'Atendimento confirmado com sucesso',
+            });
+
+            const newId = resposta.dados;
+            navigate(`${ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL}/${newId}`);
+          }
+        });
       });
     }
   };
@@ -295,7 +339,13 @@ export const SolicitacaoManual: React.FC = () => {
 
   return (
     <Col>
-      <Form form={form} layout='vertical' autoComplete='off' validateMessages={validateMessages}>
+      <Form
+        form={form}
+        layout='vertical'
+        autoComplete='off'
+        validateMessages={validateMessages}
+        initialValues={formInitialValues}
+      >
         <HeaderPage title='Atendimento de Solicitações'>
           <Col span={24}>
             <Row gutter={[8, 8]}>
@@ -360,29 +410,29 @@ export const SolicitacaoManual: React.FC = () => {
           <Col xs={24}>
             <Row gutter={[16, 8]}>
               <Col xs={24} md={8}>
-                <InputRfCpf setUsuarioId={setUsuarioId} />
+                <InputRfCpf inputProps={{ disabled: !!acervoSolicitacaoId }} />
               </Col>
 
               <Col xs={24} md={16}>
-                <Form.Item label='Nome do solicitante' name='nome'>
+                <Form.Item label='Nome do solicitante' name={['dadosSolicitante', 'nome']}>
                   <Input type='text' placeholder='Nome do solicitante' disabled />
                 </Form.Item>
               </Col>
 
               <Col xs={24} md={12}>
-                <Form.Item label='Telefone' name='telefone'>
+                <Form.Item label='Telefone' name={['dadosSolicitante', 'telefone']}>
                   <Input type='text' placeholder='Telefone' disabled />
                 </Form.Item>
               </Col>
 
               <Col xs={24} md={12}>
-                <Form.Item label='E-mail' name='email'>
+                <Form.Item label='E-mail' name={['dadosSolicitante', 'email']}>
                   <Input type='text' placeholder='E-mail' disabled />
                 </Form.Item>
               </Col>
 
               <Col xs={24} md={16}>
-                <Form.Item label='Endereço' name='endereco'>
+                <Form.Item label='Endereço' name={['dadosSolicitante', 'endereco']}>
                   <Input type='text' placeholder='Endereço' disabled />
                 </Form.Item>
               </Col>
@@ -408,7 +458,7 @@ export const SolicitacaoManual: React.FC = () => {
                   <ButtonPrimary
                     id={CDEP_BUTTON_ADICIONAR_ACERVOS}
                     onClick={() => {
-                      setInitialValuesModal(null);
+                      setInitialValuesModal(undefined);
                       setIsModalOpen(true);
                     }}
                     disabled={!nome || !rfCpfWatch}

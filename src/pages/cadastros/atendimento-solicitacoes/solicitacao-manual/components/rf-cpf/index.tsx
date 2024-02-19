@@ -1,22 +1,19 @@
 import { Form, FormItemProps, Input, InputProps } from 'antd';
 import useFormInstance from 'antd/es/form/hooks/useFormInstance';
 import dayjs from 'dayjs';
-import React, { Dispatch, SetStateAction, useState } from 'react';
+import React, { useState } from 'react';
 import usuarioService from '~/core/services/usuario-service';
 
 type InputRfCpfProps = {
   inputProps?: InputProps;
   formItemProps?: FormItemProps;
-  setUsuarioId: Dispatch<SetStateAction<number | null>>;
 };
 
-export const InputRfCpf: React.FC<InputRfCpfProps> = ({
-  inputProps,
-  formItemProps,
-  setUsuarioId,
-}) => {
+export const InputRfCpf: React.FC<InputRfCpfProps> = ({ inputProps, formItemProps }) => {
   const form = useFormInstance();
-  const rfCpf = Form.useWatch('rfCpf', form);
+
+  const rfCpf = Form.useWatch(['dadosSolicitante', 'login'], form);
+
   const [loading, setLoading] = useState<boolean>(false);
 
   const buscarRfCpf = async () => {
@@ -26,22 +23,15 @@ export const InputRfCpf: React.FC<InputRfCpfProps> = ({
         const dataAtual = dayjs();
         const dados = resposta?.dados;
 
-        setUsuarioId(dados.id);
-
-        form.setFieldsValue({
-          nome: dados.nome,
-          telefone: dados.telefone,
-          email: dados.email,
-          endereco: dados.endereco,
-          dataSolicitacao: dataAtual,
-        });
+        form.setFieldValue('dadosSolicitante', { ...dados });
+        form.setFieldValue('dataSolicitacao', dataAtual);
       }
     });
     setLoading(false);
   };
 
   return (
-    <Form.Item label='RF ou CPF' name='rfCpf' {...formItemProps}>
+    <Form.Item label='RF ou CPF' name={['dadosSolicitante', 'login']} {...formItemProps}>
       <Input.Search
         loading={loading}
         onSearch={buscarRfCpf}

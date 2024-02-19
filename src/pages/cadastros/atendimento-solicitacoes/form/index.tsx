@@ -111,11 +111,11 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       dataIndex: 'tipoAtendimento',
       width: '10%',
       render: (value, linha) => {
-        if (value && validarSituacaoLinha(linha.situacaoId)) {
+        if (value && linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) {
           return TipoAtendimentoEnum?.[value];
         }
 
-        if (validarSituacaoLinha(linha.situacaoId)) return;
+        if (linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) return;
 
         return (
           <SelectTipoAtendimento
@@ -187,7 +187,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
           type='text'
           id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
           onClick={() => onClickCancelarItemAtendimento(linha.id)}
-          disabled={validarSituacaoLinha(linha.situacaoId) || desabilitarCampos}
+          disabled={
+            (linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) || desabilitarCampos
+          }
         >
           Cancelar item
         </ButtonPrimary>
@@ -222,13 +224,15 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   };
 
   const carregarDados = useCallback(async () => {
-    const resposta = await acervoSolicitacaoService.obterDetalhesAcervoSolicitacao(
+    const resposta = await acervoSolicitacaoService.obterDetalhesParaAtendimentoSolicitacoesPorId(
       acervoSolicitacaoId,
     );
 
     if (resposta.sucesso) {
       const dadosSolicitante = resposta.dados.dadosSolicitante;
-      dadosSolicitante.cpf = dadosSolicitante?.cpf ? formatterCPFMask(dadosSolicitante.cpf) : '';
+      dadosSolicitante.login = dadosSolicitante?.login
+        ? formatterCPFMask(dadosSolicitante.login)
+        : '';
       dadosSolicitante.telefone = dadosSolicitante?.telefone
         ? maskTelefone(dadosSolicitante.telefone)
         : '';
@@ -458,7 +462,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               {ehUsuarioExteno && (
                 <>
                   <Col xs={24} md={8}>
-                    <Form.Item label='CPF' name={['dadosSolicitante', 'cpf']}>
+                    <Form.Item label='CPF' name={['dadosSolicitante', 'login']}>
                       <Input type='text' placeholder='CPF' disabled />
                     </Form.Item>
                   </Col>

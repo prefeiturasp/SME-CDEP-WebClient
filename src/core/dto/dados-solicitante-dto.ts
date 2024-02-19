@@ -1,12 +1,12 @@
 import { TipoUsuario } from '../enum/tipo-usuario-enum';
 
 export type DadosSolicitanteDTO = {
+  id: number;
   nome: string;
-  cpf: string;
+  login: string;
   telefone: string;
   endereco: string;
   email: string;
-  tipo: TipoUsuario;
+  tipo: string;
   tipoId: TipoUsuario;
-  id: number;
 };

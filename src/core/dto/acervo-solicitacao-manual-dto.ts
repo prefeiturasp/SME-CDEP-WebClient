@@ -1,22 +1,21 @@
-import { SituacaoSolicitacaoManualEnum } from '../enum/situacao-atendimento-manual-enum';
 import { TipoAtendimentoEnum } from '../enum/tipo-atendimento-enum';
 
-export type AcervoSolicitacaoManualDTO = {
-  id: number | null;
-  acervoId: number | null;
-  codigo: string | null;
-  titulo: string | null;
-  situacao: string;
-  situacaoId: SituacaoSolicitacaoManualEnum;
+export type AcervoSolicitacaoItemManualDTO = {
+  id?: number;
+  acervoId: number;
+  tipoAtendimento: TipoAtendimentoEnum;
   dataVisita?: string;
-  tipoAtendimento: string;
-  tipoAtendimentoId: TipoAtendimentoEnum;
 };
 
-export type AcervoSolicitacaoManualItemDTO = {
-  id?: number | null;
-  acervoId: number | null;
-  situacao: number | null;
-  dataVisita?: string | null;
-  tipoAtendimento: number;
+export type AcervoSolicitacaoManualDTO = {
+  id?: number;
+  usuarioId?: number;
+  dataSolicitacao: string;
+  itens: AcervoSolicitacaoItemManualDTO[];
+};
+
+export type AcervoSolicitacaoManualFormDTO = {
+  rfCpf: number;
+  tipoAtendimento: TipoAtendimentoEnum;
+  dataVisita?: string;
 };

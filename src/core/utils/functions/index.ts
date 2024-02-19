@@ -14,8 +14,10 @@ export const formatarDataParaDDMMYYYY = (
   data: string | null | undefined | Dayjs,
 ): string | undefined => (data ? dayjs(data).format('DD/MM/YYYY') : undefined);
 
-export const formatarDataPorFormato = (data: string | null | undefined, formato: string): string =>
-  data ? dayjs(data).format(formato || 'DD/MM/YYYY') : '';
+export const formatarDataPorFormato = (
+  data: string | null | undefined | Dayjs,
+  formato: string,
+): string => (data ? dayjs(data).format(formato || 'DD/MM/YYYY') : '');
 
 export const downloadBlob = (data: any, fileName: string) => {
   const a = document.createElement('a');

@@ -6,35 +6,40 @@ import { obterCodigoTombo } from '~/core/services/acervo-service';
 type InputCodigoTomboProps = {
   inputProps?: InputProps;
   formItemProps?: FormItemProps;
-  setDadosCodigoTombo?: any;
 };
 
 export const InputCodigoTombo: React.FC<InputCodigoTomboProps> = ({
   inputProps,
   formItemProps,
-  setDadosCodigoTombo,
 }) => {
   const form = useFormInstance();
-  const codigo = Form.useWatch('codigo', form);
+
   const [loading, setLoading] = useState<boolean>(false);
 
-  const buscarTomboCodigo = async () => {
+  const buscarTomboCodigo = async (codigo: string) => {
     setLoading(true);
     obterCodigoTombo(codigo).then((resposta) => {
       if (resposta.sucesso) {
         const dados = resposta?.dados;
 
-        form.setFieldsValue({ titulo: dados.nome });
-        setDadosCodigoTombo(dados);
+        form.setFieldValue('dadosCodigoTombo', { ...dados });
+      } else {
+        form.setFieldValue('dadosCodigoTombo', undefined);
       }
     });
     setLoading(false);
   };
 
+  const limparFormModal = (e: any) => {
+    form.setFieldValue('dadosCodigoTombo', { codigo: e?.target?.value });
+    form.setFieldValue('dataVisita', '');
+    form.setFieldValue('tipoAtendimento', undefined);
+  };
+
   return (
     <Form.Item
       label='N° do tombo/código'
-      name='codigo'
+      name={['dadosCodigoTombo', 'codigo']}
       rules={[{ required: true }]}
       {...formItemProps}
     >
@@ -43,6 +48,7 @@ export const InputCodigoTombo: React.FC<InputCodigoTomboProps> = ({
         loading={loading}
         onSearch={buscarTomboCodigo}
         placeholder='N° do tombo/código'
+        onChange={limparFormModal}
         {...inputProps}
       />
     </Form.Item>
