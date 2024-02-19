@@ -404,7 +404,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                   id={CDEP_BUTTON_FINALIZAR}
                   style={{ fontWeight: 700 }}
                   disabled={
-                    formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA
+                    formInitialValues?.situacaoId ===
+                      SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA ||
+                    formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.CANCELADO
                   }
                   onClick={onClickFinalizarAtendimento}
                 >
@@ -499,7 +501,11 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 <Space.Compact style={{ width: '100%' }}>
                   <SelectResponsaveis
                     formItemProps={{ style: { width: '100%' } }}
-                    selectProps={{ style: { width: '100%' } }}
+                    selectProps={{
+                      style: { width: '100%' },
+                      disabled:
+                        formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.CANCELADO,
+                    }}
                   />
 
                   <Button
@@ -507,6 +513,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                     type='primary'
                     id={CDEP_BUTTON_ASSUMIR_ATENDIMENTO}
                     onClick={() => onClickAssumirAtendimento()}
+                    disabled={
+                      formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.CANCELADO
+                    }
                   >
                     Assumir atendimento
                   </Button>

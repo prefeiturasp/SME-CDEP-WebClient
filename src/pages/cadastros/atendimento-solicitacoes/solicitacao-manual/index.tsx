@@ -1,10 +1,9 @@
 import { StopOutlined } from '@ant-design/icons';
-import { Button, Col, DatePicker, Form, Input, Row, Tooltip, notification } from 'antd';
+import { Col, DatePicker, Form, Input, Row } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import { useForm, useWatch } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
-import dayjs from 'dayjs';
-import 'dayjs/locale/pt-br';
+import _, { cloneDeep } from 'lodash';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -14,10 +13,10 @@ import ButtonSecundary from '~/components/lib/button/secundary';
 import CardContent from '~/components/lib/card-content';
 import DataTable from '~/components/lib/data-table';
 import HeaderPage from '~/components/lib/header-page';
+import { notification } from '~/components/lib/notification';
 import {
   CDEP_BUTTON_ADICIONAR_ACERVOS,
   CDEP_BUTTON_CANCELAR,
-  CDEP_BUTTON_CANCELAR_ATENDIMENTO,
   CDEP_BUTTON_CONFIRMAR,
   CDEP_BUTTON_EDITAR,
   CDEP_BUTTON_FINALIZAR,
@@ -26,13 +25,13 @@ import {
 } from '~/core/constants/ids/button/intex';
 import {
   DESEJA_CANCELAR_ALTERACOES,
-  DESEJA_CANCELAR_ATENDIMENTO,
   DESEJA_CANCELAR_ITEM,
   DESEJA_FINALIZAR_ATENDIMENTO,
   DESEJA_REMOVER_ACERVO,
   DESEJA_SAIR_MODO_EDICAO,
 } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
+import { dayjs } from '~/core/date/dayjs';
 import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detalhe-dto';
 import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solicitacao-item-detalhe-resumido-dto';
 import {
@@ -53,6 +52,7 @@ import { InputRfCpf } from './components/rf-cpf';
 
 export const SolicitacaoManual: React.FC = () => {
   const [form] = useForm();
+  const maxDate = dayjs();
 
   const navigate = useNavigate();
   const paramsRoute = useParams();
@@ -63,10 +63,20 @@ export const SolicitacaoManual: React.FC = () => {
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-  const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemDetalheResumidoDTO[]>([]);
   const [initialValuesModal, setInitialValuesModal] =
     useState<AcervoSolicitacaoItemDetalheResumidoDTO>();
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
+
+  const validarSituacaoLinha = (situacaoId: number) => {
+    switch (situacaoId) {
+      case SituacaoSolicitacaoItemEnum.CANCELADO:
+      case SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE:
+        return true;
+
+      default:
+        return false;
+    }
+  };
 
   const columns: ColumnsType<AcervoSolicitacaoItemDetalheResumidoDTO> = [
     {
@@ -103,54 +113,52 @@ export const SolicitacaoManual: React.FC = () => {
       width: '10%',
       render: (_, linha, index: number) => {
         return (
-          <Row>
-            <Col xs={12} md={10}>
-              <Tooltip title='Editar acervo'>
-                <Button type='text'>
-                  <FaEdit
-                    cursor='pointer'
-                    fontSize={16}
-                    id={CDEP_BUTTON_EDITAR}
-                    onClick={() => {
-                      setInitialValuesModal(linha);
-                      setIsModalOpen(true);
-                    }}
-                  />
-                </Button>
-              </Tooltip>
+          <Row wrap={false} gutter={[8, 8]}>
+            <Col>
+              <ButtonSecundary
+                icon={<FaEdit />}
+                size='small'
+                id={`${CDEP_BUTTON_EDITAR}_${index}`}
+                onClick={() => {
+                  setInitialValuesModal(linha);
+                  setIsModalOpen(true);
+                }}
+              >
+                Editar
+              </ButtonSecundary>
             </Col>
+
             {linha.id ? (
-              <Col xs={12} md={10}>
-                <Tooltip title='Cancelar acervo'>
-                  <Button type='text'>
-                    <StopOutlined
-                      id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
-                      onClick={() => {
-                        onClickCancelarItemAtendimento(linha.id);
-                      }}
-                    />
-                  </Button>
-                </Tooltip>
+              <Col>
+                <ButtonSecundary
+                  icon={<StopOutlined />}
+                  size='small'
+                  id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
+                  onClick={() => {
+                    onClickCancelarItemAtendimento(linha.id);
+                  }}
+                  disabled={linha.situacaoId && validarSituacaoLinha(linha.situacaoId)}
+                >
+                  Cancelar item
+                </ButtonSecundary>
               </Col>
             ) : (
-              <Col xs={12} md={10}>
-                <Tooltip title='Remover acervo'>
-                  <Button type='text'>
-                    <FaTrashAlt
-                      cursor='pointer'
-                      fontSize={16}
-                      id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
-                      onClick={() => {
-                        confirmacao({
-                          content: DESEJA_REMOVER_ACERVO,
-                          onOk() {
-                            removerAcervo(index);
-                          },
-                        });
-                      }}
-                    />
-                  </Button>
-                </Tooltip>
+              <Col>
+                <ButtonSecundary
+                  size='small'
+                  icon={<FaTrashAlt />}
+                  id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
+                  onClick={() => {
+                    confirmacao({
+                      content: DESEJA_REMOVER_ACERVO,
+                      onOk() {
+                        removerAcervo(index);
+                      },
+                    });
+                  }}
+                >
+                  Remover item
+                </ButtonSecundary>
               </Col>
             )}
           </Row>
@@ -180,7 +188,6 @@ export const SolicitacaoManual: React.FC = () => {
         dataSolicitacao,
       };
       setFormInitialValues(dadosMapeados);
-      setDataSource(dadosMapeados.itens);
     }
   }, [acervoSolicitacaoId]);
 
@@ -195,9 +202,11 @@ export const SolicitacaoManual: React.FC = () => {
   }, [form, formInitialValues]);
 
   const removerAcervo = (index: number) => {
-    const acervos = [...dataSource];
+    const values = form.getFieldsValue(true);
+
+    const acervos = [...values.itens];
     acervos.splice(index, 1);
-    setDataSource(acervos);
+    form.setFieldValue('itens', acervos);
   };
 
   const onClickVoltar = () => {
@@ -219,27 +228,9 @@ export const SolicitacaoManual: React.FC = () => {
         content: DESEJA_CANCELAR_ALTERACOES,
         onOk() {
           form.resetFields();
-          setDataSource([]);
         },
       });
     }
-  };
-
-  const onClickCancelarAtendimento = async () => {
-    confirmacao({
-      content: DESEJA_CANCELAR_ATENDIMENTO,
-      onOk() {
-        // acervoSolicitacaoService.cancelarAtendimento(acervoSolicitacaoId).then((resposta) => {
-        //   if (resposta.sucesso) {
-        //     navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
-        //     notification.success({
-        //       message: 'Sucesso',
-        //       description: 'Atendimento cancelado com sucesso',
-        //     });
-        //   }
-        // });
-      },
-    });
   };
 
   const onClickCancelarItemAtendimento = async (acervoSolicitacaoItemId: number) => {
@@ -262,17 +253,19 @@ export const SolicitacaoManual: React.FC = () => {
   };
 
   const onClickConfirmarAtendimento = async () => {
-    if (form.isFieldsTouched()) {
-      form.validateFields().then(async () => {
-        const values = form.getFieldsValue(true);
+    const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
 
-        const dataSolicitacao = values?.dataSolicitacao;
+    const semAlteracaoItens = _.isEqual(values?.itens, formInitialValues?.itens);
+
+    if (form.isFieldsTouched() || !semAlteracaoItens) {
+      form.validateFields().then(async () => {
+        const dataSolicitacao = cloneDeep(values?.dataSolicitacao);
 
         const endpoint = acervoSolicitacaoId
           ? acervoSolicitacaoService.alterarAtendimentoManual
           : acervoSolicitacaoService.confirmarAtendimentoManual;
 
-        const itens: AcervoSolicitacaoItemManualDTO[] = dataSource.map(
+        const itens: AcervoSolicitacaoItemManualDTO[] = values.itens.map(
           (item: AcervoSolicitacaoItemDetalheResumidoDTO): AcervoSolicitacaoItemManualDTO => {
             const linha: AcervoSolicitacaoItemManualDTO = {
               acervoId: item.acervoId,
@@ -293,7 +286,7 @@ export const SolicitacaoManual: React.FC = () => {
 
         const params: AcervoSolicitacaoManualDTO = {
           usuarioId: values?.dadosSolicitante?.id,
-          dataSolicitacao,
+          dataSolicitacao: dayjs(dataSolicitacao).format('YYYY-MM-DD'),
           itens,
         };
 
@@ -308,8 +301,12 @@ export const SolicitacaoManual: React.FC = () => {
               description: 'Atendimento confirmado com sucesso',
             });
 
-            const newId = resposta.dados;
-            navigate(`${ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL}/${newId}`);
+            if (acervoSolicitacaoId) {
+              carregarDados();
+            } else {
+              const newId = resposta.dados;
+              navigate(`${ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL}/${newId}`);
+            }
           }
         });
       });
@@ -320,15 +317,15 @@ export const SolicitacaoManual: React.FC = () => {
     confirmacao({
       content: DESEJA_FINALIZAR_ATENDIMENTO,
       onOk() {
-        // acervoSolicitacaoService.finalizarAtendimento(acervoSolicitacaoId).then((resposta) => {
-        //   if (resposta.sucesso) {
-        //     navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
-        //     notification.success({
-        //       message: 'Sucesso',
-        //       description: 'Atendimento finalizado com sucesso',
-        //     });
-        //   }
-        // });
+        acervoSolicitacaoService.finalizarAtendimento(acervoSolicitacaoId).then((resposta) => {
+          if (resposta.sucesso) {
+            navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
+            notification.success({
+              message: 'Sucesso',
+              description: 'Atendimento finalizado com sucesso',
+            });
+          }
+        });
       },
     });
   };
@@ -348,61 +345,54 @@ export const SolicitacaoManual: React.FC = () => {
       >
         <HeaderPage title='Atendimento de Solicitações'>
           <Col span={24}>
-            <Row gutter={[8, 8]}>
-              <Col>
-                <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
-              </Col>
-              <Col>
-                <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
-                  {() => (
-                    <ButtonSecundary
-                      id={CDEP_BUTTON_CANCELAR}
-                      onClick={() => onClickCancelar()}
-                      disabled={!form.isFieldsTouched()}
-                    >
-                      Cancelar
-                    </ButtonSecundary>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col>
-                <Button
-                  block
-                  htmlType='submit'
-                  id={CDEP_BUTTON_FINALIZAR}
-                  style={{ fontWeight: 700 }}
-                  disabled
-                  onClick={onClickFinalizarAtendimento}
-                >
-                  Finalizar
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  block
-                  id={CDEP_BUTTON_CANCELAR_ATENDIMENTO}
-                  style={{ fontWeight: 700 }}
-                  disabled
-                  // disabled={podeCancelarAtendimento()}
-                  onClick={onClickCancelarAtendimento}
-                >
-                  Cancelar solicitação
-                </Button>
-              </Col>
-              <Col>
-                <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
-                  {() => (
-                    <ButtonPrimary
-                      id={CDEP_BUTTON_CONFIRMAR}
-                      onClick={onClickConfirmarAtendimento}
-                      disabled={!form.isFieldsTouched()}
-                    >
-                      Confirmar
-                    </ButtonPrimary>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
+            <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
+              {(form) => {
+                const values = form.getFieldsValue(true);
+
+                const semAlteracaoItens = _.isEqual(values?.itens, formInitialValues?.itens);
+
+                const temItemSemId = values?.itens?.find(
+                  (item: AcervoSolicitacaoItemDetalheResumidoDTO) => item?.id < 1,
+                );
+
+                return (
+                  <Row gutter={[8, 8]}>
+                    <Col>
+                      <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
+                    </Col>
+
+                    <Col>
+                      <ButtonSecundary
+                        id={CDEP_BUTTON_CANCELAR}
+                        onClick={() => onClickCancelar()}
+                        disabled={!form.isFieldsTouched()}
+                      >
+                        Cancelar
+                      </ButtonSecundary>
+                    </Col>
+                    <Col>
+                      <ButtonSecundary
+                        id={CDEP_BUTTON_FINALIZAR}
+                        style={{ fontWeight: 700 }}
+                        disabled={!!temItemSemId}
+                        onClick={onClickFinalizarAtendimento}
+                      >
+                        Finalizar
+                      </ButtonSecundary>
+                    </Col>
+                    <Col>
+                      <ButtonPrimary
+                        id={CDEP_BUTTON_CONFIRMAR}
+                        onClick={onClickConfirmarAtendimento}
+                        disabled={!form.isFieldsTouched() && semAlteracaoItens}
+                      >
+                        Confirmar
+                      </ButtonPrimary>
+                    </Col>
+                  </Row>
+                );
+              }}
+            </Form.Item>
           </Col>
         </HeaderPage>
 
@@ -445,6 +435,7 @@ export const SolicitacaoManual: React.FC = () => {
                     placeholder='Selecione uma data'
                     locale={localeDatePicker}
                     disabled={!nome || !rfCpfWatch}
+                    maxDate={maxDate}
                   />
                 </Form.Item>
               </Col>
@@ -470,18 +461,26 @@ export const SolicitacaoManual: React.FC = () => {
             </Col>
 
             <ModalAdicionarAcervo
-              dataSource={dataSource}
+              formSolicitacaoManual={form}
               isModalOpen={isModalOpen}
-              setDataSource={setDataSource}
               setIsModalOpen={setIsModalOpen}
               initialValuesModal={initialValuesModal}
             />
-
             <Col xs={24}>
               <Form.Item shouldUpdate>
                 {() => {
+                  const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
+                  const dataSource: AcervoSolicitacaoItemDetalheResumidoDTO[] = values.itens?.length
+                    ? values.itens
+                    : [];
+
                   return (
-                    <DataTable columns={columns} dataSource={dataSource} showOrderButton={false} />
+                    <DataTable
+                      columns={columns}
+                      dataSource={dataSource}
+                      showOrderButton={false}
+                      pagination={false}
+                    />
                   );
                 }}
               </Form.Item>
