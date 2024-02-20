@@ -47,9 +47,9 @@ import { TipoAtendimentoEnum, TipoAtendimentoEnumDisplay } from '~/core/enum/tip
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
 import { formatarDataParaDDMMYYYY, maskTelefone } from '~/core/utils/functions';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { ModalAdicionarAcervo } from './components/modal-adicionar-acervo';
 import { InputRfCpf } from './components/rf-cpf';
-import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 export const SolicitacaoManual: React.FC = () => {
   const [form] = useForm();
@@ -355,6 +355,7 @@ export const SolicitacaoManual: React.FC = () => {
 
                 const semAlteracaoItens = _.isEqual(values?.itens, formInitialValues?.itens);
 
+                const temItens = values?.itens?.length;
                 const temItemSemId = values?.itens?.find(
                   (item: AcervoSolicitacaoItemDetalheResumidoDTO) => item?.id < 1,
                 );
@@ -378,7 +379,7 @@ export const SolicitacaoManual: React.FC = () => {
                       <ButtonSecundary
                         id={CDEP_BUTTON_FINALIZAR}
                         style={{ fontWeight: 700 }}
-                        disabled={!!temItemSemId || desabilitarCampos}
+                        disabled={!temItens || !!temItemSemId || desabilitarCampos}
                         onClick={onClickFinalizarAtendimento}
                       >
                         Finalizar
@@ -388,7 +389,7 @@ export const SolicitacaoManual: React.FC = () => {
                       <ButtonPrimary
                         id={CDEP_BUTTON_CONFIRMAR}
                         onClick={onClickConfirmarAtendimento}
-                        disabled={!form.isFieldsTouched() && semAlteracaoItens}
+                        disabled={(!form.isFieldsTouched() && semAlteracaoItens) || !temItens}
                       >
                         Confirmar
                       </ButtonPrimary>
