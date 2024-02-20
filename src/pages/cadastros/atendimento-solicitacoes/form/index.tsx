@@ -67,7 +67,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   }>();
 
   const usuarioLogin = auth?.usuarioLogin;
-  const ehUsuarioExteno = formInitialValues?.dadosSolicitante.tipoId != TipoUsuario.CORESSO;
+  const ehUsuarioExterno = formInitialValues?.dadosSolicitante.tipoId != TipoUsuario.CORESSO;
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
   const atendimentoFinalizado =
@@ -472,7 +472,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 </Form.Item>
               </Col>
 
-              {ehUsuarioExteno && (
+              {ehUsuarioExterno && (
                 <>
                   <Col xs={24} md={8}>
                     <Form.Item label='CPF' name={['dadosSolicitante', 'login']}>
@@ -494,7 +494,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 </Form.Item>
               </Col>
 
-              {ehUsuarioExteno && (
+              {ehUsuarioExterno && (
                 <Col xs={24} md={16}>
                   <Form.Item label='Endereço' name={['dadosSolicitante', 'endereco']}>
                     <Input type='text' placeholder='Endereço' disabled />
