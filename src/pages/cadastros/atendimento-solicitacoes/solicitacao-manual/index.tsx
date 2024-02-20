@@ -44,6 +44,7 @@ import {
   SituacaoSolicitacaoItemEnumDisplay,
 } from '~/core/enum/situacao-item-atendimento-enum';
 import { TipoAtendimentoEnum, TipoAtendimentoEnumDisplay } from '~/core/enum/tipo-atendimento-enum';
+import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
 import { formatarDataParaDDMMYYYY, maskTelefone } from '~/core/utils/functions';
@@ -57,18 +58,17 @@ export const SolicitacaoManual: React.FC = () => {
 
   const navigate = useNavigate();
   const paramsRoute = useParams();
-
+  const { desabilitarCampos } = useContext(PermissaoContext);
   const nome = useWatch(['dadosSolicitante', 'nome'], form);
   const rfCpfWatch = useWatch(['dadosSolicitante', 'login'], form)?.length;
-
-  const { desabilitarCampos } = useContext(PermissaoContext);
-
-  const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
-
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [initialValuesModal, setInitialValuesModal] =
     useState<AcervoSolicitacaoItemDetalheResumidoDTO>();
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
+
+  const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
+  const ehUsuarioExterno =
+    form.getFieldsValue(true)?.dadosSolicitante?.tipoId != TipoUsuario.CORESSO;
 
   const validarSituacaoLinha = (situacaoId: number) => {
     switch (situacaoId) {
@@ -176,6 +176,16 @@ export const SolicitacaoManual: React.FC = () => {
     );
 
     if (resposta.sucesso) {
+      if (resposta.dados.situacaoId === SituacaoSolicitacaoItemEnum.CANCELADO) {
+        navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
+        notification.success({
+          message: 'Sucesso',
+          description: 'Atendimento cancelado com sucesso',
+        });
+
+        return;
+      }
+
       const dadosSolicitante = resposta.dados.dadosSolicitante;
       dadosSolicitante.telefone = dadosSolicitante?.telefone
         ? maskTelefone(dadosSolicitante.telefone)
@@ -419,11 +429,13 @@ export const SolicitacaoManual: React.FC = () => {
                 </Form.Item>
               </Col>
 
-              <Col xs={24} md={12}>
-                <Form.Item label='Telefone' name={['dadosSolicitante', 'telefone']}>
-                  <Input type='text' placeholder='Telefone' disabled />
-                </Form.Item>
-              </Col>
+              {ehUsuarioExterno && (
+                <Col xs={24} md={12}>
+                  <Form.Item label='Telefone' name={['dadosSolicitante', 'telefone']}>
+                    <Input type='text' placeholder='Telefone' disabled />
+                  </Form.Item>
+                </Col>
+              )}
 
               <Col xs={24} md={12}>
                 <Form.Item label='E-mail' name={['dadosSolicitante', 'email']}>
@@ -431,11 +443,13 @@ export const SolicitacaoManual: React.FC = () => {
                 </Form.Item>
               </Col>
 
-              <Col xs={24} md={16}>
-                <Form.Item label='Endereço' name={['dadosSolicitante', 'endereco']}>
-                  <Input type='text' placeholder='Endereço' disabled />
-                </Form.Item>
-              </Col>
+              {ehUsuarioExterno && (
+                <Col xs={24} md={16}>
+                  <Form.Item label='Endereço' name={['dadosSolicitante', 'endereco']}>
+                    <Input type='text' placeholder='Endereço' disabled />
+                  </Form.Item>
+                </Col>
+              )}
 
               <Col xs={24} md={8}>
                 <Form.Item label='Data da solicitação' name='dataSolicitacao'>
