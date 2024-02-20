@@ -360,6 +360,9 @@ export const SolicitacaoManual: React.FC = () => {
                   (item: AcervoSolicitacaoItemDetalheResumidoDTO) => item?.id < 1,
                 );
 
+                const desabilitarConfirmar =
+                  (!form.isFieldsTouched() && semAlteracaoItens) || !temItens;
+
                 return (
                   <Row gutter={[8, 8]}>
                     <Col>
@@ -379,7 +382,9 @@ export const SolicitacaoManual: React.FC = () => {
                       <ButtonSecundary
                         id={CDEP_BUTTON_FINALIZAR}
                         style={{ fontWeight: 700 }}
-                        disabled={!temItens || !!temItemSemId || desabilitarCampos}
+                        disabled={
+                          !temItens || !!temItemSemId || desabilitarCampos || !desabilitarConfirmar
+                        }
                         onClick={onClickFinalizarAtendimento}
                       >
                         Finalizar
@@ -389,7 +394,7 @@ export const SolicitacaoManual: React.FC = () => {
                       <ButtonPrimary
                         id={CDEP_BUTTON_CONFIRMAR}
                         onClick={onClickConfirmarAtendimento}
-                        disabled={(!form.isFieldsTouched() && semAlteracaoItens) || !temItens}
+                        disabled={desabilitarConfirmar}
                       >
                         Confirmar
                       </ButtonPrimary>
