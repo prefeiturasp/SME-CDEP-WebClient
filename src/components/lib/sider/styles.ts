@@ -55,7 +55,6 @@ export const SiderSubMenuContainer = styled(SubMenu)<SiderSubMenuStylePros>`
       width: 100%;
       line-height: 20px !important;
       height: ${(props) => (props?.collapsed ? '60px' : '40px')} !important;
-      color: ${(props) => props?.theme?.token?.colorTextLabel};
 
       ${(props) => props?.isSubMenu && `padding-left: 22px !important;`}
     }
@@ -102,6 +101,10 @@ export const SiderSubMenuContainer = styled(SubMenu)<SiderSubMenuStylePros>`
         color: ${(props) => props.theme?.token?.colorPrimary} !important;
         text-decoration: underline;
       }
+    }
+
+    &:not(.ant-menu-submenu-selected) .ant-menu-submenu-title {
+      color: ${(props) => props?.theme?.token?.colorTextLabel};
     }
   }
 `;
