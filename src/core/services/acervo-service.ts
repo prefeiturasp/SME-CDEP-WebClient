@@ -1,4 +1,5 @@
 import { URL_API_ACERVO } from '../constants/urls-api';
+import { CodigoTomboDTO } from '../dto/codigo-tombo-dto';
 import { FiltroTextoLivreTipoAcervoDTO } from '../dto/filtro-texto-livre-tipo-acervo-dto';
 import { ConsultaAcervoDetalhesDTO } from '../dto/form-cadastro-detalhes';
 import { IdNomeDTO } from '../dto/id-nome-dto';
@@ -31,7 +32,13 @@ const obterDetalhamentoPorTipoAcervoECodigoAreaPublica = (
 
 const obterTermoDeCompromisso = () => obterRegistro<string>(`${URL_API_ACERVO}/termo-compromisso`);
 
+const obterCodigoTombo = (codigoTombo: string) =>
+  obterRegistro<CodigoTomboDTO>(`${URL_API_ACERVO}/pesquisar`, {
+    params: { codigoTombo },
+  });
+
 export {
+  obterCodigoTombo,
   obterDetalhamentoPorTipoAcervoECodigoAreaPublica,
   obterTermoDeCompromisso,
   obterTiposAcervo,

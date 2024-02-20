@@ -2,7 +2,7 @@ import { Button, Col, DatePicker, Form, Input, Row, Space } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
 import { cloneDeep } from 'lodash';
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import SelectResponsaveis from '~/components/cdep/input/responsaveis';
@@ -48,6 +48,7 @@ import { useAppSelector } from '~/core/hooks/use-redux';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
 import { formatarDataPorFormato, formatterCPFMask, maskTelefone } from '~/core/utils/functions';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 export const FormAtendimentoSolicitacoes: React.FC = () => {
   const dataAtual = dayjs();
@@ -56,6 +57,8 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
   const auth = useAppSelector((store) => store.auth);
+
+  const { desabilitarCampos } = useContext(PermissaoContext);
 
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
   const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemDetalheResumidoDTO[]>([]);
@@ -66,8 +69,14 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const usuarioLogin = auth?.usuarioLogin;
   const ehUsuarioExteno = formInitialValues?.dadosSolicitante.tipoId != TipoUsuario.CORESSO;
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
-  const desabilitarCampos =
+
+  const atendimentoFinalizado =
     formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.FINALIZADO_ATENDIMENTO;
+
+  const podeAssumirResponsavel =
+    desabilitarCampos ||
+    atendimentoFinalizado ||
+    formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.CANCELADO;
 
   const podeCancelarAtendimento = () => {
     if (
@@ -111,11 +120,11 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       dataIndex: 'tipoAtendimento',
       width: '10%',
       render: (value, linha) => {
-        if (value && validarSituacaoLinha(linha.situacaoId)) {
+        if (value && linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) {
           return TipoAtendimentoEnum?.[value];
         }
 
-        if (validarSituacaoLinha(linha.situacaoId)) return;
+        if (linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) return;
 
         return (
           <SelectTipoAtendimento
@@ -187,7 +196,11 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
           type='text'
           id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
           onClick={() => onClickCancelarItemAtendimento(linha.id)}
-          disabled={validarSituacaoLinha(linha.situacaoId) || desabilitarCampos}
+          disabled={
+            (linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) ||
+            desabilitarCampos ||
+            atendimentoFinalizado
+          }
         >
           Cancelar item
         </ButtonPrimary>
@@ -222,13 +235,15 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   };
 
   const carregarDados = useCallback(async () => {
-    const resposta = await acervoSolicitacaoService.obterDetalhesAcervoSolicitacao(
+    const resposta = await acervoSolicitacaoService.obterDetalhesParaAtendimentoSolicitacoesPorId(
       acervoSolicitacaoId,
     );
 
     if (resposta.sucesso) {
       const dadosSolicitante = resposta.dados.dadosSolicitante;
-      dadosSolicitante.cpf = dadosSolicitante?.cpf ? formatterCPFMask(dadosSolicitante.cpf) : '';
+      dadosSolicitante.login = dadosSolicitante?.login
+        ? formatterCPFMask(dadosSolicitante.login)
+        : '';
       dadosSolicitante.telefone = dadosSolicitante?.telefone
         ? maskTelefone(dadosSolicitante.telefone)
         : '';
@@ -372,7 +387,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         autoComplete='off'
         validateMessages={validateMessages}
         initialValues={formInitialValues}
-        disabled={desabilitarCampos}
+        disabled={desabilitarCampos || atendimentoFinalizado}
       >
         <HeaderPage title='Atendimento de Solicitações'>
           <Col span={24}>
@@ -400,7 +415,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                   id={CDEP_BUTTON_FINALIZAR}
                   style={{ fontWeight: 700 }}
                   disabled={
-                    formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA
+                    formInitialValues?.situacaoId ===
+                      SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA ||
+                    formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.CANCELADO
                   }
                   onClick={onClickFinalizarAtendimento}
                 >
@@ -458,7 +475,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               {ehUsuarioExteno && (
                 <>
                   <Col xs={24} md={8}>
-                    <Form.Item label='CPF' name={['dadosSolicitante', 'cpf']}>
+                    <Form.Item label='CPF' name={['dadosSolicitante', 'login']}>
                       <Input type='text' placeholder='CPF' disabled />
                     </Form.Item>
                   </Col>
@@ -495,7 +512,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 <Space.Compact style={{ width: '100%' }}>
                   <SelectResponsaveis
                     formItemProps={{ style: { width: '100%' } }}
-                    selectProps={{ style: { width: '100%' } }}
+                    selectProps={{
+                      style: { width: '100%' },
+                      disabled: podeAssumirResponsavel,
+                    }}
                   />
 
                   <Button
@@ -503,6 +523,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                     type='primary'
                     id={CDEP_BUTTON_ASSUMIR_ATENDIMENTO}
                     onClick={() => onClickAssumirAtendimento()}
+                    disabled={podeAssumirResponsavel}
                   >
                     Assumir atendimento
                   </Button>

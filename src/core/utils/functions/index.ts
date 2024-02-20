@@ -1,4 +1,4 @@
-import { dayjs } from '~/core/date/dayjs';
+import { Dayjs, dayjs } from '~/core/date/dayjs';
 
 export const scrollNoInicio = () => window.scrollTo(0, 0);
 
@@ -10,11 +10,14 @@ export const formatarDataHoraAuditoria = (data: string) =>
 export const formatarDuasCasasDecimais = (value: any) =>
   removerTudoQueNaoEhDigito(value).replace(/(\d)(\d{2})$/, '$1,$2');
 
-export const formatarDataParaDDMMYYYY = (data: string | null | undefined): string | undefined =>
-  data ? dayjs(data).format('DD/MM/YYYY') : undefined;
+export const formatarDataParaDDMMYYYY = (
+  data: string | null | undefined | Dayjs,
+): string | undefined => (data ? dayjs(data).format('DD/MM/YYYY') : undefined);
 
-export const formatarDataPorFormato = (data: string | null | undefined, formato: string): string =>
-  data ? dayjs(data).format(formato || 'DD/MM/YYYY') : '';
+export const formatarDataPorFormato = (
+  data: string | null | undefined | Dayjs,
+  formato: string,
+): string => (data ? dayjs(data).format(formato || 'DD/MM/YYYY') : '');
 
 export const downloadBlob = (data: any, fileName: string) => {
   const a = document.createElement('a');

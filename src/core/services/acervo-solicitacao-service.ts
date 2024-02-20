@@ -1,7 +1,4 @@
-import {
-  URL_API_ACERVO_SOLICITACAO,
-  URL_API_ACERVO_SOLICITACAO_DETALHES,
-} from '../constants/urls-api';
+import { URL_API_ACERVO_SOLICITACAO } from '../constants/urls-api';
 import { alterarRegistro, obterRegistro } from './api';
 
 import queryString from 'query-string';
@@ -14,6 +11,7 @@ import { AcervoSolicitacaoRetornoCadastroDTO } from '../dto/acervo-solicitacao-r
 import { AlterarDataVisitaAcervoSolicitacaoItemDTO } from '../dto/alterar-data-visita-acervo-solicitacao-item-dto';
 import { TipoAtendimentoDTO } from '../dto/tipo-atendimento-dto';
 import { inserirRegistro } from './api';
+import { AcervoSolicitacaoManualDTO } from '../dto/acervo-solicitacao-manual-dto';
 
 const obterItensDoAcervoPorFiltros = (acervosIds: number[]) =>
   obterRegistro<AcervoSolicitacaoItemRetornoDTO[]>(URL_API_ACERVO_SOLICITACAO, {
@@ -42,9 +40,9 @@ const obterSituacoesAtendimento = () =>
 const obterTipoAtendimento = () =>
   obterRegistro<TipoAtendimentoDTO[]>(`${URL_API_ACERVO_SOLICITACAO}/tipo-atendimento`);
 
-const obterDetalhesAcervoSolicitacao = (acervoSolicitacaoId: number) =>
+const obterDetalhesParaAtendimentoSolicitacoesPorId = (acervoSolicitacaoId: number) =>
   obterRegistro<AcervoSolicitacaoDetalheDTO>(
-    `${URL_API_ACERVO_SOLICITACAO_DETALHES}/${acervoSolicitacaoId}`,
+    `${URL_API_ACERVO_SOLICITACAO}/detalhes/${acervoSolicitacaoId}`,
   );
 
 const alterarDataVisitaDoItemAtendimento = (params: AlterarDataVisitaAcervoSolicitacaoItemDTO) =>
@@ -63,6 +61,12 @@ const cancelarItemAtendimento = (acervoSolicitacaoItemId: number) =>
 const confirmarAtendimento = (params: AcervoSolicitacaoConfirmarDTO) =>
   alterarRegistro<boolean>(`${URL_API_ACERVO_SOLICITACAO}/confirmar-atendimento`, params);
 
+const confirmarAtendimentoManual = (params: AcervoSolicitacaoManualDTO) =>
+  inserirRegistro<number>(`${URL_API_ACERVO_SOLICITACAO}/inserir-manual`, params);
+
+const alterarAtendimentoManual = (params: AcervoSolicitacaoManualDTO) =>
+  alterarRegistro<number>(`${URL_API_ACERVO_SOLICITACAO}/alterar-manual`, params);
+
 const finalizarAtendimento = (acervoSolicitacaoId: number) =>
   alterarRegistro<boolean>(
     `${URL_API_ACERVO_SOLICITACAO}/${acervoSolicitacaoId}/finalizar-atendimento`,
@@ -72,8 +76,10 @@ export default {
   obterItensDoAcervoPorFiltros,
   inserir,
   obterPorId,
+  alterarAtendimentoManual,
+  obterDetalhesParaAtendimentoSolicitacoesPorId,
+  confirmarAtendimentoManual,
   obterSituacoesAtendimento,
-  obterDetalhesAcervoSolicitacao,
   alterarDataVisitaDoItemAtendimento,
   cancelarAtendimento,
   cancelarItemAtendimento,

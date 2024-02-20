@@ -12,7 +12,7 @@ const CardDadosSolicitante: React.FC = () => {
   const [dados, setDados] = useState<DadosSolicitanteDTO>();
   const [loading, setLoading] = useState<boolean>(false);
 
-  const ehExterno = dados?.tipo && dados?.tipo > TipoUsuario.CORESSO;
+  const ehExterno = dados?.tipoId && dados?.tipoId > TipoUsuario.CORESSO;
 
   const obterDados = async () => {
     setLoading(true);
@@ -59,7 +59,7 @@ const CardDadosSolicitante: React.FC = () => {
                 <>
                   <Row>
                     <Text strong>CPF: </Text>
-                    <Text style={{ marginLeft: 4 }}>{dados?.cpf}</Text>
+                    <Text style={{ marginLeft: 4 }}>{dados?.login}</Text>
                   </Row>
                   <Row>
                     <Text strong>Telefone: </Text>
