@@ -1,7 +1,6 @@
-import { Button, Form, FormItemProps, Row, SelectProps } from 'antd';
+import { Form, FormItemProps, Row, SelectProps } from 'antd';
 import { DefaultOptionType } from 'antd/es/select';
 import React, { useContext, useEffect, useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
 import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form';
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormCredito } from '~/core/constants/config-page-cadastros-auxiliares';
@@ -13,6 +12,7 @@ import { TipoCreditoAutoria } from '~/core/enum/tipo-credito-autoria';
 import { obterCreditoAutorResumido } from '~/core/services/credito-autor-service';
 import { obterPermissaoPorMenu } from '~/core/utils/perfil';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
+import { ButtonAdicionar } from '../components/btn-add';
 
 const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Credito];
 
@@ -69,48 +69,42 @@ const SelectCredito: React.FC<SelectCreditoProps> = ({
   };
 
   return (
-    <Row wrap={false} align='middle'>
-      <Form.Item
-        label={fieldProps.label}
-        name={fieldProps.name}
-        rules={[{ required }]}
-        style={{ width: '100%', marginRight: '8px' }}
-        {...formItemProps}
-      >
-        <Select
-          showSearch
-          allowClear
-          mode='multiple'
-          id={CDEP_SELECT_CREDITO}
-          {...selectProps}
-          options={options}
-          placeholder={fieldProps.label}
+    <>
+      <Row wrap={false}>
+        <Form.Item
+          label={fieldProps.label}
+          name={fieldProps.name}
+          rules={[{ required }]}
+          style={{ width: '100%', marginRight: '8px' }}
+          {...formItemProps}
+          extra={undefined}
+        >
+          <Select
+            showSearch
+            allowClear
+            mode='multiple'
+            id={CDEP_SELECT_CREDITO}
+            {...selectProps}
+            options={options}
+            placeholder={fieldProps.label}
+          />
+        </Form.Item>
+        <ButtonAdicionar
+          onClick={() => setOpenModal(true)}
+          disabled={!permissao.podeIncluir || desabilitarCampos}
         />
-      </Form.Item>
-      <Button
-        type='default'
-        block
-        icon={<FaPlus />}
-        onClick={() => setOpenModal(true)}
-        disabled={!permissao.podeIncluir || desabilitarCampos}
-        style={{
-          fontSize: 16,
-          width: '43px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      />
-      {openModal && (
-        <FormCadastrosAuxiliares
-          {...paramsConfigPageFormCredito}
-          isModal
-          title='Cadastrar Crédito'
-          maxLength={200}
-          setOpenModal={validarAoFecharModal}
-        />
-      )}
-    </Row>
+        {openModal && (
+          <FormCadastrosAuxiliares
+            {...paramsConfigPageFormCredito}
+            isModal
+            title='Cadastrar Crédito'
+            maxLength={200}
+            setOpenModal={validarAoFecharModal}
+          />
+        )}
+      </Row>
+      {formItemProps?.extra}
+    </>
   );
 };
 
