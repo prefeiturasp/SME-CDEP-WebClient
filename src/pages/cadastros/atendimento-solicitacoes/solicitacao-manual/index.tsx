@@ -73,7 +73,6 @@ export const SolicitacaoManual: React.FC = () => {
   const validarSituacaoLinha = (situacaoId: number) => {
     switch (situacaoId) {
       case SituacaoSolicitacaoItemEnum.CANCELADO:
-      case SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE:
         return true;
 
       default:
@@ -126,6 +125,7 @@ export const SolicitacaoManual: React.FC = () => {
                   setInitialValuesModal(linha);
                   setIsModalOpen(true);
                 }}
+                disabled={linha.situacaoId && validarSituacaoLinha(linha.situacaoId)}
               >
                 Editar
               </ButtonSecundary>
