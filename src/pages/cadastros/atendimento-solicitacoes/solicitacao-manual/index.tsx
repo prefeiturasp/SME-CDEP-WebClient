@@ -47,9 +47,9 @@ import { TipoAtendimentoEnum, TipoAtendimentoEnumDisplay } from '~/core/enum/tip
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
 import { formatarDataParaDDMMYYYY, maskTelefone } from '~/core/utils/functions';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { ModalAdicionarAcervo } from './components/modal-adicionar-acervo';
 import { InputRfCpf } from './components/rf-cpf';
-import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 export const SolicitacaoManual: React.FC = () => {
   const [form] = useForm();
@@ -73,7 +73,6 @@ export const SolicitacaoManual: React.FC = () => {
   const validarSituacaoLinha = (situacaoId: number) => {
     switch (situacaoId) {
       case SituacaoSolicitacaoItemEnum.CANCELADO:
-      case SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE:
         return true;
 
       default:
@@ -126,6 +125,7 @@ export const SolicitacaoManual: React.FC = () => {
                   setInitialValuesModal(linha);
                   setIsModalOpen(true);
                 }}
+                disabled={linha.situacaoId && validarSituacaoLinha(linha.situacaoId)}
               >
                 Editar
               </ButtonSecundary>
@@ -355,9 +355,13 @@ export const SolicitacaoManual: React.FC = () => {
 
                 const semAlteracaoItens = _.isEqual(values?.itens, formInitialValues?.itens);
 
+                const temItens = values?.itens?.length;
                 const temItemSemId = values?.itens?.find(
                   (item: AcervoSolicitacaoItemDetalheResumidoDTO) => item?.id < 1,
                 );
+
+                const desabilitarConfirmar =
+                  (!form.isFieldsTouched() && semAlteracaoItens) || !temItens;
 
                 return (
                   <Row gutter={[8, 8]}>
@@ -378,7 +382,9 @@ export const SolicitacaoManual: React.FC = () => {
                       <ButtonSecundary
                         id={CDEP_BUTTON_FINALIZAR}
                         style={{ fontWeight: 700 }}
-                        disabled={!!temItemSemId || desabilitarCampos}
+                        disabled={
+                          !temItens || !!temItemSemId || desabilitarCampos || !desabilitarConfirmar
+                        }
                         onClick={onClickFinalizarAtendimento}
                       >
                         Finalizar
@@ -388,7 +394,7 @@ export const SolicitacaoManual: React.FC = () => {
                       <ButtonPrimary
                         id={CDEP_BUTTON_CONFIRMAR}
                         onClick={onClickConfirmarAtendimento}
-                        disabled={!form.isFieldsTouched() && semAlteracaoItens}
+                        disabled={desabilitarConfirmar}
                       >
                         Confirmar
                       </ButtonPrimary>

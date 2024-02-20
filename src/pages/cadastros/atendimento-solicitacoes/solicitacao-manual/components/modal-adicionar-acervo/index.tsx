@@ -69,16 +69,19 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
         : [];
 
       const itemDuplicado = dataSource.find(
-        (item) => item?.id && item.acervoId === novoItem.acervoId,
+        (item) =>
+          item.acervoId === novoItem.acervoId &&
+          item.situacaoId !== SituacaoSolicitacaoItemEnum.CANCELADO,
       );
 
-      if (itemDuplicado) {
-        notification.error({
-          message: 'Erro',
-          description: 'N° do tombo/código duplicado',
-        });
-
-        return;
+      if (!initialValuesModal) {
+        if (itemDuplicado) {
+          notification.error({
+            message: 'Erro',
+            description: 'N° do tombo/código duplicado',
+          });
+          return;
+        }
       }
 
       if (!dataSource?.length) {
@@ -87,6 +90,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
         const indexByAcervoId = dataSource?.findIndex(
           (item) => item.acervoId === novoItem?.acervoId,
         );
+
         const indexById = dataSource?.findIndex((item) => item.id === initialValuesModal?.id);
 
         const index = indexById || indexByAcervoId;
