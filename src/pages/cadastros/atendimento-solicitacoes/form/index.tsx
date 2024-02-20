@@ -146,26 +146,30 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       render: (dataVisita: string, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
         const getTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${linha.id}`]);
 
-        const datePicker = (value?: Dayjs | undefined) => (
-          <Form.Item
-            initialValue={value}
-            name={`${['dataVisita', linha.id]}`}
-            style={{ margin: 0 }}
-          >
-            <DatePicker
-              allowClear={false}
-              onChange={(date: any) => {
-                form.setFieldValue(['dataVisita', `${linha.id}`], date);
-                onChangeDataVisita(date, linha);
-              }}
-              format='DD/MM/YYYY'
-              style={{ width: '100%' }}
-              placeholder='Selecione uma data'
-              locale={localeDatePicker}
-              minDate={dataAtual}
-            />
-          </Form.Item>
-        );
+        const datePicker = (value?: Dayjs | undefined) => {
+          const initialValueData = dayjs(linha?.dataVisita) ?? value;
+
+          return (
+            <Form.Item
+              initialValue={initialValueData}
+              name={`${['dataVisita', linha.id]}`}
+              style={{ margin: 0 }}
+            >
+              <DatePicker
+                allowClear={false}
+                onChange={(date: any) => {
+                  form.setFieldValue(['dataVisita', `${linha.id}`], date);
+                  onChangeDataVisita(date, linha);
+                }}
+                format='DD/MM/YYYY'
+                style={{ width: '100%' }}
+                placeholder='Selecione uma data'
+                locale={localeDatePicker}
+                minDate={dataAtual}
+              />
+            </Form.Item>
+          );
+        };
 
         const mostrarCampoDatePicker = (value?: Dayjs) =>
           getTipoAtendimento === TipoAtendimentoEnum.Presencial ? datePicker(value) : '';
@@ -257,6 +261,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         dadosSolicitante,
         dataSolicitacao,
       };
+
       setFormInitialValues(dadosMapeados);
       setDataSource(dadosMapeados.itens);
     }
