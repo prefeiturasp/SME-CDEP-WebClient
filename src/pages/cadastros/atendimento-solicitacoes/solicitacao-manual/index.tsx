@@ -210,10 +210,6 @@ export const SolicitacaoManual: React.FC = () => {
     }
   }, [carregarDados, acervoSolicitacaoId]);
 
-  useEffect(() => {
-    form.resetFields();
-  }, [form, formInitialValues]);
-
   const removerAcervo = (index: number) => {
     const values = form.getFieldsValue(true);
 
