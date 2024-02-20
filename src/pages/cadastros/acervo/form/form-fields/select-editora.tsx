@@ -1,7 +1,6 @@
-import { Button, Form, FormItemProps, Row, SelectProps } from 'antd';
+import { Form, FormItemProps, Row, SelectProps } from 'antd';
 import { DefaultOptionType } from 'antd/es/select';
 import React, { useContext, useEffect, useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
 import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form';
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormEditora } from '~/core/constants/config-page-cadastros-auxiliares';
@@ -11,6 +10,7 @@ import { MenuEnum } from '~/core/enum/menu-enum';
 import { obterEditoraResumido } from '~/core/services/editora-service';
 import { obterPermissaoPorMenu } from '~/core/utils/perfil';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
+import { ButtonAdicionar } from '../components/btn-add';
 
 const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Editora];
 
@@ -50,46 +50,40 @@ const SelectEditora: React.FC<SelectEditoraProps> = ({ selectProps, formItemProp
   };
 
   return (
-    <Row wrap={false} align='middle'>
-      <Form.Item
-        label={fieldProps.label}
-        name={fieldProps.name}
-        style={{ width: '100%', marginRight: '8px' }}
-        {...formItemProps}
-      >
-        <Select
-          showSearch
-          allowClear
-          id={CDEP_SELECT_EDITORA}
-          {...selectProps}
-          options={options}
-          placeholder={fieldProps.label}
+    <>
+      <Row wrap={false}>
+        <Form.Item
+          label={fieldProps.label}
+          name={fieldProps.name}
+          style={{ width: '100%', marginRight: '8px' }}
+          {...formItemProps}
+          extra={undefined}
+        >
+          <Select
+            showSearch
+            allowClear
+            id={CDEP_SELECT_EDITORA}
+            {...selectProps}
+            options={options}
+            placeholder={fieldProps.label}
+          />
+        </Form.Item>
+        <ButtonAdicionar
+          onClick={() => setOpenModal(true)}
+          disabled={!permissao.podeIncluir || desabilitarCampos}
         />
-      </Form.Item>
-      <Button
-        type='default'
-        block
-        icon={<FaPlus />}
-        onClick={() => setOpenModal(true)}
-        disabled={!permissao.podeIncluir || desabilitarCampos}
-        style={{
-          fontSize: 16,
-          width: '43px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      />
-      {openModal && (
-        <FormCadastrosAuxiliares
-          {...paramsConfigPageFormEditora}
-          isModal
-          title='Cadastrar Editora'
-          maxLength={200}
-          setOpenModal={validarAoFecharModal}
-        />
-      )}
-    </Row>
+        {openModal && (
+          <FormCadastrosAuxiliares
+            {...paramsConfigPageFormEditora}
+            isModal
+            title='Cadastrar Editora'
+            maxLength={200}
+            setOpenModal={validarAoFecharModal}
+          />
+        )}
+      </Row>
+      {formItemProps?.extra}
+    </>
   );
 };
 

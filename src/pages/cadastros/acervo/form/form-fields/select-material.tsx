@@ -1,8 +1,7 @@
-import { Button, Form, FormItemProps, Row } from 'antd';
+import { Form, FormItemProps, Row } from 'antd';
 import { DefaultOptionType, SelectProps } from 'antd/es/select';
 
 import React, { useEffect, useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
 import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form';
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormMaterial } from '~/core/constants/config-page-cadastros-auxiliares';
@@ -11,6 +10,7 @@ import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acerv
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoMaterial } from '~/core/enum/tipo-material-enum';
 import { obterMaterial } from '~/core/services/material-service';
+import { ButtonAdicionar } from '../components/btn-add';
 
 const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Material];
 
@@ -82,49 +82,39 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({
   };
 
   return (
-    <Row wrap={false} align='middle'>
-      <Form.Item
-        label={fieldProps.label}
-        name={fieldProps.name}
-        rules={[{ required }]}
-        style={{ width: '100%', marginRight: habilitaBotaoAdicionar ? '8px' : '' }}
-        {...formItemProps}
-      >
-        <Select
-          showSearch
-          allowClear
-          id={CDEP_SELECT_MATERIAL}
-          {...selectProps}
-          options={options}
-          placeholder={fieldProps.label}
-        />
-      </Form.Item>
-      {habilitaBotaoAdicionar && (
-        <Button
-          type='default'
-          block
-          icon={<FaPlus />}
-          onClick={() => setOpenModal(true)}
-          style={{
-            fontSize: 16,
-            width: '43px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-          }}
-        />
-      )}
-      {openModal && (
-        <FormCadastrosAuxiliares
-          {...paramsConfigPageFormMaterial}
-          initialValues={{ tipo }}
-          isModal
-          title='Cadastrar Material'
-          maxLength={15}
-          setOpenModal={validarAoFecharModal}
-        />
-      )}
-    </Row>
+    <>
+      <Row wrap={false}>
+        <Form.Item
+          label={fieldProps.label}
+          name={fieldProps.name}
+          rules={[{ required }]}
+          style={{ width: '100%', marginRight: habilitaBotaoAdicionar ? '8px' : '' }}
+          {...formItemProps}
+          extra={undefined}
+        >
+          <Select
+            showSearch
+            allowClear
+            id={CDEP_SELECT_MATERIAL}
+            {...selectProps}
+            options={options}
+            placeholder={fieldProps.label}
+          />
+        </Form.Item>
+        {habilitaBotaoAdicionar && <ButtonAdicionar onClick={() => setOpenModal(true)} />}
+        {openModal && (
+          <FormCadastrosAuxiliares
+            {...paramsConfigPageFormMaterial}
+            initialValues={{ tipo }}
+            isModal
+            title='Cadastrar Material'
+            maxLength={15}
+            setOpenModal={validarAoFecharModal}
+          />
+        )}
+      </Row>
+      {formItemProps?.extra}
+    </>
   );
 };
 
