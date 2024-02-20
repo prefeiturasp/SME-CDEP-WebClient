@@ -37,6 +37,11 @@ export const InputRfCpf: React.FC<InputRfCpfProps> = ({ inputProps, formItemProp
         onSearch={buscarRfCpf}
         maxLength={11}
         placeholder='Informe o RF ou CPF'
+        onChange={(e) => {
+          if (e.target.value.length === 0) {
+            form.setFieldValue(['dadosSolicitante'], []);
+          }
+        }}
         {...inputProps}
       />
     </Form.Item>
