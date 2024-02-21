@@ -163,7 +163,6 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                       description={item.descricao}
                       ellipsis
                       exibirTooltip
-                      dangerouslyInnerHTML
                     />
 
                     <TextItemCardContentConsultaAcervo
