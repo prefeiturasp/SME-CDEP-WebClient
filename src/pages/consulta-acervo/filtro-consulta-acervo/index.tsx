@@ -6,6 +6,7 @@ import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
 import LimparBuscaButton from '~/components/lib/limpar-busca-button';
 import { CDEP_INPUT_ANO_FINAL, CDEP_INPUT_ANO_INICIAL } from '~/core/constants/ids/input';
 import { Colors } from '~/core/styles/colors';
+import { removerTudoQueNaoEhDigito } from '~/core/utils/functions';
 import { InputAno } from '~/pages/cadastros/acervo/form/form-fields';
 import { ConsultaAcervoContext } from '../provider';
 
@@ -13,6 +14,20 @@ export const FiltroConsultaAcervo: React.FC = () => {
   const form = useFormInstance();
 
   const { onClickBuscar, limparDados } = useContext(ConsultaAcervoContext);
+
+  const rulesAnoInicialFinal = {
+    message: (
+      <Typography style={{ color: Colors.Neutral.WHITE }}>
+        O ano inicial mínimo é de 1900 e máximo de 2099
+      </Typography>
+    ),
+    pattern: /^(19\d{2}|20\d{2})$/,
+  };
+
+  const removerCaracteresEspeciaisAnoInicialFinal = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = removerTudoQueNaoEhDigito(e.target.value);
+    return value;
+  };
 
   return (
     <Col
@@ -27,7 +42,13 @@ export const FiltroConsultaAcervo: React.FC = () => {
     >
       <Row gutter={16}>
         <Col xs={24}>
-          <Typography style={{ fontSize: 24, fontWeight: 'bold', color: '#292929' }}>
+          <Typography
+            style={{
+              fontSize: 24,
+              fontWeight: 'bold',
+              color: Colors.Components.LABEL_FILTRO_AREA_PUBLICA,
+            }}
+          >
             Faça sua busca
           </Typography>
         </Col>
@@ -39,24 +60,37 @@ export const FiltroConsultaAcervo: React.FC = () => {
         <Col xs={24} sm={6} md={4}>
           <InputAno
             formItemProps={{
-              rules: [{ required: false }],
+              rules: [rulesAnoInicialFinal, { required: false }],
               name: 'anoInicial',
               label: (
-                <Typography style={{ fontWeight: 500, color: '#292929' }}>Ano inicial</Typography>
+                <Typography
+                  style={{ fontWeight: 500, color: Colors.Components.LABEL_FILTRO_AREA_PUBLICA }}
+                >
+                  Ano inicial
+                </Typography>
               ),
+              getValueFromEvent: removerCaracteresEspeciaisAnoInicialFinal,
             }}
-            inputItemProps={{ placeholder: 'Ano inicial', id: CDEP_INPUT_ANO_INICIAL }}
+            inputItemProps={{
+              placeholder: 'Ano inicial',
+              id: CDEP_INPUT_ANO_INICIAL,
+            }}
           />
         </Col>
 
         <Col xs={24} sm={6} md={4}>
           <InputAno
             formItemProps={{
-              rules: [{ required: false }],
+              rules: [rulesAnoInicialFinal, { required: false }],
               name: 'anoFinal',
               label: (
-                <Typography style={{ fontWeight: 500, color: '#292929' }}>Ano final</Typography>
+                <Typography
+                  style={{ fontWeight: 500, color: Colors.Components.LABEL_FILTRO_AREA_PUBLICA }}
+                >
+                  Ano final
+                </Typography>
               ),
+              getValueFromEvent: removerCaracteresEspeciaisAnoInicialFinal,
             }}
             inputItemProps={{ placeholder: 'Ano final', id: CDEP_INPUT_ANO_FINAL }}
           />
@@ -66,7 +100,9 @@ export const FiltroConsultaAcervo: React.FC = () => {
           <SelectTipoAcervo
             formItemProps={{
               label: (
-                <Typography style={{ fontWeight: 500, color: '#292929' }}>
+                <Typography
+                  style={{ fontWeight: 500, color: Colors.Components.LABEL_FILTRO_AREA_PUBLICA }}
+                >
                   Busca por tipos de acervos
                 </Typography>
               ),

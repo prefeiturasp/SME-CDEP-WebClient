@@ -21,6 +21,7 @@ type ColorsType = {
     BACKGROUND_ALERT: string;
     TOOLTIP: string;
     BACKGROUND_FILTRO_AREA_PUBLICA: string;
+    LABEL_FILTRO_AREA_PUBLICA: string;
   };
   Suporte: {
     Primary: SuporteType;
@@ -50,6 +51,7 @@ const Colors: ColorsType = {
     BACKGROUND_ALERT: '#333638',
     TOOLTIP: '#086397',
     BACKGROUND_FILTRO_AREA_PUBLICA: '#C3596E',
+    LABEL_FILTRO_AREA_PUBLICA: '#292929',
   },
   Suporte: {
     Primary: {
@@ -80,4 +82,4 @@ const BoxShadow = {
   AFIX_HEADER: 'rgba(0, 0, 0, 0.15) 0px 1.5rem 1rem -18px',
 };
 
-export { Colors, BoxShadow };
+export { BoxShadow, Colors };
