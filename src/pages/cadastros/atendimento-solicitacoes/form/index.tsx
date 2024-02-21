@@ -163,7 +163,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         const getTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${linha.id}`]);
 
         const datePicker = (value?: Dayjs | undefined) => {
-          const initialValueData = dayjs(linha?.dataVisita) ?? value;
+          const initialValueData = linha?.dataVisita ? dayjs(linha?.dataVisita) : value;
 
           return (
             <Form.Item
