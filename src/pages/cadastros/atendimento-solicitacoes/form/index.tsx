@@ -66,6 +66,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     [key: number]: Dayjs;
   }>();
 
+  const temItemFinalizadoAutomaticamente = formInitialValues?.itens.find(
+    (item) => item.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE,
+  );
+
   const usuarioLogin = auth?.usuarioLogin;
   const ehUsuarioExterno = formInitialValues?.dadosSolicitante.tipoId != TipoUsuario.CORESSO;
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
@@ -84,8 +88,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     }
 
     if (
-      formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.AGUARDANDO_VISITA ||
-      formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.AGUARDANDO_ATENDIMENTO
+      (formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.AGUARDANDO_VISITA &&
+        !temItemFinalizadoAutomaticamente) ||
+      (formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.AGUARDANDO_ATENDIMENTO &&
+        !temItemFinalizadoAutomaticamente)
     ) {
       return false;
     }
@@ -95,8 +101,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
   const podeFinalizarAtendimento = () => {
     if (
-      formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA ||
-      formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.CANCELADO ||
+      formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO ||
       desabilitarCampos
     ) {
       return true;
@@ -412,60 +417,68 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       >
         <HeaderPage title='Atendimento de Solicitações'>
           <Col span={24}>
-            <Row gutter={[8, 8]}>
-              <Col>
-                <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
-              </Col>
-              <Col>
-                <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
-                  {() => (
-                    <ButtonSecundary
-                      id={CDEP_BUTTON_CANCELAR}
-                      onClick={() => onClickCancelar()}
-                      disabled={!form.isFieldsTouched()}
-                    >
-                      Cancelar
-                    </ButtonSecundary>
-                  )}
-                </Form.Item>
-              </Col>
-              <Col>
-                <Button
-                  block
-                  htmlType='submit'
-                  id={CDEP_BUTTON_FINALIZAR}
-                  style={{ fontWeight: 700 }}
-                  disabled={podeFinalizarAtendimento()}
-                  onClick={onClickFinalizarAtendimento}
-                >
-                  Finalizar
-                </Button>
-              </Col>
-              <Col>
-                <Button
-                  block
-                  id={CDEP_BUTTON_CANCELAR_ATENDIMENTO}
-                  style={{ fontWeight: 700 }}
-                  disabled={podeCancelarAtendimento()}
-                  onClick={onClickCancelarAtendimento}
-                >
-                  Cancelar atendimento
-                </Button>
-              </Col>
-              <Col>
-                <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
-                  {() => (
-                    <ButtonPrimary
-                      id={CDEP_BUTTON_CONFIRMAR}
-                      onClick={onClickConfirmarAtendimento}
-                      disabled={!form.isFieldsTouched()}
-                    >
-                      Confirmar
-                    </ButtonPrimary>
-                  )}
-                </Form.Item>
-              </Col>
-            </Row>
+            <Form.Item shouldUpdate style={{ margin: 0 }}>
+              {(formItem) => {
+                const desabilitarConfirmarECancelar = !formItem.isFieldsTouched();
+
+                return (
+                  <Row gutter={[8, 8]}>
+                    <Col>
+                      <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
+                    </Col>
+                    <Col>
+                      <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
+                        {() => (
+                          <ButtonSecundary
+                            id={CDEP_BUTTON_CANCELAR}
+                            onClick={() => onClickCancelar()}
+                            disabled={desabilitarConfirmarECancelar}
+                          >
+                            Cancelar
+                          </ButtonSecundary>
+                        )}
+                      </Form.Item>
+                    </Col>
+                    <Col>
+                      <Button
+                        block
+                        htmlType='submit'
+                        id={CDEP_BUTTON_FINALIZAR}
+                        style={{ fontWeight: 700 }}
+                        disabled={podeFinalizarAtendimento() || !desabilitarConfirmarECancelar}
+                        onClick={onClickFinalizarAtendimento}
+                      >
+                        Finalizar
+                      </Button>
+                    </Col>
+                    <Col>
+                      <Button
+                        block
+                        id={CDEP_BUTTON_CANCELAR_ATENDIMENTO}
+                        style={{ fontWeight: 700 }}
+                        disabled={podeCancelarAtendimento()}
+                        onClick={onClickCancelarAtendimento}
+                      >
+                        Cancelar atendimento
+                      </Button>
+                    </Col>
+                    <Col>
+                      <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
+                        {() => (
+                          <ButtonPrimary
+                            id={CDEP_BUTTON_CONFIRMAR}
+                            onClick={onClickConfirmarAtendimento}
+                            disabled={desabilitarConfirmarECancelar}
+                          >
+                            Confirmar
+                          </ButtonPrimary>
+                        )}
+                      </Form.Item>
+                    </Col>
+                  </Row>
+                );
+              }}
+            </Form.Item>
           </Col>
         </HeaderPage>
 
