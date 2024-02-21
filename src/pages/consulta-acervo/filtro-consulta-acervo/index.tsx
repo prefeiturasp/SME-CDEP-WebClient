@@ -18,7 +18,7 @@ export const FiltroConsultaAcervo: React.FC = () => {
   const rulesAnoInicialFinal = {
     message: (
       <Typography style={{ color: Colors.Neutral.WHITE }}>
-        O ano inicial mínimo é de 1900 e máximo de 2099
+        O ano inicial deve começar a partir de 1900
       </Typography>
     ),
     pattern: /^(19\d{2}|20\d{2})$/,
