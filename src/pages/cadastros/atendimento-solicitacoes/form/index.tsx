@@ -79,6 +79,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.CANCELADO;
 
   const podeCancelarAtendimento = () => {
+    if (desabilitarCampos) {
+      return true;
+    }
+
     if (
       formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.AGUARDANDO_VISITA ||
       formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.AGUARDANDO_ATENDIMENTO
@@ -87,6 +91,18 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     }
 
     return true;
+  };
+
+  const podeFinalizarAtendimento = () => {
+    if (
+      formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA ||
+      formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.CANCELADO ||
+      desabilitarCampos
+    ) {
+      return true;
+    }
+
+    return false;
   };
 
   const validarSituacaoLinha = (situacaoId: number) => {
@@ -419,11 +435,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                   htmlType='submit'
                   id={CDEP_BUTTON_FINALIZAR}
                   style={{ fontWeight: 700 }}
-                  disabled={
-                    formInitialValues?.situacaoId ===
-                      SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA ||
-                    formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.CANCELADO
-                  }
+                  disabled={podeFinalizarAtendimento()}
                   onClick={onClickFinalizarAtendimento}
                 >
                   Finalizar
