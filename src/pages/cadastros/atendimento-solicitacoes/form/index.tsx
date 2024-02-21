@@ -26,7 +26,7 @@ import { CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
 import {
   DESEJA_CANCELAR_ALTERACOES,
   DESEJA_CANCELAR_ATENDIMENTO,
-  DESEJA_CANCELAR_ITEM,
+  DESEJA_CANCELAR_ITEM_E_DESCARTAR_ITENS_NAO_CONFIRMADOS,
   DESEJA_FINALIZAR_ATENDIMENTO,
   DESEJA_SAIR_MODO_EDICAO,
 } from '~/core/constants/mensagens';
@@ -235,7 +235,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
   const onClickCancelarItemAtendimento = async (acervoSolicitacaoItemId: number) => {
     confirmacao({
-      content: DESEJA_CANCELAR_ITEM,
+      content: DESEJA_CANCELAR_ITEM_E_DESCARTAR_ITENS_NAO_CONFIRMADOS,
       onOk: async () => {
         const resultado = await acervoSolicitacaoService.cancelarItemAtendimento(
           acervoSolicitacaoItemId,
