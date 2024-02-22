@@ -38,4 +38,9 @@ export enum PermissaoEnum {
   OperacoesSolicitacoes_I = '274',
   OperacoesSolicitacoes_E = '275',
   OperacoesSolicitacoes_A = '276',
+
+  GestaoVisitasCalendario_C = '305',
+  GestaoVisitasCalendario_I = '306',
+  GestaoVisitasCalendario_E = '307',
+  GestaoVisitasCalendario_A = '308',
 }
