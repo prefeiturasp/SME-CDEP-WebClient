@@ -22,6 +22,7 @@ type ColorsType = {
     TOOLTIP: string;
     BACKGROUND_FILTRO_AREA_PUBLICA: string;
     LABEL_FILTRO_AREA_PUBLICA: string;
+    BORDER_CARD_MESES_CALENDAR: string;
   };
   Suporte: {
     Primary: SuporteType;
@@ -52,6 +53,7 @@ const Colors: ColorsType = {
     TOOLTIP: '#086397',
     BACKGROUND_FILTRO_AREA_PUBLICA: '#C3596E',
     LABEL_FILTRO_AREA_PUBLICA: '#292929',
+    BORDER_CARD_MESES_CALENDAR: '#CED4DA',
   },
   Suporte: {
     Primary: {

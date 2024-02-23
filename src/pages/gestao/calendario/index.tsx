@@ -1,84 +1,44 @@
-import Icon from '@ant-design/icons';
-import { Col, Collapse, CollapseProps, Row } from 'antd';
+import { Col, Row, Typography } from 'antd';
+import { useState } from 'react';
 import { FaAngleRight, FaCalendarAlt } from 'react-icons/fa';
-import styled from 'styled-components';
 import CardContent from '~/components/lib/card-content';
 import HeaderPage from '~/components/lib/header-page';
-import { Colors } from '~/core/styles/colors';
 import { mesesCalendario } from './meses';
-
-const DivCalendar = styled(Col)`
-  .ant-collapse-item .ant-collapse-header {
-    padding-left: 0;
-    border-left: 24px solid ${Colors.SystemSME.CDEP.PRIMARY};
-
-    .ant-collapse-expand-icon {
-      left: -29px;
-      position: relative;
-      color: ${Colors.Neutral.WHITE};
-
-      .ant-collapse-arrow {
-        font-size: large;
-      }
-    }
-
-    &.ant-collapse-header {
-      border-radius: 0;
-    }
-  }
-
-  .ant-collapse-item-active {
-    .ant-collapse-header {
-      border-left: 24px solid ${Colors.Neutral.WHITE};
-
-      .ant-collapse-expand-icon {
-        color: ${Colors.Neutral.DARK};
-      }
-    }
-  }
-`;
+import { CardMes, CustomHeaderCard, CustomIcon } from './styles';
 
 export const Calendario = () => {
+  const [activeIndex, setActiveIndex] = useState<number | null>(null);
+
+  const toggleActive = (index: number) => {
+    if (activeIndex === index) {
+      setActiveIndex(null);
+    } else {
+      setActiveIndex(index);
+    }
+  };
+
   return (
     <Col>
       <HeaderPage title='Calendário de visitas' />
       <CardContent>
         <Row>
           {mesesCalendario?.map((mes, index) => {
-            const items: CollapseProps['items'] = [
-              {
-                key: index,
-                label: mes.label,
-                extra: <FaCalendarAlt size={16} />,
-                children: <Col>Dias do mes selecionado</Col>,
-              },
-            ];
+            const isActive = index === activeIndex;
 
             return (
-              <Col
-                xs={24}
-                md={8}
-                lg={6}
-                key={index}
-                style={{
-                  background: Colors.BACKGROUND_CONTENT,
-                }}
-              >
-                <DivCalendar>
-                  <Collapse
-                    accordion
-                    size='large'
-                    items={items}
-                    destroyInactivePanel
-                    style={{
-                      borderRadius: 0,
-                      background: Colors.Neutral.WHITE,
-                    }}
-                    expandIcon={({ isActive }) => (
-                      <Icon component={FaAngleRight} rotate={isActive ? 90 : 0} />
-                    )}
+              <Col xs={6} md={8} lg={6} key={index}>
+                <CardMes isActive={isActive} onClick={() => toggleActive(index)}>
+                  <CustomIcon
+                    isActive={isActive}
+                    component={FaAngleRight}
+                    rotate={isActive ? 90 : 0}
+                    onClick={() => toggleActive(index)}
                   />
-                </DivCalendar>
+                  <CustomHeaderCard>
+                    <Typography>{mes.label}</Typography>
+                    <FaCalendarAlt size={16} />
+                  </CustomHeaderCard>
+                </CardMes>
               </Col>
             );
           })}
