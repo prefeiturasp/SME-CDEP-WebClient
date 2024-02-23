@@ -12,10 +12,6 @@ const DivCalendar = styled(Col)`
     padding-left: 0;
     border-left: 24px solid ${Colors.SystemSME.CDEP.PRIMARY};
 
-    &.ant-collapse-header {
-      border-radius: 0;
-    }
-
     .ant-collapse-expand-icon {
       left: -29px;
       position: relative;
@@ -23,6 +19,20 @@ const DivCalendar = styled(Col)`
 
       .ant-collapse-arrow {
         font-size: large;
+      }
+    }
+
+    &.ant-collapse-header {
+      border-radius: 0;
+    }
+  }
+
+  .ant-collapse-item-active {
+    .ant-collapse-header {
+      border-left: 24px solid ${Colors.Neutral.WHITE};
+
+      .ant-collapse-expand-icon {
+        color: ${Colors.Neutral.DARK};
       }
     }
   }
