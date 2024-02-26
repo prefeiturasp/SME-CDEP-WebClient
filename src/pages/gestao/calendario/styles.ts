@@ -4,35 +4,46 @@ import styled from 'styled-components';
 import { Colors } from '~/core/styles/colors';
 
 type CardMesProps = {
-  isActive?: boolean;
+  mesExpandido?: boolean;
 };
 
 export const CardMes = styled(Flex)<CardMesProps>`
   width: 100%;
   align-items: center;
-  padding: 16px 16px 16px 0;
   justify-content: space-between;
   background: ${Colors.Neutral.WHITE};
+`;
+
+export const DivRow = styled(Col)`
   border: 1px solid ${Colors.Components.BORDER_CARD_MESES_CALENDAR};
-  border-left: ${(props) =>
-    props.isActive
-      ? `24px solid ${Colors.Neutral.WHITE}`
-      : `24px solid ${Colors.SystemSME.CDEP.PRIMARY}`};
 `;
 
 export const CustomIcon = styled(Icon)<CardMesProps>`
-  margin: -22px;
+  width: 24px;
+  height: 100%;
   font-size: 20px;
-  color: ${(props) => (props.isActive ? Colors.Neutral.DARK : Colors.Neutral.WHITE)};
+  padding-left: 2px;
+  position: absolute;
+  background: ${(props) =>
+    props.mesExpandido ? `${Colors.Neutral.WHITE}` : `${Colors.SystemSME.CDEP.PRIMARY}`};
+  color: ${(props) => (props.mesExpandido ? Colors.Neutral.DARK : Colors.Neutral.WHITE)};
 `;
 
 export const CustomHeaderCard = styled(Flex)<CardMesProps>`
   width: 100%;
+  height: 65px;
+  padding: 12px;
   cursor: pointer;
-  padding-left: 16px;
+  margin-left: 24px;
+  align-items: center;
   justify-content: space-between;
+  border-left: ${(props) =>
+    props.mesExpandido
+      ? `2px solid ${Colors.Neutral.WHITE}`
+      : `2px solid ${Colors.Components.BORDER_CARD_MESES_CALENDAR}`};
 `;
 
 export const CustomSemanas = styled(Col)`
-  background: #ce2;
+  width: 100%;
+  height: 64px;
 `;
