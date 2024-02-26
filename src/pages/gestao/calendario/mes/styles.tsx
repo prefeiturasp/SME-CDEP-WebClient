@@ -1,10 +1,16 @@
+import { Row, Tag } from 'antd';
 import styled from 'styled-components';
 import { DiasSemanaEnum } from '~/core/enum/dias-semana';
+import { TipoEventoEnum } from '~/core/enum/tipo-evento-enum';
 import { Colors } from '~/core/styles/colors';
 
 type DiasProps = {
   desabilitado?: boolean;
   dayOfWeek?: DiasSemanaEnum;
+};
+
+type EventosTagProps = {
+  tipoId: TipoEventoEnum;
 };
 
 export const NomeDia = styled.div`
@@ -38,6 +44,26 @@ export const Dias = styled.div<DiasProps>`
   color: ${(props) => {
     if (props.desabilitado) {
       return `${Colors.Neutral.LIGHT}`;
+    }
+  }};
+`;
+
+export const DivDia = styled(Row)<DiasProps>`
+  width: 100%;
+  border-radius: 5px;
+  justify-content: space-between;
+  padding-left: 6px;
+`;
+
+export const DivTag = styled(Tag)<EventosTagProps>`
+  border-radius: 10px;
+  justify-content: space-between;
+  color: ${Colors.Neutral.WHITE};
+  background: ${(props) => {
+    if (props.tipoId === TipoEventoEnum.FERIADO) {
+      return `${Colors.Components.BACKGROUND_CALENDARIO_FERIADOS}`;
+    } else if (props.tipoId === TipoEventoEnum.VISITA) {
+      // return `${Colors.BACKGROUND_CONTENT}`;
     }
   }};
 `;

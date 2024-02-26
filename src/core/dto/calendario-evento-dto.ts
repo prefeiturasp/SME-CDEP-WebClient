@@ -13,7 +13,7 @@ export type DiaDTO = {
   dia: number;
   dayOfWeek: number;
   desabilitado: boolean;
-  eventosTag: EventoTagDTO;
+  eventosTag: EventoTagDTO[];
 };
 
 export type EventoTagDTO = {

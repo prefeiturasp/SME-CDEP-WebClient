@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd';
-import { CalendarioEventoDTO, SemanaDTO } from '~/core/dto/calendario-evento-dto';
+import { CalendarioEventoDTO, EventoTagDTO, SemanaDTO } from '~/core/dto/calendario-evento-dto';
 import { diasSemana } from './dias-semana';
-import { Dias, NomeDia } from './styles';
+import { Dias, DivDia, DivTag, NomeDia } from './styles';
 
 export const Mes = ({ semanas }: CalendarioEventoDTO) => {
   return (
@@ -18,7 +18,16 @@ export const Mes = ({ semanas }: CalendarioEventoDTO) => {
             {semana?.dias.map((dia, index) => {
               return (
                 <Dias desabilitado={dia.desabilitado} dayOfWeek={dia.dayOfWeek} key={index}>
-                  {dia.dia}
+                  <DivDia>
+                    {dia.dia}
+                    {dia?.eventosTag?.map((tag: EventoTagDTO) => {
+                      return (
+                        <DivTag tipoId={tag?.tipoId} key={tag.tipoId}>
+                          {tag.tipo}
+                        </DivTag>
+                      );
+                    })}
+                  </DivDia>
                 </Dias>
               );
             })}
