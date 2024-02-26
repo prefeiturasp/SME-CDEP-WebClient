@@ -1,5 +1,6 @@
 export const URL_API_CREDITO_AUTOR = 'v1/CreditoAutor';
 export const URL_API_EDITORA = 'v1/editora';
+export const URL_API_EVENTO = 'v1/Evento';
 export const URL_API_ASSUNTO = 'v1/assunto';
 export const URL_API_MATERIAL = 'v1/Material';
 export const URL_API_IDIOMA = 'v1/Idioma';

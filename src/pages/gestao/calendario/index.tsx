@@ -1,10 +1,12 @@
 import { Col, Row, Typography } from 'antd';
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { FaAngleRight, FaCalendarAlt } from 'react-icons/fa';
 import CardContent from '~/components/lib/card-content';
 import HeaderPage from '~/components/lib/header-page';
-import { mesesCalendario } from './meses';
-import { CardMes, CustomHeaderCard, CustomIcon } from './styles';
+import { obterSemanas } from '~/core/services/calendario-eventos-service';
+import { Colors } from '~/core/styles/colors';
+import { MesesProps, mesesCalendario } from './meses';
+import { CardMes, CustomHeaderCard, CustomIcon, CustomSemanas } from './styles';
 
 export const Calendario = () => {
   const [activeIndex, setActiveIndex] = useState<number | null>(null);
@@ -17,29 +19,44 @@ export const Calendario = () => {
     }
   };
 
+  const carregarDadosMesSelecionado = async (mesSelecionado: number) => {
+    const resposta = await obterSemanas(mesSelecionado);
+    if (resposta.sucesso) {
+      return;
+    }
+  };
+
+  const onClickMes = (mes: MesesProps, index: number) => {
+    carregarDadosMesSelecionado(mes.key);
+    toggleActive(index);
+  };
+
   return (
     <Col>
       <HeaderPage title='Calendário de visitas' />
       <CardContent>
-        <Row>
+        <Row style={{ background: Colors.BACKGROUND_CONTENT }}>
           {mesesCalendario?.map((mes, index) => {
             const isActive = index === activeIndex;
 
             return (
-              <Col xs={6} md={8} lg={6} key={index}>
-                <CardMes isActive={isActive} onClick={() => toggleActive(index)}>
-                  <CustomIcon
-                    isActive={isActive}
-                    component={FaAngleRight}
-                    rotate={isActive ? 90 : 0}
-                    onClick={() => toggleActive(index)}
-                  />
-                  <CustomHeaderCard>
-                    <Typography>{mes.label}</Typography>
-                    <FaCalendarAlt size={16} />
-                  </CustomHeaderCard>
-                </CardMes>
-              </Col>
+              <React.Fragment key={index}>
+                <Col xs={6} md={8} lg={6}>
+                  <CardMes isActive={isActive} onClick={() => onClickMes(mes, index)}>
+                    <CustomIcon
+                      isActive={isActive}
+                      component={FaAngleRight}
+                      rotate={isActive ? 90 : 0}
+                      onClick={() => onClickMes(mes, index)}
+                    />
+                    <CustomHeaderCard>
+                      <Typography>{mes.label}</Typography>
+                      <FaCalendarAlt size={16} />
+                    </CustomHeaderCard>
+                  </CardMes>
+                  {isActive && <CustomSemanas>Teste</CustomSemanas>}
+                </Col>
+              </React.Fragment>
             );
           })}
         </Row>

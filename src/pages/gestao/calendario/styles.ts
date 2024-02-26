@@ -1,5 +1,5 @@
 import Icon from '@ant-design/icons';
-import { Flex } from 'antd';
+import { Col, Flex } from 'antd';
 import styled from 'styled-components';
 import { Colors } from '~/core/styles/colors';
 
@@ -12,6 +12,7 @@ export const CardMes = styled(Flex)<CardMesProps>`
   align-items: center;
   padding: 16px 16px 16px 0;
   justify-content: space-between;
+  background: ${Colors.Neutral.WHITE};
   border: 1px solid ${Colors.Components.BORDER_CARD_MESES_CALENDAR};
   border-left: ${(props) =>
     props.isActive
@@ -30,4 +31,8 @@ export const CustomHeaderCard = styled(Flex)<CardMesProps>`
   cursor: pointer;
   padding-left: 16px;
   justify-content: space-between;
+`;
+
+export const CustomSemanas = styled(Col)`
+  background: #ce2;
 `;
