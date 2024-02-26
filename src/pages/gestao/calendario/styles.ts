@@ -43,7 +43,9 @@ export const CustomHeaderCard = styled(Flex)<CardMesProps>`
       : `2px solid ${Colors.Components.BORDER_CARD_MESES_CALENDAR}`};
 `;
 
-export const CustomSemanas = styled(Col)`
+export const ContainerMes = styled(Col)`
   width: 100%;
-  height: 64px;
+  min-height: 64px;
+  border-left: 1px solid ${Colors.Components.BORDER_CARD_MESES_CALENDAR};
+  border-right: 1px solid ${Colors.Components.BORDER_CARD_MESES_CALENDAR};
 `;

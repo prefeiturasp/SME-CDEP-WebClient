@@ -23,6 +23,7 @@ type ColorsType = {
     BACKGROUND_FILTRO_AREA_PUBLICA: string;
     LABEL_FILTRO_AREA_PUBLICA: string;
     BORDER_CARD_MESES_CALENDAR: string;
+    BACKGROUND_CALENDARIO_DOMINGOS: string;
   };
   Suporte: {
     Primary: SuporteType;
@@ -54,6 +55,7 @@ const Colors: ColorsType = {
     BACKGROUND_FILTRO_AREA_PUBLICA: '#C3596E',
     LABEL_FILTRO_AREA_PUBLICA: '#292929',
     BORDER_CARD_MESES_CALENDAR: '#CED4DA',
+    BACKGROUND_CALENDARIO_DOMINGOS: '#DC8E8E40',
   },
   Suporte: {
     Primary: {
