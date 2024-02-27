@@ -27,7 +27,7 @@ const BtnCancelarSolicitacoes: React.FC = () => {
         description: 'Solicitação cancelada com sucesso',
       });
 
-      navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
+      navigate(ROUTES.PRINCIPAL);
     }
   };
 

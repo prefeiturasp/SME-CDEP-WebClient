@@ -76,7 +76,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
 
   const montarAlerta = (description: string, message: string) => (
     <Alert
-      style={{ margin: '8px 0px' }}
+      style={{ margin: '-5px 0px 15px' }}
       message={message}
       showIcon
       description={`Planilha: ${description}`}
@@ -84,7 +84,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
     />
   );
 
-  const obterConteudoExtraPorCampo = (nameFieldEnum: string) => {
+  const obterConteudoExtraPorCampo = (nameFieldEnum: string): React.ReactNode | undefined => {
     if (!errosAcervoLinhaRetorno) return;
 
     const fieldError = errosAcervoLinhaRetorno[nameFieldEnum as keyof AcervoLinhaRetornoCamposDTO];
@@ -203,6 +203,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
                     PropsByFieldAcervoEnum[FieldAcervoEnum.Coautor].name,
                   ),
                 }}
+                obterConteudoExtraPorCampo={obterConteudoExtraPorCampo}
               />
             );
             break;

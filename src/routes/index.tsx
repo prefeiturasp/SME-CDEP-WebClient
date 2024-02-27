@@ -22,6 +22,7 @@ import { ConsultaAcervo } from '~/pages/consulta-acervo';
 import { DetalhesConsultaAcervo } from '~/pages/consulta-acervo/detalhes';
 import { ListaCardsConsultaAcervo } from '~/pages/consulta-acervo/lista-cards-consulta-acervo';
 import CriarConta from '~/pages/criar-conta';
+import { Calendario } from '~/pages/gestao/calendario';
 import Home from '~/pages/home';
 import Inicial from '~/pages/inicial';
 import Login from '~/pages/login';
@@ -178,6 +179,12 @@ const RoutesConfig = () => {
                     path={ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL_EDITAR}
                     element={<SolicitacaoManual />}
                   />
+                </Route>
+              </Route>
+
+              <Route path={ROUTES.GESTAO}>
+                <Route element={<GuardPermissao menuKey={MenuEnum.Calendario} />}>
+                  <Route path={ROUTES.CALENDARIO} element={<Calendario />} />
                 </Route>
               </Route>
             </Route>

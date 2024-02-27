@@ -1,14 +1,14 @@
-import { Button, Form, FormItemProps, Row } from 'antd';
+import { Form, FormItemProps, Row } from 'antd';
 import { DefaultOptionType, SelectProps } from 'antd/es/select';
 
 import React, { useEffect, useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
 import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form';
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormIdioma } from '~/core/constants/config-page-cadastros-auxiliares';
 import { CDEP_SELECT_IDIOMA } from '~/core/constants/ids/select';
 import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { obterIdioma } from '~/core/services/idioma-service';
+import { ButtonAdicionar } from '../components/btn-add';
 
 const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Idioma];
 
@@ -45,46 +45,38 @@ const SelectIdioma: React.FC<SelectIdiomaProps> = ({ selectProps, formItemProps 
   };
 
   return (
-    <Row wrap={false} align='middle'>
-      <Form.Item
-        label={fieldProps.label}
-        name={fieldProps.name}
-        rules={[{ required: true }]}
-        style={{ width: '100%', marginRight: '8px' }}
-        {...formItemProps}
-      >
-        <Select
-          showSearch
-          allowClear
-          id={CDEP_SELECT_IDIOMA}
-          {...selectProps}
-          options={options}
-          placeholder={fieldProps.label}
-        />
-      </Form.Item>
-      <Button
-        type='default'
-        block
-        icon={<FaPlus />}
-        onClick={() => setOpenModal(true)}
-        style={{
-          fontSize: 16,
-          width: '43px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}
-      />
-      {openModal && (
-        <FormCadastrosAuxiliares
-          {...paramsConfigPageFormIdioma}
-          isModal
-          title='Cadastrar Idioma'
-          maxLength={15}
-          setOpenModal={validarAoFecharModal}
-        />
-      )}
-    </Row>
+    <>
+      <Row wrap={false}>
+        <Form.Item
+          label={fieldProps.label}
+          name={fieldProps.name}
+          rules={[{ required: true }]}
+          style={{ width: '100%', marginRight: '8px' }}
+          {...formItemProps}
+          extra={undefined}
+        >
+          <Select
+            showSearch
+            allowClear
+            id={CDEP_SELECT_IDIOMA}
+            {...selectProps}
+            options={options}
+            placeholder={fieldProps.label}
+          />
+        </Form.Item>
+        <ButtonAdicionar onClick={() => setOpenModal(true)} />
+        {openModal && (
+          <FormCadastrosAuxiliares
+            {...paramsConfigPageFormIdioma}
+            isModal
+            title='Cadastrar Idioma'
+            maxLength={15}
+            setOpenModal={validarAoFecharModal}
+          />
+        )}
+      </Row>
+      {formItemProps?.extra}
+    </>
   );
 };
 

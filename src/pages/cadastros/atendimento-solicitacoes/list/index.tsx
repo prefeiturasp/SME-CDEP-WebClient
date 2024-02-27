@@ -25,8 +25,9 @@ import { dayjs } from '~/core/date/dayjs';
 import { SolicitacaoDTO } from '~/core/dto/solicitacao-dto';
 import { ROUTES } from '~/core/enum/routes';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
+import { InputRfCpfSolicitante } from './components/rf-cpf-solicitante';
 
-type FiltroSolicitacaoProps = {
+export type FiltroSolicitacaoProps = {
   tipoAcervo: number | null;
   acervoSolicitacaoId: number | null;
   dataSolicitacaoInicio: string | null;
@@ -35,6 +36,7 @@ type FiltroSolicitacaoProps = {
   dataVisitaFim: string | null;
   situacaoItem: number | null;
   responsavel: string | null;
+  solicitanteRf: string | null;
 };
 
 const DEFAULT_VALUES: FiltroSolicitacaoProps = {
@@ -46,6 +48,7 @@ const DEFAULT_VALUES: FiltroSolicitacaoProps = {
   dataVisitaFim: null,
   situacaoItem: null,
   responsavel: null,
+  solicitanteRf: null,
 };
 
 const columns: ColumnsType<SolicitacaoDTO> = [
@@ -115,6 +118,7 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
       dataSolicitacaoFim: form?.getFieldValue('dataSolicitacao')?.[1],
       dataVisitaInicio: form?.getFieldValue('dataVisita')?.[0],
       dataVisitaFim: form?.getFieldValue('dataVisita')?.[1],
+      solicitanteRf: form?.getFieldValue('solicitanteRf'),
     });
   };
 
@@ -206,6 +210,16 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
 
                 <Col xs={24} md={8}>
                   <SelectSituacaoAtendimento selectProps={{ onChange: obterFiltros }} />
+                </Col>
+
+                <Col xs={24} md={8}>
+                  <InputRfCpfSolicitante obterFiltros={obterFiltros} />
+                </Col>
+
+                <Col xs={24} md={8}>
+                  <Form.Item label='Nome do solicitante' name='nomeSolicitante'>
+                    <Input type='text' placeholder='Nome do solicitante' disabled />
+                  </Form.Item>
                 </Col>
 
                 <Col xs={24}>

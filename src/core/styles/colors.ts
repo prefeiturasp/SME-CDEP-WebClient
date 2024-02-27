@@ -21,6 +21,15 @@ type ColorsType = {
     BACKGROUND_ALERT: string;
     TOOLTIP: string;
     BACKGROUND_FILTRO_AREA_PUBLICA: string;
+    LABEL_FILTRO_AREA_PUBLICA: string;
+    BORDER_CARD_MESES_CALENDAR: string;
+    BACKGROUND_CALENDARIO_DOMINGOS: string;
+    BACKGROUND_CALENDARIO_DIA_EXPANDIDO: string;
+    BACKGROUND_TAGS_CALENDARIO: {
+      VISITA: string;
+      FERIADO: string;
+      SUSPENSAO: string;
+    };
   };
   Suporte: {
     Primary: SuporteType;
@@ -50,6 +59,15 @@ const Colors: ColorsType = {
     BACKGROUND_ALERT: '#333638',
     TOOLTIP: '#086397',
     BACKGROUND_FILTRO_AREA_PUBLICA: '#C3596E',
+    LABEL_FILTRO_AREA_PUBLICA: '#292929',
+    BORDER_CARD_MESES_CALENDAR: '#CED4DA',
+    BACKGROUND_CALENDARIO_DOMINGOS: '#DC8E8E40',
+    BACKGROUND_CALENDARIO_DIA_EXPANDIDO: '#FFF7E1',
+    BACKGROUND_TAGS_CALENDARIO: {
+      VISITA: '#00585E',
+      FERIADO: '#7F298C',
+      SUSPENSAO: '#89162d',
+    },
   },
   Suporte: {
     Primary: {
@@ -80,4 +98,4 @@ const BoxShadow = {
   AFIX_HEADER: 'rgba(0, 0, 0, 0.15) 0px 1.5rem 1rem -18px',
 };
 
-export { Colors, BoxShadow };
+export { BoxShadow, Colors };

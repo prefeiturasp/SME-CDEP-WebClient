@@ -13,5 +13,6 @@ export enum MenuEnum {
   Operacoes,
   Solicitacao,
   Gestao,
+  Calendario,
   AtendimentoSolicitacoes,
 }

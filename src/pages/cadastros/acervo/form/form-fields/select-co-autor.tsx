@@ -1,7 +1,6 @@
-import { Button, Form, FormItemProps, Row, SelectProps } from 'antd';
+import { Form, FormItemProps, Row, SelectProps } from 'antd';
 import { DefaultOptionType } from 'antd/es/select';
 import React, { useContext, useEffect, useState } from 'react';
-import { FaPlus } from 'react-icons/fa';
 import FormCadastrosAuxiliares from '~/components/cdep/cadastros/auxiliares/form';
 import Select from '~/components/lib/inputs/select';
 import { paramsConfigPageFormAutor } from '~/core/constants/config-page-cadastros-auxiliares';
@@ -13,6 +12,7 @@ import { TipoCreditoAutoria } from '~/core/enum/tipo-credito-autoria';
 import { obterCreditoAutorResumido } from '~/core/services/credito-autor-service';
 import { obterPermissaoPorMenu } from '~/core/utils/perfil';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
+import { ButtonAdicionar } from '../components/btn-add';
 import InputTipoAutoriaLista from './input-tipo-autoria-lista';
 
 const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Coautor];
@@ -20,9 +20,14 @@ const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.Coautor];
 type SelectCoautorProps = {
   selectProps?: SelectProps;
   formItemProps?: FormItemProps;
+  obterConteudoExtraPorCampo?: (nameFieldEnum: string) => React.ReactNode;
 };
 
-const SelectCoautor: React.FC<SelectCoautorProps> = ({ selectProps, formItemProps }) => {
+const SelectCoautor: React.FC<SelectCoautorProps> = ({
+  selectProps,
+  formItemProps,
+  obterConteudoExtraPorCampo,
+}) => {
   const { desabilitarCampos } = useContext(PermissaoContext);
 
   const permissao = obterPermissaoPorMenu(MenuEnum.Autor);
@@ -57,7 +62,7 @@ const SelectCoautor: React.FC<SelectCoautorProps> = ({ selectProps, formItemProp
 
         return (
           <>
-            <Row wrap={false} align='middle'>
+            <Row wrap={false}>
               <Form.Item
                 label={fieldProps.label}
                 name={fieldProps.name}
@@ -65,6 +70,7 @@ const SelectCoautor: React.FC<SelectCoautorProps> = ({ selectProps, formItemProp
                 {...formItemProps}
                 shouldUpdate
                 getValueFromEvent={(_, value) => value}
+                extra={undefined}
               >
                 <Select
                   showSearch
@@ -91,21 +97,12 @@ const SelectCoautor: React.FC<SelectCoautorProps> = ({ selectProps, formItemProp
                   }}
                 />
               </Form.Item>
-              <Button
-                type='default'
-                block
-                icon={<FaPlus />}
+              <ButtonAdicionar
                 onClick={() => setOpenModal(true)}
                 disabled={!permissao.podeIncluir || desabilitarCampos}
-                style={{
-                  fontSize: 16,
-                  width: '43px',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                }}
               />
             </Row>
+            {formItemProps?.extra}
             {openModal && (
               <FormCadastrosAuxiliares
                 {...paramsConfigPageFormAutor}
@@ -115,6 +112,8 @@ const SelectCoautor: React.FC<SelectCoautorProps> = ({ selectProps, formItemProp
               />
             )}
             <InputTipoAutoriaLista />
+            {obterConteudoExtraPorCampo &&
+              obterConteudoExtraPorCampo(PropsByFieldAcervoEnum[FieldAcervoEnum.TipoAutoria].name)}
           </>
         );
       }}
