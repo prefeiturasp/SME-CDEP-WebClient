@@ -1,4 +1,4 @@
-import { Col, Row, Tag } from 'antd';
+import { Flex, Row, Tag } from 'antd';
 import styled from 'styled-components';
 import { DiasSemanaEnum } from '~/core/enum/dias-semana';
 import { TipoEventoEnum } from '~/core/enum/tipo-evento-enum';
@@ -10,9 +10,9 @@ type DiasProps = {
   diaExpandido?: boolean;
 };
 
-type EventosTagProps = {
-  tipoId: TipoEventoEnum;
-};
+interface EventosProps extends DiasProps {
+  tipoId?: TipoEventoEnum;
+}
 
 export const NomeDia = styled.div`
   height: 38px;
@@ -23,7 +23,7 @@ export const NomeDia = styled.div`
   background: ${Colors.Neutral.WHITE};
 `;
 
-export const Dias = styled.div<DiasProps>`
+export const Dias = styled.div<EventosProps>`
   height: 64px;
   padding: 4px;
   display: flex;
@@ -40,6 +40,8 @@ export const Dias = styled.div<DiasProps>`
       return `${Colors.BACKGROUND_CONTENT}`;
     } else if (props.desabilitado) {
       return `${Colors.BACKGROUND_CONTENT}`;
+    } else if (props.diaExpandido) {
+      return `${Colors.Components.BACKGROUND_CALENDARIO_DIA_EXPANDIDO}`;
     }
 
     return `${Colors.Neutral.WHITE}`;
@@ -58,7 +60,7 @@ export const ContainerDia = styled(Row)`
   padding-left: 6px;
 `;
 
-export const DivTag = styled(Tag)<EventosTagProps>`
+export const DivTag = styled(Tag)<EventosProps>`
   border-radius: 10px;
   justify-content: space-between;
   color: ${Colors.Neutral.WHITE};
@@ -73,10 +75,27 @@ export const DivTag = styled(Tag)<EventosTagProps>`
   }};
 `;
 
-export const ContainerDiaExpandido = styled(Col)`
+export const ContainerDiaExpandido = styled(Flex)<EventosProps>`
   width: 100%;
+  padding: 6px;
   min-height: 64px;
+  align-items: center;
+  justify-content: center;
   border-left: 1px solid ${Colors.Components.BORDER_CARD_MESES_CALENDAR};
   border-right: 1px solid ${Colors.Components.BORDER_CARD_MESES_CALENDAR};
-  background: ${Colors.Neutral.WHITE};
+  background: ${(props) => {
+    if (props.tipoId === TipoEventoEnum.SUSPENSAO || props.tipoId === TipoEventoEnum.FERIADO) {
+      return `${Colors.BACKGROUND_CONTENT}`;
+    }
+
+    return `${Colors.Components.BACKGROUND_CALENDARIO_DIA_EXPANDIDO}`;
+  }};
+
+  &.visita {
+    justify-content: start;
+  }
+
+  &.suspensao {
+    justify-content: space-between;
+  }
 `;

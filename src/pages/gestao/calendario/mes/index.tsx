@@ -1,5 +1,6 @@
 import { Col, Row } from 'antd';
 import React, { useEffect, useState } from 'react';
+import { notification } from '~/components/lib/notification';
 import {
   DiaDTO,
   EventoDetalheDTO,
@@ -7,10 +8,12 @@ import {
   SemanaDTO,
 } from '~/core/dto/calendario-evento-dto';
 import { MesesEnum } from '~/core/enum/meses';
+import { TipoEventoEnum } from '~/core/enum/tipo-evento-enum';
 import { obterDetalheDia } from '~/core/services/calendario-eventos-service';
 import { MesesRowProps } from '../meses';
+import { DetalhesEventoDia } from './detalhes-evento-dia';
 import { diasSemana } from './dias-semana';
-import { ContainerDia, ContainerDiaExpandido, Dias, DivTag, NomeDia } from './styles';
+import { ContainerDia, Dias, DivTag, NomeDia } from './styles';
 
 type LinhaExpandidaProps = {
   indexLinha: number;
@@ -24,7 +27,7 @@ type MesProps = {
 };
 
 export const Mes: React.FC<MesProps> = ({ mesEscolhido, semanas, onClickMes }) => {
-  const [dados, setDados] = useState<EventoDetalheDTO>();
+  const [dados, setDados] = useState<EventoDetalheDTO[] | undefined>();
   const [indexDiaExpandido, setIndexDiaExpandido] = useState<LinhaExpandidaProps | undefined>();
 
   const toggleActive = (dia: DiaDTO, indexLinha: number) => {
@@ -39,7 +42,7 @@ export const Mes: React.FC<MesProps> = ({ mesEscolhido, semanas, onClickMes }) =
     if (mesEscolhido) {
       await obterDetalheDia(diaSelecionado, mesEscolhido).then((resposta) => {
         if (resposta.sucesso) {
-          setDados(resposta?.dados);
+          setDados([resposta?.dados]);
         }
       });
     }
@@ -70,13 +73,26 @@ export const Mes: React.FC<MesProps> = ({ mesEscolhido, semanas, onClickMes }) =
         const row = semana?.dias.map((dia) => {
           const diaExpandido = dia.dia === indexDiaExpandido?.keyDia;
 
+          const ehFeriado =
+            dia.eventosTag.filter((item) => item.tipoId === TipoEventoEnum.FERIADO)?.length > 0;
+
           return (
             <Dias
               key={dia.dia}
               dayOfWeek={dia.dayOfWeek}
-              desabilitado={dia.desabilitado}
               diaExpandido={diaExpandido}
-              onClick={() => onClickDia(dia, semana?.numero)}
+              desabilitado={dia.desabilitado || ehFeriado}
+              onClick={() => {
+                setIndexDiaExpandido(undefined);
+                if (ehFeriado) {
+                  notification.error({
+                    message: 'Erro',
+                    description: 'Não é possível inserir evento no feriado.',
+                  });
+                  return;
+                }
+                onClickDia(dia, semana?.numero);
+              }}
             >
               <ContainerDia>
                 {dia.dia}
@@ -95,7 +111,13 @@ export const Mes: React.FC<MesProps> = ({ mesEscolhido, semanas, onClickMes }) =
         return (
           <Col key={semana.numero} xs={24}>
             <Row>{row}</Row>
-            {linhaExpandida && <ContainerDiaExpandido>dados</ContainerDiaExpandido>}
+            {linhaExpandida && (
+              <>
+                {dados?.map((evento) => {
+                  return <DetalhesEventoDia key={evento.id} evento={evento} />;
+                })}
+              </>
+            )}
           </Col>
         );
       })}

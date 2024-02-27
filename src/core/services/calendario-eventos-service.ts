@@ -1,6 +1,6 @@
 import { URL_API_EVENTO } from '../constants/urls-api';
 import { CalendarioEventoDTO, EventoDetalheDTO } from '../dto/calendario-evento-dto';
-import { obterRegistro } from './api';
+import { inserirRegistro, obterRegistro } from './api';
 
 const obterSemanas = (mes: number) =>
   obterRegistro<CalendarioEventoDTO>(`${URL_API_EVENTO}/calendario/${mes}`);
@@ -8,4 +8,6 @@ const obterSemanas = (mes: number) =>
 const obterDetalheDia = (dia: number, mes: number) =>
   obterRegistro<EventoDetalheDTO>(`${URL_API_EVENTO}/detalhes-dia`, { params: { dia, mes } });
 
-export { obterDetalheDia, obterSemanas };
+const inserirSuspensao = (evento: any) => inserirRegistro(URL_API_EVENTO, { params: { evento } });
+
+export { inserirSuspensao, obterDetalheDia, obterSemanas };
