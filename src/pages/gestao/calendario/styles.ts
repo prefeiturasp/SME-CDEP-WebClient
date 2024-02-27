@@ -14,7 +14,7 @@ export const CardMes = styled(Flex)<CardMesProps>`
   background: ${Colors.Neutral.WHITE};
 `;
 
-export const DivRow = styled(Col)`
+export const WrapperMes = styled(Col)`
   border: 1px solid ${Colors.Components.BORDER_CARD_MESES_CALENDAR};
 `;
 

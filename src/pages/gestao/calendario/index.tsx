@@ -8,8 +8,8 @@ import { MesesEnum } from '~/core/enum/meses';
 import { obterSemanas } from '~/core/services/calendario-eventos-service';
 import { Colors } from '~/core/styles/colors';
 import { Mes } from './mes';
-import { MesesRowProps, mesesCalendario } from './meses';
-import { CardMes, ContainerMes, CustomHeaderCard, CustomIcon, DivRow } from './styles';
+import { MesesProps, MesesRowProps, mesesCalendario } from './meses';
+import { CardMes, ContainerMes, CustomHeaderCard, CustomIcon, WrapperMes } from './styles';
 
 type LinhaExpandidaProps = {
   indexLinha: number;
@@ -18,6 +18,7 @@ type LinhaExpandidaProps = {
 
 export const Calendario = () => {
   const [dados, setDados] = useState<CalendarioEventoDTO>();
+  const [mesEscolhido, setMesEscolhido] = useState<number>();
   const [indexMesExpandido, setIndexMesExpandido] = useState<LinhaExpandidaProps | undefined>();
 
   const toggleActive = (mes: MesesRowProps, indexLinha: number) => {
@@ -32,6 +33,7 @@ export const Calendario = () => {
     await obterSemanas(mesSelecionado).then((resposta) => {
       if (resposta.sucesso) {
         setDados(resposta?.dados);
+        setMesEscolhido(mesSelecionado);
       }
     });
   };
@@ -46,14 +48,14 @@ export const Calendario = () => {
       <HeaderPage title='Calendário de visitas' />
       <CardContent>
         <Row style={{ background: Colors.BACKGROUND_CONTENT }}>
-          {mesesCalendario.map((item, indexLinha) => {
+          {mesesCalendario.map((item: MesesProps, indexLinha: number) => {
             const linhaExpandida = indexLinha === indexMesExpandido?.indexLinha;
 
             const row = item.row.map((mes) => {
               const mesExpandido = mes.key === indexMesExpandido?.keyMes;
 
               return (
-                <DivRow key={mes.key} xs={6}>
+                <WrapperMes key={mes.key} xs={6}>
                   <CardMes mesExpandido={mesExpandido} onClick={() => onClickMes(mes, indexLinha)}>
                     <CustomIcon
                       component={FaAngleRight}
@@ -66,7 +68,7 @@ export const Calendario = () => {
                       <FaCalendarAlt size={16} />
                     </CustomHeaderCard>
                   </CardMes>
-                </DivRow>
+                </WrapperMes>
               );
             });
 
@@ -75,7 +77,11 @@ export const Calendario = () => {
                 <Row>{row}</Row>
                 {linhaExpandida && (
                   <ContainerMes>
-                    <Mes semanas={dados?.semanas} />
+                    <Mes
+                      onClickMes={onClickMes}
+                      semanas={dados?.semanas}
+                      mesEscolhido={mesEscolhido}
+                    />
                   </ContainerMes>
                 )}
               </Col>

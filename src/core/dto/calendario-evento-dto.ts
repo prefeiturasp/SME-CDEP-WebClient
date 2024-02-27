@@ -20,3 +20,13 @@ export type EventoTagDTO = {
   tipoId: TipoEventoEnum;
   tipo: string;
 };
+
+export type EventoDetalheDTO = {
+  id: number;
+  tipoId: TipoEventoEnum;
+  tipo: string;
+  solicitante: string;
+  titulo: string;
+  codigoTombo: string;
+  acervoSolicitacaoId: number;
+};
