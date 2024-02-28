@@ -69,7 +69,6 @@ export const ContainerDia = styled(Row)`
 
 export const DivTag = styled(Tag)<EventosProps>`
   border-radius: 10px;
-  justify-content: space-between;
   color: ${Colors.Neutral.WHITE};
   background: ${(props) => {
     if (props.tipoId === TipoEventoEnum.FERIADO) {

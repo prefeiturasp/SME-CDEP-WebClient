@@ -91,16 +91,22 @@ export const Mes: React.FC<MesProps> = ({
                 onClickDia(dia, semana?.numero);
               }}
             >
-              <ContainerDia>
-                {dia.dia}
-                {dia?.eventosTag?.map((tag: EventoTagDTO) => {
-                  return (
-                    <DivTag tipoId={tag?.tipoId} key={tag.tipoId}>
-                      {tag.tipo}
-                    </DivTag>
-                  );
-                })}
-              </ContainerDia>
+              <Col xs={24}>
+                <Row>
+                  <Col>{dia.dia}</Col>
+                  <Col>
+                    <ContainerDia>
+                      {dia?.eventosTag?.map((tag: EventoTagDTO) => {
+                        return (
+                          <DivTag tipoId={tag?.tipoId} key={tag.tipoId}>
+                            {tag.tipo}
+                          </DivTag>
+                        );
+                      })}
+                    </ContainerDia>
+                  </Col>
+                </Row>
+              </Col>
             </Dias>
           );
         });
