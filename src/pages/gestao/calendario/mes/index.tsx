@@ -92,7 +92,7 @@ export const Mes: React.FC<MesProps> = ({
               }}
             >
               <Col xs={24}>
-                <Row>
+                <Row justify='space-between'>
                   <Col>{dia.dia}</Col>
                   <Col>
                     <ContainerDia>
