@@ -1,4 +1,5 @@
 import { Col, Row } from 'antd';
+import { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
   DiaDTO,
@@ -22,7 +23,7 @@ type MesProps = {
   semanas?: SemanaDTO[];
   mesEscolhido?: MesesEnum;
   onClickMes?: (mes: MesesRowProps, indexLinha: number) => void;
-  carregarDadosMesSelecionado?: any;
+  carregarDadosMesSelecionado?: (mesEscolhido: number) => Promise<AxiosResponse<void, any>>;
 };
 
 export const Mes: React.FC<MesProps> = ({
