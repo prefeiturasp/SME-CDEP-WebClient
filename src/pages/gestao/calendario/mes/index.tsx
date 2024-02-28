@@ -1,5 +1,4 @@
 import { Col, Row } from 'antd';
-import { AxiosResponse } from 'axios';
 import React, { useEffect, useState } from 'react';
 import {
   DiaDTO,
@@ -23,7 +22,7 @@ type MesProps = {
   semanas?: SemanaDTO[];
   mesEscolhido?: MesesEnum;
   onClickMes?: (mes: MesesRowProps, indexLinha: number) => void;
-  carregarDadosMesSelecionado?: (mesEscolhido: number) => Promise<AxiosResponse<void, any>>;
+  carregarDadosMesSelecionado?: (mesEscolhido: number) => void;
 };
 
 export const Mes: React.FC<MesProps> = ({
@@ -79,7 +78,7 @@ export const Mes: React.FC<MesProps> = ({
 
         const row = semana?.dias.map((dia) => {
           const diaExpandido = dia.dia === indexDiaExpandido?.keyDia;
-          const eventoTipoId = dia.eventosTag.find((item) => item?.tipoId);
+          const eventoTipoId = dia?.eventosTag?.find((item) => item?.tipoId);
 
           return (
             <Dias
