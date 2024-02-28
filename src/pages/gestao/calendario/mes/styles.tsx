@@ -42,12 +42,6 @@ export const Dias = styled.div<DiasProps>`
       return `${Colors.BACKGROUND_CONTENT}`;
     } else if (props.desabilitado) {
       return `${Colors.BACKGROUND_CONTENT}`;
-    } else if (
-      props.diaExpandido &&
-      (props.eventoTipoId?.tipoId === TipoEventoEnum.FERIADO ||
-        props.eventoTipoId?.tipoId === TipoEventoEnum.SUSPENSAO)
-    ) {
-      return `${Colors.BACKGROUND_CONTENT}`;
     } else if (props.diaExpandido) {
       return `${Colors.Components.BACKGROUND_CALENDARIO_DIA_EXPANDIDO}`;
     }
@@ -87,20 +81,10 @@ export const ContainerDiaExpandido = styled(Flex)<EventosProps>`
   padding: 6px;
   min-height: 64px;
   align-items: center;
-  justify-content: center;
+  justify-content: start;
   border-left: 1px solid ${Colors.Components.BORDER_CARD_MESES_CALENDAR};
   border-right: 1px solid ${Colors.Components.BORDER_CARD_MESES_CALENDAR};
-  background: ${(props) => {
-    if (props.tipoId === TipoEventoEnum.SUSPENSAO || props.tipoId === TipoEventoEnum.FERIADO) {
-      return `${Colors.BACKGROUND_CONTENT}`;
-    }
-
-    return `${Colors.Components.BACKGROUND_CALENDARIO_DIA_EXPANDIDO}`;
-  }};
-
-  &.visita {
-    justify-content: start;
-  }
+  background: ${Colors.Components.BACKGROUND_CALENDARIO_DIA_EXPANDIDO};
 
   &.suspensao {
     justify-content: space-between;

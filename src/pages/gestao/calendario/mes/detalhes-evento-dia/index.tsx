@@ -63,16 +63,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
 
   const detalheSuspensao = (item: EventoDetalheDTO) => (
     <ContainerDiaExpandido tipoId={item?.tipoId} className='suspensao'>
-      <Row
-        gutter={16}
-        align='middle'
-        justify='space-between'
-        style={{ width: '100%', marginLeft: 2 }}
-      >
-        <Row>
-          <ContainerTypography>Justificativa:</ContainerTypography>
-          <Typography.Text ellipsis>{item.justificativa}</Typography.Text>
-        </Row>
+      <Row gutter={16} align='middle'>
         <Col>
           <ButtonSecundary
             onClick={() => {
@@ -96,6 +87,13 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
             Excluir suspensão
           </ButtonSecundary>
         </Col>
+
+        <Col>
+          <Row>
+            <ContainerTypography>Justificativa:</ContainerTypography>
+            <Typography.Text ellipsis>{item.justificativa}</Typography.Text>
+          </Row>
+        </Col>
       </Row>
     </ContainerDiaExpandido>
   );
@@ -109,7 +107,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
   );
 
   const detalheFeriado = (item: EventoDetalheDTO) => (
-    <ContainerDiaExpandido tipoId={item?.tipoId} className='semEvento'>
+    <ContainerDiaExpandido tipoId={item?.tipoId} className='feriado'>
       <Col>
         <Row>
           <ContainerTypography>Feriado:</ContainerTypography>
