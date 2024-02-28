@@ -77,7 +77,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
           <ButtonSecundary
             onClick={() => {
               confirmacao({
-                title: DESEJA_EXCLUIR_SUSPENSAO,
+                content: DESEJA_EXCLUIR_SUSPENSAO,
                 onOk: () => {
                   deletarSuspensao(item.id).then(() => {
                     notification.success({
