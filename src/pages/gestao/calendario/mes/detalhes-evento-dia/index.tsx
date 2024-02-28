@@ -1,6 +1,5 @@
 import { Col, Form, Input, Row, Typography } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { AxiosResponse } from 'axios';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonPrimary from '~/components/lib/button/primary';
@@ -19,7 +18,7 @@ type DetalhesEventoDiaProps = {
   mesEscolhido?: number;
   diaEscolhido?: number;
   evento?: EventoDetalheDTO[];
-  carregarDadosMesSelecionado?: (mesEscolhido: number) => Promise<AxiosResponse<void>>;
+  carregarDadosMesSelecionado?: (mesEscolhido: number) => void;
 };
 
 export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
