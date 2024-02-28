@@ -16,9 +16,9 @@ import { deletarSuspensao, inserirSuspensao } from '~/core/services/calendario-e
 import { ContainerDiaExpandido, ContainerTypography } from '../styles';
 
 type DetalhesEventoDiaProps = {
-  evento: any;
   mesEscolhido?: number;
   diaEscolhido?: number;
+  evento?: EventoDetalheDTO[];
   carregarDadosMesSelecionado?: (mesEscolhido: number) => Promise<AxiosResponse<void>>;
 };
 
@@ -30,7 +30,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
 }) => {
   const [form] = useForm();
   const navigate = useNavigate();
-  const naoTemEventos = !evento.length;
+  const naoTemEventos = !evento?.length;
   const [abrirModal, setAbrirModal] = useState<boolean>(false);
 
   const detalheVisita = (item: EventoDetalheDTO) => (
@@ -98,8 +98,8 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
     </ContainerDiaExpandido>
   );
 
-  const detalheSemEvento = (item: EventoDetalheDTO) => (
-    <ContainerDiaExpandido tipoId={item?.tipoId} className='semEvento'>
+  const detalheSemEvento = () => (
+    <ContainerDiaExpandido className='semEvento'>
       <Col>
         <ButtonPrimary onClick={() => setAbrirModal(true)}>Incluir suspensão</ButtonPrimary>
       </Col>
@@ -133,7 +133,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
   };
 
   const onFinish = () => {
-    form.validateFields().then(async () => {
+    form.validateFields().then(() => {
       const justificativa = form.getFieldValue('justificativa');
 
       const valoresParaSalvar = {
@@ -144,7 +144,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
         descricao: TipoEventoEnumDisplay[TipoEventoEnum.SUSPENSAO],
       };
 
-      await inserirSuspensao(valoresParaSalvar).then(() => {
+      inserirSuspensao(valoresParaSalvar).then(() => {
         notification.success({
           message: 'Sucesso',
           description: 'A suspensão foi inserida com sucesso!',
@@ -160,7 +160,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
 
   return (
     <>
-      {evento.map((item: EventoDetalheDTO) => {
+      {evento?.map((item: EventoDetalheDTO) => {
         if (item?.tipoId === TipoEventoEnum.VISITA) {
           return detalheVisita(item);
         } else if (item?.tipoId === TipoEventoEnum.SUSPENSAO) {
@@ -170,7 +170,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
         }
       })}
 
-      {naoTemEventos && detalheSemEvento(evento)}
+      {naoTemEventos && detalheSemEvento()}
 
       <Modal
         open={abrirModal}

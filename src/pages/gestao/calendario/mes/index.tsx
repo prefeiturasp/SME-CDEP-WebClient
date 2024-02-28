@@ -19,8 +19,8 @@ type LinhaExpandidaProps = {
 };
 
 type MesProps = {
-  semanas: SemanaDTO[] | undefined;
-  mesEscolhido: MesesEnum | undefined;
+  semanas?: SemanaDTO[];
+  mesEscolhido?: MesesEnum;
   onClickMes?: (mes: MesesRowProps, indexLinha: number) => void;
   carregarDadosMesSelecionado?: any;
 };
@@ -48,7 +48,7 @@ export const Mes: React.FC<MesProps> = ({
     if (mesEscolhido) {
       await obterDetalheDia(diaSelecionado, mesEscolhido).then((resposta) => {
         if (resposta.sucesso) {
-          setDados([resposta?.dados]);
+          setDados(resposta?.dados);
         }
       });
     }
@@ -116,17 +116,25 @@ export const Mes: React.FC<MesProps> = ({
             <Row>{row}</Row>
             {linhaExpandida && (
               <>
-                {dados?.map((evento) => {
-                  return (
-                    <DetalhesEventoDia
-                      evento={evento}
-                      key={evento.id}
-                      mesEscolhido={mesEscolhido}
-                      diaEscolhido={diaEscolhido}
-                      carregarDadosMesSelecionado={carregarDadosMesSelecionado}
-                    />
-                  );
-                })}
+                {dados?.length ? (
+                  dados?.map((evento) => {
+                    return (
+                      <DetalhesEventoDia
+                        evento={dados}
+                        key={evento.id}
+                        mesEscolhido={mesEscolhido}
+                        diaEscolhido={diaEscolhido}
+                        carregarDadosMesSelecionado={carregarDadosMesSelecionado}
+                      />
+                    );
+                  })
+                ) : (
+                  <DetalhesEventoDia
+                    mesEscolhido={mesEscolhido}
+                    diaEscolhido={diaEscolhido}
+                    carregarDadosMesSelecionado={carregarDadosMesSelecionado}
+                  />
+                )}
               </>
             )}
           </Col>

@@ -10,7 +10,7 @@ const obterSemanas = (mes: number) =>
   obterRegistro<CalendarioEventoDTO>(`${URL_API_EVENTO}/calendario/${mes}`);
 
 const obterDetalheDia = (dia: number, mes: number) =>
-  obterRegistro<EventoDetalheDTO>(`${URL_API_EVENTO}/detalhes-dia`, { params: { dia, mes } });
+  obterRegistro<EventoDetalheDTO[]>(`${URL_API_EVENTO}/detalhes-dia`, { params: { dia, mes } });
 
 const inserirSuspensao = (params: EventoCadastroDTO) => inserirRegistro(URL_API_EVENTO, params);
 
