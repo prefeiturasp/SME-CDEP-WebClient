@@ -17,8 +17,8 @@ import { ContainerDiaExpandido, ContainerTypography } from '../styles';
 
 type DetalhesEventoDiaProps = {
   evento: any;
-  mesEscolhido: number | undefined;
-  diaEscolhido: number | undefined;
+  mesEscolhido?: number;
+  diaEscolhido?: number;
   carregarDadosMesSelecionado?: (mesEscolhido: number) => Promise<AxiosResponse<void>>;
 };
 
@@ -65,8 +65,8 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
     <ContainerDiaExpandido tipoId={item?.tipoId} className='suspensao'>
       <Row
         gutter={16}
-        align={'middle'}
-        justify={'space-between'}
+        align='middle'
+        justify='space-between'
         style={{ width: '100%', marginLeft: 2 }}
       >
         <Row>

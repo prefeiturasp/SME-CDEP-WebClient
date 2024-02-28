@@ -35,8 +35,8 @@ export type EventoDetalheDTO = {
 };
 
 export type EventoCadastroDTO = {
-  dia: number | undefined;
-  mes: MesesEnum | undefined;
+  dia?: number;
+  mes?: MesesEnum;
   tipo: TipoEventoEnum;
   descricao: string;
   justificativa: string;
