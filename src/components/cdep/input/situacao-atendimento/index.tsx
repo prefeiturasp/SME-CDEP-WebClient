@@ -34,7 +34,7 @@ export const SelectSituacaoAtendimento: React.FC<SelectSituacaoAtendimentoProps>
   }, []);
 
   return (
-    <Form.Item label='Situação do atendimento' name='situacaoItem' {...formItemProps}>
+    <Form.Item label='Situação do item do atendimento' name='situacaoItem' {...formItemProps}>
       <Select
         showSearch
         allowClear
