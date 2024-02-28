@@ -81,6 +81,7 @@ export const Calendario = () => {
                       onClickMes={onClickMes}
                       semanas={dados?.semanas}
                       mesEscolhido={mesEscolhido}
+                      carregarDadosMesSelecionado={carregarDadosMesSelecionado}
                     />
                   </ContainerMes>
                 )}

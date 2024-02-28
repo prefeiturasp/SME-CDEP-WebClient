@@ -1,3 +1,4 @@
+import { MesesEnum } from '../enum/meses';
 import { TipoEventoEnum } from '../enum/tipo-evento-enum';
 
 export type CalendarioEventoDTO = {
@@ -23,10 +24,20 @@ export type EventoTagDTO = {
 
 export type EventoDetalheDTO = {
   id: number;
-  tipoId: TipoEventoEnum;
   tipo: string;
-  solicitante: string;
   titulo: string;
+  descricao: string;
+  justificativa: string;
   codigoTombo: string;
+  solicitante: string;
+  tipoId: TipoEventoEnum;
   acervoSolicitacaoId: number;
+};
+
+export type EventoCadastroDTO = {
+  dia: number | undefined;
+  mes: MesesEnum | undefined;
+  tipo: TipoEventoEnum;
+  descricao: string;
+  justificativa: string;
 };
