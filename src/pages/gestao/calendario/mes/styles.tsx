@@ -1,5 +1,6 @@
-import { Flex, Row, Tag } from 'antd';
+import { Flex, Row, Tag, Typography } from 'antd';
 import styled from 'styled-components';
+import { EventoTagDTO } from '~/core/dto/calendario-evento-dto';
 import { DiasSemanaEnum } from '~/core/enum/dias-semana';
 import { TipoEventoEnum } from '~/core/enum/tipo-evento-enum';
 import { Colors } from '~/core/styles/colors';
@@ -8,9 +9,10 @@ type DiasProps = {
   desabilitado?: boolean;
   dayOfWeek?: DiasSemanaEnum;
   diaExpandido?: boolean;
+  eventoTipoId?: EventoTagDTO;
 };
 
-interface EventosProps extends DiasProps {
+interface EventosProps {
   tipoId?: TipoEventoEnum;
 }
 
@@ -23,7 +25,7 @@ export const NomeDia = styled.div`
   background: ${Colors.Neutral.WHITE};
 `;
 
-export const Dias = styled.div<EventosProps>`
+export const Dias = styled.div<DiasProps>`
   height: 64px;
   padding: 4px;
   display: flex;
@@ -39,6 +41,12 @@ export const Dias = styled.div<EventosProps>`
     } else if (props.dayOfWeek === DiasSemanaEnum.Sabado) {
       return `${Colors.BACKGROUND_CONTENT}`;
     } else if (props.desabilitado) {
+      return `${Colors.BACKGROUND_CONTENT}`;
+    } else if (
+      props.diaExpandido &&
+      (props.eventoTipoId?.tipoId === TipoEventoEnum.FERIADO ||
+        props.eventoTipoId?.tipoId === TipoEventoEnum.SUSPENSAO)
+    ) {
       return `${Colors.BACKGROUND_CONTENT}`;
     } else if (props.diaExpandido) {
       return `${Colors.Components.BACKGROUND_CALENDARIO_DIA_EXPANDIDO}`;
@@ -62,7 +70,6 @@ export const ContainerDia = styled(Row)`
 
 export const DivTag = styled(Tag)<EventosProps>`
   border-radius: 10px;
-  justify-content: space-between;
   color: ${Colors.Neutral.WHITE};
   background: ${(props) => {
     if (props.tipoId === TipoEventoEnum.FERIADO) {
@@ -98,4 +105,9 @@ export const ContainerDiaExpandido = styled(Flex)<EventosProps>`
   &.suspensao {
     justify-content: space-between;
   }
+`;
+
+export const ContainerTypography = styled(Typography)`
+  margin-right: 6px;
+  font-weight: bold;
 `;
