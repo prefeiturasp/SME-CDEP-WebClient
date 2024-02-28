@@ -43,8 +43,9 @@ export const Dias = styled.div<DiasProps>`
     } else if (props.desabilitado) {
       return `${Colors.BACKGROUND_CONTENT}`;
     } else if (
-      (props.diaExpandido && props.eventoTipoId?.tipoId === TipoEventoEnum.FERIADO) ||
-      (props.diaExpandido && props.eventoTipoId?.tipoId === TipoEventoEnum.SUSPENSAO)
+      props.diaExpandido &&
+      (props.eventoTipoId?.tipoId === TipoEventoEnum.FERIADO ||
+        props.eventoTipoId?.tipoId === TipoEventoEnum.SUSPENSAO)
     ) {
       return `${Colors.BACKGROUND_CONTENT}`;
     } else if (props.diaExpandido) {
