@@ -1,5 +1,5 @@
 import { Col, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
   DiaDTO,
   EventoDetalheDTO,
@@ -9,6 +9,7 @@ import {
 import { MesesEnum } from '~/core/enum/meses';
 import { TipoEventoEnum } from '~/core/enum/tipo-evento-enum';
 import { obterDetalheDia } from '~/core/services/calendario-eventos-service';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { MesesRowProps } from '../meses';
 import { DetalhesEventoDia } from './detalhes-evento-dia';
 import { diasSemana } from './dias-semana';
@@ -32,9 +33,10 @@ export const Mes: React.FC<MesProps> = ({
   onClickMes,
   carregarDadosMesSelecionado,
 }) => {
+  const { permissao } = useContext(PermissaoContext);
+  const [diaEscolhido, setDiaEscolhido] = useState<number>();
   const [dados, setDados] = useState<EventoDetalheDTO[] | undefined>();
   const [indexDiaExpandido, setIndexDiaExpandido] = useState<LinhaExpandidaProps | undefined>();
-  const [diaEscolhido, setDiaEscolhido] = useState<number>();
 
   const toggleActive = (dia: DiaDTO, indexLinha: number) => {
     if (indexDiaExpandido?.keyDia === dia.dia) {
@@ -89,6 +91,7 @@ export const Mes: React.FC<MesProps> = ({
               eventoTipoId={eventoTipoId}
               desabilitado={dia.desabilitado}
               onClick={() => {
+                if (!permissao.podeIncluir && !eventoTipoId) return;
                 onClickDia(dia, semana?.numero);
               }}
             >
