@@ -74,8 +74,7 @@ const BtnEnviarSolicitacoes: React.FC = () => {
     if (resposta.sucesso) {
       dispatch(setAcervosSelecionados([]));
 
-      const solicitacaoId = resposta.dados;
-      navigate(`${ROUTES.SOLICITACAO}/${solicitacaoId}`);
+      navigate(`${ROUTES.PRINCIPAL}`);
 
       notification.success({
         message: 'Sucesso',
