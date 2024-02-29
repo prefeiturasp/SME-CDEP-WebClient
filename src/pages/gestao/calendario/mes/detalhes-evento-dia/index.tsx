@@ -17,7 +17,10 @@ import { ContainerDiaExpandido, ContainerTypography } from '../styles';
 type DetalhesEventoDiaProps = {
   mesEscolhido?: number;
   diaEscolhido?: number;
-  evento?: EventoDetalheDTO[];
+  evento?: EventoDetalheDTO;
+  tipoVisita?: boolean;
+  tipoFeriado?: boolean;
+  tipoSuspensao?: boolean;
   carregarDadosMesSelecionado?: (mesEscolhido: number) => void;
 };
 
@@ -26,13 +29,16 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
   mesEscolhido,
   diaEscolhido,
   carregarDadosMesSelecionado,
+  tipoVisita,
+  tipoFeriado,
+  tipoSuspensao,
 }) => {
   const [form] = useForm();
   const navigate = useNavigate();
-  const naoTemEventos = !evento?.length;
+  const naoTemEventos = !evento;
   const [abrirModal, setAbrirModal] = useState<boolean>(false);
 
-  const detalheVisita = (item: EventoDetalheDTO) => (
+  const detalheVisita = (item?: EventoDetalheDTO) => (
     <ContainerDiaExpandido className='visita'>
       <Row gutter={16}>
         <Col>
@@ -44,23 +50,21 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
             {item?.tipo}
           </ButtonSecundary>
         </Col>
-        {item?.solicitante && item?.titulo && (
-          <Col>
-            <Row>
-              <ContainerTypography>Nome do solicitante:</ContainerTypography>
-              <Typography>{item?.solicitante}</Typography>
-            </Row>
-            <Row>
-              <ContainerTypography>Título do acervo:</ContainerTypography>
-              <Typography.Text ellipsis>{item?.titulo}</Typography.Text>
-            </Row>
-          </Col>
-        )}
+        <Col>
+          <Row>
+            <ContainerTypography>Nome do solicitante:</ContainerTypography>
+            <Typography>{item?.solicitante}</Typography>
+          </Row>
+          <Row>
+            <ContainerTypography>Título do acervo:</ContainerTypography>
+            <Typography.Text ellipsis>{item?.titulo}</Typography.Text>
+          </Row>
+        </Col>
       </Row>
     </ContainerDiaExpandido>
   );
 
-  const detalheSuspensao = (item: EventoDetalheDTO) => (
+  const detalheSuspensao = (item?: EventoDetalheDTO) => (
     <ContainerDiaExpandido tipoId={item?.tipoId} className='suspensao'>
       <Row gutter={16} align='middle'>
         <Col>
@@ -69,16 +73,18 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
               confirmacao({
                 content: DESEJA_EXCLUIR_SUSPENSAO,
                 onOk: () => {
-                  deletarSuspensao(item.id).then(() => {
-                    notification.success({
-                      message: 'Sucesso',
-                      description: 'A suspensão foi excluída com sucesso!',
-                    });
+                  if (item?.id) {
+                    deletarSuspensao(item.id).then(() => {
+                      notification.success({
+                        message: 'Sucesso',
+                        description: 'A suspensão foi excluída com sucesso!',
+                      });
 
-                    if (carregarDadosMesSelecionado && mesEscolhido) {
-                      carregarDadosMesSelecionado(mesEscolhido);
-                    }
-                  });
+                      if (carregarDadosMesSelecionado && mesEscolhido) {
+                        carregarDadosMesSelecionado(mesEscolhido);
+                      }
+                    });
+                  }
                 },
               });
             }}
@@ -90,7 +96,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
         <Col>
           <Row>
             <ContainerTypography>Justificativa:</ContainerTypography>
-            <Typography.Text ellipsis>{item.justificativa}</Typography.Text>
+            <Typography.Text ellipsis>{item?.justificativa}</Typography.Text>
           </Row>
         </Col>
       </Row>
@@ -105,12 +111,12 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
     </ContainerDiaExpandido>
   );
 
-  const detalheFeriado = (item: EventoDetalheDTO) => (
+  const detalheFeriado = (item?: EventoDetalheDTO) => (
     <ContainerDiaExpandido tipoId={item?.tipoId} className='feriado'>
       <Col>
         <Row>
           <ContainerTypography>Feriado:</ContainerTypography>
-          <Typography.Text ellipsis>{item.descricao}</Typography.Text>
+          <Typography.Text ellipsis>{item?.descricao}</Typography.Text>
         </Row>
       </Col>
     </ContainerDiaExpandido>
@@ -159,17 +165,10 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
 
   return (
     <>
-      {evento?.map((item: EventoDetalheDTO) => {
-        if (item?.tipoId === TipoEventoEnum.VISITA) {
-          return detalheVisita(item);
-        } else if (item?.tipoId === TipoEventoEnum.SUSPENSAO) {
-          return detalheSuspensao(item);
-        } else if (item?.tipoId === TipoEventoEnum.FERIADO) {
-          return detalheFeriado(item);
-        }
-      })}
-
       {naoTemEventos && detalheSemEvento()}
+      {tipoVisita && detalheVisita(evento)}
+      {tipoFeriado && detalheFeriado(evento)}
+      {tipoSuspensao && detalheSuspensao(evento)}
 
       <Modal
         open={abrirModal}

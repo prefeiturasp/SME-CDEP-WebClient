@@ -7,6 +7,7 @@ import {
   SemanaDTO,
 } from '~/core/dto/calendario-evento-dto';
 import { MesesEnum } from '~/core/enum/meses';
+import { TipoEventoEnum } from '~/core/enum/tipo-evento-enum';
 import { obterDetalheDia } from '~/core/services/calendario-eventos-service';
 import { MesesRowProps } from '../meses';
 import { DetalhesEventoDia } from './detalhes-evento-dia';
@@ -118,10 +119,17 @@ export const Mes: React.FC<MesProps> = ({
               <>
                 {dados?.length ? (
                   dados?.map((evento) => {
+                    const tipoVisita = evento.tipoId === TipoEventoEnum.VISITA;
+                    const tipoFeriado = evento.tipoId === TipoEventoEnum.FERIADO;
+                    const tipoSuspensao = evento.tipoId === TipoEventoEnum.SUSPENSAO;
+
                     return (
                       <DetalhesEventoDia
-                        evento={dados}
                         key={evento.id}
+                        evento={evento}
+                        tipoVisita={tipoVisita}
+                        tipoFeriado={tipoFeriado}
+                        tipoSuspensao={tipoSuspensao}
                         mesEscolhido={mesEscolhido}
                         diaEscolhido={diaEscolhido}
                         carregarDadosMesSelecionado={carregarDadosMesSelecionado}
