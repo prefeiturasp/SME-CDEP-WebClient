@@ -11,7 +11,14 @@ const InputEmail: React.FC<InputEmailProps> = ({ inputProps, formItemProps }) =>
     <Form.Item
       label='E-mail'
       name='email'
-      rules={[{ required: true }, { type: 'email', message: 'Não é um e-mail válido' }]}
+      rules={[
+        { required: true },
+        { type: 'email', message: 'Não é um e-mail válido' },
+        {
+          pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+          message: 'Não é um e-mail válido',
+        },
+      ]}
       {...formItemProps}
     >
       <Input
