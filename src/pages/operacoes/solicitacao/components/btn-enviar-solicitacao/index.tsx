@@ -74,7 +74,19 @@ const BtnEnviarSolicitacoes: React.FC = () => {
     if (resposta.sucesso) {
       dispatch(setAcervosSelecionados([]));
 
-      navigate(ROUTES.PRINCIPAL);
+      const solicitacaoId = resposta.dados;
+
+      const respostaComAnexo = await acervoSolicitacaoService.obterPorId(solicitacaoId);
+
+      if (respostaComAnexo?.sucesso) {
+        const temAnexos = respostaComAnexo?.dados?.itens?.some((f) => f?.arquivos && f.arquivos.length > 0,);
+
+        if (temAnexos) {
+          navigate(`${ROUTES.SOLICITACAO}/${solicitacaoId}`);
+        } else {
+          navigate(`${ROUTES.PRINCIPAL}`);
+        }
+      }
 
       notification.success({
         message: 'Sucesso',
