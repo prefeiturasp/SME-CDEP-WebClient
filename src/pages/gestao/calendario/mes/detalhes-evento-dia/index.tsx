@@ -39,7 +39,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
   const [abrirModal, setAbrirModal] = useState<boolean>(false);
 
   const detalheVisita = (item?: EventoDetalheDTO) => (
-    <ContainerDiaExpandido className='visita'>
+    <ContainerDiaExpandido tipoId={item?.tipoId} className='visita'>
       <Row gutter={16}>
         <Col>
           <ButtonSecundary
@@ -111,16 +111,18 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
     </ContainerDiaExpandido>
   );
 
-  const detalheFeriado = (item?: EventoDetalheDTO) => (
-    <ContainerDiaExpandido tipoId={item?.tipoId} className='feriado'>
-      <Col>
-        <Row>
-          <ContainerTypography>Feriado:</ContainerTypography>
-          <Typography.Text ellipsis>{item?.descricao}</Typography.Text>
-        </Row>
-      </Col>
-    </ContainerDiaExpandido>
-  );
+  const detalheFeriado = (item?: EventoDetalheDTO) => {
+    return (
+      <ContainerDiaExpandido tipoId={item?.tipoId} className='feriado'>
+        <Col>
+          <Row>
+            <ContainerTypography>Feriado:</ContainerTypography>
+            <Typography.Text ellipsis>{item?.descricao}</Typography.Text>
+          </Row>
+        </Col>
+      </ContainerDiaExpandido>
+    );
+  };
 
   const onCancel = () => {
     if (form.isFieldsTouched()) {

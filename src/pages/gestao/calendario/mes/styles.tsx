@@ -12,9 +12,9 @@ type DiasProps = {
   eventoTipoId?: EventoTagDTO;
 };
 
-interface EventosProps {
+type EventosProps = {
   tipoId?: TipoEventoEnum;
-}
+};
 
 export const NomeDia = styled.div`
   height: 38px;
@@ -84,6 +84,12 @@ export const ContainerDiaExpandido = styled(Flex)<EventosProps>`
   justify-content: start;
   border-left: 1px solid ${Colors.Components.BORDER_CARD_MESES_CALENDAR};
   border-right: 1px solid ${Colors.Components.BORDER_CARD_MESES_CALENDAR};
+  border-bottom: ${(props) => {
+    if (props.tipoId === TipoEventoEnum.VISITA) {
+      return `1px solid ${Colors.Neutral.MEDIUM}`;
+    }
+  }};
+
   background: ${Colors.Components.BACKGROUND_CALENDARIO_DIA_EXPANDIDO};
 
   &.suspensao {

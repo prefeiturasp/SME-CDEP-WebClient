@@ -30,6 +30,7 @@ export const Calendario = () => {
   };
 
   const carregarDadosMesSelecionado = async (mesSelecionado: number) => {
+    setDados(undefined);
     await obterSemanas(mesSelecionado).then((resposta) => {
       if (resposta.sucesso) {
         setDados(resposta?.dados);
