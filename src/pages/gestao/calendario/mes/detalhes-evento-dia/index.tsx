@@ -1,6 +1,6 @@
 import { Col, Form, Input, Row, Typography } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonPrimary from '~/components/lib/button/primary';
 import ButtonSecundary from '~/components/lib/button/secundary';
@@ -12,6 +12,7 @@ import { ROUTES } from '~/core/enum/routes';
 import { TipoEventoEnum, TipoEventoEnumDisplay } from '~/core/enum/tipo-evento-enum';
 import { confirmacao } from '~/core/services/alerta-service';
 import { deletarSuspensao, inserirSuspensao } from '~/core/services/calendario-eventos-service';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { ContainerDiaExpandido, ContainerTypography } from '../styles';
 
 type DetalhesEventoDiaProps = {
@@ -37,6 +38,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
   const navigate = useNavigate();
   const naoTemEventos = !evento;
   const [abrirModal, setAbrirModal] = useState<boolean>(false);
+  const { permissao } = useContext(PermissaoContext);
 
   const detalheVisita = (item?: EventoDetalheDTO) => (
     <ContainerDiaExpandido tipoId={item?.tipoId} className='visita'>
@@ -64,44 +66,54 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
     </ContainerDiaExpandido>
   );
 
-  const detalheSuspensao = (item?: EventoDetalheDTO) => (
-    <ContainerDiaExpandido tipoId={item?.tipoId} className='suspensao'>
-      <Row gutter={16} align='middle'>
-        <Col>
-          <ButtonSecundary
-            onClick={() => {
-              confirmacao({
-                content: DESEJA_EXCLUIR_SUSPENSAO,
-                onOk: () => {
-                  if (item?.id) {
-                    deletarSuspensao(item.id).then(() => {
-                      notification.success({
-                        message: 'Sucesso',
-                        description: 'A suspensão foi excluída com sucesso!',
-                      });
+  const detalheSuspensao = (item?: EventoDetalheDTO) => {
+    const justificativa = (
+      <Col>
+        <Row>
+          <ContainerTypography>Justificativa:</ContainerTypography>
+          <Typography.Text ellipsis>{item?.justificativa}</Typography.Text>
+        </Row>
+      </Col>
+    );
+    return (
+      <ContainerDiaExpandido tipoId={item?.tipoId} className='suspensao'>
+        <Row gutter={16} align='middle'>
+          {permissao.podeIncluir ? (
+            <>
+              <Col>
+                <ButtonSecundary
+                  onClick={() => {
+                    confirmacao({
+                      content: DESEJA_EXCLUIR_SUSPENSAO,
+                      onOk: () => {
+                        if (item?.id) {
+                          deletarSuspensao(item.id).then(() => {
+                            notification.success({
+                              message: 'Sucesso',
+                              description: 'A suspensão foi excluída com sucesso!',
+                            });
 
-                      if (carregarDadosMesSelecionado && mesEscolhido) {
-                        carregarDadosMesSelecionado(mesEscolhido);
-                      }
+                            if (carregarDadosMesSelecionado && mesEscolhido) {
+                              carregarDadosMesSelecionado(mesEscolhido);
+                            }
+                          });
+                        }
+                      },
                     });
-                  }
-                },
-              });
-            }}
-          >
-            Excluir suspensão
-          </ButtonSecundary>
-        </Col>
-
-        <Col>
-          <Row>
-            <ContainerTypography>Justificativa:</ContainerTypography>
-            <Typography.Text ellipsis>{item?.justificativa}</Typography.Text>
-          </Row>
-        </Col>
-      </Row>
-    </ContainerDiaExpandido>
-  );
+                  }}
+                >
+                  Excluir suspensão
+                </ButtonSecundary>
+              </Col>
+              {justificativa}
+            </>
+          ) : (
+            justificativa
+          )}
+        </Row>
+      </ContainerDiaExpandido>
+    );
+  };
 
   const detalheSemEvento = () => (
     <ContainerDiaExpandido className='semEvento'>
@@ -111,18 +123,16 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
     </ContainerDiaExpandido>
   );
 
-  const detalheFeriado = (item?: EventoDetalheDTO) => {
-    return (
-      <ContainerDiaExpandido tipoId={item?.tipoId} className='feriado'>
-        <Col>
-          <Row>
-            <ContainerTypography>Feriado:</ContainerTypography>
-            <Typography.Text ellipsis>{item?.descricao}</Typography.Text>
-          </Row>
-        </Col>
-      </ContainerDiaExpandido>
-    );
-  };
+  const detalheFeriado = (item?: EventoDetalheDTO) => (
+    <ContainerDiaExpandido tipoId={item?.tipoId} className='feriado'>
+      <Col>
+        <Row>
+          <ContainerTypography>Feriado:</ContainerTypography>
+          <Typography.Text ellipsis>{item?.descricao}</Typography.Text>
+        </Row>
+      </Col>
+    </ContainerDiaExpandido>
+  );
 
   const onCancel = () => {
     if (form.isFieldsTouched()) {
