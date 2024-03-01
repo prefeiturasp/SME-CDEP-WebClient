@@ -108,8 +108,6 @@ const ListaAcervosSolicitacao: React.FC = () => {
         const temAnexo = !!resposta?.dados?.itens?.find((item) => item?.arquivos?.length);
         if (!temAnexo) navigate(ROUTES.PRINCIPAL);
       }
-
-      return;
     } else {
       setDataSource([]);
       setPodeCancelarSolicitacao(false);
