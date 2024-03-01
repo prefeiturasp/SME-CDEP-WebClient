@@ -1,14 +1,10 @@
-import { Col, Row } from 'antd';
+import { Badge, Col, Row } from 'antd';
 import React, { useContext, useEffect, useState } from 'react';
-import {
-  DiaDTO,
-  EventoDetalheDTO,
-  EventoTagDTO,
-  SemanaDTO,
-} from '~/core/dto/calendario-evento-dto';
+import { DiaDTO, EventoDetalheDTO, SemanaDTO } from '~/core/dto/calendario-evento-dto';
 import { MesesEnum } from '~/core/enum/meses';
 import { TipoEventoEnum } from '~/core/enum/tipo-evento-enum';
 import { obterDetalheDia } from '~/core/services/calendario-eventos-service';
+import { Colors } from '~/core/styles/colors';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { MesesRowProps } from '../meses';
 import { DetalhesEventoDia } from './detalhes-evento-dia';
@@ -82,6 +78,8 @@ export const Mes: React.FC<MesProps> = ({
         const row = semana?.dias.map((dia) => {
           const diaExpandido = dia.dia === indexDiaExpandido?.keyDia;
           const eventoTipoId = dia?.eventosTag?.find((item) => item?.tipoId);
+          const tags = dia?.eventosTag?.[0];
+          const tagsCount = dia?.eventosTag?.length;
 
           return (
             <Dias
@@ -100,13 +98,19 @@ export const Mes: React.FC<MesProps> = ({
                   <Col>{dia.dia}</Col>
                   <Col>
                     <ContainerDia>
-                      {dia?.eventosTag?.map((tag: EventoTagDTO) => {
-                        return (
-                          <DivTag tipoId={tag?.tipoId} key={tag.tipoId}>
-                            {tag.tipo}
+                      {tags && (
+                        <Badge
+                          count={tagsCount > 1 ? tagsCount : null}
+                          offset={[-6, 0]}
+                          style={{
+                            background: Colors.SystemSME.CDEP.PRIMARY,
+                          }}
+                        >
+                          <DivTag tipoId={tags?.tipoId} key={tags.tipoId}>
+                            {tags.tipo}
                           </DivTag>
-                        );
-                      })}
+                        </Badge>
+                      )}
                     </ContainerDia>
                   </Col>
                 </Row>
