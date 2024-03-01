@@ -41,7 +41,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
   const { permissao } = useContext(PermissaoContext);
 
   const detalheVisita = (item?: EventoDetalheDTO) => (
-    <ContainerDiaExpandido className='visita'>
+    <ContainerDiaExpandido tipoId={item?.tipoId} className='visita'>
       <Row gutter={16}>
         <Col>
           <ButtonSecundary
