@@ -198,7 +198,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
               name='justificativa'
               rules={[{ required: true, message: 'Campo obrigatório' }]}
             >
-              <Input.TextArea placeholder='Justificativa' />
+              <Input.TextArea maxLength={100} placeholder='Justificativa' />
             </Form.Item>
           </Col>
         </Form>
