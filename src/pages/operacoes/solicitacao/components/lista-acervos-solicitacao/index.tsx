@@ -102,12 +102,14 @@ const ListaAcervosSolicitacao: React.FC = () => {
       setDataSource(resposta.dados.itens);
       setPodeCancelarSolicitacao(resposta.dados.podeCancelarSolicitacao);
 
-      const temAnexo = !!resposta?.dados?.itens?.find((item) => item?.arquivos?.length);
-      const validarSeTemAnexos = location?.state && location?.state?.validarSeTemAnexos;
+      const validarSeTemAnexos = !!location?.state?.validarSeTemAnexos;
 
-      if (!temAnexo && validarSeTemAnexos) {
-        navigate(ROUTES.PRINCIPAL);
+      if (validarSeTemAnexos) {
+        const temAnexo = !!resposta?.dados?.itens?.find((item) => item?.arquivos?.length);
+        if (!temAnexo) navigate(ROUTES.PRINCIPAL);
       }
+
+      return;
     } else {
       setDataSource([]);
       setPodeCancelarSolicitacao(false);
