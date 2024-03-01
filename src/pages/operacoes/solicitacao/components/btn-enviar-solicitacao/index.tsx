@@ -116,6 +116,7 @@ const BtnEnviarSolicitacoes: React.FC = () => {
         title='TERMO DE COMPROMISSO DO PESQUISADOR CDEP'
         onOk={validateFields}
         onCancel={onCancelModal}
+        cancelText='Cancelar'
         centered
         destroyOnClose
         okText='Prosseguir'
