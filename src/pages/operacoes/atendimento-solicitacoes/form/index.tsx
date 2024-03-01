@@ -47,7 +47,7 @@ import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
-import { formatarDataPorFormato, formatterCPFMask, maskTelefone } from '~/core/utils/functions';
+import { formatarDataParaDDMMYYYY, formatterCPFMask, maskTelefone } from '~/core/utils/functions';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 export const FormAtendimentoSolicitacoes: React.FC = () => {
@@ -274,7 +274,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         : '';
 
       const dataSolicitacao = resposta.dados.dataSolicitacao
-        ? formatarDataPorFormato(resposta.dados.dataSolicitacao, 'DD/MM/YYYY - HH:mm')
+        ? formatarDataParaDDMMYYYY(resposta.dados.dataSolicitacao)
         : '';
 
       const dadosMapeados: AcervoSolicitacaoDetalheDTO = {

@@ -6,7 +6,7 @@ export type AcervoSolicitacaoDetalheDTO = {
   dadosSolicitante: DadosSolicitanteDTO;
   id: number;
   usuarioId: number;
-  dataSolicitacao: string | Dayjs;
+  dataSolicitacao?: string | Dayjs;
   responsavelRf: string;
   situacao: string;
   situacaoId: number;
