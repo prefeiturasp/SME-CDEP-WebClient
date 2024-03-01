@@ -9,7 +9,7 @@ import {
   FaFileDownload,
   FaTrashAlt,
 } from 'react-icons/fa';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ButtonPrimary from '~/components/lib/button/primary';
 import { notification } from '~/components/lib/notification';
@@ -51,6 +51,7 @@ const ContainerExpandedTable = styled.div`
 
 const ListaAcervosSolicitacao: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const paramsRoute = useParams();
   const dispatch = useAppDispatch();
 
@@ -101,6 +102,13 @@ const ListaAcervosSolicitacao: React.FC = () => {
     if (resposta.sucesso) {
       setDataSource(resposta.dados.itens);
       setPodeCancelarSolicitacao(resposta.dados.podeCancelarSolicitacao);
+
+      const validarSeTemAnexos = !!location?.state?.validarSeTemAnexos;
+
+      if (validarSeTemAnexos) {
+        const temAnexo = !!resposta?.dados?.itens?.find((item) => item?.arquivos?.length);
+        if (!temAnexo) navigate(ROUTES.PRINCIPAL);
+      }
     } else {
       setDataSource([]);
       setPodeCancelarSolicitacao(false);
