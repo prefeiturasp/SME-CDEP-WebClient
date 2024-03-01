@@ -66,54 +66,54 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
     </ContainerDiaExpandido>
   );
 
-  const detalheSuspensao = (item?: EventoDetalheDTO) => (
-    <ContainerDiaExpandido tipoId={item?.tipoId} className='suspensao'>
-      <Row gutter={16} align='middle'>
-        {permissao.podeIncluir ? (
-          <>
-            <Col>
-              <ButtonSecundary
-                onClick={() => {
-                  confirmacao({
-                    content: DESEJA_EXCLUIR_SUSPENSAO,
-                    onOk: () => {
-                      if (item?.id) {
-                        deletarSuspensao(item.id).then(() => {
-                          notification.success({
-                            message: 'Sucesso',
-                            description: 'A suspensão foi excluída com sucesso!',
-                          });
+  const detalheSuspensao = (item?: EventoDetalheDTO) => {
+    const justificativa = (
+      <Col>
+        <Row>
+          <ContainerTypography>Justificativa:</ContainerTypography>
+          <Typography.Text ellipsis>{item?.justificativa}</Typography.Text>
+        </Row>
+      </Col>
+    );
+    return (
+      <ContainerDiaExpandido tipoId={item?.tipoId} className='suspensao'>
+        <Row gutter={16} align='middle'>
+          {permissao.podeIncluir ? (
+            <>
+              <Col>
+                <ButtonSecundary
+                  onClick={() => {
+                    confirmacao({
+                      content: DESEJA_EXCLUIR_SUSPENSAO,
+                      onOk: () => {
+                        if (item?.id) {
+                          deletarSuspensao(item.id).then(() => {
+                            notification.success({
+                              message: 'Sucesso',
+                              description: 'A suspensão foi excluída com sucesso!',
+                            });
 
-                          if (carregarDadosMesSelecionado && mesEscolhido) {
-                            carregarDadosMesSelecionado(mesEscolhido);
-                          }
-                        });
-                      }
-                    },
-                  });
-                }}
-              >
-                Excluir suspensão
-              </ButtonSecundary>
-            </Col>
-            <Col>
-              <Row>
-                <ContainerTypography>Justificativa:</ContainerTypography>
-                <Typography.Text ellipsis>{item?.justificativa}</Typography.Text>
-              </Row>
-            </Col>
-          </>
-        ) : (
-          <Col>
-            <Row>
-              <ContainerTypography>Justificativa:</ContainerTypography>
-              <Typography.Text ellipsis>{item?.justificativa}</Typography.Text>
-            </Row>
-          </Col>
-        )}
-      </Row>
-    </ContainerDiaExpandido>
-  );
+                            if (carregarDadosMesSelecionado && mesEscolhido) {
+                              carregarDadosMesSelecionado(mesEscolhido);
+                            }
+                          });
+                        }
+                      },
+                    });
+                  }}
+                >
+                  Excluir suspensão
+                </ButtonSecundary>
+              </Col>
+              {justificativa}
+            </>
+          ) : (
+            justificativa
+          )}
+        </Row>
+      </ContainerDiaExpandido>
+    );
+  };
 
   const detalheSemEvento = () => (
     <ContainerDiaExpandido className='semEvento'>
