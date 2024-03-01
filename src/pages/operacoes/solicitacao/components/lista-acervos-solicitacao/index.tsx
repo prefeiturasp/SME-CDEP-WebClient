@@ -24,6 +24,7 @@ import { Dayjs, dayjs } from '~/core/date/dayjs';
 import { AcervoSolicitacaoItemRetornoCadastroDTO } from '~/core/dto/acervo-solicitacao-item-retorno-cadastro-dto';
 import { ArquivoCodigoNomeDTO } from '~/core/dto/arquivo-codigo-nome-dto';
 import { ROUTES } from '~/core/enum/routes';
+import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
 import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
 import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
@@ -348,16 +349,20 @@ const ListaAcervosSolicitacao: React.FC = () => {
       title: 'Ações',
       align: 'center',
       width: '100px',
-      render: (_, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => (
-        <ButtonPrimary
-          type='text'
-          id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
-          onClick={() => onClickCancelarItemAtendimento(linha.id)}
-          disabled={!linha.alteraDataVisita}
-        >
-          Cancelar item
-        </ButtonPrimary>
-      ),
+      render: (_, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => {
+        return linha?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA ? (
+          <ButtonPrimary
+            type='text'
+            id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
+            onClick={() => onClickCancelarItemAtendimento(linha.id)}
+            disabled={!linha.alteraDataVisita}
+          >
+            Cancelar item
+          </ButtonPrimary>
+        ) : (
+          '-'
+        );
+      },
     });
   }
 
