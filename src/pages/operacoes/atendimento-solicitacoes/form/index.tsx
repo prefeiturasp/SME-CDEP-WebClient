@@ -102,6 +102,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const podeFinalizarAtendimento = () => {
     if (
       formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO ||
+      formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.FINALIZADO_ATENDIMENTO ||
       desabilitarCampos
     ) {
       return true;
