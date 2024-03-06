@@ -246,6 +246,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         return (
           <Row wrap={false}>
             <ButtonPrimary
+              size='small'
               type='text'
               id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
               onClick={() => onClickCancelarItemAtendimento(linha.id)}
@@ -258,10 +259,13 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               Cancelar item
             </ButtonPrimary>
             <ButtonPrimary
+              size='small'
               id={CDEP_BUTTON_CONFIRMAR}
               onClick={() => onClickConfirmarParcial(linha)}
               disabled={
-                !camposTocado(linha.id, ['tipoAtendimento', 'dataVisita']) || desabilitarCampos
+                !camposTocado(linha.id, ['tipoAtendimento', 'dataVisita']) ||
+                desabilitarCampos ||
+                validarSituacaoLinha(linha.id)
               }
             >
               Confirmar
@@ -388,8 +392,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const onClickConfirmarParcial = async (linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
     if (form.isFieldsTouched()) {
       form.validateFields().then(async () => {
-        const valoresParaSalvar = dataSource?.filter((item: AcervoSolicitacaoItemConfirmarDTO) => {
-          if (item.id === linha.id) {
+        const valoresParaSalvar = dataSource
+          ?.filter((item: AcervoSolicitacaoItemConfirmarDTO) => item.id === linha.id)
+          .map((item) => {
             let novaDataVisita;
             const valorTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${item.id}`]);
 
@@ -401,11 +406,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
             return {
               id: item.id,
-              dataVisita: formatarDataParaDDMMYYYY(novaDataVisita),
+              dataVisita: novaDataVisita,
               tipoAtendimento: valorTipoAtendimento,
             };
-          }
-        });
+          });
 
         const params: AcervoSolicitacaoConfirmarDTO = {
           id: acervoSolicitacaoId,
