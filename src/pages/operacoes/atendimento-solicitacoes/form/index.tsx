@@ -148,7 +148,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     },
     {
       title: 'Responsável',
-      dataIndex: 'responsavel',
+      dataIndex: 'responsavelRf',
       width: '10%',
     },
     {
@@ -259,7 +259,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
             </ButtonPrimary>
             <ButtonPrimary
               id={CDEP_BUTTON_CONFIRMAR}
-              onClick={onClickConfirmarAtendimento}
+              onClick={() => onClickConfirmarParcial(linha)}
               disabled={
                 !camposTocado(linha.id, ['tipoAtendimento', 'dataVisita']) || desabilitarCampos
               }
@@ -325,7 +325,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
       const dadosDataSource = dadosMapeados.itens.map((item) => ({
         ...item,
-        responsavel: dadosSolicitante.nome,
+        responsavelRf: dadosSolicitante.nome,
       }));
 
       setFormInitialValues(dadosMapeados);
@@ -385,36 +385,31 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     });
   };
 
-  const onClickConfirmarAtendimento = async () => {
+  const onClickConfirmarParcial = async (linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
     if (form.isFieldsTouched()) {
       form.validateFields().then(async () => {
-        const valoresFiltrado = dataSource.filter(
-          (item) =>
-            item.situacaoId != SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE &&
-            item.situacaoId != SituacaoSolicitacaoItemEnum.CANCELADO,
-        );
+        const valoresParaSalvar = dataSource?.filter((item: AcervoSolicitacaoItemConfirmarDTO) => {
+          if (item.id === linha.id) {
+            let novaDataVisita;
+            const valorTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${item.id}`]);
 
-        const valoresParaSalvar = valoresFiltrado.map((item: AcervoSolicitacaoItemConfirmarDTO) => {
-          let novaDataVisita;
-          const valorTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${item.id}`]);
+            if (valorTipoAtendimento === TipoAtendimentoEnum.Email) {
+              novaDataVisita = undefined;
+            } else {
+              novaDataVisita = form.getFieldValue(['dataVisita', `${item.id}`]) ?? item.dataVisita;
+            }
 
-          if (valorTipoAtendimento === TipoAtendimentoEnum.Email) {
-            novaDataVisita = undefined;
-          } else {
-            novaDataVisita = form.getFieldValue(['dataVisita', `${item.id}`]) ?? item.dataVisita;
+            return {
+              id: item.id,
+              dataVisita: formatarDataParaDDMMYYYY(novaDataVisita),
+              tipoAtendimento: valorTipoAtendimento,
+            };
           }
-
-          return {
-            id: item.id,
-            dataVisita: novaDataVisita,
-            tipoAtendimento: valorTipoAtendimento,
-          };
         });
 
         const params: AcervoSolicitacaoConfirmarDTO = {
           id: acervoSolicitacaoId,
           itens: cloneDeep(valoresParaSalvar),
-          responsavelRf: form.getFieldValue('responsavelRf'),
         };
 
         const resposta = await acervoSolicitacaoService.confirmarAtendimento(params);
@@ -422,7 +417,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         if (resposta.sucesso) {
           notification.success({
             message: 'Sucesso',
-            description: 'Atendimento confirmado com sucesso',
+            description: 'O item foi confirmado com sucesso',
           });
           carregarDados();
         }
