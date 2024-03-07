@@ -2,7 +2,7 @@ import { MesesEnum } from '../enum/meses';
 import { TipoEventoEnum } from '../enum/tipo-evento-enum';
 
 export type CalendarioEventoDTO = {
-  semanas: SemanaDTO[] | undefined;
+  semanas?: SemanaDTO[];
 };
 
 export type SemanaDTO = {

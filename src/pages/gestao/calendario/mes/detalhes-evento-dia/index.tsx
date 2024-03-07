@@ -1,7 +1,6 @@
 import { Col, Form, Input, Row, Typography } from 'antd';
 import { useForm } from 'antd/es/form/Form';
-import { AxiosResponse } from 'axios';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import ButtonPrimary from '~/components/lib/button/primary';
 import ButtonSecundary from '~/components/lib/button/secundary';
@@ -13,13 +12,17 @@ import { ROUTES } from '~/core/enum/routes';
 import { TipoEventoEnum, TipoEventoEnumDisplay } from '~/core/enum/tipo-evento-enum';
 import { confirmacao } from '~/core/services/alerta-service';
 import { deletarSuspensao, inserirSuspensao } from '~/core/services/calendario-eventos-service';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { ContainerDiaExpandido, ContainerTypography } from '../styles';
 
 type DetalhesEventoDiaProps = {
-  evento: any;
   mesEscolhido?: number;
   diaEscolhido?: number;
-  carregarDadosMesSelecionado?: (mesEscolhido: number) => Promise<AxiosResponse<void>>;
+  evento?: EventoDetalheDTO;
+  tipoVisita?: boolean;
+  tipoFeriado?: boolean;
+  tipoSuspensao?: boolean;
+  carregarDadosMesSelecionado?: (mesEscolhido: number) => void;
 };
 
 export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
@@ -27,14 +30,18 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
   mesEscolhido,
   diaEscolhido,
   carregarDadosMesSelecionado,
+  tipoVisita,
+  tipoFeriado,
+  tipoSuspensao,
 }) => {
   const [form] = useForm();
   const navigate = useNavigate();
-  const naoTemEventos = !evento.length;
+  const naoTemEventos = !evento;
   const [abrirModal, setAbrirModal] = useState<boolean>(false);
+  const { permissao } = useContext(PermissaoContext);
 
-  const detalheVisita = (item: EventoDetalheDTO) => (
-    <ContainerDiaExpandido className='visita'>
+  const detalheVisita = (item?: EventoDetalheDTO) => (
+    <ContainerDiaExpandido tipoId={item?.tipoId} className='visita'>
       <Row gutter={16}>
         <Col>
           <ButtonSecundary
@@ -45,73 +52,83 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
             {item?.tipo}
           </ButtonSecundary>
         </Col>
-        {item?.solicitante && item?.titulo && (
-          <Col>
-            <Row>
-              <ContainerTypography>Nome do solicitante:</ContainerTypography>
-              <Typography>{item?.solicitante}</Typography>
-            </Row>
-            <Row>
-              <ContainerTypography>Título do acervo:</ContainerTypography>
-              <Typography.Text ellipsis>{item?.titulo}</Typography.Text>
-            </Row>
-          </Col>
-        )}
-      </Row>
-    </ContainerDiaExpandido>
-  );
-
-  const detalheSuspensao = (item: EventoDetalheDTO) => (
-    <ContainerDiaExpandido tipoId={item?.tipoId} className='suspensao'>
-      <Row gutter={16} align='middle'>
-        <Col>
-          <ButtonSecundary
-            onClick={() => {
-              confirmacao({
-                content: DESEJA_EXCLUIR_SUSPENSAO,
-                onOk: () => {
-                  deletarSuspensao(item.id).then(() => {
-                    notification.success({
-                      message: 'Sucesso',
-                      description: 'A suspensão foi excluída com sucesso!',
-                    });
-
-                    if (carregarDadosMesSelecionado && mesEscolhido) {
-                      carregarDadosMesSelecionado(mesEscolhido);
-                    }
-                  });
-                },
-              });
-            }}
-          >
-            Excluir suspensão
-          </ButtonSecundary>
-        </Col>
-
         <Col>
           <Row>
-            <ContainerTypography>Justificativa:</ContainerTypography>
-            <Typography.Text ellipsis>{item.justificativa}</Typography.Text>
+            <ContainerTypography>Nome do solicitante:</ContainerTypography>
+            <Typography>{item?.solicitante}</Typography>
+          </Row>
+          <Row>
+            <ContainerTypography>Título do acervo:</ContainerTypography>
+            <Typography.Text ellipsis>{item?.titulo}</Typography.Text>
           </Row>
         </Col>
       </Row>
     </ContainerDiaExpandido>
   );
 
-  const detalheSemEvento = (item: EventoDetalheDTO) => (
-    <ContainerDiaExpandido tipoId={item?.tipoId} className='semEvento'>
+  const detalheSuspensao = (item?: EventoDetalheDTO) => {
+    const justificativa = (
+      <Col>
+        <Row>
+          <ContainerTypography>Justificativa:</ContainerTypography>
+          <Typography.Text ellipsis>{item?.justificativa}</Typography.Text>
+        </Row>
+      </Col>
+    );
+    return (
+      <ContainerDiaExpandido tipoId={item?.tipoId} className='suspensao'>
+        <Row gutter={16} align='middle'>
+          {permissao.podeIncluir ? (
+            <>
+              <Col>
+                <ButtonSecundary
+                  onClick={() => {
+                    confirmacao({
+                      content: DESEJA_EXCLUIR_SUSPENSAO,
+                      onOk: () => {
+                        if (item?.id) {
+                          deletarSuspensao(item.id).then(() => {
+                            notification.success({
+                              message: 'Sucesso',
+                              description: 'A suspensão foi excluída com sucesso!',
+                            });
+
+                            if (carregarDadosMesSelecionado && mesEscolhido) {
+                              carregarDadosMesSelecionado(mesEscolhido);
+                            }
+                          });
+                        }
+                      },
+                    });
+                  }}
+                >
+                  Excluir suspensão
+                </ButtonSecundary>
+              </Col>
+              {justificativa}
+            </>
+          ) : (
+            justificativa
+          )}
+        </Row>
+      </ContainerDiaExpandido>
+    );
+  };
+
+  const detalheSemEvento = () => (
+    <ContainerDiaExpandido className='semEvento'>
       <Col>
         <ButtonPrimary onClick={() => setAbrirModal(true)}>Incluir suspensão</ButtonPrimary>
       </Col>
     </ContainerDiaExpandido>
   );
 
-  const detalheFeriado = (item: EventoDetalheDTO) => (
+  const detalheFeriado = (item?: EventoDetalheDTO) => (
     <ContainerDiaExpandido tipoId={item?.tipoId} className='feriado'>
       <Col>
         <Row>
           <ContainerTypography>Feriado:</ContainerTypography>
-          <Typography.Text ellipsis>{item.descricao}</Typography.Text>
+          <Typography.Text ellipsis>{item?.descricao}</Typography.Text>
         </Row>
       </Col>
     </ContainerDiaExpandido>
@@ -133,7 +150,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
   };
 
   const onFinish = () => {
-    form.validateFields().then(async () => {
+    form.validateFields().then(() => {
       const justificativa = form.getFieldValue('justificativa');
 
       const valoresParaSalvar = {
@@ -144,7 +161,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
         descricao: TipoEventoEnumDisplay[TipoEventoEnum.SUSPENSAO],
       };
 
-      await inserirSuspensao(valoresParaSalvar).then(() => {
+      inserirSuspensao(valoresParaSalvar).then(() => {
         notification.success({
           message: 'Sucesso',
           description: 'A suspensão foi inserida com sucesso!',
@@ -160,17 +177,10 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
 
   return (
     <>
-      {evento.map((item: EventoDetalheDTO) => {
-        if (item?.tipoId === TipoEventoEnum.VISITA) {
-          return detalheVisita(item);
-        } else if (item?.tipoId === TipoEventoEnum.SUSPENSAO) {
-          return detalheSuspensao(item);
-        } else if (item?.tipoId === TipoEventoEnum.FERIADO) {
-          return detalheFeriado(item);
-        }
-      })}
-
-      {naoTemEventos && detalheSemEvento(evento)}
+      {naoTemEventos && detalheSemEvento()}
+      {tipoVisita && detalheVisita(evento)}
+      {tipoFeriado && detalheFeriado(evento)}
+      {tipoSuspensao && detalheSuspensao(evento)}
 
       <Modal
         open={abrirModal}
@@ -188,7 +198,7 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
               name='justificativa'
               rules={[{ required: true, message: 'Campo obrigatório' }]}
             >
-              <Input.TextArea placeholder='Justificativa' />
+              <Input.TextArea maxLength={100} placeholder='Justificativa' />
             </Form.Item>
           </Col>
         </Form>

@@ -1,13 +1,11 @@
-import { Col, Row } from 'antd';
-import React, { useEffect, useState } from 'react';
-import {
-  DiaDTO,
-  EventoDetalheDTO,
-  EventoTagDTO,
-  SemanaDTO,
-} from '~/core/dto/calendario-evento-dto';
+import { Badge, Col, Row } from 'antd';
+import React, { useContext, useEffect, useState } from 'react';
+import { DiaDTO, EventoDetalheDTO, SemanaDTO } from '~/core/dto/calendario-evento-dto';
 import { MesesEnum } from '~/core/enum/meses';
+import { TipoEventoEnum } from '~/core/enum/tipo-evento-enum';
 import { obterDetalheDia } from '~/core/services/calendario-eventos-service';
+import { Colors } from '~/core/styles/colors';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { MesesRowProps } from '../meses';
 import { DetalhesEventoDia } from './detalhes-evento-dia';
 import { diasSemana } from './dias-semana';
@@ -19,10 +17,10 @@ type LinhaExpandidaProps = {
 };
 
 type MesProps = {
-  semanas: SemanaDTO[] | undefined;
-  mesEscolhido: MesesEnum | undefined;
+  semanas?: SemanaDTO[];
+  mesEscolhido?: MesesEnum;
   onClickMes?: (mes: MesesRowProps, indexLinha: number) => void;
-  carregarDadosMesSelecionado?: any;
+  carregarDadosMesSelecionado?: (mesEscolhido: number) => void;
 };
 
 export const Mes: React.FC<MesProps> = ({
@@ -31,9 +29,10 @@ export const Mes: React.FC<MesProps> = ({
   onClickMes,
   carregarDadosMesSelecionado,
 }) => {
+  const { permissao } = useContext(PermissaoContext);
+  const [diaEscolhido, setDiaEscolhido] = useState<number>();
   const [dados, setDados] = useState<EventoDetalheDTO[] | undefined>();
   const [indexDiaExpandido, setIndexDiaExpandido] = useState<LinhaExpandidaProps | undefined>();
-  const [diaEscolhido, setDiaEscolhido] = useState<number>();
 
   const toggleActive = (dia: DiaDTO, indexLinha: number) => {
     if (indexDiaExpandido?.keyDia === dia.dia) {
@@ -48,7 +47,7 @@ export const Mes: React.FC<MesProps> = ({
     if (mesEscolhido) {
       await obterDetalheDia(diaSelecionado, mesEscolhido).then((resposta) => {
         if (resposta.sucesso) {
-          setDados([resposta?.dados]);
+          setDados(resposta?.dados);
         }
       });
     }
@@ -78,7 +77,9 @@ export const Mes: React.FC<MesProps> = ({
 
         const row = semana?.dias.map((dia) => {
           const diaExpandido = dia.dia === indexDiaExpandido?.keyDia;
-          const eventoTipoId = dia.eventosTag.find((item) => item?.tipoId);
+          const eventoTipoId = dia?.eventosTag?.find((item) => item?.tipoId);
+          const tags = dia?.eventosTag?.[0];
+          const tagsCount = dia?.eventosTag?.length;
 
           return (
             <Dias
@@ -88,6 +89,7 @@ export const Mes: React.FC<MesProps> = ({
               eventoTipoId={eventoTipoId}
               desabilitado={dia.desabilitado}
               onClick={() => {
+                if (!permissao.podeIncluir && !eventoTipoId) return;
                 onClickDia(dia, semana?.numero);
               }}
             >
@@ -96,13 +98,19 @@ export const Mes: React.FC<MesProps> = ({
                   <Col>{dia.dia}</Col>
                   <Col>
                     <ContainerDia>
-                      {dia?.eventosTag?.map((tag: EventoTagDTO) => {
-                        return (
-                          <DivTag tipoId={tag?.tipoId} key={tag.tipoId}>
-                            {tag.tipo}
+                      {tags && (
+                        <Badge
+                          count={tagsCount > 1 ? tagsCount : null}
+                          offset={[-6, 0]}
+                          style={{
+                            background: Colors.SystemSME.CDEP.PRIMARY,
+                          }}
+                        >
+                          <DivTag tipoId={tags?.tipoId} key={tags.tipoId}>
+                            {tags.tipo}
                           </DivTag>
-                        );
-                      })}
+                        </Badge>
+                      )}
                     </ContainerDia>
                   </Col>
                 </Row>
@@ -116,17 +124,32 @@ export const Mes: React.FC<MesProps> = ({
             <Row>{row}</Row>
             {linhaExpandida && (
               <>
-                {dados?.map((evento) => {
-                  return (
-                    <DetalhesEventoDia
-                      evento={evento}
-                      key={evento.id}
-                      mesEscolhido={mesEscolhido}
-                      diaEscolhido={diaEscolhido}
-                      carregarDadosMesSelecionado={carregarDadosMesSelecionado}
-                    />
-                  );
-                })}
+                {dados?.length ? (
+                  dados?.map((evento) => {
+                    const tipoVisita = evento.tipoId === TipoEventoEnum.VISITA;
+                    const tipoFeriado = evento.tipoId === TipoEventoEnum.FERIADO;
+                    const tipoSuspensao = evento.tipoId === TipoEventoEnum.SUSPENSAO;
+
+                    return (
+                      <DetalhesEventoDia
+                        key={evento.id}
+                        evento={evento}
+                        tipoVisita={tipoVisita}
+                        tipoFeriado={tipoFeriado}
+                        tipoSuspensao={tipoSuspensao}
+                        mesEscolhido={mesEscolhido}
+                        diaEscolhido={diaEscolhido}
+                        carregarDadosMesSelecionado={carregarDadosMesSelecionado}
+                      />
+                    );
+                  })
+                ) : (
+                  <DetalhesEventoDia
+                    mesEscolhido={mesEscolhido}
+                    diaEscolhido={diaEscolhido}
+                    carregarDadosMesSelecionado={carregarDadosMesSelecionado}
+                  />
+                )}
               </>
             )}
           </Col>

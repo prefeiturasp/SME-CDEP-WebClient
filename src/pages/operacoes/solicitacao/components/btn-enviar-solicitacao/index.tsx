@@ -5,15 +5,15 @@ import { useNavigate, useParams } from 'react-router-dom';
 import Spin from '~/components/cdep/spin';
 import ButtonSecundary from '~/components/lib/button/secundary';
 import Modal from '~/components/lib/modal';
+import { notification } from '~/components/lib/notification';
 import { CDEP_BUTTON_NOVO } from '~/core/constants/ids/button/intex';
 import { AcervoSolicitacaoItemCadastroDTO } from '~/core/dto/acervo-solicitacao-item-cadastro-dto';
 import { ROUTES } from '~/core/enum/routes';
 import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions';
 import { obterTermoDeCompromisso } from '~/core/services/acervo-service';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
-import { AcervoSolicitacaoContext } from '../../provider';
-import { notification } from '~/components/lib/notification';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
+import { AcervoSolicitacaoContext } from '../../provider';
 
 const BtnEnviarSolicitacoes: React.FC = () => {
   const navigate = useNavigate();
@@ -75,7 +75,10 @@ const BtnEnviarSolicitacoes: React.FC = () => {
       dispatch(setAcervosSelecionados([]));
 
       const solicitacaoId = resposta.dados;
-      navigate(`${ROUTES.SOLICITACAO}/${solicitacaoId}`);
+
+      navigate(`${ROUTES.SOLICITACAO}/${solicitacaoId}`, {
+        state: { validarSeTemAnexos: true },
+      });
 
       notification.success({
         message: 'Sucesso',
@@ -113,6 +116,7 @@ const BtnEnviarSolicitacoes: React.FC = () => {
         title='TERMO DE COMPROMISSO DO PESQUISADOR CDEP'
         onOk={validateFields}
         onCancel={onCancelModal}
+        cancelText='Cancelar'
         centered
         destroyOnClose
         okText='Prosseguir'

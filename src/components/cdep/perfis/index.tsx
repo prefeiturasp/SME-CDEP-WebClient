@@ -67,7 +67,7 @@ const DropdownPerfil: React.FC = () => {
               lineHeight: '16px',
             }}
           >
-            <Texto style={{ fontWeight: 700 }}>{`RF: ${auth.usuarioLogin}`}</Texto>
+            <Texto style={{ fontWeight: 700 }}>{`Login: ${auth.usuarioLogin}`}</Texto>
             <Texto>{auth?.usuarioNome}</Texto>
             <Texto>{perfil?.perfilSelecionado?.perfilNome}</Texto>
           </div>

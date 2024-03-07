@@ -5,5 +5,6 @@ export type AcervoSolicitacaoItemRetornoCadastroDTO = {
   situacao?: string;
   arquivos?: ArquivoCodigoNomeDTO[];
   id: number;
+  situacaoId?: number;
   alteraDataVisita?: boolean;
 } & AcervoSolicitacaoItemRetornoDTO;

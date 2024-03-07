@@ -9,7 +9,7 @@ import {
   FaFileDownload,
   FaTrashAlt,
 } from 'react-icons/fa';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import ButtonPrimary from '~/components/lib/button/primary';
 import { notification } from '~/components/lib/notification';
@@ -24,11 +24,12 @@ import { Dayjs, dayjs } from '~/core/date/dayjs';
 import { AcervoSolicitacaoItemRetornoCadastroDTO } from '~/core/dto/acervo-solicitacao-item-retorno-cadastro-dto';
 import { ArquivoCodigoNomeDTO } from '~/core/dto/arquivo-codigo-nome-dto';
 import { ROUTES } from '~/core/enum/routes';
+import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
 import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
 import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import armazenamentoService from '~/core/services/armazenamento-service';
-import { downloadBlob } from '~/core/utils/functions';
+import { downloadBlob, formatarDataParaDDMMYYYY } from '~/core/utils/functions';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { AcervoSolicitacaoContext } from '../../provider';
 
@@ -50,6 +51,7 @@ const ContainerExpandedTable = styled.div`
 
 const ListaAcervosSolicitacao: React.FC = () => {
   const navigate = useNavigate();
+  const location = useLocation();
   const paramsRoute = useParams();
   const dispatch = useAppDispatch();
 
@@ -100,6 +102,13 @@ const ListaAcervosSolicitacao: React.FC = () => {
     if (resposta.sucesso) {
       setDataSource(resposta.dados.itens);
       setPodeCancelarSolicitacao(resposta.dados.podeCancelarSolicitacao);
+
+      const validarSeTemAnexos = !!location?.state?.validarSeTemAnexos;
+
+      if (validarSeTemAnexos) {
+        const temAnexo = !!resposta?.dados?.itens?.find((item) => item?.arquivos?.length);
+        if (!temAnexo) navigate(ROUTES.PRINCIPAL);
+      }
     } else {
       setDataSource([]);
       setPodeCancelarSolicitacao(false);
@@ -291,7 +300,7 @@ const ListaAcervosSolicitacao: React.FC = () => {
         );
       }
 
-      return dataVisita ? dayjs(dataVisita).format('DD/MM/YYYY - HH:mm') : '';
+      return dataVisita ? formatarDataParaDDMMYYYY(dataVisita) : '';
     },
   });
 
@@ -348,16 +357,20 @@ const ListaAcervosSolicitacao: React.FC = () => {
       title: 'Ações',
       align: 'center',
       width: '100px',
-      render: (_, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => (
-        <ButtonPrimary
-          type='text'
-          id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
-          onClick={() => onClickCancelarItemAtendimento(linha.id)}
-          disabled={!linha.alteraDataVisita}
-        >
-          Cancelar item
-        </ButtonPrimary>
-      ),
+      render: (_, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => {
+        return linha?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA ? (
+          <ButtonPrimary
+            type='text'
+            id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
+            onClick={() => onClickCancelarItemAtendimento(linha.id)}
+            disabled={!linha.alteraDataVisita}
+          >
+            Cancelar item
+          </ButtonPrimary>
+        ) : (
+          '-'
+        );
+      },
     });
   }
 
