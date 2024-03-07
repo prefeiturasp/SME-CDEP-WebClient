@@ -261,9 +261,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               id={CDEP_BUTTON_CONFIRMAR}
               onClick={() => onClickConfirmarParcial(linha)}
               disabled={
-                !camposTocado(linha.id, ['tipoAtendimento', 'dataVisita']) ||
                 desabilitarCampos ||
-                validarSituacaoLinha(linha.id)
+                !form.isFieldsTouched() ||
+                validarSituacaoLinha(linha.id) ||
+                !camposTocado(linha.id, ['tipoAtendimento', 'dataVisita'])
               }
             >
               Confirmar
