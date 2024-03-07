@@ -142,7 +142,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     },
     {
       title: 'Responsável',
-      dataIndex: 'responsavelRf',
+      dataIndex: 'responsavel',
       width: '10%',
     },
     {
@@ -321,13 +321,8 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         dataSolicitacao,
       };
 
-      const dadosDataSource = dadosMapeados.itens.map((item) => ({
-        ...item,
-        responsavelRf: dadosSolicitante.nome,
-      }));
-
       setFormInitialValues(dadosMapeados);
-      setDataSource(dadosDataSource);
+      setDataSource(dadosMapeados.itens);
     }
   }, [acervoSolicitacaoId]);
 
