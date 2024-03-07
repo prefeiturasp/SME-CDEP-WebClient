@@ -48,12 +48,10 @@ import { formatarDataParaDDMMYYYY, formatterCPFMask, maskTelefone } from '~/core
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 export const FormAtendimentoSolicitacoes: React.FC = () => {
-  const dataAtual = dayjs();
-
   const [form] = useForm();
+  const dataAtual = dayjs();
   const navigate = useNavigate();
   const paramsRoute = useParams();
-
   const { desabilitarCampos } = useContext(PermissaoContext);
 
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
@@ -69,39 +67,35 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     (item) => item.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE,
   );
 
+  const temItemFinalizadoManualmente = formInitialValues?.itens.find(
+    (item) => item.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_MANUALMENTE,
+  );
+
   const ehUsuarioExterno = formInitialValues?.dadosSolicitante.tipoId != TipoUsuario.CORESSO;
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
   const atendimentoFinalizado =
     formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.FINALIZADO_ATENDIMENTO;
 
+  const atendimentoTaCancelado =
+    formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.CANCELADO;
+
   const podeCancelarAtendimento = () => {
-    if (desabilitarCampos) {
-      return true;
-    }
-
-    if (
-      (formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.AGUARDANDO_VISITA &&
-        !temItemFinalizadoAutomaticamente) ||
-      (formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.AGUARDANDO_ATENDIMENTO &&
-        !temItemFinalizadoAutomaticamente)
-    ) {
-      return false;
-    }
-
-    return true;
+    return !!(
+      desabilitarCampos ||
+      atendimentoTaCancelado ||
+      temItemFinalizadoManualmente ||
+      temItemFinalizadoAutomaticamente
+    );
   };
 
   const podeFinalizarAtendimento = () => {
-    if (
-      formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO ||
+    return !!(
+      desabilitarCampos ||
+      formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.ATENDIDO_PARCIALMENTE ||
       formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.FINALIZADO_ATENDIMENTO ||
-      desabilitarCampos
-    ) {
-      return true;
-    }
-
-    return false;
+      formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO
+    );
   };
 
   const validarSituacaoLinha = (situacaoId: number) => {
@@ -391,7 +385,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
   const onClickConfirmarParcial = async (linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
     if (form.isFieldsTouched()) {
-      form.validateFields().then(async () => {
+      form.validateFields(['tipoAtendimento', linha.id]).then(async () => {
         const valoresParaSalvar = dataSource
           ?.filter((item: AcervoSolicitacaoItemConfirmarDTO) => item.id === linha.id)
           .map((item) => {
