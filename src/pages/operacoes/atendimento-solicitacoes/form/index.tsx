@@ -262,7 +262,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               onClick={() => onClickConfirmarParcial(linha)}
               disabled={
                 desabilitarCampos ||
-                !form.isFieldsTouched() ||
                 validarSituacaoLinha(linha.id) ||
                 !camposTocado(linha.id, ['tipoAtendimento', 'dataVisita'])
               }
@@ -330,16 +329,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       setDataSource(dadosMapeados.itens);
     }
   }, [acervoSolicitacaoId]);
-
-  useEffect(() => {
-    if (acervoSolicitacaoId) {
-      carregarDados();
-    }
-  }, [carregarDados, acervoSolicitacaoId]);
-
-  useEffect(() => {
-    form.resetFields();
-  }, [form, formInitialValues]);
 
   const onClickVoltar = () => {
     if (form.isFieldsTouched()) {
@@ -418,6 +407,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
             description: 'O item foi confirmado com sucesso',
           });
           carregarDados();
+          setLinhasCamposTocados({});
         }
       });
     }
@@ -439,6 +429,16 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       },
     });
   };
+
+  useEffect(() => {
+    if (acervoSolicitacaoId) {
+      carregarDados();
+    }
+  }, [carregarDados, acervoSolicitacaoId]);
+
+  useEffect(() => {
+    form.resetFields();
+  }, [form, formInitialValues]);
 
   return (
     <Col>
