@@ -1,11 +1,10 @@
-import { Button, Col, DatePicker, Form, Input, Row, Space } from 'antd';
+import { Button, Col, DatePicker, Form, Input, Row } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
 import { cloneDeep } from 'lodash';
 import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
-import SelectResponsaveis from '~/components/cdep/input/responsaveis';
 import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento';
 import ButtonPrimary from '~/components/lib/button/primary';
 import ButtonSecundary from '~/components/lib/button/secundary';
@@ -14,7 +13,6 @@ import DataTable from '~/components/lib/data-table';
 import HeaderPage from '~/components/lib/header-page';
 import { notification } from '~/components/lib/notification';
 import {
-  CDEP_BUTTON_ASSUMIR_ATENDIMENTO,
   CDEP_BUTTON_CANCELAR,
   CDEP_BUTTON_CANCELAR_ATENDIMENTO,
   CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO,
@@ -44,20 +42,16 @@ import { SituacaoSolicitacaoEnum } from '~/core/enum/situacao-atendimento-enum';
 import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
 import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
 import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
-import { useAppSelector } from '~/core/hooks/use-redux';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
 import { formatarDataParaDDMMYYYY, formatterCPFMask, maskTelefone } from '~/core/utils/functions';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 export const FormAtendimentoSolicitacoes: React.FC = () => {
-  const dataAtual = dayjs();
-
   const [form] = useForm();
+  const dataAtual = dayjs();
   const navigate = useNavigate();
   const paramsRoute = useParams();
-  const auth = useAppSelector((store) => store.auth);
-
   const { desabilitarCampos } = useContext(PermissaoContext);
 
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
@@ -65,50 +59,43 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const [dataVisitasEditaveis, setDataVisitasEditaveis] = useState<{
     [key: number]: Dayjs;
   }>();
+  const [linhasCamposTocados, setLinhasCamposTocados] = useState<{
+    [key: number]: { [key: string]: boolean };
+  }>({});
 
   const temItemFinalizadoAutomaticamente = formInitialValues?.itens.find(
     (item) => item.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE,
   );
 
-  const usuarioLogin = auth?.usuarioLogin;
+  const temItemFinalizadoManualmente = formInitialValues?.itens.find(
+    (item) => item.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_MANUALMENTE,
+  );
+
   const ehUsuarioExterno = formInitialValues?.dadosSolicitante.tipoId != TipoUsuario.CORESSO;
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
   const atendimentoFinalizado =
     formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.FINALIZADO_ATENDIMENTO;
 
-  const podeAssumirResponsavel =
-    desabilitarCampos ||
-    atendimentoFinalizado ||
-    formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.CANCELADO;
+  const atendimentoTaCancelado =
+    formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.CANCELADO;
 
   const podeCancelarAtendimento = () => {
-    if (desabilitarCampos) {
-      return true;
-    }
-
-    if (
-      (formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.AGUARDANDO_VISITA &&
-        !temItemFinalizadoAutomaticamente) ||
-      (formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.AGUARDANDO_ATENDIMENTO &&
-        !temItemFinalizadoAutomaticamente)
-    ) {
-      return false;
-    }
-
-    return true;
+    return !!(
+      desabilitarCampos ||
+      atendimentoTaCancelado ||
+      temItemFinalizadoManualmente ||
+      temItemFinalizadoAutomaticamente
+    );
   };
 
   const podeFinalizarAtendimento = () => {
-    if (
-      formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO ||
+    return !!(
+      desabilitarCampos ||
+      formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.ATENDIDO_PARCIALMENTE ||
       formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.FINALIZADO_ATENDIMENTO ||
-      desabilitarCampos
-    ) {
-      return true;
-    }
-
-    return false;
+      formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO
+    );
   };
 
   const validarSituacaoLinha = (situacaoId: number) => {
@@ -122,6 +109,27 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     }
   };
 
+  const marcarCampoComoTocado = (linhaId: number, fieldName: string) => {
+    setLinhasCamposTocados((prev) => ({
+      ...prev,
+      [linhaId]: {
+        ...prev[linhaId],
+        [fieldName]: true,
+      },
+    }));
+  };
+
+  const camposTocado = (linhaId: number, fieldsName: string[] | undefined) => {
+    if (!fieldsName || !Array.isArray(fieldsName) || fieldsName.length === 0) {
+      return false;
+    }
+    return fieldsName?.some((fieldName) => linhasCamposTocados[linhaId]?.[fieldName]);
+  };
+
+  const handleChange = (fieldsName: string[], linhaId: number) => {
+    fieldsName.forEach((fieldName) => marcarCampoComoTocado(linhaId, fieldName));
+  };
+
   const columns: ColumnsType<AcervoSolicitacaoItemDetalheResumidoDTO> = [
     {
       title: 'N° do tombo/código',
@@ -131,6 +139,15 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     {
       title: 'Título',
       dataIndex: 'titulo',
+    },
+    {
+      title: 'Tipo de acervo',
+      dataIndex: 'tipoAcervo',
+    },
+    {
+      title: 'Responsável',
+      dataIndex: 'responsavel',
+      width: '15%',
     },
     {
       title: 'Situação',
@@ -157,6 +174,11 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 margin: 0,
               },
             }}
+            selectProps={{
+              onChange: () => {
+                handleChange(['tipoAtendimento'], linha.id);
+              },
+            }}
           />
         );
       },
@@ -179,9 +201,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
             >
               <DatePicker
                 allowClear={false}
-                onChange={(date: any) => {
+                onChange={(date: Dayjs) => {
                   form.setFieldValue(['dataVisita', `${linha.id}`], date);
                   onChangeDataVisita(date, linha);
+                  handleChange(['dataVisita'], linha.id);
                 }}
                 format='DD/MM/YYYY'
                 style={{ width: '100%' }}
@@ -217,20 +240,37 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       title: 'Ações',
       align: 'center',
       width: '10%',
-      render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => (
-        <ButtonPrimary
-          type='text'
-          id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
-          onClick={() => onClickCancelarItemAtendimento(linha.id)}
-          disabled={
-            (linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) ||
-            desabilitarCampos ||
-            atendimentoFinalizado
-          }
-        >
-          Cancelar item
-        </ButtonPrimary>
-      ),
+      render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
+        return (
+          <Row wrap={false}>
+            <ButtonPrimary
+              size='small'
+              type='text'
+              id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
+              onClick={() => onClickCancelarItemAtendimento(linha.id)}
+              disabled={
+                (linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) ||
+                desabilitarCampos ||
+                atendimentoFinalizado
+              }
+            >
+              Cancelar item
+            </ButtonPrimary>
+            <ButtonPrimary
+              size='small'
+              id={CDEP_BUTTON_CONFIRMAR}
+              onClick={() => onClickConfirmarParcial(linha)}
+              disabled={
+                desabilitarCampos ||
+                validarSituacaoLinha(linha.id) ||
+                !camposTocado(linha.id, ['tipoAtendimento', 'dataVisita'])
+              }
+            >
+              Confirmar
+            </ButtonPrimary>
+          </Row>
+        );
+      },
     },
   ];
 
@@ -267,6 +307,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
     if (resposta.sucesso) {
       const dadosSolicitante = resposta.dados.dadosSolicitante;
+
       dadosSolicitante.login = dadosSolicitante?.login
         ? formatterCPFMask(dadosSolicitante.login)
         : '';
@@ -289,16 +330,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     }
   }, [acervoSolicitacaoId]);
 
-  useEffect(() => {
-    if (acervoSolicitacaoId) {
-      carregarDados();
-    }
-  }, [carregarDados, acervoSolicitacaoId]);
-
-  useEffect(() => {
-    form.resetFields();
-  }, [form, formInitialValues]);
-
   const onClickVoltar = () => {
     if (form.isFieldsTouched()) {
       confirmacao({
@@ -317,6 +348,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       confirmacao({
         content: DESEJA_CANCELAR_ALTERACOES,
         onOk() {
+          setLinhasCamposTocados({});
           form.resetFields();
         },
       });
@@ -340,40 +372,31 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     });
   };
 
-  const onClickAssumirAtendimento = () => {
-    form.setFieldValue('responsavelRf', usuarioLogin);
-  };
-
-  const onClickConfirmarAtendimento = async () => {
+  const onClickConfirmarParcial = async (linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
     if (form.isFieldsTouched()) {
-      form.validateFields().then(async () => {
-        const valoresFiltrado = dataSource.filter(
-          (item) =>
-            item.situacaoId != SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE &&
-            item.situacaoId != SituacaoSolicitacaoItemEnum.CANCELADO,
-        );
+      form.validateFields(['tipoAtendimento', linha.id]).then(async () => {
+        const valoresParaSalvar = dataSource
+          ?.filter((item: AcervoSolicitacaoItemConfirmarDTO) => item.id === linha.id)
+          .map((item) => {
+            let novaDataVisita;
+            const valorTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${item.id}`]);
 
-        const valoresParaSalvar = valoresFiltrado.map((item: AcervoSolicitacaoItemConfirmarDTO) => {
-          let novaDataVisita;
-          const valorTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${item.id}`]);
+            if (valorTipoAtendimento === TipoAtendimentoEnum.Email) {
+              novaDataVisita = undefined;
+            } else {
+              novaDataVisita = form.getFieldValue(['dataVisita', `${item.id}`]) ?? item.dataVisita;
+            }
 
-          if (valorTipoAtendimento === TipoAtendimentoEnum.Email) {
-            novaDataVisita = undefined;
-          } else {
-            novaDataVisita = form.getFieldValue(['dataVisita', `${item.id}`]) ?? item.dataVisita;
-          }
-
-          return {
-            id: item.id,
-            dataVisita: novaDataVisita,
-            tipoAtendimento: valorTipoAtendimento,
-          };
-        });
+            return {
+              id: item.id,
+              dataVisita: novaDataVisita,
+              tipoAtendimento: valorTipoAtendimento,
+            };
+          });
 
         const params: AcervoSolicitacaoConfirmarDTO = {
           id: acervoSolicitacaoId,
           itens: cloneDeep(valoresParaSalvar),
-          responsavelRf: form.getFieldValue('responsavelRf'),
         };
 
         const resposta = await acervoSolicitacaoService.confirmarAtendimento(params);
@@ -381,9 +404,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         if (resposta.sucesso) {
           notification.success({
             message: 'Sucesso',
-            description: 'Atendimento confirmado com sucesso',
+            description: 'O item foi confirmado com sucesso',
           });
           carregarDados();
+          setLinhasCamposTocados({});
         }
       });
     }
@@ -405,6 +429,16 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       },
     });
   };
+
+  useEffect(() => {
+    if (acervoSolicitacaoId) {
+      carregarDados();
+    }
+  }, [carregarDados, acervoSolicitacaoId]);
+
+  useEffect(() => {
+    form.resetFields();
+  }, [form, formInitialValues]);
 
   return (
     <Col>
@@ -462,19 +496,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                       >
                         Cancelar atendimento
                       </Button>
-                    </Col>
-                    <Col>
-                      <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
-                        {() => (
-                          <ButtonPrimary
-                            id={CDEP_BUTTON_CONFIRMAR}
-                            onClick={onClickConfirmarAtendimento}
-                            disabled={desabilitarConfirmarECancelar}
-                          >
-                            Confirmar
-                          </ButtonPrimary>
-                        )}
-                      </Form.Item>
                     </Col>
                   </Row>
                 );
@@ -537,28 +558,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 <Form.Item label='Data da solicitação' name='dataSolicitacao'>
                   <Input type='text' placeholder='Data da solicitação' disabled />
                 </Form.Item>
-              </Col>
-
-              <Col xs={24} md={16}>
-                <Space.Compact style={{ width: '100%' }}>
-                  <SelectResponsaveis
-                    formItemProps={{ style: { width: '100%' } }}
-                    selectProps={{
-                      style: { width: '100%' },
-                      disabled: podeAssumirResponsavel,
-                    }}
-                  />
-
-                  <Button
-                    style={{ marginTop: 24 }}
-                    type='primary'
-                    id={CDEP_BUTTON_ASSUMIR_ATENDIMENTO}
-                    onClick={() => onClickAssumirAtendimento()}
-                    disabled={podeAssumirResponsavel}
-                  >
-                    Assumir atendimento
-                  </Button>
-                </Space.Compact>
               </Col>
 
               <Col xs={24} md={8}>
