@@ -141,9 +141,13 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       dataIndex: 'titulo',
     },
     {
+      title: 'Tipo de acervo',
+      dataIndex: 'tipoAcervo',
+    },
+    {
       title: 'Responsável',
       dataIndex: 'responsavel',
-      width: '10%',
+      width: '15%',
     },
     {
       title: 'Situação',
@@ -182,7 +186,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     {
       title: 'Data da visita',
       dataIndex: 'dataVisita',
-      width: '15%',
+      width: '10%',
       render: (dataVisita: string, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
         const getTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${linha.id}`]);
 
