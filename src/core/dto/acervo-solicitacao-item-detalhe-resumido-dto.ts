@@ -10,6 +10,8 @@ export type AcervoSolicitacaoItemDetalheResumidoDTO = {
   situacao?: string;
   situacaoId?: SituacaoSolicitacaoItemEnum;
   dataVisita?: string;
+  dataEmprestimo?: string;
+  dataDevolucao?: string;
   responsavel?: string;
   tipoAtendimento: TipoAtendimentoEnum;
   acervoId: number;
