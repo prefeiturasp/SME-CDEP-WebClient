@@ -295,6 +295,8 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         dataIndex: 'dataEmprestimo',
         width: '10%',
         render: (dataEmprestimo, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
+          console.log('🚀 ~ dataEmprestimo:', dataEmprestimo);
+
           return linha.tipoAcervoId !== TipoAcervo.Bibliografico ? (
             ''
           ) : (
@@ -507,7 +509,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     if (form.isFieldsTouched()) {
       form.validateFields(['tipoAtendimento', linha.id]).then(async () => {
         const valoresParaSalvar = dataSource
-          ?.filter((item: AcervoSolicitacaoItemConfirmarDTO) => item.id === linha.id)
+          ?.filter((item) => item.id === linha.id)
           .map((item) => {
             let novaDataVisita;
             const valorTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${item.id}`]);
@@ -521,6 +523,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
             const paramsItem: AcervoSolicitacaoItemConfirmarDTO = {
               id: item.id,
               dataVisita: novaDataVisita,
+              tipoAcervo: linha.tipoAcervoId,
               tipoAtendimento: valorTipoAtendimento,
               dataEmprestimo:
                 form.getFieldValue(['dataEmprestimo', `${item.id}`]) ?? item.dataEmprestimo,

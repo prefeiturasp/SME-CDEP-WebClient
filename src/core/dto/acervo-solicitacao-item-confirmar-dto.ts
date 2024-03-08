@@ -6,5 +6,5 @@ export type AcervoSolicitacaoItemConfirmarDTO = {
   dataVisita?: string;
   dataEmprestimo?: string;
   dataDevolucao?: string;
-  tipoAcervo?: string;
+  tipoAcervo?: number;
 };
