@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Row, Tag, Tooltip } from 'antd';
+import { Button, Col, DatePicker, Row, Tag, Tooltip, Typography } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
@@ -23,6 +23,7 @@ import {
 import { Dayjs, dayjs } from '~/core/date/dayjs';
 import { AcervoSolicitacaoItemRetornoCadastroDTO } from '~/core/dto/acervo-solicitacao-item-retorno-cadastro-dto';
 import { ArquivoCodigoNomeDTO } from '~/core/dto/arquivo-codigo-nome-dto';
+import { AcervoDisponibilidadeEnum } from '~/core/enum/acervo-disponibilidade-enum';
 import { ROUTES } from '~/core/enum/routes';
 import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
 import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
@@ -32,6 +33,7 @@ import armazenamentoService from '~/core/services/armazenamento-service';
 import { downloadBlob, formatarDataParaDDMMYYYY } from '~/core/utils/functions';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { AcervoSolicitacaoContext } from '../../provider';
+import { configTagAcervoDisponibilidadeMap } from './utils';
 
 const ContainerExpandedTable = styled.div`
   .ant-table-tbody tr.ant-table-expanded-row td {
@@ -183,6 +185,26 @@ const ListaAcervosSolicitacao: React.FC = () => {
     {
       title: 'Tipo de acervo',
       dataIndex: 'tipoAcervo',
+    },
+    {
+      title: 'Disponibilidade',
+      dataIndex: 'disponibilidade',
+      render: () => {
+        const mockDisponibilidade: AcervoDisponibilidadeEnum = 0;
+        const config = configTagAcervoDisponibilidadeMap[mockDisponibilidade];
+
+        return (
+          <Tag color={config.bgColor}>
+            <Typography.Text
+              style={{
+                color: config.labelColor,
+              }}
+            >
+              {config.valor}
+            </Typography.Text>
+          </Tag>
+        );
+      },
     },
     {
       title: 'Título',
