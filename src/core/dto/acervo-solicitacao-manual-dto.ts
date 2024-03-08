@@ -6,6 +6,9 @@ export type AcervoSolicitacaoItemManualDTO = {
   acervoId: number;
   tipoAtendimento: TipoAtendimentoEnum;
   dataVisita?: string;
+  dataEmprestimo?: string;
+  dataDevolucao?: string;
+  tipoAcervo?: string;
 };
 
 export type AcervoSolicitacaoManualDTO = {

@@ -5,6 +5,7 @@ export type AcervoSolicitacaoItemDetalheResumidoDTO = {
   id: number;
   codigo: string;
   tipoAcervo?: string;
+  tipoAcervoId?: number;
   titulo: string;
   situacao?: string;
   situacaoId?: SituacaoSolicitacaoItemEnum;
