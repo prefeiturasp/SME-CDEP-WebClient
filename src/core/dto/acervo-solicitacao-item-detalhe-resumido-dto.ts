@@ -15,4 +15,5 @@ export type AcervoSolicitacaoItemDetalheResumidoDTO = {
   responsavel?: string;
   tipoAtendimento: TipoAtendimentoEnum;
   acervoId: number;
+  situacaoEmprestimo?: number;
 };

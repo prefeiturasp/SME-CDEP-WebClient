@@ -157,6 +157,20 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     fieldsName.forEach((fieldName) => marcarCampoComoTocado(linhaId, fieldName));
   };
 
+  const validarDatas = (linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
+    const getDataVisita = form.getFieldValue(['dataVisita', linha.id]);
+    const getDataDevolucao = form.getFieldValue(['dataDevolucao', linha.id]);
+    const getDataEmprestimo = form.getFieldValue(['dataEmprestimo', linha.id]);
+
+    if ((linha.dataVisita || getDataVisita) && getDataEmprestimo && getDataDevolucao) {
+      return dayjs(linha.dataVisita || getDataVisita).isSameOrBefore(getDataEmprestimo, 'day') &&
+        dayjs(getDataEmprestimo).isSameOrAfter(linha.dataVisita || getDataVisita, 'day') &&
+        dayjs(getDataDevolucao).isSameOrAfter(getDataEmprestimo, 'day')
+        ? Promise.resolve()
+        : Promise.reject();
+    }
+  };
+
   const columns: ColumnsType<AcervoSolicitacaoItemDetalheResumidoDTO> = [
     {
       title: 'N° do tombo/código',
@@ -245,9 +259,19 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
           return (
             <Form.Item
+              style={{ margin: 0 }}
               initialValue={initialValueData}
               name={`${['dataVisita', linha.id]}`}
-              style={{ margin: 0 }}
+              dependencies={[
+                ['dataEmprestimo', linha.id],
+                ['dataDevolucao', linha.id],
+              ]}
+              rules={[
+                {
+                  message: 'A data da visita não pode ser posterior à data de empréstimo.',
+                  validator: () => validarDatas(linha),
+                },
+              ]}
             >
               <DatePicker
                 allowClear={false}
@@ -294,28 +318,25 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         title: 'Data do empréstimo',
         dataIndex: 'dataEmprestimo',
         width: '10%',
-        render: (dataEmprestimo, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-          console.log('🚀 ~ dataEmprestimo:', dataEmprestimo);
+        render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
+          const dataAtual = dayjs();
+          const initialValueData = linha?.dataEmprestimo ? dayjs(linha?.dataEmprestimo) : dataAtual;
 
           return linha.tipoAcervoId !== TipoAcervo.Bibliografico ? (
             ''
           ) : (
             <Form.Item
-              name={['dataEmprestimo', linha.id]}
               style={{ margin: 0 }}
+              initialValue={initialValueData}
+              name={['dataEmprestimo', linha.id]}
+              dependencies={[
+                ['dataVisita', linha.id],
+                ['dataDevolucao', linha.id],
+              ]}
               rules={[
                 {
                   message: 'A data do empréstimo não pode ser anterior à data da visita.',
-                  validator(rule, value, callback) {
-                    const dataEmprestimoFormatada = formatarDataParaDDMMYYYY(value);
-                    const dataVisitaFormatada = formatarDataParaDDMMYYYY(linha?.dataVisita);
-
-                    if (dataEmprestimoFormatada && dataVisitaFormatada) {
-                      return dataEmprestimoFormatada >= dataVisitaFormatada
-                        ? Promise.resolve()
-                        : Promise.reject();
-                    }
-                  },
+                  validator: () => validarDatas(linha),
                 },
               ]}
             >
@@ -339,11 +360,32 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         title: 'Data da devolução',
         dataIndex: 'dataDevolucao',
         width: '10%',
-        render: (dataDevolucao, linha) => {
+        render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
+          const dataAtual = dayjs();
+          const dataSugerida = dataAtual.add(7, 'day');
+
+          const initialValueData = linha?.dataDevolucao
+            ? dayjs(linha?.dataDevolucao)
+            : dataSugerida;
+
           return linha.tipoAcervoId !== TipoAcervo.Bibliografico ? (
             ''
           ) : (
-            <Form.Item name={['dataDevolucao', linha.id]} style={{ margin: 0 }}>
+            <Form.Item
+              style={{ margin: 0 }}
+              initialValue={initialValueData}
+              name={['dataDevolucao', linha.id]}
+              dependencies={[
+                ['dataEmprestimo', linha.id],
+                ['dataVisita', linha.id],
+              ]}
+              rules={[
+                {
+                  message: 'A data da devolução não pode ser anterior à data do empréstimo.',
+                  validator: () => validarDatas(linha),
+                },
+              ]}
+            >
               <DatePicker
                 allowClear={false}
                 onChange={(date: Dayjs) => {
