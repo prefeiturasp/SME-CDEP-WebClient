@@ -1,11 +1,12 @@
 import { SituacaoSolicitacaoItemEnum } from '../enum/situacao-item-atendimento-enum';
+import { TipoAcervo } from '../enum/tipo-acervo';
 import { TipoAtendimentoEnum } from '../enum/tipo-atendimento-enum';
 
 export type AcervoSolicitacaoItemDetalheResumidoDTO = {
   id: number;
   codigo: string;
   tipoAcervo?: string;
-  tipoAcervoId?: number;
+  tipoAcervoId?: TipoAcervo;
   titulo: string;
   situacao?: string;
   situacaoId?: SituacaoSolicitacaoItemEnum;

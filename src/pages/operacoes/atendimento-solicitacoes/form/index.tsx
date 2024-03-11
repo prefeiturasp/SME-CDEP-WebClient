@@ -27,6 +27,9 @@ import {
   DESEJA_CANCELAR_ITEM_E_DESCARTAR_ITENS_NAO_CONFIRMADOS,
   DESEJA_FINALIZAR_ATENDIMENTO,
   DESEJA_SAIR_MODO_EDICAO,
+  ERRO_DATA_DEVOLUCAO,
+  ERRO_DATA_EMPRESTIMO,
+  ERRO_DATA_VISITA,
 } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
 import { Dayjs, dayjs } from '~/core/date/dayjs';
@@ -268,7 +271,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               ]}
               rules={[
                 {
-                  message: 'A data da visita não pode ser posterior à data de empréstimo.',
+                  message: ERRO_DATA_VISITA,
                   validator: () => validarDatas(linha),
                 },
               ]}
@@ -335,7 +338,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               ]}
               rules={[
                 {
-                  message: 'A data do empréstimo não pode ser anterior à data da visita.',
+                  message: ERRO_DATA_EMPRESTIMO,
                   validator: () => validarDatas(linha),
                 },
               ]}
@@ -381,7 +384,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               ]}
               rules={[
                 {
-                  message: 'A data da devolução não pode ser anterior à data do empréstimo.',
+                  message: ERRO_DATA_DEVOLUCAO,
                   validator: () => validarDatas(linha),
                 },
               ]}

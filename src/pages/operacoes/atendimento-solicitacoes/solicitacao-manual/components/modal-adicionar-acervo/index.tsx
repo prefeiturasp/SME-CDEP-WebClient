@@ -1,17 +1,25 @@
 import { Col, DatePicker, Form, Input, ModalProps, Row } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
+import { Rule } from 'antd/es/form';
 import { FormInstance, FormProps, useForm, useWatch } from 'antd/es/form/Form';
 import dayjs from 'dayjs';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento';
 import { InputCodigoTombo } from '~/components/cdep/input/tombo-codigo';
 import Modal from '~/components/lib/modal';
 import { notification } from '~/components/lib/notification';
-import { DESEJA_CANCELAR_ALTERACOES } from '~/core/constants/mensagens';
+import {
+  DESEJA_CANCELAR_ALTERACOES,
+  ERRO_DATA_DEVOLUCAO,
+  ERRO_DATA_EMPRESTIMO,
+  ERRO_DATA_VISITA,
+} from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
 import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detalhe-dto';
 import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solicitacao-item-detalhe-resumido-dto';
+import { CodigoTomboDTO } from '~/core/dto/codigo-tombo-dto';
 import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
+import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
 import { confirmacao } from '~/core/services/alerta-service';
 
@@ -34,12 +42,16 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
 }) => {
   const minDate = dayjs();
   const [form] = useForm();
-
   const tipoAtendimentoWatch = useWatch('tipoAtendimento', form);
+
+  const [tipoAcervo, setTipoAcervo] = useState<TipoAcervo>();
+  const ehBibliografico = tipoAcervo === TipoAcervo.Bibliografico;
 
   const mostrarSeTiverData = !!initialValuesModal?.dataVisita;
   const ehPresencialWatch = tipoAtendimentoWatch === TipoAtendimentoEnum.Presencial;
   const temDataEhPresencial = mostrarSeTiverData && ehPresencialWatch;
+
+  const rules: Rule[] = [];
 
   const onFinish = () => {
     form.validateFields().then(() => {
@@ -55,8 +67,11 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
         codigo: values?.dadosCodigoTombo?.codigo,
         acervoId: values?.dadosCodigoTombo?.id,
         titulo: values?.dadosCodigoTombo?.nome,
-        tipoAtendimento: values?.tipoAtendimento,
+        tipoAtendimento: ehBibliografico ? TipoAtendimentoEnum.Presencial : values?.tipoAtendimento,
         dataVisita: ehEmail ? '' : values?.dataVisita,
+        tipoAcervoId: values?.dadosCodigoTombo?.tipo,
+        dataEmprestimo: values?.dataEmprestimo,
+        dataDevolucao: values?.dataDevolucao,
         situacaoId,
       };
 
@@ -122,23 +137,68 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
     }
   };
 
+  const validarDatas = () => {
+    const getDataVisita = form.getFieldValue('dataVisita');
+    const getDataDevolucao = form.getFieldValue('dataDevolucao');
+    const getDataEmprestimo = form.getFieldValue('dataEmprestimo');
+
+    if (getDataVisita && getDataEmprestimo && getDataDevolucao) {
+      return dayjs(getDataVisita).isSameOrBefore(getDataEmprestimo, 'day') &&
+        dayjs(getDataEmprestimo).isSameOrAfter(getDataVisita, 'day') &&
+        dayjs(getDataDevolucao).isSameOrAfter(getDataEmprestimo, 'day')
+        ? Promise.resolve()
+        : Promise.reject();
+    }
+  };
+
   useEffect(() => {
     form.resetFields();
     if (initialValuesModal && isModalOpen) {
-      const dadosCodigoTombo = {
+      const dadosCodigoTombo: CodigoTomboDTO = {
+        tipo: initialValuesModal.tipoAcervoId,
         codigo: initialValuesModal.codigo,
         nome: initialValuesModal.titulo,
         id: initialValuesModal.acervoId,
       };
+
       form.setFieldValue('dadosCodigoTombo', dadosCodigoTombo);
 
       if (initialValuesModal?.dataVisita) {
         form.setFieldValue('dataVisita', dayjs(initialValuesModal.dataVisita));
       }
 
+      if (initialValuesModal?.dataEmprestimo) {
+        form.setFieldValue('dataEmprestimo', dayjs(initialValuesModal.dataEmprestimo));
+      }
+
+      if (initialValuesModal?.dataDevolucao) {
+        form.setFieldValue('dataDevolucao', dayjs(initialValuesModal.dataDevolucao));
+      }
+
       form.setFieldValue('tipoAtendimento', initialValuesModal?.tipoAtendimento);
     }
   }, [form, isModalOpen, initialValuesModal]);
+
+  if (ehBibliografico) {
+    rules.push(
+      {
+        required: true,
+      },
+      {
+        message: ERRO_DATA_VISITA,
+        validator: () => validarDatas(),
+      },
+    );
+  }
+
+  useEffect(() => {
+    if (ehBibliografico) {
+      form.setFieldValue('tipoAtendimento', TipoAtendimentoEnum.Presencial);
+      form.setFieldValue('dataVisita', dayjs());
+      form.setFieldValue('dataDevolucao', dayjs());
+      form.setFieldValue('dataEmprestimo', dayjs());
+    }
+  }, [form, tipoAcervo]);
 
   return (
     <Modal
@@ -158,8 +218,12 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
         {...formProps}
       >
         <Col>
-          <InputCodigoTombo inputProps={{ disabled: !!initialValuesModal?.id }} />
+          <InputCodigoTombo
+            setTipoAcervo={setTipoAcervo}
+            inputProps={{ disabled: !!initialValuesModal?.id }}
+          />
         </Col>
+
         <Col>
           <Form.Item
             label='Título do acervo'
@@ -169,21 +233,31 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
             <Input placeholder='Título do acervo' disabled />
           </Form.Item>
         </Col>
+
         <Col xs={24}>
           <Row gutter={16}>
             <Col xs={12}>
-              <SelectTipoAtendimento formItemProps={{ label: 'Tipo de atendimento' }} />
+              <SelectTipoAtendimento
+                formItemProps={{ label: 'Tipo de atendimento' }}
+                selectProps={{ disabled: ehBibliografico }}
+              />
             </Col>
+
             {(temDataEhPresencial || ehPresencialWatch) && (
               <Col xs={12}>
                 <Form.Item
-                  label='Data da visita'
                   name='dataVisita'
-                  rules={[
-                    {
-                      required: true,
-                    },
-                  ]}
+                  label='Data da visita'
+                  dependencies={['dataEmprestimo', 'dataDevolucao']}
+                  rules={
+                    ehBibliografico
+                      ? rules
+                      : [
+                          {
+                            required: true,
+                          },
+                        ]
+                  }
                 >
                   <DatePicker
                     style={{ width: '100%' }}
@@ -194,6 +268,59 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                   />
                 </Form.Item>
               </Col>
+            )}
+
+            {(temDataEhPresencial || ehPresencialWatch) && ehBibliografico && (
+              <>
+                <Col xs={12}>
+                  <Form.Item
+                    name='dataEmprestimo'
+                    label='Data do empréstimo'
+                    dependencies={['dataVisita', 'dataDevolucao']}
+                    rules={[
+                      {
+                        required: ehBibliografico,
+                      },
+                      {
+                        message: ERRO_DATA_EMPRESTIMO,
+                        validator: () => validarDatas(),
+                      },
+                    ]}
+                  >
+                    <DatePicker
+                      style={{ width: '100%' }}
+                      format='DD/MM/YYYY'
+                      placeholder='Selecione uma data'
+                      locale={localeDatePicker}
+                      minDate={minDate}
+                    />
+                  </Form.Item>
+                </Col>
+                <Col xs={12}>
+                  <Form.Item
+                    label='Data da devolução'
+                    name='dataDevolucao'
+                    dependencies={['dataEmprestimo', 'dataVisita']}
+                    rules={[
+                      {
+                        required: ehBibliografico,
+                      },
+                      {
+                        message: ERRO_DATA_DEVOLUCAO,
+                        validator: () => validarDatas(),
+                      },
+                    ]}
+                  >
+                    <DatePicker
+                      style={{ width: '100%' }}
+                      format='DD/MM/YYYY'
+                      placeholder='Selecione uma data'
+                      locale={localeDatePicker}
+                      minDate={minDate}
+                    />
+                  </Form.Item>
+                </Col>
+              </>
             )}
           </Row>
         </Col>

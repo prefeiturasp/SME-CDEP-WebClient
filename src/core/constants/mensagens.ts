@@ -23,3 +23,7 @@ export const ACERVO_EXCLUIR_LINHA = 'Deseja realmente excluir esta linha?';
 export const DESEJA_DESCARTAR_DADOS_PLANILHA_ATUAL_E_CARREGAR_SELECIONADA =
   'Deseja realmente descartar os dados da planilha atual e carregar os dados da planilha selecionada?';
 export const DESEJA_SAIR_MODO_EDICAO = 'Você tem certeza que deseja fechar o modo de edição?';
+export const ERRO_DATA_VISITA = 'A data da visita não pode ser posterior à data de empréstimo.';
+export const ERRO_DATA_EMPRESTIMO = 'A data do empréstimo não pode ser anterior à data da visita.';
+export const ERRO_DATA_DEVOLUCAO =
+  'A data da devolução não pode ser anterior à data do empréstimo.';
