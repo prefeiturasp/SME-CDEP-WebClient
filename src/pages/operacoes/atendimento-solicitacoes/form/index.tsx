@@ -686,6 +686,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
           message: 'Sucesso',
           description: 'Item prorrogado com sucesso',
         });
+
+        carregarDados();
+        setLinhasCamposTocados({});
       }
     });
   };
@@ -697,6 +700,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
           message: 'Sucesso',
           description: 'Item devolvido com sucesso',
         });
+
+        carregarDados();
+        setLinhasCamposTocados({});
       }
     });
   };

@@ -209,8 +209,8 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
 
       form.setFieldValue('tipoAtendimento', TipoAtendimentoEnum.Presencial);
       form.setFieldValue('dataVisita', dayjs());
-      form.setFieldValue('dataDevolucao', dayjs());
       form.setFieldValue('dataEmprestimo', dayjs());
+      form.setFieldValue('dataDevolucao', dayjs().add(7, 'day'));
     }
   }, [form, tipoAcervo, ehBibliografico]);
 
