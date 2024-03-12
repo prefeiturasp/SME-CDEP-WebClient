@@ -67,7 +67,6 @@ export const SolicitacaoManual: React.FC = () => {
     useState<AcervoSolicitacaoItemDetalheResumidoDTO>();
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
 
-  //TODO: verificar se ainda precisa do datasource na linha 534
   const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
   const dataSource: AcervoSolicitacaoItemDetalheResumidoDTO[] = values.itens?.length
     ? values.itens
@@ -530,11 +529,6 @@ export const SolicitacaoManual: React.FC = () => {
             <Col xs={24}>
               <Form.Item shouldUpdate>
                 {() => {
-                  const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
-                  const dataSource: AcervoSolicitacaoItemDetalheResumidoDTO[] = values.itens?.length
-                    ? values.itens
-                    : [];
-
                   return (
                     <DataTable
                       columns={columns}

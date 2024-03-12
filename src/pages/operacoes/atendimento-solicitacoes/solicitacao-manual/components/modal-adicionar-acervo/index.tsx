@@ -44,9 +44,10 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   const [form] = useForm();
   const tipoAtendimentoWatch = useWatch('tipoAtendimento', form);
 
-  //TODO:  VERIFICAR ATUALIZACAO DO MODAL QUANDO PESQUISAR POR BIBLIOGRAFICO
+  const [desabilitarAdicionar, setDesabilitarAdicionar] = useState<boolean>(false);
   const [tipoAcervo, setTipoAcervo] = useState<TipoAcervo>();
-  const ehBibliografico = tipoAcervo === TipoAcervo.Bibliografico;
+  const ehBibliografico =
+    (tipoAcervo || initialValuesModal?.tipoAcervoId) === TipoAcervo.Bibliografico;
 
   const mostrarSeTiverData = !!initialValuesModal?.dataVisita;
   const ehPresencialWatch = tipoAtendimentoWatch === TipoAtendimentoEnum.Presencial;
@@ -119,6 +120,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
         }
       }
 
+      setTipoAcervo(undefined);
       setIsModalOpen(false);
     });
   };
@@ -194,12 +196,23 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
 
   useEffect(() => {
     if (ehBibliografico) {
+      const dadosTombo: CodigoTomboDTO = form.getFieldValue('dadosCodigoTombo');
+
+      if (
+        (dadosTombo?.temControleDisponibilidade && dadosTombo?.estaDisponivel) ||
+        !dadosTombo?.temControleDisponibilidade
+      ) {
+        setDesabilitarAdicionar(false);
+      } else {
+        setDesabilitarAdicionar(true);
+      }
+
       form.setFieldValue('tipoAtendimento', TipoAtendimentoEnum.Presencial);
       form.setFieldValue('dataVisita', dayjs());
       form.setFieldValue('dataDevolucao', dayjs());
       form.setFieldValue('dataEmprestimo', dayjs());
     }
-  }, [form, tipoAcervo]);
+  }, [form, tipoAcervo, ehBibliografico]);
 
   return (
     <Modal
@@ -210,6 +223,9 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
       onOk={onFinish}
       cancelText='Cancelar'
       onCancel={onCancel}
+      okButtonProps={{
+        disabled: desabilitarAdicionar,
+      }}
       {...modalProps}
     >
       <Form
