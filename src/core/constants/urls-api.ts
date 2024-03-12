@@ -30,3 +30,4 @@ export const URL_API_ACERVO_FOTOGRAFICO_IMPORTACAO_PLANILHA =
 export const URL_API_ACERVO_TRIDIMENSIONAL_IMPORTACAO_PLANILHA =
   'v1/acervo/tridimensional/importacao/planilha';
 export const URL_API_ACERVO_SOLICITACAO = 'v1/AcervoSolicitacao';
+export const URL_API_ACERVO_EMPRESTIMO = 'v1/AcervoEmprestimo';

@@ -1,4 +1,4 @@
-import { Button, Col, DatePicker, Row, Tag, Tooltip } from 'antd';
+import { Button, Col, DatePicker, Row, Tag, Tooltip, Typography } from 'antd';
 import Table, { ColumnsType } from 'antd/es/table';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import {
@@ -25,10 +25,12 @@ import { AcervoSolicitacaoItemRetornoCadastroDTO } from '~/core/dto/acervo-solic
 import { ArquivoCodigoNomeDTO } from '~/core/dto/arquivo-codigo-nome-dto';
 import { ROUTES } from '~/core/enum/routes';
 import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
+import { TipoAcervo, TipoAcervoDisplay } from '~/core/enum/tipo-acervo';
 import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
 import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import armazenamentoService from '~/core/services/armazenamento-service';
+import { Colors } from '~/core/styles/colors';
 import { downloadBlob, formatarDataParaDDMMYYYY } from '~/core/utils/functions';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { AcervoSolicitacaoContext } from '../../provider';
@@ -71,6 +73,16 @@ const ListaAcervosSolicitacao: React.FC = () => {
 
   const temArquivos: boolean = useMemo(
     () => (dataSource?.length ? !!dataSource?.find((item) => !!item?.arquivos?.length) : false),
+    [dataSource],
+  );
+
+  const temBibliografico: boolean = useMemo(
+    () =>
+      dataSource?.length
+        ? !!dataSource?.find(
+            (item) => item?.tipoAcervo === TipoAcervoDisplay[TipoAcervo.Bibliografico],
+          )
+        : false,
     [dataSource],
   );
 
@@ -215,6 +227,36 @@ const ListaAcervosSolicitacao: React.FC = () => {
       dataIndex: 'tipoAtendimento',
     },
   ];
+
+  if (temBibliografico) {
+    columns.push({
+      title: 'Disponibilidade',
+      dataIndex: 'disponibilidade',
+      render: (_, linha) => {
+        const ehBibliografico = linha.tipoAcervo === TipoAcervoDisplay[TipoAcervo.Bibliografico];
+        const labelColor = linha.estaDisponivel
+          ? Colors.Components.BACKGROUND_TAGS_DISPONIBILIDADE.LABEL_ACERVO_DISPONIVEL
+          : Colors.Suporte.Primary.ERROR;
+        const bgColor = linha.estaDisponivel
+          ? Colors.Components.BACKGROUND_TAGS_DISPONIBILIDADE.ACERVO_DISPONIVEL
+          : Colors.Components.BACKGROUND_TAGS_DISPONIBILIDADE.ACERVO_INDISPONIVEL;
+
+        return (
+          ehBibliografico && (
+            <Tag color={bgColor}>
+              <Typography.Text
+                style={{
+                  color: labelColor,
+                }}
+              >
+                {linha.situacaoDisponibilidade}
+              </Typography.Text>
+            </Tag>
+          )
+        );
+      },
+    });
+  }
 
   if (temArquivos) {
     columns.push({

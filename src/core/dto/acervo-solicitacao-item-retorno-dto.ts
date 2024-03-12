@@ -1,7 +1,9 @@
 export interface AcervoSolicitacaoItemRetornoDTO {
-  tipoAcervo: string;
-  acervoId: number;
-  titulo: string;
-  autoresCreditos: string[];
   id: number;
+  titulo: string;
+  acervoId: number;
+  tipoAcervo: string;
+  autoresCreditos: string[];
+  situacaoDisponibilidade: string;
+  estaDisponivel: boolean;
 }
