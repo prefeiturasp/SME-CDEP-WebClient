@@ -68,9 +68,9 @@ export const SolicitacaoManual: React.FC = () => {
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
 
   const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
-  const dataSource: AcervoSolicitacaoItemDetalheResumidoDTO[] = values.itens?.length
-    ? values.itens
-    : [];
+  const dataSource: AcervoSolicitacaoItemDetalheResumidoDTO[] = useMemo(() => {
+    return values.itens?.length ? values.itens : [];
+  }, [values.itens]);
 
   const temBibliografico: boolean = useMemo(
     () =>
