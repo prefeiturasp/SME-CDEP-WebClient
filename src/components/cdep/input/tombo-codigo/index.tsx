@@ -19,6 +19,7 @@ export const InputCodigoTombo: React.FC<InputCodigoTomboProps> = ({
   const [loading, setLoading] = useState<boolean>(false);
 
   const buscarTomboCodigo = async (codigo: string) => {
+    setTipoAcervo && setTipoAcervo(undefined);
     setLoading(true);
     obterCodigoTombo(codigo).then((resposta) => {
       if (resposta.sucesso) {

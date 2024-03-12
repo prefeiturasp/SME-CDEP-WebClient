@@ -1,5 +1,8 @@
-import { Tooltip, Typography } from 'antd';
+import { Space, Tag, Tooltip, Typography } from 'antd';
 import React from 'react';
+import { AcervoDisponibilidadeEnum } from '~/core/enum/acervo-disponibilidade-enum';
+import { TipoAcervo } from '~/core/enum/tipo-acervo';
+import { configTagAcervoDisponibilidadeMap } from '~/pages/operacoes/solicitacao/components/lista-acervos-solicitacao/utils';
 
 type InfoTituloConsultaAcervoProps = {
   label: string;
@@ -8,14 +11,16 @@ type InfoTituloConsultaAcervoProps = {
   exibirLabelSemValor?: boolean;
   exibirTooltip?: boolean;
   dangerouslyInnerHTML?: boolean;
+  item?: any;
 };
 
-const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcervoProps> = ({
+export const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcervoProps> = ({
+  item,
   label,
   description,
   ellipsis = false,
-  exibirLabelSemValor = false,
   exibirTooltip = false,
+  exibirLabelSemValor = false,
   dangerouslyInnerHTML = false,
 }) => {
   if (!exibirLabelSemValor && !description) return <></>;
@@ -32,20 +37,40 @@ const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcervoProps>
     conteudo = <Typography dangerouslySetInnerHTML={{ __html: description }} />;
   }
 
+  let config;
+  const validarDisponibilidade = item?.temControleDisponibilidade && item?.estaDisponivel;
+
+  if (validarDisponibilidade) {
+    config = configTagAcervoDisponibilidadeMap[AcervoDisponibilidadeEnum.ACERVO_DISPONIVEL];
+  } else if (!validarDisponibilidade) {
+    config = {};
+  }
+
   return (
-    <Typography.Text strong ellipsis={ellipsis} style={{ width: '100%' }}>
-      {label}
-      <span style={{ fontWeight: 'normal' }}>
-        {exibirTooltip ? (
-          <Tooltip autoAdjustOverflow title={getDescription()}>
-            {conteudo}
-          </Tooltip>
-        ) : (
-          conteudo
-        )}
-      </span>
-    </Typography.Text>
+    <Space>
+      <Typography.Text strong ellipsis={ellipsis} style={{ width: '100%' }}>
+        {label}
+        <span style={{ fontWeight: 'normal' }}>
+          {exibirTooltip ? (
+            <Tooltip autoAdjustOverflow title={getDescription()}>
+              {conteudo}
+            </Tooltip>
+          ) : (
+            conteudo
+          )}
+        </span>
+      </Typography.Text>
+      {(item?.tipo || item?.tipoAcervoId) === TipoAcervo?.Bibliografico && (
+        <Tag color={config?.bgColor}>
+          <Typography.Text
+            style={{
+              color: config?.labelColor,
+            }}
+          >
+            {item?.situacaoDisponibilidade}
+          </Typography.Text>
+        </Tag>
+      )}
+    </Space>
   );
 };
-
-export default TextItemCardContentConsultaAcervo;

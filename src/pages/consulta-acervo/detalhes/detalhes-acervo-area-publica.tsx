@@ -5,7 +5,7 @@ import {
   FieldAcervoDetalhesProps,
 } from '~/core/dto/form-cadastro-detalhes';
 import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
-import TextItemCardContentConsultaAcervo from '../components/text-content-card';
+import { TextItemCardContentConsultaAcervo } from '../components/text-content-card';
 
 type DetalhesAcervoAreaPublicaProps = {
   fields: FieldAcervoDetalhesProps[];
@@ -26,6 +26,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Titulo].label}: `}
                 description={dados.titulo}
                 ellipsis={!!field.ellipsis}
+                item={dados}
               />
             );
             break;

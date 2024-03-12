@@ -17,4 +17,7 @@ export type AcervoSolicitacaoItemDetalheResumidoDTO = {
   tipoAtendimento: TipoAtendimentoEnum;
   acervoId: number;
   situacaoEmprestimo?: number;
+  estaDisponivel?: boolean;
+  situacaoDisponibilidade?: string;
+  temControleDisponibilidade?: boolean;
 };

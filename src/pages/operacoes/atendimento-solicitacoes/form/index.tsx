@@ -43,6 +43,7 @@ import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import 'dayjs/locale/pt-br';
 import { AcervoEmprestimoProrrogacaoDTO } from '~/core/dto/acervo-emprestimo-prorrogacao-dto';
 import { AcervoSolicitacaoItemConfirmarDTO } from '~/core/dto/acervo-solicitacao-item-confirmar-dto';
+import { AcervoDisponibilidadeEnum } from '~/core/enum/acervo-disponibilidade-enum';
 import { ROUTES } from '~/core/enum/routes';
 import { SituacaoSolicitacaoEnum } from '~/core/enum/situacao-atendimento-enum';
 import { SituacaoEmprestimoEnum } from '~/core/enum/situacao-emprestimo-enum';
@@ -199,20 +200,27 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       dataIndex: 'titulo',
       render(value, linha) {
         if (linha && linha.tipoAcervoId) {
-          const config = configTagAcervoDisponibilidadeMap[linha.tipoAcervoId];
+          let config;
+          const validarDisponibilidade = linha.temControleDisponibilidade && linha.estaDisponivel;
+
+          if (validarDisponibilidade) {
+            config = configTagAcervoDisponibilidadeMap[AcervoDisponibilidadeEnum.ACERVO_DISPONIVEL];
+          } else if (!validarDisponibilidade) {
+            config = {};
+          }
 
           return (
             <Col>
               <Row>
                 <Typography.Text>{value}</Typography.Text>
-                {linha.tipoAcervoId === TipoAcervo.Bibliografico && (
-                  <Tag color={config.bgColor}>
+                {linha.tipoAcervoId === TipoAcervo.Bibliografico && validarDisponibilidade && (
+                  <Tag color={config?.bgColor}>
                     <Typography.Text
                       style={{
-                        color: config.labelColor,
+                        color: config?.labelColor,
                       }}
                     >
-                      {config.valor}
+                      {linha.situacaoDisponibilidade}
                     </Typography.Text>
                   </Tag>
                 )}
@@ -678,6 +686,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
           message: 'Sucesso',
           description: 'Item prorrogado com sucesso',
         });
+
+        carregarDados();
+        setLinhasCamposTocados({});
       }
     });
   };
@@ -689,6 +700,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
           message: 'Sucesso',
           description: 'Item devolvido com sucesso',
         });
+
+        carregarDados();
+        setLinhasCamposTocados({});
       }
     });
   };
