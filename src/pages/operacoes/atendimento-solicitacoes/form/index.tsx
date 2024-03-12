@@ -111,13 +111,14 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const podeFinalizarAtendimento = () => {
     return !!(
       desabilitarCampos ||
+      atendimentoFinalizado ||
+      atendimentoTaCancelado ||
       formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.ATENDIDO_PARCIALMENTE ||
-      formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.FINALIZADO_ATENDIMENTO ||
       formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO
     );
   };
 
-  const validarSituacaoLinha = (situacaoId: number) => {
+  const validarSituacaoLinha = (situacaoId?: number) => {
     switch (situacaoId) {
       case SituacaoSolicitacaoItemEnum.CANCELADO:
       case SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE:
@@ -128,9 +129,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     }
   };
 
-  const validarSituacaoEmprestimoLinha = (situacaoId: number) => {
+  const validarSituacaoEmprestimoLinha = (situacaoId?: number) => {
     switch (situacaoId) {
       case SituacaoEmprestimoEnum.DEVOLVIDO:
+      case SituacaoSolicitacaoItemEnum.CANCELADO:
         return true;
 
       default:
@@ -349,8 +351,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
           const dataAtual = dayjs();
           const initialValueData = linha?.dataEmprestimo ? dayjs(linha?.dataEmprestimo) : dataAtual;
+          const situacaoLinhaCancelada = validarSituacaoEmprestimoLinha(linha.situacaoId);
 
-          return linha.tipoAcervoId !== TipoAcervo.Bibliografico ? (
+          return linha.tipoAcervoId !== TipoAcervo.Bibliografico || situacaoLinhaCancelada ? (
             ''
           ) : (
             <Form.Item
@@ -392,7 +395,8 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
           const dataAtual = dayjs();
           const dataSugerida = dataAtual.add(7, 'day');
-          const desabilitarData = !!(
+          const situacaoLinhaCancelada = validarSituacaoEmprestimoLinha(linha.situacaoId);
+          const desabilitarSeDevolvido = !!(
             linha.situacaoEmprestimo && validarSituacaoEmprestimoLinha(linha.situacaoEmprestimo)
           );
 
@@ -400,7 +404,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
             ? dayjs(linha?.dataDevolucao)
             : dataSugerida;
 
-          return linha.tipoAcervoId !== TipoAcervo.Bibliografico ? (
+          return linha.tipoAcervoId !== TipoAcervo.Bibliografico || situacaoLinhaCancelada ? (
             ''
           ) : (
             <Form.Item
@@ -429,7 +433,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 style={{ width: '100%' }}
                 placeholder='Selecione uma data'
                 locale={localeDatePicker}
-                disabled={desabilitarData}
+                disabled={desabilitarSeDevolvido}
               />
             </Form.Item>
           );
