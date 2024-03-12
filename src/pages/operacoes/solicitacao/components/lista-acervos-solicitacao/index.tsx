@@ -23,17 +23,17 @@ import {
 import { Dayjs, dayjs } from '~/core/date/dayjs';
 import { AcervoSolicitacaoItemRetornoCadastroDTO } from '~/core/dto/acervo-solicitacao-item-retorno-cadastro-dto';
 import { ArquivoCodigoNomeDTO } from '~/core/dto/arquivo-codigo-nome-dto';
-import { AcervoDisponibilidadeEnum } from '~/core/enum/acervo-disponibilidade-enum';
 import { ROUTES } from '~/core/enum/routes';
 import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
+import { TipoAcervo, TipoAcervoDisplay } from '~/core/enum/tipo-acervo';
 import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
 import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import armazenamentoService from '~/core/services/armazenamento-service';
+import { Colors } from '~/core/styles/colors';
 import { downloadBlob, formatarDataParaDDMMYYYY } from '~/core/utils/functions';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { AcervoSolicitacaoContext } from '../../provider';
-import { configTagAcervoDisponibilidadeMap } from './utils';
 
 const ContainerExpandedTable = styled.div`
   .ant-table-tbody tr.ant-table-expanded-row td {
@@ -73,6 +73,16 @@ const ListaAcervosSolicitacao: React.FC = () => {
 
   const temArquivos: boolean = useMemo(
     () => (dataSource?.length ? !!dataSource?.find((item) => !!item?.arquivos?.length) : false),
+    [dataSource],
+  );
+
+  const temBibliografico: boolean = useMemo(
+    () =>
+      dataSource?.length
+        ? !!dataSource?.find(
+            (item) => item?.tipoAcervo === TipoAcervoDisplay[TipoAcervo.Bibliografico],
+          )
+        : false,
     [dataSource],
   );
 
@@ -187,26 +197,6 @@ const ListaAcervosSolicitacao: React.FC = () => {
       dataIndex: 'tipoAcervo',
     },
     {
-      title: 'Disponibilidade',
-      dataIndex: 'disponibilidade',
-      render: () => {
-        const mockDisponibilidade: AcervoDisponibilidadeEnum = 0;
-        const config = configTagAcervoDisponibilidadeMap[mockDisponibilidade];
-
-        return (
-          <Tag color={config.bgColor}>
-            <Typography.Text
-              style={{
-                color: config.labelColor,
-              }}
-            >
-              {config.valor}
-            </Typography.Text>
-          </Tag>
-        );
-      },
-    },
-    {
       title: 'Título',
       dataIndex: 'titulo',
       render: (titulo: string) => <div style={{ wordBreak: 'break-word' }}>{titulo}</div>,
@@ -237,6 +227,36 @@ const ListaAcervosSolicitacao: React.FC = () => {
       dataIndex: 'tipoAtendimento',
     },
   ];
+
+  if (temBibliografico) {
+    columns.push({
+      title: 'Disponibilidade',
+      dataIndex: 'disponibilidade',
+      render: (_, linha) => {
+        const ehBibliografico = linha.tipoAcervo === TipoAcervoDisplay[TipoAcervo.Bibliografico];
+        const labelColor = linha.estaDisponivel
+          ? Colors.Components.BACKGROUND_TAGS_DISPONIBILIDADE.LABEL_ACERVO_DISPONIVEL
+          : Colors.Suporte.Primary.ERROR;
+        const bgColor = linha.estaDisponivel
+          ? Colors.Components.BACKGROUND_TAGS_DISPONIBILIDADE.ACERVO_DISPONIVEL
+          : Colors.Components.BACKGROUND_TAGS_DISPONIBILIDADE.ACERVO_INDISPONIVEL;
+
+        return (
+          ehBibliografico && (
+            <Tag color={bgColor}>
+              <Typography.Text
+                style={{
+                  color: labelColor,
+                }}
+              >
+                {linha.situacaoDisponibilidade}
+              </Typography.Text>
+            </Tag>
+          )
+        );
+      },
+    });
+  }
 
   if (temArquivos) {
     columns.push({

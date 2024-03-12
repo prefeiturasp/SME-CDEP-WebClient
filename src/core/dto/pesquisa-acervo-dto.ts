@@ -14,4 +14,7 @@ export type PesquisaAcervoDTO = {
   enderecoImagemPadrao: string;
   codigo: string;
   acervoId: number;
+  estaDisponivel: boolean;
+  situacaoDisponibilidade: string;
+  temControleDisponibilidade: boolean;
 };

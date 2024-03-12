@@ -12,6 +12,7 @@ import HeaderPage from '~/components/lib/header-page';
 
 import SelectResponsaveis from '~/components/cdep/input/responsaveis';
 import { SelectSituacaoAtendimento } from '~/components/cdep/input/situacao-atendimento';
+import { SelectSituacaoEmprestimo } from '~/components/cdep/input/situacao-emprestimo';
 import { RangePicker } from '~/components/cdep/range-picker';
 import ButtonPrimary from '~/components/lib/button/primary';
 import {
@@ -37,6 +38,7 @@ export type FiltroSolicitacaoProps = {
   situacaoItem: number | null;
   responsavel: string | null;
   solicitanteRf: string | null;
+  situacaoEmprestimo: string | null;
 };
 
 const DEFAULT_VALUES: FiltroSolicitacaoProps = {
@@ -49,6 +51,7 @@ const DEFAULT_VALUES: FiltroSolicitacaoProps = {
   situacaoItem: null,
   responsavel: null,
   solicitanteRf: null,
+  situacaoEmprestimo: null,
 };
 
 const columns: ColumnsType<SolicitacaoDTO> = [
@@ -60,6 +63,11 @@ const columns: ColumnsType<SolicitacaoDTO> = [
   {
     title: 'Tipo de acervo',
     dataIndex: 'tipoAcervo',
+    align: 'center',
+  },
+  {
+    title: 'Título',
+    dataIndex: 'titulo',
     align: 'center',
   },
   {
@@ -87,6 +95,11 @@ const columns: ColumnsType<SolicitacaoDTO> = [
   {
     title: 'Situação do Item',
     dataIndex: 'situacao',
+    align: 'center',
+  },
+  {
+    title: 'Situação do Empréstimo',
+    dataIndex: 'situacaoEmprestimo',
     align: 'center',
   },
 ];
@@ -119,6 +132,7 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
       dataVisitaInicio: form?.getFieldValue('dataVisita')?.[0],
       dataVisitaFim: form?.getFieldValue('dataVisita')?.[1],
       solicitanteRf: form?.getFieldValue('solicitanteRf'),
+      situacaoEmprestimo: form?.getFieldValue('situacaoEmprestimo'),
     });
   };
 
@@ -220,6 +234,10 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
                   <Form.Item label='Nome do solicitante' name='nomeSolicitante'>
                     <Input type='text' placeholder='Nome do solicitante' disabled />
                   </Form.Item>
+                </Col>
+
+                <Col xs={24} md={8}>
+                  <SelectSituacaoEmprestimo selectProps={{ onChange: obterFiltros }} />
                 </Col>
 
                 <Col xs={24}>

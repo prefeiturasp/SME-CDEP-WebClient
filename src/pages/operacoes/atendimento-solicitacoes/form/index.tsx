@@ -17,7 +17,9 @@ import {
   CDEP_BUTTON_CANCELAR_ATENDIMENTO,
   CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO,
   CDEP_BUTTON_CONFIRMAR,
+  CDEP_BUTTON_DEVOLVER_ITEM,
   CDEP_BUTTON_FINALIZAR,
+  CDEP_BUTTON_PRORROGAR_ITEM,
   CDEP_BUTTON_VOLTAR,
 } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
@@ -39,13 +41,16 @@ import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solic
 
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import 'dayjs/locale/pt-br';
+import { AcervoEmprestimoProrrogacaoDTO } from '~/core/dto/acervo-emprestimo-prorrogacao-dto';
 import { AcervoSolicitacaoItemConfirmarDTO } from '~/core/dto/acervo-solicitacao-item-confirmar-dto';
 import { ROUTES } from '~/core/enum/routes';
 import { SituacaoSolicitacaoEnum } from '~/core/enum/situacao-atendimento-enum';
+import { SituacaoEmprestimoEnum } from '~/core/enum/situacao-emprestimo-enum';
 import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
 import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
+import { devolverEmprestimo, prorrogarEmprestimo } from '~/core/services/acervo-emprestimo';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
 import { formatarDataParaDDMMYYYY, formatterCPFMask, maskTelefone } from '~/core/utils/functions';
@@ -115,6 +120,16 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     switch (situacaoId) {
       case SituacaoSolicitacaoItemEnum.CANCELADO:
       case SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE:
+        return true;
+
+      default:
+        return false;
+    }
+  };
+
+  const validarSituacaoEmprestimoLinha = (situacaoId: number) => {
+    switch (situacaoId) {
+      case SituacaoEmprestimoEnum.DEVOLVIDO:
         return true;
 
       default:
@@ -245,6 +260,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               onChange: () => {
                 handleChange(['tipoAtendimento'], linha.id);
               },
+              disabled: desabilitarCampos || atendimentoFinalizado,
             }}
           />
         );
@@ -288,6 +304,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 placeholder='Selecione uma data'
                 locale={localeDatePicker}
                 minDate={dataAtual}
+                disabled={desabilitarCampos || atendimentoFinalizado}
               />
             </Form.Item>
           );
@@ -354,6 +371,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 style={{ width: '100%' }}
                 placeholder='Selecione uma data'
                 locale={localeDatePicker}
+                disabled={desabilitarCampos || atendimentoFinalizado}
               />
             </Form.Item>
           );
@@ -366,6 +384,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
           const dataAtual = dayjs();
           const dataSugerida = dataAtual.add(7, 'day');
+          const desabilitarData = !!(
+            linha.situacaoEmprestimo && validarSituacaoEmprestimoLinha(linha.situacaoEmprestimo)
+          );
 
           const initialValueData = linha?.dataDevolucao
             ? dayjs(linha?.dataDevolucao)
@@ -400,6 +421,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 style={{ width: '100%' }}
                 placeholder='Selecione uma data'
                 locale={localeDatePicker}
+                disabled={desabilitarData}
               />
             </Form.Item>
           );
@@ -413,6 +435,8 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     align: 'center',
     width: '10%',
     render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
+      const getDataDevolucao = form.getFieldValue(['dataDevolucao', linha.id]);
+
       const olharCamposTocados = [
         'tipoAtendimento',
         'dataVisita',
@@ -420,7 +444,38 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         'dataDevolucao',
       ];
 
-      return (
+      const acervoEhBibliografico = linha.tipoAcervoId === TipoAcervo.Bibliografico;
+
+      const params: AcervoEmprestimoProrrogacaoDTO = {
+        acervoSolicitacaoItemId: linha.id,
+        dataDevolucao: getDataDevolucao,
+      };
+
+      const desabilitarBotao = linha.situacaoEmprestimo
+        ? validarSituacaoEmprestimoLinha(linha.situacaoEmprestimo)
+        : false;
+
+      return atendimentoFinalizado && acervoEhBibliografico ? (
+        <Row wrap={false}>
+          <ButtonPrimary
+            size='small'
+            type='text'
+            id={CDEP_BUTTON_PRORROGAR_ITEM}
+            onClick={() => onClickProrrogarDevolucao(params)}
+            disabled={!camposTocado(linha.id, olharCamposTocados)}
+          >
+            Prorrogar
+          </ButtonPrimary>
+          <ButtonPrimary
+            size='small'
+            id={CDEP_BUTTON_DEVOLVER_ITEM}
+            onClick={() => onClickDevolverEmprestimo(linha.id)}
+            disabled={desabilitarBotao}
+          >
+            Devolver item
+          </ButtonPrimary>
+        </Row>
+      ) : (
         <Row wrap={false}>
           <ButtonPrimary
             size='small'
@@ -441,6 +496,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
             onClick={() => onClickConfirmarParcial(linha)}
             disabled={
               desabilitarCampos ||
+              atendimentoFinalizado ||
               validarSituacaoLinha(linha.id) ||
               !camposTocado(linha.id, olharCamposTocados)
             }
@@ -615,6 +671,28 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     });
   };
 
+  const onClickProrrogarDevolucao = (params: AcervoEmprestimoProrrogacaoDTO) => {
+    prorrogarEmprestimo(params).then((resposta) => {
+      if (resposta.sucesso) {
+        notification.success({
+          message: 'Sucesso',
+          description: 'Item prorrogado com sucesso',
+        });
+      }
+    });
+  };
+
+  const onClickDevolverEmprestimo = (id: number) => {
+    devolverEmprestimo(id).then((resposta) => {
+      if (resposta.sucesso) {
+        notification.success({
+          message: 'Sucesso',
+          description: 'Item devolvido com sucesso',
+        });
+      }
+    });
+  };
+
   useEffect(() => {
     if (acervoSolicitacaoId) {
       carregarDados();
@@ -633,7 +711,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         autoComplete='off'
         validateMessages={validateMessages}
         initialValues={formInitialValues}
-        disabled={desabilitarCampos || atendimentoFinalizado}
       >
         <HeaderPage title='Atendimento de Solicitações'>
           <Col span={24}>

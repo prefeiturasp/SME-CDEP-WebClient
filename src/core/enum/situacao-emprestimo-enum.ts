@@ -3,6 +3,7 @@ export enum SituacaoEmprestimoEnum {
   DEVOLUCAO_EM_ATRASO = 2,
   EMPRESTADO_PRORROGACAO = 3,
   DEVOLVIDO = 4,
+  CANCELADO = 5,
 }
 
 export const SituacaoEmprestimoEnumDisplay: Record<SituacaoEmprestimoEnum, string> = {
@@ -10,4 +11,5 @@ export const SituacaoEmprestimoEnumDisplay: Record<SituacaoEmprestimoEnum, strin
   [SituacaoEmprestimoEnum.DEVOLUCAO_EM_ATRASO]: 'Devolução em atraso',
   [SituacaoEmprestimoEnum.EMPRESTADO_PRORROGACAO]: 'Emprestado - Prorrogação',
   [SituacaoEmprestimoEnum.DEVOLVIDO]: 'Devolvido',
+  [SituacaoEmprestimoEnum.CANCELADO]: 'Cancelado',
 };

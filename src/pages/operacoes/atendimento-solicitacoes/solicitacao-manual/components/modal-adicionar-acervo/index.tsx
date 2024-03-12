@@ -44,6 +44,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   const [form] = useForm();
   const tipoAtendimentoWatch = useWatch('tipoAtendimento', form);
 
+  //TODO:  VERIFICAR ATUALIZACAO DO MODAL QUANDO PESQUISAR POR BIBLIOGRAFICO
   const [tipoAcervo, setTipoAcervo] = useState<TipoAcervo>();
   const ehBibliografico = tipoAcervo === TipoAcervo.Bibliografico;
 
@@ -207,6 +208,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
       okText='Adicionar'
       title='Inserir acervo à solicitação'
       onOk={onFinish}
+      cancelText='Cancelar'
       onCancel={onCancel}
       {...modalProps}
     >
