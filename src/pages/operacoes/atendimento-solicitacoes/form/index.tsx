@@ -356,9 +356,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         title: 'Data do empréstimo',
         dataIndex: 'dataEmprestimo',
         width: '10%',
-        render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-          const dataAtual = dayjs();
-          const initialValueData = linha?.dataEmprestimo ? dayjs(linha?.dataEmprestimo) : dataAtual;
+        render: (dataEmprestimo, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
+          const initialValueData = linha?.dataEmprestimo
+            ? dayjs(linha?.dataEmprestimo)
+            : dataEmprestimo;
           const situacaoLinhaCancelada = validarSituacaoEmprestimoLinha(linha.situacaoId);
 
           return linha.tipoAcervoId !== TipoAcervo.Bibliografico || situacaoLinhaCancelada ? (
@@ -402,8 +403,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         dataIndex: 'dataDevolucao',
         width: '10%',
         render: (dataDevolucao, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-          const dataAtual = dayjs();
-          const dataSugerida = dataAtual.add(7, 'day');
+          const dataSugerida = dataDevolucao?.add(7, 'day');
           const situacaoLinhaCancelada = validarSituacaoEmprestimoLinha(linha.situacaoId);
           const desabilitarSeDevolvido = !!(
             linha.situacaoEmprestimo && validarSituacaoEmprestimoLinha(linha.situacaoEmprestimo)
