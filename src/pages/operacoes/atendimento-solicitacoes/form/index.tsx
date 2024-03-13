@@ -257,6 +257,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
         if (linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) return;
 
+        if (linha.tipoAcervoId === TipoAcervo.Bibliografico) {
+          return TipoAtendimentoEnum?.[value];
+        }
+
         return (
           <SelectTipoAtendimento
             formItemProps={{
@@ -281,7 +285,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       dataIndex: 'dataVisita',
       width: '10%',
       render: (dataVisita: string, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-        const getTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${linha.id}`]);
+        const ehPresencial = linha.tipoAtendimento === TipoAtendimentoEnum.Presencial;
 
         const datePicker = (value?: Dayjs | undefined) => {
           const initialValueData = linha?.dataVisita ? dayjs(linha?.dataVisita) : value;
@@ -303,7 +307,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               ]}
             >
               <DatePicker
-                allowClear={false}
+                allowClear
                 onChange={(date: Dayjs) => {
                   form.setFieldValue(['dataVisita', `${linha.id}`], date);
                   onChangeDatas(date, linha);
@@ -320,8 +324,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
           );
         };
 
-        const mostrarCampoDatePicker = (value?: Dayjs) =>
-          getTipoAtendimento === TipoAtendimentoEnum.Presencial ? datePicker(value) : '';
+        const mostrarCampoDatePicker = (value?: Dayjs) => (ehPresencial ? datePicker(value) : '');
 
         if (linha?.tipoAtendimento === TipoAtendimentoEnum.Presencial) {
           let value = undefined;
@@ -372,7 +375,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               ]}
             >
               <DatePicker
-                allowClear={false}
+                allowClear
                 onChange={(date: Dayjs) => {
                   form.setFieldValue(['dataEmprestimo', `${linha.id}`], date);
                   onChangeDatas(date, linha);
@@ -423,7 +426,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               ]}
             >
               <DatePicker
-                allowClear={false}
+                allowClear
                 onChange={(date: Dayjs) => {
                   form.setFieldValue(['dataDevolucao', `${linha.id}`], date);
                   onChangeDatas(date, linha);
