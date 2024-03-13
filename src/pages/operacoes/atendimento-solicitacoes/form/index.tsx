@@ -659,7 +659,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               id: item.id,
               dataVisita: novaDataVisita,
               tipoAcervo: linha.tipoAcervoId,
-              tipoAtendimento: valorTipoAtendimento,
+              tipoAtendimento: valorTipoAtendimento ?? item.tipoAtendimento,
               dataEmprestimo:
                 form.getFieldValue(['dataEmprestimo', `${item.id}`]) ?? item.dataEmprestimo,
               dataDevolucao:
