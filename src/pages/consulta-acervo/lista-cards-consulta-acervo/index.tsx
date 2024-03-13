@@ -13,7 +13,7 @@ import { TipoAcervoTag, TipoAcervoTagDisplay } from '~/core/enum/tipo-acervo-tag
 import { Colors } from '~/core/styles/colors';
 import { ButtonEnviarParaMinhaSelecao } from '../components/button-enviar-para-minha-selecao';
 import CheckboxSelecionarAcervo from '../components/selecionar-acervo';
-import TextItemCardContentConsultaAcervo from '../components/text-content-card';
+import { TextItemCardContentConsultaAcervo } from '../components/text-content-card';
 import { ConsultaAcervoContext } from '../provider';
 
 const ImageContainer = styled.div`
@@ -144,6 +144,7 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Titulo].label}: `}
                       description={item.titulo}
+                      item={item}
                     />
 
                     <TextItemCardContentConsultaAcervo

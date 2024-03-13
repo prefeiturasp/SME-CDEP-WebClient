@@ -30,6 +30,15 @@ type ColorsType = {
       FERIADO: string;
       SUSPENSAO: string;
     };
+    BACKGROUND_TAGS_DISPONIBILIDADE: {
+      ACERVO_RESERVADO: string;
+      ACERVO_DISPONIVEL: string;
+      ACERVO_EMPRESTADO: string;
+      ACERVO_INDISPONIVEL: string;
+      LABEL_ACERVO_RESERVADO: string;
+      LABEL_ACERVO_DISPONIVEL: string;
+      LABEL_ACERVO_EMPRESTADO: string;
+    };
   };
   Suporte: {
     Primary: SuporteType;
@@ -67,6 +76,15 @@ const Colors: ColorsType = {
       VISITA: '#00585E',
       FERIADO: '#7F298C',
       SUSPENSAO: '#89162d',
+    },
+    BACKGROUND_TAGS_DISPONIBILIDADE: {
+      ACERVO_RESERVADO: '#FFF3CD',
+      ACERVO_DISPONIVEL: '#D4EBD8',
+      ACERVO_EMPRESTADO: '#D1ECF1',
+      ACERVO_INDISPONIVEL: '#F9D1CE',
+      LABEL_ACERVO_RESERVADO: '#856404',
+      LABEL_ACERVO_DISPONIVEL: '#05812F',
+      LABEL_ACERVO_EMPRESTADO: '#0C5460',
     },
   },
   Suporte: {

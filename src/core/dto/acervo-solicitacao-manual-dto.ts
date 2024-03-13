@@ -4,8 +4,11 @@ import { TipoAtendimentoEnum } from '../enum/tipo-atendimento-enum';
 export type AcervoSolicitacaoItemManualDTO = {
   id?: number;
   acervoId: number;
-  tipoAtendimento: TipoAtendimentoEnum;
+  tipoAtendimento?: TipoAtendimentoEnum;
   dataVisita?: string;
+  dataEmprestimo?: string;
+  dataDevolucao?: string;
+  tipoAcervo?: string;
 };
 
 export type AcervoSolicitacaoManualDTO = {

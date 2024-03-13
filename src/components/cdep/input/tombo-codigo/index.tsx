@@ -1,26 +1,33 @@
 import { Form, FormItemProps, Input, InputProps } from 'antd';
 import useFormInstance from 'antd/es/form/hooks/useFormInstance';
-import React, { useState } from 'react';
+import React, { Dispatch, SetStateAction, useState } from 'react';
+import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { obterCodigoTombo } from '~/core/services/acervo-service';
 
 type InputCodigoTomboProps = {
   inputProps?: InputProps;
   formItemProps?: FormItemProps;
+  setTipoAcervo?: Dispatch<SetStateAction<TipoAcervo | undefined>>;
 };
 
 export const InputCodigoTombo: React.FC<InputCodigoTomboProps> = ({
   inputProps,
   formItemProps,
+  setTipoAcervo,
 }) => {
   const form = useFormInstance();
-
   const [loading, setLoading] = useState<boolean>(false);
 
   const buscarTomboCodigo = async (codigo: string) => {
+    setTipoAcervo && setTipoAcervo(undefined);
     setLoading(true);
     obterCodigoTombo(codigo).then((resposta) => {
       if (resposta.sucesso) {
         const dados = resposta?.dados;
+
+        if (setTipoAcervo && dados.tipo) {
+          setTipoAcervo(dados?.tipo);
+        }
 
         form.setFieldValue('dadosCodigoTombo', { ...dados });
       } else {

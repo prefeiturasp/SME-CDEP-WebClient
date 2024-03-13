@@ -4,7 +4,7 @@ import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import { useForm, useWatch } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
 import _, { cloneDeep } from 'lodash';
-import React, { useCallback, useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { FaEdit, FaTrashAlt } from 'react-icons/fa';
 import { useNavigate, useParams } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
@@ -43,6 +43,7 @@ import {
   SituacaoSolicitacaoItemEnum,
   SituacaoSolicitacaoItemEnumDisplay,
 } from '~/core/enum/situacao-item-atendimento-enum';
+import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoAtendimentoEnum, TipoAtendimentoEnumDisplay } from '~/core/enum/tipo-atendimento-enum';
 import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
@@ -66,6 +67,19 @@ export const SolicitacaoManual: React.FC = () => {
     useState<AcervoSolicitacaoItemDetalheResumidoDTO>();
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
 
+  const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
+  const dataSource: AcervoSolicitacaoItemDetalheResumidoDTO[] = useMemo(() => {
+    return values.itens?.length ? values.itens : [];
+  }, [values.itens]);
+
+  const temBibliografico: boolean = useMemo(
+    () =>
+      dataSource?.length
+        ? !!dataSource?.find((item) => item?.tipoAcervoId === TipoAcervo.Bibliografico)
+        : false,
+    [dataSource],
+  );
+
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
   const ehUsuarioExterno =
     form.getFieldsValue(true)?.dadosSolicitante?.tipoId != TipoUsuario.CORESSO;
@@ -79,6 +93,9 @@ export const SolicitacaoManual: React.FC = () => {
         return false;
     }
   };
+
+  const validarSeEhBibliografico = (tipoAcervo?: TipoAcervo) =>
+    tipoAcervo === TipoAcervo.Bibliografico ?? false;
 
   const columns: ColumnsType<AcervoSolicitacaoItemDetalheResumidoDTO> = [
     {
@@ -109,66 +126,86 @@ export const SolicitacaoManual: React.FC = () => {
       width: '10%',
       render: (dataVisita) => formatarDataParaDDMMYYYY(dataVisita),
     },
-    {
-      title: 'Ações',
-      align: 'center',
-      width: '10%',
-      render: (_, linha, index: number) => {
-        return (
-          <Row wrap={false} gutter={[8, 8]}>
+  ];
+
+  if (temBibliografico) {
+    columns.push(
+      {
+        title: 'Data do empréstimo',
+        dataIndex: 'dataEmprestimo',
+        width: '10%',
+        render: (dataEmprestimo, linha) =>
+          validarSeEhBibliografico(linha.tipoAcervoId) && formatarDataParaDDMMYYYY(dataEmprestimo),
+      },
+      {
+        title: 'Data da devolução',
+        dataIndex: 'dataDevolucao',
+        width: '10%',
+        render: (dataDevolucao, linha) =>
+          validarSeEhBibliografico(linha.tipoAcervoId) && formatarDataParaDDMMYYYY(dataDevolucao),
+      },
+    );
+  }
+
+  columns.push({
+    title: 'Ações',
+    align: 'center',
+    width: '10%',
+    render: (_, linha, index: number) => {
+      return (
+        <Row wrap={false} gutter={[8, 8]}>
+          <Col>
+            <ButtonSecundary
+              icon={<FaEdit />}
+              size='small'
+              id={`${CDEP_BUTTON_EDITAR}_${index}`}
+              onClick={() => {
+                setInitialValuesModal(linha);
+                setIsModalOpen(true);
+              }}
+              disabled={linha.situacaoId && validarSituacaoLinha(linha.situacaoId)}
+            >
+              Editar
+            </ButtonSecundary>
+          </Col>
+
+          {linha.id ? (
             <Col>
               <ButtonSecundary
-                icon={<FaEdit />}
+                icon={<StopOutlined />}
                 size='small'
-                id={`${CDEP_BUTTON_EDITAR}_${index}`}
+                id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
                 onClick={() => {
-                  setInitialValuesModal(linha);
-                  setIsModalOpen(true);
+                  onClickCancelarItemAtendimento(linha.id);
                 }}
                 disabled={linha.situacaoId && validarSituacaoLinha(linha.situacaoId)}
               >
-                Editar
+                Cancelar item
               </ButtonSecundary>
             </Col>
-
-            {linha.id ? (
-              <Col>
-                <ButtonSecundary
-                  icon={<StopOutlined />}
-                  size='small'
-                  id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
-                  onClick={() => {
-                    onClickCancelarItemAtendimento(linha.id);
-                  }}
-                  disabled={linha.situacaoId && validarSituacaoLinha(linha.situacaoId)}
-                >
-                  Cancelar item
-                </ButtonSecundary>
-              </Col>
-            ) : (
-              <Col>
-                <ButtonSecundary
-                  size='small'
-                  icon={<FaTrashAlt />}
-                  id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
-                  onClick={() => {
-                    confirmacao({
-                      content: DESEJA_REMOVER_ACERVO,
-                      onOk() {
-                        removerAcervo(index);
-                      },
-                    });
-                  }}
-                >
-                  Remover item
-                </ButtonSecundary>
-              </Col>
-            )}
-          </Row>
-        );
-      },
+          ) : (
+            <Col>
+              <ButtonSecundary
+                size='small'
+                icon={<FaTrashAlt />}
+                id={`${CDEP_BUTTON_REMOVER_ACERVO}_${index}`}
+                onClick={() => {
+                  confirmacao({
+                    content: DESEJA_REMOVER_ACERVO,
+                    onOk() {
+                      removerAcervo(index);
+                    },
+                  });
+                }}
+              >
+                Remover item
+              </ButtonSecundary>
+            </Col>
+          )}
+        </Row>
+      );
     },
-  ];
+  });
 
   const carregarDados = useCallback(async () => {
     const resposta = await acervoSolicitacaoService.obterDetalhesParaAtendimentoSolicitacoesPorId(
@@ -287,6 +324,14 @@ export const SolicitacaoManual: React.FC = () => {
 
             if (item.dataVisita) {
               linha.dataVisita = item.dataVisita;
+            }
+
+            if (item.dataEmprestimo) {
+              linha.dataEmprestimo = item.dataEmprestimo;
+            }
+
+            if (item.dataDevolucao) {
+              linha.dataDevolucao = item.dataDevolucao;
             }
 
             return linha;

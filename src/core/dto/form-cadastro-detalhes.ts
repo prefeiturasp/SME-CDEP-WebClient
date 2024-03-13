@@ -1,5 +1,6 @@
 import { ReactImageGalleryItem } from 'react-image-gallery';
 import { FieldAcervoEnum } from '../enum/field-acervo-enum';
+import { TipoAcervo } from '../enum/tipo-acervo';
 
 export type ConsultaAcervoDetalhesDTO = {
   titulo: string;
@@ -44,6 +45,10 @@ export type ConsultaAcervoDetalhesDTO = {
   disponibilizacao: string;
   imagens: ReactImageGalleryItem[];
   enderecoImagemPadrao: string;
+  estaDisponivel: boolean;
+  situacaoDisponibilidade: string;
+  temControleDisponibilidade: boolean;
+  tipoAcervoId?: TipoAcervo;
 };
 
 export type FieldAcervoDetalhesProps = {
