@@ -2,6 +2,7 @@ import { Col, DatePicker, Form, Input, ModalProps, Row } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import { Rule } from 'antd/es/form';
 import { FormInstance, FormProps, useForm, useWatch } from 'antd/es/form/Form';
+import { NamePath } from 'antd/es/form/interface';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento';
@@ -53,7 +54,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   const ehPresencialWatch = tipoAtendimentoWatch === TipoAtendimentoEnum.Presencial;
   const temDataEhPresencial = mostrarSeTiverData && ehPresencialWatch;
 
-  const rules: Rule[] = [];
+  const rules: Rule[] = [{ required: true }];
 
   const onFinish = () => {
     form.validateFields().then(() => {
@@ -140,10 +141,10 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
     }
   };
 
-  const validarDatas = () => {
-    const getDataVisita = form.getFieldValue('dataVisita');
-    const getDataDevolucao = form.getFieldValue('dataDevolucao');
-    const getDataEmprestimo = form.getFieldValue('dataEmprestimo');
+  const validarDatas = (getFieldValue: NamePath) => {
+    const getDataVisita = getFieldValue('dataVisita');
+    const getDataDevolucao = getFieldValue('dataDevolucao');
+    const getDataEmprestimo = getFieldValue('dataEmprestimo');
 
     if (getDataVisita && getDataEmprestimo && getDataDevolucao) {
       return dayjs(getDataVisita).isSameOrBefore(getDataEmprestimo, 'day') &&
@@ -152,6 +153,8 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
         ? Promise.resolve()
         : Promise.reject();
     }
+
+    return Promise.resolve();
   };
 
   useEffect(() => {
@@ -181,18 +184,6 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
       form.setFieldValue('tipoAtendimento', initialValuesModal?.tipoAtendimento);
     }
   }, [form, isModalOpen, initialValuesModal]);
-
-  if (ehBibliografico) {
-    rules.push(
-      {
-        required: true,
-      },
-      {
-        message: ERRO_DATA_VISITA,
-        validator: () => validarDatas(),
-      },
-    );
-  }
 
   useEffect(() => {
     if (ehBibliografico) {
@@ -266,16 +257,14 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                 <Form.Item
                   name='dataVisita'
                   label='Data da visita'
-                  dependencies={['dataEmprestimo', 'dataDevolucao']}
-                  rules={
-                    ehBibliografico
-                      ? rules
-                      : [
-                          {
-                            required: true,
-                          },
-                        ]
-                  }
+                  dependencies={ehBibliografico ? ['dataEmprestimo', 'dataDevolucao'] : []}
+                  rules={[
+                    ...rules,
+                    ({ getFieldValue }) => ({
+                      message: ERRO_DATA_VISITA,
+                      validator: () => validarDatas(getFieldValue),
+                    }),
+                  ]}
                 >
                   <DatePicker
                     style={{ width: '100%' }}
@@ -296,13 +285,11 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                     label='Data do empréstimo'
                     dependencies={['dataVisita', 'dataDevolucao']}
                     rules={[
-                      {
-                        required: ehBibliografico,
-                      },
-                      {
+                      ...rules,
+                      ({ getFieldValue }) => ({
                         message: ERRO_DATA_EMPRESTIMO,
-                        validator: () => validarDatas(),
-                      },
+                        validator: () => validarDatas(getFieldValue),
+                      }),
                     ]}
                   >
                     <DatePicker
@@ -320,13 +307,11 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                     name='dataDevolucao'
                     dependencies={['dataEmprestimo', 'dataVisita']}
                     rules={[
-                      {
-                        required: ehBibliografico,
-                      },
-                      {
+                      ...rules,
+                      ({ getFieldValue }) => ({
                         message: ERRO_DATA_DEVOLUCAO,
-                        validator: () => validarDatas(),
-                      },
+                        validator: () => validarDatas(getFieldValue),
+                      }),
                     ]}
                   >
                     <DatePicker

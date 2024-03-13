@@ -534,6 +534,11 @@ export const SolicitacaoManual: React.FC = () => {
             <Col xs={24}>
               <Form.Item shouldUpdate>
                 {() => {
+                  const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
+                  const dataSource: AcervoSolicitacaoItemDetalheResumidoDTO[] = values.itens?.length
+                    ? values.itens
+                    : [];
+
                   return (
                     <DataTable
                       columns={columns}
