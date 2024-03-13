@@ -82,14 +82,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     (item) => item.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_MANUALMENTE,
   );
 
-  const temBibliografico: boolean = useMemo(
-    () =>
-      dataSource?.length
-        ? !!dataSource?.find((item) => item?.tipoAcervoId === TipoAcervo.Bibliografico)
-        : false,
-    [dataSource],
-  );
-
   const ehUsuarioExterno = formInitialValues?.dadosSolicitante.tipoId != TipoUsuario.CORESSO;
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
@@ -192,6 +184,17 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     }
   };
 
+  const validarSeEhBibliografico = (tipoAcervo?: TipoAcervo) =>
+    tipoAcervo === TipoAcervo.Bibliografico ?? false;
+
+  const temBibliografico: boolean = useMemo(
+    () =>
+      dataSource?.length
+        ? !!dataSource?.find((item) => validarSeEhBibliografico(item?.tipoAcervoId))
+        : false,
+    [dataSource],
+  );
+
   const columns: ColumnsType<AcervoSolicitacaoItemDetalheResumidoDTO> = [
     {
       title: 'N° do tombo/código',
@@ -215,7 +218,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
             <Col>
               <Row>
                 <Typography.Text>{value}</Typography.Text>
-                {linha.tipoAcervoId === TipoAcervo.Bibliografico && validarDisponibilidade && (
+                {validarSeEhBibliografico(linha.tipoAcervoId) && validarDisponibilidade && (
                   <Tag color={config?.bgColor}>
                     <Typography.Text
                       style={{
@@ -257,7 +260,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
         if (linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) return;
 
-        if (linha.tipoAcervoId === TipoAcervo.Bibliografico) {
+        if (validarSeEhBibliografico(linha.tipoAcervoId)) {
           return TipoAtendimentoEnum?.[value];
         }
 
@@ -285,7 +288,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       dataIndex: 'dataVisita',
       width: '10%',
       render: (dataVisita: string, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-        const ehPresencial = linha.tipoAtendimento === TipoAtendimentoEnum.Presencial;
+        const ehPresencial = linha?.tipoAtendimento === TipoAtendimentoEnum.Presencial;
 
         const datePicker = (value?: Dayjs | undefined) => {
           const initialValueData = linha?.dataVisita ? dayjs(linha?.dataVisita) : value;
@@ -326,7 +329,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
         const mostrarCampoDatePicker = (value?: Dayjs) => (ehPresencial ? datePicker(value) : '');
 
-        if (linha?.tipoAtendimento === TipoAtendimentoEnum.Presencial) {
+        if (ehPresencial) {
           let value = undefined;
 
           if (dataVisitasEditaveis?.[linha.id]) {
@@ -459,8 +462,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         'dataDevolucao',
       ];
 
-      const acervoEhBibliografico = linha.tipoAcervoId === TipoAcervo.Bibliografico;
-
       const params: AcervoEmprestimoProrrogacaoDTO = {
         acervoSolicitacaoItemId: linha.id,
         dataDevolucao: getDataDevolucao,
@@ -470,7 +471,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         ? validarSituacaoEmprestimoLinha(linha.situacaoEmprestimo)
         : false;
 
-      return atendimentoFinalizado && acervoEhBibliografico ? (
+      return atendimentoFinalizado && validarSeEhBibliografico(linha.tipoAcervoId) ? (
         <Row wrap={false}>
           <ButtonPrimary
             size='small'
