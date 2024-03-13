@@ -288,7 +288,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       dataIndex: 'dataVisita',
       width: '10%',
       render: (dataVisita: string, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-        const ehPresencial = linha?.tipoAtendimento === TipoAtendimentoEnum.Presencial;
+        const getTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${linha.id}`]);
+        const ehPresencial =
+          (linha?.tipoAtendimento || getTipoAtendimento) === TipoAtendimentoEnum.Presencial;
 
         const datePicker = (value?: Dayjs | undefined) => {
           const initialValueData = linha?.dataVisita ? dayjs(linha?.dataVisita) : value;
