@@ -14,7 +14,7 @@ export type AcervoSolicitacaoItemDetalheResumidoDTO = {
   dataEmprestimo?: string;
   dataDevolucao?: string;
   responsavel?: string;
-  tipoAtendimento: TipoAtendimentoEnum;
+  tipoAtendimento?: TipoAtendimentoEnum;
   acervoId: number;
   situacaoEmprestimo?: number;
   estaDisponivel?: boolean;
