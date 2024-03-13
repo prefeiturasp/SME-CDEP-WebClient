@@ -94,6 +94,9 @@ export const SolicitacaoManual: React.FC = () => {
     }
   };
 
+  const validarSeEhBibliografico = (tipoAcervo?: TipoAcervo) =>
+    tipoAcervo === TipoAcervo.Bibliografico ?? false;
+
   const columns: ColumnsType<AcervoSolicitacaoItemDetalheResumidoDTO> = [
     {
       title: 'N° do tombo/código',
@@ -131,13 +134,15 @@ export const SolicitacaoManual: React.FC = () => {
         title: 'Data do empréstimo',
         dataIndex: 'dataEmprestimo',
         width: '10%',
-        render: (dataEmprestimo) => formatarDataParaDDMMYYYY(dataEmprestimo),
+        render: (dataEmprestimo, linha) =>
+          validarSeEhBibliografico(linha.tipoAcervoId) && formatarDataParaDDMMYYYY(dataEmprestimo),
       },
       {
         title: 'Data da devolução',
         dataIndex: 'dataDevolucao',
         width: '10%',
-        render: (dataDevolucao) => formatarDataParaDDMMYYYY(dataDevolucao),
+        render: (dataDevolucao, linha) =>
+          validarSeEhBibliografico(linha.tipoAcervoId) && formatarDataParaDDMMYYYY(dataDevolucao),
       },
     );
   }

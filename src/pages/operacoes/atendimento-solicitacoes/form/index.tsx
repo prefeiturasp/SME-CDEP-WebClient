@@ -254,15 +254,15 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       dataIndex: 'tipoAtendimento',
       width: '10%',
       render: (value, linha) => {
+        if (value && linha.tipoAcervoId && validarSeEhBibliografico(linha.tipoAcervoId)) {
+          return TipoAtendimentoEnum?.[value];
+        }
+
         if (value && linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) {
           return TipoAtendimentoEnum?.[value];
         }
 
         if (linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) return;
-
-        if (validarSeEhBibliografico(linha.tipoAcervoId)) {
-          return TipoAtendimentoEnum?.[value];
-        }
 
         return (
           <SelectTipoAtendimento
@@ -383,6 +383,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                   form.setFieldValue(['dataEmprestimo', `${linha.id}`], date);
                   onChangeDatas(date, linha);
                   handleChange(['dataEmprestimo'], linha.id);
+                  form.setFieldValue(['dataDevolucao', linha.id], date.add(7, 'day'));
                 }}
                 format='DD/MM/YYYY'
                 style={{ width: '100%' }}
@@ -398,7 +399,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         title: 'Data da devolução',
         dataIndex: 'dataDevolucao',
         width: '10%',
-        render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
+        render: (dataDevolucao, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
           const dataAtual = dayjs();
           const dataSugerida = dataAtual.add(7, 'day');
           const situacaoLinhaCancelada = validarSituacaoEmprestimoLinha(linha.situacaoId);
@@ -408,6 +409,8 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
           const initialValueData = linha?.dataDevolucao
             ? dayjs(linha?.dataDevolucao)
+            : dataDevolucao
+            ? dataDevolucao
             : dataSugerida;
 
           return linha.tipoAcervoId !== TipoAcervo.Bibliografico || situacaoLinhaCancelada ? (
@@ -575,8 +578,23 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         dataSolicitacao,
       };
 
+      const dadosMapeadosItens: AcervoSolicitacaoItemDetalheResumidoDTO[] = dadosMapeados.itens.map(
+        (item) => {
+          let tipoAtendimento;
+
+          if (validarSeEhBibliografico(item.tipoAcervoId)) {
+            tipoAtendimento = TipoAtendimentoEnum.Presencial;
+          }
+
+          return {
+            ...item,
+            tipoAtendimento,
+          };
+        },
+      );
+
       setFormInitialValues(dadosMapeados);
-      setDataSource(dadosMapeados.itens);
+      setDataSource(dadosMapeadosItens);
     }
   }, [acervoSolicitacaoId]);
 
@@ -641,7 +659,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               id: item.id,
               dataVisita: novaDataVisita,
               tipoAcervo: linha.tipoAcervoId,
-              tipoAtendimento: valorTipoAtendimento,
+              tipoAtendimento: valorTipoAtendimento ?? item.tipoAtendimento,
               dataEmprestimo:
                 form.getFieldValue(['dataEmprestimo', `${item.id}`]) ?? item.dataEmprestimo,
               dataDevolucao:
