@@ -403,7 +403,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         dataIndex: 'dataDevolucao',
         width: '10%',
         render: (dataDevolucao, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-          const dataSugerida = dataDevolucao?.add(7, 'day');
+          const dataSugerida = dataDevolucao ? dayjs(dataDevolucao)?.add(7, 'day') : undefined;
           const situacaoLinhaCancelada = validarSituacaoEmprestimoLinha(linha.situacaoId);
           const desabilitarSeDevolvido = !!(
             linha.situacaoEmprestimo && validarSituacaoEmprestimoLinha(linha.situacaoEmprestimo)
