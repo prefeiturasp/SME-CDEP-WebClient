@@ -441,8 +441,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
             if (atendimentoFinalizado) {
               return false;
             } else if (
-              ehDataVisitaFuturaDesabilitarEmprestimoEDevolucao(linha) ||
-              desabilitarSeDevolvido
+              desabilitarSeDevolvido ||
+              validarSituacaoLinha(linha.situacaoId) ||
+              ehDataVisitaFuturaDesabilitarEmprestimoEDevolucao(linha)
             ) {
               return true;
             }
