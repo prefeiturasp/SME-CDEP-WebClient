@@ -315,6 +315,7 @@ export const SolicitacaoManual: React.FC = () => {
           (item: AcervoSolicitacaoItemDetalheResumidoDTO): AcervoSolicitacaoItemManualDTO => {
             const linha: AcervoSolicitacaoItemManualDTO = {
               acervoId: item.acervoId,
+              tipoAcervo: item.tipoAcervoId,
               tipoAtendimento: item.tipoAtendimento,
             };
 
