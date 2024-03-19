@@ -41,9 +41,12 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   initialValuesModal,
   formSolicitacaoManual,
 }) => {
-  const minDate = dayjs();
+  const dataAtual = dayjs();
+  const minDateMenos7 = dayjs().subtract(7, 'day');
   const [form] = useForm();
   const tipoAtendimentoWatch = useWatch('tipoAtendimento', form);
+  const dataVisitaWatch = useWatch('dataVisita', form);
+  const minDateDataEmprestimo = dayjs(dataVisitaWatch).add(0, 'day');
 
   const [desabilitarAdicionar, setDesabilitarAdicionar] = useState<boolean>(false);
   const [tipoAcervo, setTipoAcervo] = useState<TipoAcervo>();
@@ -271,7 +274,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                     format='DD/MM/YYYY'
                     placeholder='Selecione uma data'
                     locale={localeDatePicker}
-                    minDate={minDate}
+                    minDate={minDateMenos7}
                   />
                 </Form.Item>
               </Col>
@@ -297,7 +300,8 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                       format='DD/MM/YYYY'
                       placeholder='Selecione uma data'
                       locale={localeDatePicker}
-                      minDate={minDate}
+                      minDate={minDateDataEmprestimo}
+                      maxDate={dataAtual}
                     />
                   </Form.Item>
                 </Col>
@@ -319,7 +323,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                       format='DD/MM/YYYY'
                       placeholder='Selecione uma data'
                       locale={localeDatePicker}
-                      minDate={minDate}
+                      minDate={dataAtual}
                     />
                   </Form.Item>
                 </Col>

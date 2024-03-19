@@ -184,6 +184,15 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     }
   };
 
+  const desabilitarDatas = (linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
+    const dataAtual = dayjs();
+    const getDataVisita = form.getFieldValue(['dataVisita', linha.id]);
+
+    if (dayjs(getDataVisita)?.isAfter(dataAtual) || dayjs(linha.dataVisita)?.isAfter(dataAtual)) {
+      return true;
+    }
+  };
+
   const validarSeEhBibliografico = (tipoAcervo?: TipoAcervo) =>
     tipoAcervo === TipoAcervo.Bibliografico ?? false;
 
@@ -317,6 +326,11 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                   form.setFieldValue(['dataVisita', `${linha.id}`], date);
                   onChangeDatas(date, linha);
                   handleChange(['dataVisita'], linha.id);
+
+                  if (desabilitarDatas(linha)) {
+                    form.setFieldValue(['dataDevolucao', linha.id], undefined);
+                    form.setFieldValue(['dataEmprestimo', linha.id], undefined);
+                  }
                 }}
                 format='DD/MM/YYYY'
                 style={{ width: '100%' }}
@@ -389,10 +403,11 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                   form.setFieldValue(['dataDevolucao', linha.id], date.add(7, 'day'));
                 }}
                 format='DD/MM/YYYY'
+                maxDate={dataAtual}
                 style={{ width: '100%' }}
                 placeholder='Selecione uma data'
                 locale={localeDatePicker}
-                disabled={desabilitarCampos || atendimentoFinalizado}
+                disabled={desabilitarCampos || atendimentoFinalizado || desabilitarDatas(linha)}
               />
             </Form.Item>
           );
@@ -444,7 +459,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 style={{ width: '100%' }}
                 placeholder='Selecione uma data'
                 locale={localeDatePicker}
-                disabled={desabilitarSeDevolvido}
+                disabled={desabilitarSeDevolvido || desabilitarDatas(linha)}
               />
             </Form.Item>
           );
@@ -662,10 +677,8 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               dataVisita: novaDataVisita,
               tipoAcervo: linha.tipoAcervoId,
               tipoAtendimento: valorTipoAtendimento ?? item.tipoAtendimento,
-              dataEmprestimo:
-                form.getFieldValue(['dataEmprestimo', `${item.id}`]) ?? item.dataEmprestimo,
-              dataDevolucao:
-                form.getFieldValue(['dataDevolucao', `${item.id}`]) ?? item.dataDevolucao,
+              dataEmprestimo: form.getFieldValue(['dataEmprestimo', `${item.id}`]),
+              dataDevolucao: form.getFieldValue(['dataDevolucao', `${item.id}`]),
             };
 
             return paramsItem;
