@@ -113,6 +113,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const validarSituacaoLinha = (situacaoId?: number) => {
     switch (situacaoId) {
       case SituacaoSolicitacaoItemEnum.CANCELADO:
+      case SituacaoSolicitacaoItemEnum.FINALIZADO_MANUALMENTE:
       case SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE:
         return true;
 
@@ -186,11 +187,8 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
   const desabilitarDatas = (linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
     const dataAtual = dayjs();
-    const getDataVisita = form.getFieldValue(['dataVisita', linha.id]);
 
-    if (dayjs(getDataVisita)?.isAfter(dataAtual) || dayjs(linha.dataVisita)?.isAfter(dataAtual)) {
-      return true;
-    }
+    return dayjs(dataVisitasEditaveis?.[linha.id])?.isAfter(dataAtual);
   };
 
   const validarSeEhBibliografico = (tipoAcervo?: TipoAcervo) =>
@@ -327,10 +325,8 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                   onChangeDatas(date, linha);
                   handleChange(['dataVisita'], linha.id);
 
-                  if (desabilitarDatas(linha)) {
-                    form.setFieldValue(['dataDevolucao', linha.id], undefined);
-                    form.setFieldValue(['dataEmprestimo', linha.id], undefined);
-                  }
+                  form.setFieldValue(['dataDevolucao', linha.id], undefined);
+                  form.setFieldValue(['dataEmprestimo', linha.id], undefined);
                 }}
                 format='DD/MM/YYYY'
                 style={{ width: '100%' }}
@@ -411,7 +407,12 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 style={{ width: '100%' }}
                 placeholder='Selecione uma data'
                 locale={localeDatePicker}
-                disabled={desabilitarCampos || atendimentoFinalizado || desabilitarDatas(linha)}
+                disabled={
+                  desabilitarCampos ||
+                  atendimentoFinalizado ||
+                  desabilitarDatas(linha) ||
+                  validarSituacaoLinha(linha.situacaoId)
+                }
               />
             </Form.Item>
           );
@@ -463,7 +464,11 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 style={{ width: '100%' }}
                 placeholder='Selecione uma data'
                 locale={localeDatePicker}
-                disabled={desabilitarSeDevolvido || desabilitarDatas(linha)}
+                disabled={
+                  desabilitarSeDevolvido ||
+                  desabilitarDatas(linha) ||
+                  validarSituacaoLinha(linha.situacaoId)
+                }
               />
             </Form.Item>
           );
@@ -601,16 +606,11 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
 
       const dadosMapeadosItens: AcervoSolicitacaoItemDetalheResumidoDTO[] = dadosMapeados.itens.map(
         (item) => {
-          let tipoAtendimento;
-
           if (validarSeEhBibliografico(item.tipoAcervoId)) {
-            tipoAtendimento = TipoAtendimentoEnum.Presencial;
+            item.tipoAtendimento = TipoAtendimentoEnum.Presencial;
           }
 
-          return {
-            ...item,
-            tipoAtendimento,
-          };
+          return { ...item };
         },
       );
 
