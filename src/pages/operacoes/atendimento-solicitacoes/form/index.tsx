@@ -337,7 +337,11 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 placeholder='Selecione uma data'
                 locale={localeDatePicker}
                 minDate={dataAtual}
-                disabled={desabilitarCampos || atendimentoFinalizado}
+                disabled={
+                  desabilitarCampos ||
+                  atendimentoFinalizado ||
+                  validarSituacaoLinha(linha.situacaoId)
+                }
               />
             </Form.Item>
           );
