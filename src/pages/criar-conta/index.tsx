@@ -12,25 +12,26 @@ import InputCPF from '~/components/cdep/input/cpf';
 import InputEmail from '~/components/cdep/input/email';
 import InputEndereco from '~/components/cdep/input/endereco';
 import InputEstado from '~/components/cdep/input/estado';
+import InputInstituicao from '~/components/cdep/input/instituicao';
 import InputNumero from '~/components/cdep/input/numero';
 import SenhaCadastro from '~/components/cdep/input/senha-cadastro';
 import InputTelefone from '~/components/cdep/input/telefone';
-import InputInstituicao from '~/components/cdep/input/instituicao';
 import { CDEP_BUTTON_CADASTRAR, CDEP_BUTTON_CANCELAR } from '~/core/constants/ids/button/intex';
 import {
   CDEP_INPUT_BAIRRO,
   CDEP_INPUT_CEP,
   CDEP_INPUT_CIDADE,
   CDEP_INPUT_COMPLEMENTO,
+  CDEP_INPUT_CONFIRMAR_EMAIL,
   CDEP_INPUT_CONFIRMAR_SENHA,
   CDEP_INPUT_CPF,
   CDEP_INPUT_EMAIL,
   CDEP_INPUT_ENDERECO,
+  CDEP_INPUT_INSTITUICAO_EMPRESA,
   CDEP_INPUT_NOME_COMPLETO,
   CDEP_INPUT_NUMERO,
   CDEP_INPUT_SENHA,
   CDEP_INPUT_TELEFONE,
-  CDEP_INPUT_INSTITUICAO_EMPRESA,
 } from '~/core/constants/ids/input';
 import { CDEP_SELECT_TIPO_USUARIO, CDEP_SELECT_UF } from '~/core/constants/ids/select';
 import { LISTA_TIPO_USUARIO } from '~/core/constants/lista-tipo-usuario';
@@ -187,6 +188,20 @@ const CriarConta = () => {
           </Col>
           <Col span={24}>
             <InputEmail inputProps={{ id: CDEP_INPUT_EMAIL }} />
+          </Col>
+          <Col span={24}>
+            <InputEmail
+              confirmarEmail={{ fieldName: 'email' }}
+              formItemProps={{ label: 'Confirmação de E-mail', name: 'confirmarEmail' }}
+              inputProps={{
+                id: CDEP_INPUT_CONFIRMAR_EMAIL,
+                placeholder: 'Confirme seu e-mail',
+                onPaste: (e) => {
+                  e.preventDefault();
+                  return false;
+                },
+              }}
+            />
           </Col>
           <Col span={24}>
             <InputCEP
