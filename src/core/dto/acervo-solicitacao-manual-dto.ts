@@ -8,7 +8,7 @@ export type AcervoSolicitacaoItemManualDTO = {
   dataVisita?: string;
   dataEmprestimo?: string;
   dataDevolucao?: string;
-  tipoAcervo?: string;
+  tipoAcervo?: number;
 };
 
 export type AcervoSolicitacaoManualDTO = {

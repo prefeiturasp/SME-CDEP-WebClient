@@ -18,6 +18,7 @@ type ConsultaAcervoContextProps = {
   carregarDados: (listParams: PaginationConfig, params: FiltroTextoLivreTipoAcervoDTO) => void;
   onClickBuscar: (form: FormInstance) => void;
   limparDados: (form: FormInstance) => void;
+  textoLivrePesquisado?: string;
 };
 
 const DEFAULT_VALUES: ConsultaAcervoContextProps = {
@@ -38,6 +39,7 @@ const DEFAULT_VALUES: ConsultaAcervoContextProps = {
   carregarDados: () => {},
   onClickBuscar: () => {},
   limparDados: () => {},
+  textoLivrePesquisado: '',
 };
 
 export const ConsultaAcervoContext = createContext<ConsultaAcervoContextProps>(DEFAULT_VALUES);
@@ -45,15 +47,18 @@ export const ConsultaAcervoContext = createContext<ConsultaAcervoContextProps>(D
 const ConsultaAcervoContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate();
 
-  const [dataSource, setDataSource] = useState<PesquisaAcervoDTO[]>(DEFAULT_VALUES.dataSource);
   const [loading, setLoading] = useState<boolean>(DEFAULT_VALUES.loading);
-
   const [listParams, setListParams] = useState<PaginationConfig>(DEFAULT_VALUES.listParams);
+  const [dataSource, setDataSource] = useState<PesquisaAcervoDTO[]>(DEFAULT_VALUES.dataSource);
+  const [textoLivrePesquisado, setTextoLivrePesquisado] = useState<string | undefined>(
+    DEFAULT_VALUES.textoLivrePesquisado,
+  );
 
   const limparDados = (form: FormInstance) => {
     form.resetFields();
     setDataSource(DEFAULT_VALUES.dataSource);
     setListParams(DEFAULT_VALUES.listParams);
+    setTextoLivrePesquisado(DEFAULT_VALUES.textoLivrePesquisado);
   };
 
   const carregarDados = (listParams: PaginationConfig, params: FiltroTextoLivreTipoAcervoDTO) => {
@@ -82,6 +87,7 @@ const ConsultaAcervoContextProvider: React.FC<PropsWithChildren> = ({ children }
   const onClickBuscar = (form: FormInstance) => {
     form.validateFields().then((values: FiltroTextoLivreTipoAcervoDTO) => {
       const filtroConsulta = { ...values };
+      setTextoLivrePesquisado(values.textoLivre);
       carregarDados({ ...listParams, current: 1 }, filtroConsulta);
     });
   };
@@ -97,6 +103,7 @@ const ConsultaAcervoContextProvider: React.FC<PropsWithChildren> = ({ children }
         carregarDados,
         onClickBuscar,
         limparDados,
+        textoLivrePesquisado,
       }}
     >
       {children}

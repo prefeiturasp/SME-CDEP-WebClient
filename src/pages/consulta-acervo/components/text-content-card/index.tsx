@@ -6,7 +6,7 @@ import { configTagAcervoDisponibilidadeMap } from '~/pages/operacoes/solicitacao
 
 type InfoTituloConsultaAcervoProps = {
   label: string;
-  description: string;
+  description: string | React.ReactNode;
   ellipsis?: boolean;
   exibirLabelSemValor?: boolean;
   exibirTooltip?: boolean;
@@ -28,13 +28,15 @@ export const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcerv
   let conteudo: string | React.ReactNode = description;
 
   const getDescription = () => {
-    if (description?.length > 250) return `${description.substring(0, 250)}...`;
+    if (typeof description === 'string') {
+      if (description?.length > 250) return `${description?.substring(0, 250)}...`;
 
-    return description;
+      return description;
+    }
   };
 
   if (dangerouslyInnerHTML) {
-    conteudo = <Typography dangerouslySetInnerHTML={{ __html: description }} />;
+    conteudo = <Typography dangerouslySetInnerHTML={{ __html: description ?? '' }} />;
   }
 
   let config;

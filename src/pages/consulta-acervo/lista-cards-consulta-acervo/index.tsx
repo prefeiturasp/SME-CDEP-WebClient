@@ -4,6 +4,7 @@ import useFormInstance from 'antd/es/form/hooks/useFormInstance';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
+import { DestacarTexto } from '~/components/cdep/destacar-texto';
 import { FiltroTextoLivreTipoAcervoDTO } from '~/core/dto/filtro-texto-livre-tipo-acervo-dto';
 import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
 import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
@@ -57,7 +58,8 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
   const form = useFormInstance();
   const navigate = useNavigate();
 
-  const { dataSource, loading, listParams, carregarDados } = useContext(ConsultaAcervoContext);
+  const { dataSource, loading, listParams, carregarDados, textoLivrePesquisado } =
+    useContext(ConsultaAcervoContext);
 
   const desabilitarCliqueDireitoImagem = (e: any) => {
     e.preventDefault();
@@ -138,30 +140,45 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                   <Row gutter={[6, 6]} style={{ display: 'grid' }} wrap>
                     <TextItemCardContentConsultaAcervo
                       label='Tipo de acervo: '
-                      description={tipoAcervoNome(item.tipo)}
+                      description={DestacarTexto({
+                        palavraPraDestacar: tipoAcervoNome(item.tipo),
+                        palavraComparacao: textoLivrePesquisado,
+                      })}
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Titulo].label}: `}
-                      description={item.titulo}
+                      description={DestacarTexto({
+                        palavraPraDestacar: item.titulo,
+                        palavraComparacao: textoLivrePesquisado,
+                      })}
                       item={item}
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label='Autoria/Crédito: '
-                      description={item.creditoAutoria}
+                      description={DestacarTexto({
+                        palavraPraDestacar: item.creditoAutoria,
+                        palavraComparacao: textoLivrePesquisado,
+                      })}
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Assunto].label}: `}
-                      description={item.assunto}
+                      description={DestacarTexto({
+                        palavraPraDestacar: item.assunto,
+                        palavraComparacao: textoLivrePesquisado,
+                      })}
                       ellipsis
                       exibirTooltip
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Descricao].label}: `}
-                      description={item.descricao}
+                      description={DestacarTexto({
+                        palavraPraDestacar: item.descricao,
+                        palavraComparacao: textoLivrePesquisado,
+                      })}
                       ellipsis
                       exibirTooltip
                     />
@@ -189,7 +206,10 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                       color: Colors.Neutral.DARK,
                     }}
                   >
-                    {tagAcervo(item.tipo)}
+                    {DestacarTexto({
+                      palavraPraDestacar: tagAcervo(item.tipo),
+                      palavraComparacao: textoLivrePesquisado,
+                    })}
                   </Tag>
                 </Row>
 
