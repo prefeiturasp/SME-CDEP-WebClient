@@ -11,7 +11,7 @@ export const MENU_OPERACOES: MenuItemCDEPProps = {
   children: [
     {
       key: MenuEnum.Solicitacao,
-      title: 'Solicitação',
+      title: 'Nova solicitação',
       url: ROUTES.SOLICITACAO,
       roles: {
         podeConsultar: PermissaoEnum.OperacoesSolicitacoes_C,
