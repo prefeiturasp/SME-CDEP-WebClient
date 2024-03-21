@@ -15,7 +15,11 @@ export const DestacarTexto: React.FC<DestacarTextoProps> = ({
 
   if (!palavraComparacao) return palavraPraDestacar;
 
-  const regex = new RegExp(`(${palavraComparacao.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi');
+  const normalizarPalabraComparacao = removerAcentos(palavraComparacao);
+  const regex = new RegExp(
+    `(${normalizarPalabraComparacao.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`,
+    'gi',
+  );
 
   return palavraPraDestacar.split(' ').map((word, index, words) => {
     const normalizarPalavra = removerAcentos(word).toLowerCase();
