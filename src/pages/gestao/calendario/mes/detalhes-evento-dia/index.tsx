@@ -41,7 +41,11 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
   const { permissao } = useContext(PermissaoContext);
 
   const detalheVisita = (item?: EventoDetalheDTO) => (
-    <ContainerDiaExpandido tipoId={item?.tipoId} className='visita'>
+    <ContainerDiaExpandido
+      tipoId={item?.tipoId}
+      situacaoItem={item?.situacaoSolicitacaoItemId}
+      className='visita'
+    >
       <Row gutter={16}>
         <Col>
           <ButtonSecundary
@@ -60,6 +64,18 @@ export const DetalhesEventoDia: React.FC<DetalhesEventoDiaProps> = ({
           <Row>
             <ContainerTypography>Título do acervo:</ContainerTypography>
             <Typography.Text ellipsis>{item?.titulo}</Typography.Text>
+          </Row>
+          <Row>
+            <ContainerTypography>Código/Tombo:</ContainerTypography>
+            <Typography.Text ellipsis>{item?.codigoTombo}</Typography.Text>
+          </Row>
+          <Row>
+            <ContainerTypography>Situação:</ContainerTypography>
+            <Typography.Text ellipsis>{item?.situacaoSolicitacaoItemDescricao}</Typography.Text>
+          </Row>
+          <Row>
+            <ContainerTypography>Horário:</ContainerTypography>
+            <Typography.Text ellipsis>{item?.horario}</Typography.Text>
           </Row>
         </Col>
       </Row>
