@@ -2,6 +2,7 @@ import { Flex, Row, Tag, Typography } from 'antd';
 import styled from 'styled-components';
 import { EventoTagDTO } from '~/core/dto/calendario-evento-dto';
 import { DiasSemanaEnum } from '~/core/enum/dias-semana';
+import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
 import { TipoEventoEnum } from '~/core/enum/tipo-evento-enum';
 import { Colors } from '~/core/styles/colors';
 
@@ -14,6 +15,7 @@ type DiasProps = {
 
 type EventosProps = {
   tipoId?: TipoEventoEnum;
+  situacaoItem?: SituacaoSolicitacaoItemEnum;
 };
 
 export const NomeDia = styled.div`
@@ -90,7 +92,13 @@ export const ContainerDiaExpandido = styled(Flex)<EventosProps>`
     }
   }};
 
-  background: ${Colors.Components.BACKGROUND_CALENDARIO_DIA_EXPANDIDO};
+  background: ${(props) => {
+    if (props.situacaoItem !== SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA) {
+      return Colors.BACKGROUND_CONTENT;
+    }
+
+    return Colors.Components.BACKGROUND_CALENDARIO_DIA_EXPANDIDO;
+  }};
 
   &.suspensao {
     justify-content: space-between;

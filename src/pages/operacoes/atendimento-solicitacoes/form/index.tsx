@@ -1,12 +1,9 @@
-import { Button, Col, DatePicker, Form, Input, Row, Tag, Typography } from 'antd';
+import { Button, Col, Form, Input, Row, Space, Tag, Typography } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
-import { cloneDeep } from 'lodash';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
-import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento';
-import ButtonPrimary from '~/components/lib/button/primary';
 import ButtonSecundary from '~/components/lib/button/secundary';
 import CardContent from '~/components/lib/card-content';
 import DataTable from '~/components/lib/data-table';
@@ -16,10 +13,9 @@ import {
   CDEP_BUTTON_CANCELAR,
   CDEP_BUTTON_CANCELAR_ATENDIMENTO,
   CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO,
-  CDEP_BUTTON_CONFIRMAR,
   CDEP_BUTTON_DEVOLVER_ITEM,
+  CDEP_BUTTON_EDITAR,
   CDEP_BUTTON_FINALIZAR,
-  CDEP_BUTTON_PRORROGAR_ITEM,
   CDEP_BUTTON_VOLTAR,
 } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
@@ -27,21 +23,15 @@ import {
   DESEJA_CANCELAR_ALTERACOES,
   DESEJA_CANCELAR_ATENDIMENTO,
   DESEJA_CANCELAR_ITEM_E_DESCARTAR_ITENS_NAO_CONFIRMADOS,
+  DESEJA_DEVOLVER_ITEM,
   DESEJA_FINALIZAR_ATENDIMENTO,
   DESEJA_SAIR_MODO_EDICAO,
-  ERRO_DATA_DEVOLUCAO,
-  ERRO_DATA_EMPRESTIMO,
-  ERRO_DATA_VISITA,
 } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
-import { Dayjs, dayjs } from '~/core/date/dayjs';
-import { AcervoSolicitacaoConfirmarDTO } from '~/core/dto/acervo-solicitacao-confirmar-dto';
 import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detalhe-dto';
 import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solicitacao-item-detalhe-resumido-dto';
 
-import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
-import { AcervoEmprestimoProrrogacaoDTO } from '~/core/dto/acervo-emprestimo-prorrogacao-dto';
-import { AcervoSolicitacaoItemConfirmarDTO } from '~/core/dto/acervo-solicitacao-item-confirmar-dto';
+import { FaEdit } from 'react-icons/fa';
 import { AcervoDisponibilidadeEnum } from '~/core/enum/acervo-disponibilidade-enum';
 import { ROUTES } from '~/core/enum/routes';
 import { SituacaoSolicitacaoEnum } from '~/core/enum/situacao-atendimento-enum';
@@ -50,29 +40,26 @@ import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimen
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
 import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
-import { devolverEmprestimo, prorrogarEmprestimo } from '~/core/services/acervo-emprestimo';
+import { devolverEmprestimo } from '~/core/services/acervo-emprestimo';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
 import { formatarDataParaDDMMYYYY, formatterCPFMask, maskTelefone } from '~/core/utils/functions';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { configTagAcervoDisponibilidadeMap } from '../../solicitacao/components/lista-acervos-solicitacao/utils';
+import { ModalAtendimento } from './components/modal-atendimento';
 
 export const FormAtendimentoSolicitacoes: React.FC = () => {
   const [form] = useForm();
-  const dataAtual = dayjs();
 
   const navigate = useNavigate();
   const paramsRoute = useParams();
   const { desabilitarCampos } = useContext(PermissaoContext);
 
+  const [initialValuesModal, setInitialValuesModal] =
+    useState<AcervoSolicitacaoItemDetalheResumidoDTO>();
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
   const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemDetalheResumidoDTO[]>([]);
-  const [dataEditaveis, setDatasEditaveis] = useState<{
-    [key: number]: Dayjs;
-  }>();
-  const [linhasCamposTocados, setLinhasCamposTocados] = useState<{
-    [key: number]: { [key: string]: boolean };
-  }>({});
 
   const temItemFinalizadoAutomaticamente = formInitialValues?.itens.find(
     (item) => item.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE,
@@ -133,70 +120,9 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     }
   };
 
-  const marcarCampoComoTocado = (linhaId: number, fieldName: string) => {
-    setLinhasCamposTocados((prev) => {
-      const updated = { ...(prev || {}) };
-
-      updated[linhaId] = { [fieldName]: true };
-
-      limparCamposTocadosDeOutrasLinhas(updated, linhaId);
-
-      return updated;
-    });
+  const validarSeEhBibliografico = (tipoAcervoId?: TipoAcervo) => {
+    return tipoAcervoId === TipoAcervo.Bibliografico ?? false;
   };
-
-  const limparCamposTocadosDeOutrasLinhas = (
-    updated: { [key: number]: { [key: string]: boolean } },
-    linhaId: number,
-  ) => {
-    Object.entries(updated).forEach(([key, value]) => {
-      const linhaKey = parseInt(key);
-
-      if (linhaKey !== linhaId && linhaKey in updated && Object.values(value).includes(true)) {
-        Object.keys(value).forEach((campo) => {
-          updated[linhaKey][campo] = false;
-        });
-      }
-    });
-  };
-
-  const camposTocado = (linhaId: number, fieldsName: string[] | undefined) => {
-    if (!fieldsName || !Array.isArray(fieldsName) || fieldsName.length === 0) {
-      return false;
-    }
-    return fieldsName?.some((fieldName) => linhasCamposTocados[linhaId]?.[fieldName]);
-  };
-
-  const handleChange = (fieldsName: string[], linhaId: number) => {
-    fieldsName.forEach((fieldName) => marcarCampoComoTocado(linhaId, fieldName));
-  };
-
-  const validarDatas = (linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-    const getDataVisita = form.getFieldValue(['dataVisita', linha.id]);
-    const getDataDevolucao = form.getFieldValue(['dataDevolucao', linha.id]);
-    const getDataEmprestimo = form.getFieldValue(['dataEmprestimo', linha.id]);
-
-    if ((linha.dataVisita || getDataVisita) && getDataEmprestimo && getDataDevolucao) {
-      return dayjs(linha.dataVisita || getDataVisita).isSameOrBefore(getDataEmprestimo, 'day') &&
-        dayjs(getDataEmprestimo).isSameOrAfter(linha.dataVisita || getDataVisita, 'day') &&
-        dayjs(getDataDevolucao).isSameOrAfter(getDataEmprestimo, 'day')
-        ? Promise.resolve()
-        : Promise.reject();
-    }
-  };
-
-  const ehDataVisitaFuturaDesabilitarEmprestimoEDevolucao = (
-    linha: AcervoSolicitacaoItemDetalheResumidoDTO,
-  ) => {
-    const getDataVisita = form.getFieldValue(['dataVisita', linha.id]);
-
-    return dayjs(dataEditaveis?.[linha.id] || getDataVisita || linha.dataVisita)?.isAfter(
-      dataAtual,
-    );
-  };
-
-  const validarSeEhBibliografico = (tipoAcervo?: TipoAcervo) =>
-    tipoAcervo === TipoAcervo.Bibliografico ?? false;
 
   const temBibliografico: boolean = useMemo(
     () =>
@@ -264,107 +190,13 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       title: 'Tipo de atendimento',
       dataIndex: 'tipoAtendimento',
       width: '10%',
-      render: (value, linha) => {
-        if (value && linha.tipoAcervoId && validarSeEhBibliografico(linha.tipoAcervoId)) {
-          return TipoAtendimentoEnum?.[value];
-        }
-
-        if (value && linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) {
-          return TipoAtendimentoEnum?.[value];
-        }
-
-        if (linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) return;
-
-        return (
-          <SelectTipoAtendimento
-            formItemProps={{
-              initialValue: value === 0 ? null : value,
-              name: ['tipoAtendimento', `${linha.id}`],
-              style: {
-                margin: 0,
-              },
-            }}
-            selectProps={{
-              onChange: () => {
-                handleChange(['tipoAtendimento'], linha.id);
-              },
-              disabled: desabilitarCampos || atendimentoFinalizado,
-            }}
-          />
-        );
-      },
+      render: (value) => TipoAtendimentoEnum?.[value],
     },
     {
       title: 'Data da visita',
       dataIndex: 'dataVisita',
       width: '10%',
-      render: (dataVisita: string, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-        const getTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${linha.id}`]);
-        const ehPresencial =
-          (linha?.tipoAtendimento || getTipoAtendimento) === TipoAtendimentoEnum.Presencial;
-
-        const datePicker = (value?: Dayjs | undefined) => {
-          const initialValueData = linha?.dataVisita ? dayjs(linha?.dataVisita) : value;
-
-          return (
-            <Form.Item
-              style={{ margin: 0 }}
-              initialValue={initialValueData}
-              name={`${['dataVisita', linha.id]}`}
-              dependencies={[
-                ['dataEmprestimo', linha.id],
-                ['dataDevolucao', linha.id],
-              ]}
-              rules={[
-                {
-                  message: ERRO_DATA_VISITA,
-                  validator: () => validarDatas(linha),
-                },
-              ]}
-            >
-              <DatePicker
-                allowClear
-                onChange={(date: Dayjs) => {
-                  form.setFieldValue(['dataVisita', `${linha.id}`], date);
-                  onChangeDatas(date, linha);
-                  handleChange(['dataVisita'], linha.id);
-
-                  form.setFieldValue(['dataDevolucao', linha.id], undefined);
-                  form.setFieldValue(['dataEmprestimo', linha.id], undefined);
-                }}
-                format='DD/MM/YYYY'
-                style={{ width: '100%' }}
-                placeholder='Selecione uma data'
-                locale={localeDatePicker}
-                minDate={dataAtual}
-                disabled={
-                  desabilitarCampos ||
-                  atendimentoFinalizado ||
-                  validarSituacaoLinha(linha.situacaoId)
-                }
-              />
-            </Form.Item>
-          );
-        };
-
-        const mostrarCampoDatePicker = (value?: Dayjs) => (ehPresencial ? datePicker(value) : '');
-
-        if (ehPresencial) {
-          let value = undefined;
-
-          if (dataEditaveis?.[linha.id]) {
-            value = dataEditaveis[linha.id];
-          }
-
-          if (!dataEditaveis?.[linha.id] && dataVisita) {
-            value = dayjs(dataVisita);
-          }
-
-          return mostrarCampoDatePicker(value);
-        }
-
-        return mostrarCampoDatePicker();
-      },
+      render: (value) => formatarDataParaDDMMYYYY(value),
     },
   ];
 
@@ -374,122 +206,13 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         title: 'Data do empréstimo',
         dataIndex: 'dataEmprestimo',
         width: '10%',
-        render: (dataEmprestimo, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-          const initialValueData = linha?.dataEmprestimo
-            ? dayjs(linha?.dataEmprestimo)
-            : dataEmprestimo;
-
-          const situacaoLinhaCancelada = validarSituacaoEmprestimoLinha(linha.situacaoId);
-
-          const minDateDataEmprestimo = dayjs(dataEditaveis?.[linha.id]).add(0, 'day');
-
-          return linha.tipoAcervoId !== TipoAcervo.Bibliografico || situacaoLinhaCancelada ? (
-            ''
-          ) : (
-            <Form.Item
-              style={{ margin: 0 }}
-              initialValue={initialValueData}
-              name={['dataEmprestimo', linha.id]}
-              dependencies={[
-                ['dataVisita', linha.id],
-                ['dataDevolucao', linha.id],
-              ]}
-              rules={[
-                {
-                  message: ERRO_DATA_EMPRESTIMO,
-                  validator: () => validarDatas(linha),
-                },
-              ]}
-            >
-              <DatePicker
-                allowClear
-                onChange={(date: Dayjs) => {
-                  form.setFieldValue(['dataEmprestimo', `${linha.id}`], date);
-                  onChangeDatas(date, linha);
-                  handleChange(['dataEmprestimo'], linha.id);
-                  form.setFieldValue(['dataDevolucao', linha.id], date?.add(7, 'day'));
-                }}
-                format='DD/MM/YYYY'
-                maxDate={dataAtual}
-                minDate={minDateDataEmprestimo}
-                style={{ width: '100%' }}
-                placeholder='Selecione uma data'
-                locale={localeDatePicker}
-                disabled={
-                  desabilitarCampos ||
-                  atendimentoFinalizado ||
-                  ehDataVisitaFuturaDesabilitarEmprestimoEDevolucao(linha) ||
-                  validarSituacaoLinha(linha.situacaoId)
-                }
-              />
-            </Form.Item>
-          );
-        },
+        render: (value) => formatarDataParaDDMMYYYY(value),
       },
       {
         title: 'Data da devolução',
         dataIndex: 'dataDevolucao',
         width: '10%',
-        render: (dataDevolucao, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-          const dataSugerida = dataDevolucao ? dayjs(dataDevolucao)?.add(7, 'day') : undefined;
-          const situacaoLinhaCancelada = validarSituacaoEmprestimoLinha(linha.situacaoId);
-          const desabilitarSeDevolvido = !!(
-            linha.situacaoEmprestimo && validarSituacaoEmprestimoLinha(linha.situacaoEmprestimo)
-          );
-          const minDateDataEmprestimo = form.getFieldValue(['dataEmprestimo', linha.id]);
-          const desabilitarData = () => {
-            if (atendimentoFinalizado) {
-              return false;
-            } else if (
-              desabilitarSeDevolvido ||
-              validarSituacaoLinha(linha.situacaoId) ||
-              ehDataVisitaFuturaDesabilitarEmprestimoEDevolucao(linha)
-            ) {
-              return true;
-            }
-          };
-
-          const initialValueData = linha?.dataDevolucao
-            ? dayjs(linha?.dataDevolucao)
-            : dataDevolucao
-            ? dataDevolucao
-            : dataSugerida;
-
-          return linha.tipoAcervoId !== TipoAcervo.Bibliografico || situacaoLinhaCancelada ? (
-            ''
-          ) : (
-            <Form.Item
-              style={{ margin: 0 }}
-              initialValue={initialValueData}
-              name={['dataDevolucao', linha.id]}
-              dependencies={[
-                ['dataEmprestimo', linha.id],
-                ['dataVisita', linha.id],
-              ]}
-              rules={[
-                {
-                  message: ERRO_DATA_DEVOLUCAO,
-                  validator: () => validarDatas(linha),
-                },
-              ]}
-            >
-              <DatePicker
-                allowClear
-                onChange={(date: Dayjs) => {
-                  form.setFieldValue(['dataDevolucao', `${linha.id}`], date);
-                  onChangeDatas(date, linha);
-                  handleChange(['dataDevolucao'], linha.id);
-                }}
-                format='DD/MM/YYYY'
-                style={{ width: '100%' }}
-                placeholder='Selecione uma data'
-                locale={localeDatePicker}
-                disabled={desabilitarData()}
-                minDate={minDateDataEmprestimo}
-              />
-            </Form.Item>
-          );
-        },
+        render: (value) => formatarDataParaDDMMYYYY(value),
       },
     );
   }
@@ -498,73 +221,77 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     title: 'Ações',
     align: 'center',
     width: '10%',
-    render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-      const getDataDevolucao = form.getFieldValue(['dataDevolucao', linha.id]);
+    render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO, index: number) => {
+      const itemEstaFinalizadoManualmente =
+        linha.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_MANUALMENTE;
+      const itemEstaCancelado = linha.situacaoId === SituacaoSolicitacaoItemEnum.CANCELADO;
 
-      const olharCamposTocados = [
-        'tipoAtendimento',
-        'dataVisita',
-        'dataEmprestimo',
-        'dataDevolucao',
-      ];
-
-      const params: AcervoEmprestimoProrrogacaoDTO = {
-        acervoSolicitacaoItemId: linha.id,
-        dataDevolucao: getDataDevolucao,
-      };
-
-      const desabilitarBotao = linha.situacaoEmprestimo
+      const itemDevolvido = linha.situacaoEmprestimo
         ? validarSituacaoEmprestimoLinha(linha.situacaoEmprestimo)
         : false;
 
-      return atendimentoFinalizado && validarSeEhBibliografico(linha.tipoAcervoId) ? (
-        <Row wrap={false}>
-          <ButtonPrimary
+      const esconderBotoes = itemDevolvido || itemEstaCancelado;
+
+      const podeProrrogarDevolverItem =
+        itemEstaFinalizadoManualmente && validarSeEhBibliografico(linha.tipoAcervoId);
+
+      const btnEditar = () =>
+        esconderBotoes ? (
+          <></>
+        ) : (
+          <ButtonSecundary
+            icon={<FaEdit />}
             size='small'
-            type='text'
-            id={CDEP_BUTTON_PRORROGAR_ITEM}
-            onClick={() => onClickProrrogarDevolucao(params)}
-            disabled={!camposTocado(linha.id, olharCamposTocados)}
+            id={`${CDEP_BUTTON_EDITAR}_${index}`}
+            onClick={() => {
+              setInitialValuesModal(linha);
+              setIsModalOpen(true);
+            }}
+            disabled={desabilitarCampos}
           >
-            Prorrogar
-          </ButtonPrimary>
-          <ButtonPrimary
-            size='small'
-            id={CDEP_BUTTON_DEVOLVER_ITEM}
-            onClick={() => onClickDevolverEmprestimo(linha.id)}
-            disabled={desabilitarBotao}
-          >
-            Devolver item
-          </ButtonPrimary>
+            {podeProrrogarDevolverItem ? 'Prorrogar' : 'Editar'}
+          </ButtonSecundary>
+        );
+
+      return podeProrrogarDevolverItem ? (
+        <Row wrap={false} justify='center'>
+          <Space>
+            {btnEditar()}
+            {esconderBotoes ? (
+              <></>
+            ) : (
+              <ButtonSecundary
+                size='small'
+                id={CDEP_BUTTON_DEVOLVER_ITEM}
+                onClick={() => onClickDevolverEmprestimo(linha.id)}
+                disabled={itemDevolvido}
+              >
+                Devolver item
+              </ButtonSecundary>
+            )}
+          </Space>
         </Row>
       ) : (
-        <Row wrap={false}>
-          <ButtonPrimary
-            size='small'
-            type='text'
-            id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
-            onClick={() => onClickCancelarItemAtendimento(linha.id)}
-            disabled={
-              (linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) ||
-              desabilitarCampos ||
-              atendimentoFinalizado
-            }
-          >
-            Cancelar item
-          </ButtonPrimary>
-          <ButtonPrimary
-            size='small'
-            id={CDEP_BUTTON_CONFIRMAR}
-            onClick={() => onClickConfirmarParcial(linha)}
-            disabled={
-              desabilitarCampos ||
-              atendimentoFinalizado ||
-              validarSituacaoLinha(linha.id) ||
-              !camposTocado(linha.id, olharCamposTocados)
-            }
-          >
-            Confirmar
-          </ButtonPrimary>
+        <Row wrap={false} justify='center'>
+          <Space>
+            {btnEditar()}
+            {esconderBotoes ? (
+              <></>
+            ) : (
+              <ButtonSecundary
+                size='small'
+                id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
+                onClick={() => onClickCancelarItemAtendimento(linha.id)}
+                disabled={
+                  (linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) ||
+                  desabilitarCampos ||
+                  atendimentoFinalizado
+                }
+              >
+                Cancelar item
+              </ButtonSecundary>
+            )}
+          </Space>
         </Row>
       );
     },
@@ -587,13 +314,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         }
       },
     });
-  };
-
-  const onChangeDatas = (date: Dayjs, linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-    setDatasEditaveis((prevData) => ({
-      ...prevData,
-      [linha.id]: date,
-    }));
   };
 
   const carregarDados = useCallback(async () => {
@@ -654,7 +374,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       confirmacao({
         content: DESEJA_CANCELAR_ALTERACOES,
         onOk() {
-          setLinhasCamposTocados({});
           form.resetFields();
         },
       });
@@ -678,51 +397,42 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     });
   };
 
-  const onClickConfirmarParcial = async (linha: AcervoSolicitacaoItemDetalheResumidoDTO) => {
-    if (form.isFieldsTouched()) {
-      form.validateFields(['tipoAtendimento', linha.id]).then(async () => {
-        const valoresParaSalvar = dataSource
-          ?.filter((item) => item.id === linha.id)
-          .map((item) => {
-            let novaDataVisita;
-            const valorTipoAtendimento = form.getFieldValue(['tipoAtendimento', `${item.id}`]);
+  //           if (valorTipoAtendimento === TipoAtendimentoEnum.Email) {
+  //             novaDataVisita = undefined;
+  //           } else {
+  //             novaDataVisita = form.getFieldValue(['dataVisita', `${item.id}`]) ?? item.dataVisita;
+  //           }
 
-            if (valorTipoAtendimento === TipoAtendimentoEnum.Email) {
-              novaDataVisita = undefined;
-            } else {
-              novaDataVisita = form.getFieldValue(['dataVisita', `${item.id}`]) ?? item.dataVisita;
-            }
+  //           const paramsItem: AcervoSolicitacaoItemConfirmarDTO = {
+  //             id: item.id,
+  //             dataVisita: novaDataVisita,
+  //             tipoAcervo: linha.tipoAcervoId,
+  //             tipoAtendimento: valorTipoAtendimento ?? item.tipoAtendimento,
+  //             dataEmprestimo: form.getFieldValue(['dataEmprestimo', `${item.id}`]),
+  //             dataDevolucao: form.getFieldValue(['dataDevolucao', `${item.id}`]),
+  //           };
 
-            const paramsItem: AcervoSolicitacaoItemConfirmarDTO = {
-              id: item.id,
-              dataVisita: novaDataVisita,
-              tipoAcervo: linha.tipoAcervoId,
-              tipoAtendimento: valorTipoAtendimento ?? item.tipoAtendimento,
-              dataEmprestimo: form.getFieldValue(['dataEmprestimo', `${item.id}`]),
-              dataDevolucao: form.getFieldValue(['dataDevolucao', `${item.id}`]),
-            };
+  //           return paramsItem;
+  //         });
 
-            return paramsItem;
-          });
+  //       const params: AcervoSolicitacaoConfirmarDTO = {
+  //         id: acervoSolicitacaoId,
+  //         itens: cloneDeep(valoresParaSalvar),
+  //       };
 
-        const params: AcervoSolicitacaoConfirmarDTO = {
-          id: acervoSolicitacaoId,
-          itens: cloneDeep(valoresParaSalvar),
-        };
+  //       const resposta = await acervoSolicitacaoService.confirmarAtendimento(params);
 
-        const resposta = await acervoSolicitacaoService.confirmarAtendimento(params);
-
-        if (resposta.sucesso) {
-          notification.success({
-            message: 'Sucesso',
-            description: 'O item foi confirmado com sucesso',
-          });
-          carregarDados();
-          setLinhasCamposTocados({});
-        }
-      });
-    }
-  };
+  //       if (resposta.sucesso) {
+  //         notification.success({
+  //           message: 'Sucesso',
+  //           description: 'O item foi confirmado com sucesso',
+  //         });
+  //         carregarDados();
+  //
+  //       }
+  //     });
+  //   }
+  // };
 
   const onClickFinalizarAtendimento = () => {
     confirmacao({
@@ -741,31 +451,21 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     });
   };
 
-  const onClickProrrogarDevolucao = (params: AcervoEmprestimoProrrogacaoDTO) => {
-    prorrogarEmprestimo(params).then((resposta) => {
-      if (resposta.sucesso) {
-        notification.success({
-          message: 'Sucesso',
-          description: 'Item prorrogado com sucesso',
-        });
-
-        carregarDados();
-        setLinhasCamposTocados({});
-      }
-    });
-  };
-
   const onClickDevolverEmprestimo = (id: number) => {
-    devolverEmprestimo(id).then((resposta) => {
-      if (resposta.sucesso) {
-        notification.success({
-          message: 'Sucesso',
-          description: 'Item devolvido com sucesso',
-        });
+    confirmacao({
+      content: DESEJA_DEVOLVER_ITEM,
+      onOk: () => {
+        devolverEmprestimo(id).then((resposta) => {
+          if (resposta.sucesso) {
+            notification.success({
+              message: 'Sucesso',
+              description: 'Item devolvido com sucesso',
+            });
 
-        carregarDados();
-        setLinhasCamposTocados({});
-      }
+            carregarDados();
+          }
+        });
+      },
     });
   };
 
@@ -914,6 +614,15 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               }}
             </Form.Item>
           </Col>
+
+          <ModalAtendimento
+            isModalOpen={isModalOpen}
+            carregarDados={carregarDados}
+            setIsModalOpen={setIsModalOpen}
+            initialValuesModal={initialValuesModal}
+            acervoSolicitacaoId={acervoSolicitacaoId}
+            initialValuesAtendimento={formInitialValues}
+          />
         </CardContent>
       </Form>
     </Col>
