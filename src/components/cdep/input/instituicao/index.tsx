@@ -24,7 +24,19 @@ const InputInstituicao: React.FC<InputInstituicaoProps> = ({ inputProps, formIte
     <Form.Item
       label='Instituição/Empresa'
       name='instituicao'
-      rules={[{ required: campoEhObrigatorio() }]}
+      dependencies={['tipo']}
+      rules={[
+        { required: campoEhObrigatorio() },
+        {
+          validator() {
+            if (campoEhObrigatorio()) {
+              return Promise.reject();
+            }
+
+            return Promise.resolve();
+          },
+        },
+      ]}
       {...formItemProps}
     >
       <Input
