@@ -2,19 +2,14 @@ import { Col, DatePicker, Form, Input, ModalProps, Row } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import { Rule } from 'antd/es/form';
 import { FormInstance, FormProps, useForm, useWatch } from 'antd/es/form/Form';
-import { NamePath } from 'antd/es/form/interface';
 import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import InputNumero from '~/components/cdep/input/numero';
 import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento';
 import { InputCodigoTombo } from '~/components/cdep/input/tombo-codigo';
 import Modal from '~/components/lib/modal';
 import { notification } from '~/components/lib/notification';
-import {
-  DESEJA_CANCELAR_ALTERACOES,
-  ERRO_DATA_DEVOLUCAO,
-  ERRO_DATA_EMPRESTIMO,
-  ERRO_DATA_VISITA,
-} from '~/core/constants/mensagens';
+import { DESEJA_CANCELAR_ALTERACOES } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
 import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detalhe-dto';
 import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solicitacao-item-detalhe-resumido-dto';
@@ -23,6 +18,7 @@ import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimen
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
 import { confirmacao } from '~/core/services/alerta-service';
+import { formatarHora } from '~/core/utils/functions';
 
 type ModalAdicionarAcervoProps = {
   modalProps?: ModalProps;
@@ -62,6 +58,13 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   const onFinish = () => {
     form.validateFields().then(() => {
       const values = form.getFieldsValue(true);
+
+      const [horas, minutos] = values && values.horaVisita ? values.horaVisita.split(':') : [];
+      const dataVisitaFormatada = dayjs(values.dataVisita)
+        .utc()
+        .hour(parseInt(horas))
+        .minute(parseInt(minutos));
+
       const ehEmail = values?.tipoAtendimento === TipoAtendimentoEnum.Email;
 
       const situacaoId = ehEmail
@@ -74,10 +77,11 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
         acervoId: values?.dadosCodigoTombo?.id,
         titulo: values?.dadosCodigoTombo?.nome,
         tipoAtendimento: ehBibliografico ? TipoAtendimentoEnum.Presencial : values?.tipoAtendimento,
-        dataVisita: ehEmail ? '' : values?.dataVisita,
+        dataVisita: ehEmail ? '' : dataVisitaFormatada,
         tipoAcervoId: values?.dadosCodigoTombo?.tipo,
         dataEmprestimo: values?.dataEmprestimo,
         dataDevolucao: values?.dataDevolucao,
+        horaVisita: values?.horaVisita,
         situacaoId,
       };
 
@@ -144,22 +148,6 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
     }
   };
 
-  const validarDatas = (getFieldValue: NamePath) => {
-    const getDataVisita = getFieldValue('dataVisita');
-    const getDataDevolucao = getFieldValue('dataDevolucao');
-    const getDataEmprestimo = getFieldValue('dataEmprestimo');
-
-    if (getDataVisita && getDataEmprestimo && getDataDevolucao) {
-      return dayjs(getDataVisita).isSameOrBefore(getDataEmprestimo, 'day') &&
-        dayjs(getDataEmprestimo).isSameOrAfter(getDataVisita, 'day') &&
-        dayjs(getDataDevolucao).isSameOrAfter(getDataEmprestimo, 'day')
-        ? Promise.resolve()
-        : Promise.reject();
-    }
-
-    return Promise.resolve();
-  };
-
   useEffect(() => {
     form.resetFields();
     if (initialValuesModal && isModalOpen) {
@@ -174,6 +162,14 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
 
       if (initialValuesModal?.dataVisita) {
         form.setFieldValue('dataVisita', dayjs(initialValuesModal.dataVisita));
+      }
+
+      if (initialValuesModal?.horaVisita || initialValuesModal.dataVisitaFormatada) {
+        if (initialValuesModal.dataVisitaFormatada) {
+          initialValuesModal.horaVisita = initialValuesModal.dataVisitaFormatada.split(' ')[1];
+        }
+
+        form.setFieldValue('horaVisita', initialValuesModal.horaVisita);
       }
 
       if (initialValuesModal?.dataEmprestimo) {
@@ -256,27 +252,43 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
             </Col>
 
             {(temDataEhPresencial || ehPresencialWatch) && (
-              <Col xs={12}>
-                <Form.Item
-                  name='dataVisita'
-                  label='Data da visita'
-                  dependencies={ehBibliografico ? ['dataEmprestimo', 'dataDevolucao'] : []}
-                  rules={[
-                    ...rules,
-                    ({ getFieldValue }) => ({
-                      message: ERRO_DATA_VISITA,
-                      validator: () => validarDatas(getFieldValue),
-                    }),
-                  ]}
-                >
-                  <DatePicker
-                    style={{ width: '100%' }}
-                    format='DD/MM/YYYY'
-                    placeholder='Selecione uma data'
-                    locale={localeDatePicker}
-                    minDate={minDateMenos7}
-                  />
-                </Form.Item>
+              <Col xs={24}>
+                <Row gutter={[16, 16]}>
+                  <Col xs={12}>
+                    <Form.Item
+                      name='dataVisita'
+                      label='Data da visita'
+                      dependencies={ehBibliografico ? ['dataEmprestimo', 'dataDevolucao'] : []}
+                      rules={[...rules]}
+                    >
+                      <DatePicker
+                        style={{ width: '100%' }}
+                        format='DD/MM/YYYY'
+                        placeholder='Selecione uma data'
+                        locale={localeDatePicker}
+                        minDate={minDateMenos7}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={12}>
+                    <InputNumero
+                      formItemProps={{
+                        label: 'Hora da visita',
+                        name: 'horaVisita',
+                        getValueFromEvent: (e: React.ChangeEvent<HTMLInputElement>) =>
+                          formatarHora(e.target.value),
+                        dependencies: ['dataVisita'],
+                        rules: [
+                          ({ getFieldValue }) => ({
+                            required: getFieldValue('dataVisita'),
+                            message: 'É necessário informar a hora da visita.',
+                          }),
+                        ],
+                      }}
+                      inputProps={{ placeholder: 'Informe a hora', maxLength: 5 }}
+                    />
+                  </Col>
+                </Row>
               </Col>
             )}
 
@@ -287,13 +299,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                     name='dataEmprestimo'
                     label='Data do empréstimo'
                     dependencies={['dataVisita', 'dataDevolucao']}
-                    rules={[
-                      ...rules,
-                      ({ getFieldValue }) => ({
-                        message: ERRO_DATA_EMPRESTIMO,
-                        validator: () => validarDatas(getFieldValue),
-                      }),
-                    ]}
+                    rules={[...rules]}
                   >
                     <DatePicker
                       style={{ width: '100%' }}
@@ -310,13 +316,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                     label='Data da devolução'
                     name='dataDevolucao'
                     dependencies={['dataEmprestimo', 'dataVisita']}
-                    rules={[
-                      ...rules,
-                      ({ getFieldValue }) => ({
-                        message: ERRO_DATA_DEVOLUCAO,
-                        validator: () => validarDatas(getFieldValue),
-                      }),
-                    ]}
+                    rules={[...rules]}
                   >
                     <DatePicker
                       style={{ width: '100%' }}

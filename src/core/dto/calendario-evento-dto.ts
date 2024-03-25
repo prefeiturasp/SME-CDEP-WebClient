@@ -32,6 +32,9 @@ export type EventoDetalheDTO = {
   solicitante: string;
   tipoId: TipoEventoEnum;
   acervoSolicitacaoId: number;
+  situacaoSolicitacaoItemId: number;
+  situacaoSolicitacaoItemDescricao: string;
+  horario: string;
 };
 
 export type EventoCadastroDTO = {

@@ -22,7 +22,6 @@ import {
 } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
 import { URL_API_ACERVO_SOLICITACAO } from '~/core/constants/urls-api';
-import { dayjs } from '~/core/date/dayjs';
 import { SolicitacaoDTO } from '~/core/dto/solicitacao-dto';
 import { ROUTES } from '~/core/enum/routes';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
@@ -74,7 +73,7 @@ const columns: ColumnsType<SolicitacaoDTO> = [
     title: 'Data da solicitação',
     dataIndex: 'dataCriacao',
     align: 'center',
-    render: (dataCriacao: string) => dayjs(dataCriacao).format('DD/MM/YYYY - HH:mm'),
+    render: (dataCriacao: string) => dataCriacao,
   },
   {
     title: 'Solicitante',
@@ -90,7 +89,7 @@ const columns: ColumnsType<SolicitacaoDTO> = [
     title: 'Data da visita',
     dataIndex: 'dataVisita',
     align: 'center',
-    render: (dataVisita: string) => (dataVisita ? dayjs(dataVisita).format('DD/MM/YYYY') : <></>),
+    render: (dataVisita: string) => (dataVisita ? dataVisita : ''),
   },
   {
     title: 'Situação do Item',

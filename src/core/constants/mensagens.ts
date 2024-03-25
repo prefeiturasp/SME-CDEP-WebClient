@@ -16,6 +16,7 @@ export const DESEJA_REMOVER_ACERVO = 'Deseja realmente remover este acervo?';
 export const DESEJA_CANCELAR_ITEM = 'Deseja realmente cancelar este item?';
 export const DESEJA_CANCELAR_ITEM_E_DESCARTAR_ITENS_NAO_CONFIRMADOS =
   'Você tem certeza que deseja cancelar o item e descartar as alterações não confirmadas?';
+export const DESEJA_DEVOLVER_ITEM = 'Você tem certeza que deseja devolver o item?';
 export const DESEJA_CANCELAR_ATENDIMENTO = 'Deseja realmente cancelar o atendimento?';
 export const DESEJA_FINALIZAR_ATENDIMENTO = 'Deseja realmente finalizar o atendimento?';
 export const ACERVO_EXCLUIDO_SUCESSO = 'Acervo excluído com sucesso';
