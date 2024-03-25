@@ -43,7 +43,12 @@ import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
 import { devolverEmprestimo } from '~/core/services/acervo-emprestimo';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
-import { formatarDataParaDDMMYYYY, formatterCPFMask, maskTelefone } from '~/core/utils/functions';
+import {
+  formatarDataParaDDMMYYYY,
+  formatarDataPorFormato,
+  formatterCPFMask,
+  maskTelefone,
+} from '~/core/utils/functions';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { configTagAcervoDisponibilidadeMap } from '../../solicitacao/components/lista-acervos-solicitacao/utils';
 import { ModalAtendimento } from './components/modal-atendimento';
@@ -196,7 +201,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       title: 'Data da visita',
       dataIndex: 'dataVisita',
       width: '10%',
-      render: (value) => formatarDataParaDDMMYYYY(value),
+      render: (value) => formatarDataPorFormato(value, 'DD/MM/YYYY HH:mm'),
     },
   ];
 
@@ -396,43 +401,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       },
     });
   };
-
-  //           if (valorTipoAtendimento === TipoAtendimentoEnum.Email) {
-  //             novaDataVisita = undefined;
-  //           } else {
-  //             novaDataVisita = form.getFieldValue(['dataVisita', `${item.id}`]) ?? item.dataVisita;
-  //           }
-
-  //           const paramsItem: AcervoSolicitacaoItemConfirmarDTO = {
-  //             id: item.id,
-  //             dataVisita: novaDataVisita,
-  //             tipoAcervo: linha.tipoAcervoId,
-  //             tipoAtendimento: valorTipoAtendimento ?? item.tipoAtendimento,
-  //             dataEmprestimo: form.getFieldValue(['dataEmprestimo', `${item.id}`]),
-  //             dataDevolucao: form.getFieldValue(['dataDevolucao', `${item.id}`]),
-  //           };
-
-  //           return paramsItem;
-  //         });
-
-  //       const params: AcervoSolicitacaoConfirmarDTO = {
-  //         id: acervoSolicitacaoId,
-  //         itens: cloneDeep(valoresParaSalvar),
-  //       };
-
-  //       const resposta = await acervoSolicitacaoService.confirmarAtendimento(params);
-
-  //       if (resposta.sucesso) {
-  //         notification.success({
-  //           message: 'Sucesso',
-  //           description: 'O item foi confirmado com sucesso',
-  //         });
-  //         carregarDados();
-  //
-  //       }
-  //     });
-  //   }
-  // };
 
   const onClickFinalizarAtendimento = () => {
     confirmacao({

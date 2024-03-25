@@ -4,6 +4,7 @@ import { FormProps, useForm, useWatch } from 'antd/es/form/Form';
 import dayjs from 'dayjs';
 import React, { useContext, useEffect } from 'react';
 import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento';
+import InputNumero from '~/components/lib/inputs/number';
 import Modal from '~/components/lib/modal';
 import { notification } from '~/components/lib/notification';
 import { DESEJA_CANCELAR_ALTERACOES } from '~/core/constants/mensagens';
@@ -21,6 +22,7 @@ import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
 import { prorrogarEmprestimo } from '~/core/services/acervo-emprestimo';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
+import { formatarHora } from '~/core/utils/functions';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 type ModalAtendimentoProps = {
@@ -71,7 +73,11 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
       form.validateFields().then(async () => {
         const values: AcervoSolicitacaoItemDetalheResumidoDTO = form.getFieldsValue(true);
 
-        const dataVisitaFormatada = dayjs(values.dataVisita);
+        const [horas, minutos] = values && values.horaVisita ? values.horaVisita.split(':') : [];
+        const dataVisitaFormatada = dayjs(values.dataVisita)
+          .utc()
+          .hour(parseInt(horas))
+          .minute(parseInt(minutos));
 
         let novaDataVisita;
         if (values.tipoAtendimento === TipoAtendimentoEnum.Email) {
@@ -187,6 +193,11 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
         form.setFieldValue('dataVisita', dayjs(initialValuesModal.dataVisita));
       }
 
+      if (initialValuesModal?.dataVisitaFormatada) {
+        initialValuesModal.horaVisita = initialValuesModal.dataVisitaFormatada.split(' ')[1];
+        form.setFieldValue('horaVisita', initialValuesModal.horaVisita);
+      }
+
       if (initialValuesModal?.dataEmprestimo) {
         form.setFieldValue('dataEmprestimo', dayjs(initialValuesModal.dataEmprestimo));
       }
@@ -250,31 +261,71 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
             </Col>
 
             {(temDataEhPresencial || ehPresencialWatch) && (
-              <Col xs={12}>
-                <Form.Item
-                  name='dataVisita'
-                  label='Data da visita'
-                  dependencies={ehBibliografico ? ['dataEmprestimo', 'dataDevolucao'] : []}
-                >
-                  <DatePicker
-                    allowClear
-                    format={formatoData}
-                    style={{ width: '100%' }}
-                    placeholder='Selecione uma data'
-                    locale={localeDatePicker}
-                    minDate={dataAtual}
-                    onChange={(date: Dayjs) => {
-                      form.setFieldValue('dataVisita', date);
-                      form.setFieldValue('dataDevolucao', undefined);
-                      form.setFieldValue('dataEmprestimo', undefined);
-                    }}
-                    disabled={
-                      desabilitarCampos ||
-                      atendimentoFinalizado ||
-                      validarSituacaoItem(situacaoItemAtendimento)
-                    }
-                  />
-                </Form.Item>
+              <Col xs={24}>
+                <Row gutter={[16, 16]}>
+                  <Col xs={12}>
+                    <Form.Item
+                      name='dataVisita'
+                      label='Data da visita'
+                      dependencies={ehBibliografico ? ['dataEmprestimo', 'dataDevolucao'] : []}
+                      rules={[
+                        ({ getFieldValue }) => ({
+                          validator: (_, dataVisita) => {
+                            if (dataVisita && !getFieldValue('horaVisita')) {
+                              return Promise.reject();
+                            }
+
+                            return Promise.resolve();
+                          },
+                        }),
+                      ]}
+                    >
+                      <DatePicker
+                        allowClear
+                        format={formatoData}
+                        style={{ width: '100%' }}
+                        placeholder='Selecione uma data'
+                        locale={localeDatePicker}
+                        minDate={dataAtual}
+                        onChange={(date: Dayjs) => {
+                          form.setFieldValue('dataVisita', date);
+                          form.setFieldValue('dataDevolucao', undefined);
+                          form.setFieldValue('dataEmprestimo', undefined);
+                        }}
+                        disabled={
+                          desabilitarCampos ||
+                          atendimentoFinalizado ||
+                          validarSituacaoItem(situacaoItemAtendimento)
+                        }
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col xs={12}>
+                    <InputNumero
+                      formItemProps={{
+                        label: 'Hora da visita',
+                        name: 'horaVisita',
+                        getValueFromEvent: (e: React.ChangeEvent<HTMLInputElement>) =>
+                          formatarHora(e.target.value),
+                        dependencies: ['dataVisita'],
+                        rules: [
+                          ({ getFieldValue }) => ({
+                            required: getFieldValue('dataVisita'),
+                            message: 'É necessário informar a hora da visita.',
+                          }),
+                        ],
+                      }}
+                      inputProps={{
+                        placeholder: 'Informe a hora',
+                        maxLength: 5,
+                        disabled:
+                          desabilitarCampos ||
+                          atendimentoFinalizado ||
+                          validarSituacaoItem(situacaoItemAtendimento),
+                      }}
+                    />
+                  </Col>
+                </Row>
               </Col>
             )}
 
