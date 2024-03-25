@@ -7,6 +7,7 @@ export type AcervoSolicitacaoDetalheDTO = {
   id: number;
   usuarioId: number;
   dataSolicitacao?: string | Dayjs;
+  dataSolicitacaoFormatada?: string | Dayjs;
   situacao: string;
   situacaoId: number;
   itens: AcervoSolicitacaoItemDetalheResumidoDTO[];

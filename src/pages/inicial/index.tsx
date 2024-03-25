@@ -8,7 +8,6 @@ import DataTable from '~/components/lib/data-table';
 import HeaderPage from '~/components/lib/header-page';
 import { CDEP_BUTTON_NOVA_SOLICITACAO } from '~/core/constants/ids/button/intex';
 import { URL_API_ACERVO_SOLICITACAO } from '~/core/constants/urls-api';
-import { dayjs } from '~/core/date/dayjs';
 import { MinhaSolicitacaoDTO } from '~/core/dto/minha-solicitacao-dto';
 import { ROUTES } from '~/core/enum/routes';
 
@@ -31,12 +30,12 @@ const Inicial: React.FC = () => {
     {
       title: 'Data da solicitação',
       dataIndex: 'dataCriacao',
-      render: (dataCriacao: string) => (dataCriacao ? dayjs(dataCriacao).format('DD/MM/YYYY') : ''),
+      render: (dataCriacao: string) => (dataCriacao ? dataCriacao : ''),
     },
     {
       title: 'Data da visita',
       dataIndex: 'dataVisita',
-      render: (dataVisita: string) => (dataVisita ? dayjs(dataVisita).format('DD/MM/YYYY') : ''),
+      render: (dataVisita: string) => (dataVisita ? dataVisita : ''),
     },
     {
       title: 'Situação',

@@ -10,6 +10,24 @@ export const formatarDataHoraAuditoria = (data: string) =>
 export const formatarDuasCasasDecimais = (value: any) =>
   removerTudoQueNaoEhDigito(value).replace(/(\d)(\d{2})$/, '$1,$2');
 
+export const formatarHora = (value: any) => {
+  const removerTudoQueNaoEhDigito = (str: string) => str.replace(/\D/g, '');
+  const horaNumerica = removerTudoQueNaoEhDigito(value);
+
+  if (horaNumerica.length < 4) {
+    return horaNumerica.replace(/(\d{2})(\d{2})$/, '$1:$2');
+  }
+
+  const horas = parseInt(horaNumerica.substring(0, 2));
+  const minutos = parseInt(horaNumerica.substring(2, 4));
+
+  if (horas < 0 || horas > 23 || minutos < 0 || minutos > 59) {
+    return '00:00';
+  }
+
+  return horaNumerica.replace(/(\d{2})(\d{2})$/, '$1:$2');
+};
+
 export const formatarDataParaDDMMYYYY = (
   data: string | null | undefined | Dayjs,
 ): string | undefined => (data ? dayjs(data).format('DD/MM/YYYY') : undefined);

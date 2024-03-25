@@ -48,7 +48,11 @@ import { TipoAtendimentoEnum, TipoAtendimentoEnumDisplay } from '~/core/enum/tip
 import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
-import { formatarDataParaDDMMYYYY, maskTelefone } from '~/core/utils/functions';
+import {
+  formatarDataParaDDMMYYYY,
+  formatarDataPorFormato,
+  maskTelefone,
+} from '~/core/utils/functions';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { ModalAdicionarAcervo } from './components/modal-adicionar-acervo';
 import { InputRfCpf } from './components/rf-cpf';
@@ -124,7 +128,7 @@ export const SolicitacaoManual: React.FC = () => {
       title: 'Data da visita',
       dataIndex: 'dataVisita',
       width: '10%',
-      render: (dataVisita) => formatarDataParaDDMMYYYY(dataVisita),
+      render: (dataVisita) => formatarDataPorFormato(dataVisita, 'DD/MM/YYYY HH:mm'),
     },
   ];
 
