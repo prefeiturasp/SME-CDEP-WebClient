@@ -15,21 +15,26 @@ export const DestacarTexto: React.FC<DestacarTextoProps> = ({
 
   if (!palavraComparacao) return palavraPraDestacar;
 
-  const normalizarPalabraComparacao = removerAcentos(palavraComparacao);
-  const regex = new RegExp(
-    `(${normalizarPalabraComparacao.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`,
-    'gi',
+  const comparacaoNormalizada = removerAcentos(palavraComparacao.toLowerCase());
+
+  const palavras = palavraPraDestacar.split(/(\s+|\/+)/);
+
+  return (
+    <React.Fragment>
+      {palavras.map((word, index) => {
+        if (word.includes(' ') || word.includes('/')) {
+          return <span key={index}>{word}</span>;
+        }
+
+        const palavraNormalizada = removerAcentos(word.toLowerCase());
+        const destacada = palavraNormalizada === comparacaoNormalizada;
+
+        return (
+          <span key={index} style={{ backgroundColor: destacada ? 'yellow' : 'transparent' }}>
+            {word}
+          </span>
+        );
+      })}
+    </React.Fragment>
   );
-
-  return palavraPraDestacar.split(' ').map((word, index, words) => {
-    const normalizarPalavra = removerAcentos(word).toLowerCase();
-    const destacada = regex.test(normalizarPalavra);
-
-    return (
-      <React.Fragment key={index}>
-        <span style={{ backgroundColor: destacada ? 'yellow' : 'transparent' }}>{word}</span>
-        {index < words.length - 1 ? ' ' : ''}
-      </React.Fragment>
-    );
-  });
 };
