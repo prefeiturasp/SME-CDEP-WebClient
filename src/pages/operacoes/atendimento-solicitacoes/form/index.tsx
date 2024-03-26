@@ -15,7 +15,6 @@ import {
   CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO,
   CDEP_BUTTON_DEVOLVER_ITEM,
   CDEP_BUTTON_EDITAR,
-  CDEP_BUTTON_FINALIZAR,
   CDEP_BUTTON_VOLTAR,
 } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
@@ -24,7 +23,6 @@ import {
   DESEJA_CANCELAR_ATENDIMENTO,
   DESEJA_CANCELAR_ITEM_E_DESCARTAR_ITENS_NAO_CONFIRMADOS,
   DESEJA_DEVOLVER_ITEM,
-  DESEJA_FINALIZAR_ATENDIMENTO,
   DESEJA_SAIR_MODO_EDICAO,
 } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
@@ -39,7 +37,9 @@ import { SituacaoEmprestimoEnum } from '~/core/enum/situacao-emprestimo-enum';
 import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
 import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
+import { useAppSelector } from '~/core/hooks/use-redux';
 import { devolverEmprestimo } from '~/core/services/acervo-emprestimo';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
@@ -59,6 +59,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
   const { desabilitarCampos } = useContext(PermissaoContext);
+  const perfilSelecionado = useAppSelector((state) => state.perfil.perfilSelecionado?.perfil);
 
   const [initialValuesModal, setInitialValuesModal] =
     useState<AcervoSolicitacaoItemDetalheResumidoDTO>();
@@ -66,6 +67,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
   const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemDetalheResumidoDTO[]>([]);
 
+  const ehAdminGeral = perfilSelecionado === TipoPerfil.ADMIN_GERAL;
   const temItemFinalizadoAutomaticamente = formInitialValues?.itens.find(
     (item) => item.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE,
   );
@@ -84,21 +86,13 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.CANCELADO;
 
   const podeCancelarAtendimento = () => {
+    if (!ehAdminGeral) return true;
+
     return !!(
       desabilitarCampos ||
       atendimentoTaCancelado ||
       temItemFinalizadoManualmente ||
       temItemFinalizadoAutomaticamente
-    );
-  };
-
-  const podeFinalizarAtendimento = () => {
-    return !!(
-      desabilitarCampos ||
-      atendimentoFinalizado ||
-      atendimentoTaCancelado ||
-      formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.ATENDIDO_PARCIALMENTE ||
-      formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO
     );
   };
 
@@ -402,23 +396,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     });
   };
 
-  const onClickFinalizarAtendimento = () => {
-    confirmacao({
-      content: DESEJA_FINALIZAR_ATENDIMENTO,
-      onOk() {
-        acervoSolicitacaoService.finalizarAtendimento(acervoSolicitacaoId).then((resposta) => {
-          if (resposta.sucesso) {
-            navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
-            notification.success({
-              message: 'Sucesso',
-              description: 'Atendimento finalizado com sucesso',
-            });
-          }
-        });
-      },
-    });
-  };
-
   const onClickDevolverEmprestimo = (id: number) => {
     confirmacao({
       content: DESEJA_DEVOLVER_ITEM,
@@ -479,18 +456,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                           </ButtonSecundary>
                         )}
                       </Form.Item>
-                    </Col>
-                    <Col>
-                      <Button
-                        block
-                        htmlType='submit'
-                        id={CDEP_BUTTON_FINALIZAR}
-                        style={{ fontWeight: 700 }}
-                        disabled={podeFinalizarAtendimento() || !desabilitarConfirmarECancelar}
-                        onClick={onClickFinalizarAtendimento}
-                      >
-                        Finalizar
-                      </Button>
                     </Col>
                     <Col>
                       <Button
