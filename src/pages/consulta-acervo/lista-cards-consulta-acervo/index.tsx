@@ -206,10 +206,7 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                       color: Colors.Neutral.DARK,
                     }}
                   >
-                    {DestacarTexto({
-                      palavraPraDestacar: tagAcervo(item.tipo),
-                      palavraComparacao: textoLivrePesquisado,
-                    })}
+                    {tagAcervo(item.tipo)}
                   </Tag>
                 </Row>
 
