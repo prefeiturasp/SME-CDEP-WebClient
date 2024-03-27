@@ -23,6 +23,10 @@ import {
 import { Dayjs, dayjs } from '~/core/date/dayjs';
 import { AcervoSolicitacaoItemRetornoCadastroDTO } from '~/core/dto/acervo-solicitacao-item-retorno-cadastro-dto';
 import { ArquivoCodigoNomeDTO } from '~/core/dto/arquivo-codigo-nome-dto';
+import {
+  AcervoDisponibilidadeSituacaoEnum,
+  AcervoDisponibilidadeSituacaoEnumDisplay,
+} from '~/core/enum/acervo-disponibilidade-enum';
 import { ROUTES } from '~/core/enum/routes';
 import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
 import { TipoAcervo, TipoAcervoDisplay } from '~/core/enum/tipo-acervo';
@@ -400,6 +404,10 @@ const ListaAcervosSolicitacao: React.FC = () => {
       align: 'center',
       width: '100px',
       render: (_, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => {
+        const temAcervoDisponivel =
+          linha?.situacaoDisponibilidade ===
+          AcervoDisponibilidadeSituacaoEnumDisplay[AcervoDisponibilidadeSituacaoEnum.DISPONIVEL];
+
         return linha?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA ? (
           <ButtonPrimary
             type='text'
@@ -409,8 +417,17 @@ const ListaAcervosSolicitacao: React.FC = () => {
           >
             Cancelar item
           </ButtonPrimary>
+        ) : linha.tipoAcervo === TipoAcervoDisplay[TipoAcervo.Bibliografico] &&
+          !temAcervoDisponivel ? (
+          <ButtonPrimary
+            type='text'
+            id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
+            onClick={() => onClickCancelarItemAtendimento(linha.id)}
+          >
+            Cancelar item
+          </ButtonPrimary>
         ) : (
-          '-'
+          <></>
         );
       },
     });

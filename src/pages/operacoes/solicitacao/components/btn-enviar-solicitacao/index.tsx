@@ -8,6 +8,10 @@ import Modal from '~/components/lib/modal';
 import { notification } from '~/components/lib/notification';
 import { CDEP_BUTTON_NOVO } from '~/core/constants/ids/button/intex';
 import { AcervoSolicitacaoItemCadastroDTO } from '~/core/dto/acervo-solicitacao-item-cadastro-dto';
+import {
+  AcervoDisponibilidadeEnumDisplay,
+  AcervoDisponibilidadeSituacaoEnum,
+} from '~/core/enum/acervo-disponibilidade-enum';
 import { ROUTES } from '~/core/enum/routes';
 import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions';
 import { obterTermoDeCompromisso } from '~/core/services/acervo-service';
@@ -32,8 +36,21 @@ const BtnEnviarSolicitacoes: React.FC = () => {
 
   const [dados, setDados] = useState<string>('');
 
+  const temAcervoIndisponivel: boolean = useMemo(
+    () =>
+      dataSource?.length
+        ? !!dataSource?.find(
+            (item) =>
+              item?.situacaoDisponibilidade !==
+              AcervoDisponibilidadeEnumDisplay[AcervoDisponibilidadeSituacaoEnum.DISPONIVEL],
+          )
+        : false,
+    [dataSource],
+  );
+
   const desabilitarBtnEnviarSolicitacao: boolean = useMemo(
-    () => !permissao?.podeIncluir || !!solicitacaoId || !dataSource?.length,
+    () =>
+      !permissao?.podeIncluir || !!solicitacaoId || !dataSource?.length || temAcervoIndisponivel,
     [dataSource, solicitacaoId, permissao],
   );
 
