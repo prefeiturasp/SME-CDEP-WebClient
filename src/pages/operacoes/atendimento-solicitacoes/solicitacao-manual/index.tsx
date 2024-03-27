@@ -81,7 +81,7 @@ export const SolicitacaoManual: React.FC = () => {
     [dataSource],
   );
 
-  const semAlteracaoItens = _.isEqual(dataSource, formInitialValues?.itens);
+  const semAlteracaoItens = _.isEqual(values.itens, formInitialValues?.itens);
 
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
   const ehUsuarioExterno =
@@ -535,18 +535,18 @@ export const SolicitacaoManual: React.FC = () => {
             </Col>
 
             <ModalAdicionarAcervo
-              formSolicitacaoManual={form}
               isModalOpen={isModalOpen}
+              formSolicitacaoManual={form}
               setIsModalOpen={setIsModalOpen}
               initialValuesModal={initialValuesModal}
             />
+
             <Col xs={24}>
               <Form.Item shouldUpdate>
                 {() => {
                   const listData: AcervoSolicitacaoItemDetalheResumidoDTO[] = values.itens?.length
                     ? values.itens
                     : [];
-                  setDataSource(listData);
 
                   return (
                     <DataTable
