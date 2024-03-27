@@ -4,7 +4,7 @@ import useFormInstance from 'antd/es/form/hooks/useFormInstance';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { DestacarTexto } from '~/components/cdep/destacar-texto';
+import { HighlightedText } from '~/components/cdep/destacar-texto';
 import { FiltroTextoLivreTipoAcervoDTO } from '~/core/dto/filtro-texto-livre-tipo-acervo-dto';
 import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
 import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
@@ -60,6 +60,8 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
 
   const { dataSource, loading, listParams, carregarDados, textoLivrePesquisado } =
     useContext(ConsultaAcervoContext);
+
+  const termoPesquisado = textoLivrePesquisado ? [textoLivrePesquisado] : [];
 
   const desabilitarCliqueDireitoImagem = (e: any) => {
     e.preventDefault();
@@ -140,45 +142,43 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                   <Row gutter={[6, 6]} style={{ display: 'grid' }} wrap>
                     <TextItemCardContentConsultaAcervo
                       label='Tipo de acervo: '
-                      description={DestacarTexto({
-                        palavraPraDestacar: tipoAcervoNome(item.tipo),
-                        palavraComparacao: textoLivrePesquisado,
-                      })}
+                      description={
+                        <HighlightedText
+                          text={tipoAcervoNome(item.tipo)}
+                          searchTerm={termoPesquisado}
+                        />
+                      }
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Titulo].label}: `}
-                      description={DestacarTexto({
-                        palavraPraDestacar: item.titulo,
-                        palavraComparacao: textoLivrePesquisado,
-                      })}
+                      description={
+                        <HighlightedText text={item.titulo} searchTerm={termoPesquisado} />
+                      }
                       item={item}
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label='Autoria/Crédito: '
-                      description={DestacarTexto({
-                        palavraPraDestacar: item.creditoAutoria,
-                        palavraComparacao: textoLivrePesquisado,
-                      })}
+                      description={
+                        <HighlightedText text={item.creditoAutoria} searchTerm={termoPesquisado} />
+                      }
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Assunto].label}: `}
-                      description={DestacarTexto({
-                        palavraPraDestacar: item.assunto,
-                        palavraComparacao: textoLivrePesquisado,
-                      })}
+                      description={
+                        <HighlightedText text={item.assunto} searchTerm={termoPesquisado} />
+                      }
                       ellipsis
                       exibirTooltip
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Descricao].label}: `}
-                      description={DestacarTexto({
-                        palavraPraDestacar: item.descricao,
-                        palavraComparacao: textoLivrePesquisado,
-                      })}
+                      description={
+                        <HighlightedText text={item.descricao} searchTerm={termoPesquisado} />
+                      }
                       ellipsis
                       exibirTooltip
                     />
@@ -206,10 +206,7 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                       color: Colors.Neutral.DARK,
                     }}
                   >
-                    {DestacarTexto({
-                      palavraPraDestacar: tagAcervo(item.tipo),
-                      palavraComparacao: textoLivrePesquisado,
-                    })}
+                    {tagAcervo(item.tipo)}
                   </Tag>
                 </Row>
 

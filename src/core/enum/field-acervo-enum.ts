@@ -48,6 +48,7 @@ export enum FieldAcervoEnum {
   CodigoNovo,
   Dimensoes,
   LocalizacaoCDDPHA,
+  AcervoDisponivel,
 }
 
 type FieldAcervoNameLabelType = {
@@ -105,6 +106,7 @@ type FieldAcervoNameLabelProps = {
   CodigoNovo: FieldAcervoNameLabelType;
   Dimensoes: FieldAcervoNameLabelType;
   LocalizacaoCDDPHA: FieldAcervoNameLabelType;
+  AcervoDisponivel: FieldAcervoNameLabelType;
 };
 
 const FieldAcervoNameLabel: FieldAcervoNameLabelProps = {
@@ -304,6 +306,10 @@ const FieldAcervoNameLabel: FieldAcervoNameLabelProps = {
     name: 'localizacao',
     label: 'Localização',
   },
+  AcervoDisponivel: {
+    name: 'situacaoSaldo',
+    label: 'Acervo disponível',
+  },
 };
 
 export const FieldAcervoEnumByName: Record<string, FieldAcervoEnum> = {
@@ -360,4 +366,5 @@ export const PropsByFieldAcervoEnum: Record<FieldAcervoEnum, FieldAcervoNameLabe
   [FieldAcervoEnum.CodigoNovo]: FieldAcervoNameLabel.CodigoNovo,
   [FieldAcervoEnum.Dimensoes]: FieldAcervoNameLabel.Dimensoes,
   [FieldAcervoEnum.LocalizacaoCDDPHA]: FieldAcervoNameLabel.LocalizacaoCDDPHA,
+  [FieldAcervoEnum.AcervoDisponivel]: FieldAcervoNameLabel.AcervoDisponivel,
 };

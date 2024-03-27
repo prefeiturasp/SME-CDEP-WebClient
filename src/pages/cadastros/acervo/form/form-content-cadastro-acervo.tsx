@@ -10,6 +10,7 @@ import {
   FormPageConfigCadastroAcervoProps,
 } from '~/core/dto/form-cadastro-acervo';
 import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
+import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import {
   EditorDescricao,
   InputAcessibilidade,
@@ -58,7 +59,7 @@ import {
   SelectSerieColecao,
   SelectSuporte,
 } from './form-fields';
-import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
+import { RadioAcervoDisponivel } from './form-fields/radio-acervo-disponivel';
 
 type FormContentCadastroAcervoProps = {
   fieldsConfig: FormPageConfigCadastroAcervoProps | undefined;
@@ -381,6 +382,16 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
                 tipoAcervo={fieldsConfig.tipo}
                 extra={obterConteudoExtraPorCampo(
                   PropsByFieldAcervoEnum[FieldAcervoEnum.CopiaDigital].name,
+                )}
+              />
+            );
+            break;
+          case FieldAcervoEnum.AcervoDisponivel:
+            input = (
+              <RadioAcervoDisponivel
+                tipoAcervo={fieldsConfig.tipo}
+                extra={obterConteudoExtraPorCampo(
+                  PropsByFieldAcervoEnum[FieldAcervoEnum.AcervoDisponivel].name,
                 )}
               />
             );

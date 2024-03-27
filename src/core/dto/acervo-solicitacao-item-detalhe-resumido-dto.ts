@@ -1,4 +1,5 @@
 import { Dayjs } from 'dayjs';
+import { AcervoDisponibilidadeSituacaoEnum } from '../enum/acervo-disponibilidade-enum';
 import { SituacaoSolicitacaoItemEnum } from '../enum/situacao-item-atendimento-enum';
 import { TipoAcervo } from '../enum/tipo-acervo';
 import { TipoAtendimentoEnum } from '../enum/tipo-atendimento-enum';
@@ -22,6 +23,7 @@ export type AcervoSolicitacaoItemDetalheResumidoDTO = {
   dataDevolucaoFormatada?: string;
   situacaoEmprestimo?: number;
   situacaoDisponibilidade?: string;
+  situacaoSaldo?: AcervoDisponibilidadeSituacaoEnum;
   estaDisponivel?: boolean;
   temControleDisponibilidade?: boolean;
   horaVisita?: string;

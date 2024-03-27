@@ -32,14 +32,15 @@ import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detal
 import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solicitacao-item-detalhe-resumido-dto';
 
 import { FaEdit } from 'react-icons/fa';
-import { AcervoDisponibilidadeEnum } from '~/core/enum/acervo-disponibilidade-enum';
 import { ROUTES } from '~/core/enum/routes';
 import { SituacaoSolicitacaoEnum } from '~/core/enum/situacao-atendimento-enum';
 import { SituacaoEmprestimoEnum } from '~/core/enum/situacao-emprestimo-enum';
 import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
 import { TipoUsuario } from '~/core/enum/tipo-usuario-enum';
+import { useAppSelector } from '~/core/hooks/use-redux';
 import { devolverEmprestimo } from '~/core/services/acervo-emprestimo';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
@@ -59,6 +60,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const navigate = useNavigate();
   const paramsRoute = useParams();
   const { desabilitarCampos } = useContext(PermissaoContext);
+  const perfilSelecionado = useAppSelector((state) => state.perfil.perfilSelecionado?.perfil);
 
   const [initialValuesModal, setInitialValuesModal] =
     useState<AcervoSolicitacaoItemDetalheResumidoDTO>();
@@ -66,6 +68,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
   const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemDetalheResumidoDTO[]>([]);
 
+  const ehAdminGeral = perfilSelecionado === TipoPerfil.ADMIN_GERAL;
   const temItemFinalizadoAutomaticamente = formInitialValues?.itens.find(
     (item) => item.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE,
   );
@@ -84,6 +87,8 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.CANCELADO;
 
   const podeCancelarAtendimento = () => {
+    if (!ehAdminGeral) return true;
+
     return !!(
       desabilitarCampos ||
       atendimentoTaCancelado ||
@@ -148,12 +153,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       render(value, linha) {
         if (linha && linha.tipoAcervoId) {
           let config;
-          const validarDisponibilidade = linha.temControleDisponibilidade && linha.estaDisponivel;
+          const validarDisponibilidade = linha.temControleDisponibilidade;
 
-          if (validarDisponibilidade) {
-            config = configTagAcervoDisponibilidadeMap[AcervoDisponibilidadeEnum.ACERVO_DISPONIVEL];
-          } else if (!validarDisponibilidade) {
-            config = {};
+          if (linha.situacaoSaldo && validarDisponibilidade) {
+            config = configTagAcervoDisponibilidadeMap[linha.situacaoSaldo];
           }
 
           return (
@@ -235,10 +238,18 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         ? validarSituacaoEmprestimoLinha(linha.situacaoEmprestimo)
         : false;
 
-      const esconderBotoes = itemDevolvido || itemEstaCancelado;
+      const naoPodeEditar =
+        !validarSeEhBibliografico(linha.tipoAcervoId) && validarSituacaoLinha(linha.situacaoId);
+
+      const esconderBotoes = itemDevolvido || itemEstaCancelado || naoPodeEditar;
 
       const podeProrrogarDevolverItem =
         itemEstaFinalizadoManualmente && validarSeEhBibliografico(linha.tipoAcervoId);
+
+      const naoPodeEditarAcervoIndisponivel =
+        validarSeEhBibliografico(linha.tipoAcervoId) &&
+        !linha.estaDisponivel &&
+        !podeProrrogarDevolverItem;
 
       const btnEditar = () =>
         esconderBotoes ? (
@@ -252,7 +263,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               setInitialValuesModal(linha);
               setIsModalOpen(true);
             }}
-            disabled={desabilitarCampos}
+            disabled={desabilitarCampos || naoPodeEditarAcervoIndisponivel}
           >
             {podeProrrogarDevolverItem ? 'Prorrogar' : 'Editar'}
           </ButtonSecundary>

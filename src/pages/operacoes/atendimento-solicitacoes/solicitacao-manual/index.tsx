@@ -70,11 +70,7 @@ export const SolicitacaoManual: React.FC = () => {
   const [initialValuesModal, setInitialValuesModal] =
     useState<AcervoSolicitacaoItemDetalheResumidoDTO>();
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
-
-  const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
-  const dataSource: AcervoSolicitacaoItemDetalheResumidoDTO[] = useMemo(() => {
-    return values.itens?.length ? values.itens : [];
-  }, [values.itens]);
+  const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemDetalheResumidoDTO[]>([]);
 
   const temBibliografico: boolean = useMemo(
     () =>
@@ -236,12 +232,25 @@ export const SolicitacaoManual: React.FC = () => {
         ? dayjs(resposta.dados.dataSolicitacao)
         : '';
 
+      const dadosMapeadosItens: AcervoSolicitacaoItemDetalheResumidoDTO[] =
+        resposta.dados.itens.map((item) => {
+          if (item.dataVisitaFormatada) {
+            item.horaVisita = item.dataVisitaFormatada.split(' ')[1];
+          }
+
+          form.setFieldValue('horaVisita', item.horaVisita);
+          return { ...item };
+        });
+
       const dadosMapeados: AcervoSolicitacaoDetalheDTO = {
         ...resposta.dados,
         dadosSolicitante,
         dataSolicitacao,
+        itens: dadosMapeadosItens,
       };
+
       setFormInitialValues(dadosMapeados);
+      setDataSource(dadosMapeadosItens);
     }
   }, [acervoSolicitacaoId]);
 
@@ -304,8 +313,7 @@ export const SolicitacaoManual: React.FC = () => {
 
   const onClickConfirmarAtendimento = async () => {
     const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
-
-    const semAlteracaoItens = _.isEqual(values?.itens, formInitialValues?.itens);
+    const semAlteracaoItens = _.isEqual(values.itens, formInitialValues?.itens);
 
     if (form.isFieldsTouched() || !semAlteracaoItens) {
       form.validateFields().then(async () => {
@@ -360,12 +368,12 @@ export const SolicitacaoManual: React.FC = () => {
               description: 'Atendimento confirmado com sucesso',
             });
 
-            if (acervoSolicitacaoId) {
-              carregarDados();
-            } else {
+            if (!acervoSolicitacaoId) {
               const newId = resposta.dados;
               navigate(`${ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL}/${newId}`);
             }
+
+            carregarDados();
           }
         });
       });
@@ -407,14 +415,14 @@ export const SolicitacaoManual: React.FC = () => {
           <Col span={24}>
             <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
               {(form) => {
-                const values = form.getFieldsValue(true);
-
-                const semAlteracaoItens = _.isEqual(values?.itens, formInitialValues?.itens);
+                const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
 
                 const temItens = values?.itens?.length;
                 const temItemSemId = values?.itens?.find(
                   (item: AcervoSolicitacaoItemDetalheResumidoDTO) => item?.id < 1,
                 );
+
+                const semAlteracaoItens = _.isEqual(values.itens, formInitialValues?.itens);
 
                 const desabilitarConfirmar =
                   (!form.isFieldsTouched() && semAlteracaoItens) || !temItens;
@@ -531,23 +539,24 @@ export const SolicitacaoManual: React.FC = () => {
             </Col>
 
             <ModalAdicionarAcervo
-              formSolicitacaoManual={form}
               isModalOpen={isModalOpen}
+              formSolicitacaoManual={form}
               setIsModalOpen={setIsModalOpen}
               initialValuesModal={initialValuesModal}
             />
+
             <Col xs={24}>
               <Form.Item shouldUpdate>
                 {() => {
                   const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
-                  const dataSource: AcervoSolicitacaoItemDetalheResumidoDTO[] = values.itens?.length
+                  const listData: AcervoSolicitacaoItemDetalheResumidoDTO[] = values.itens?.length
                     ? values.itens
                     : [];
 
                   return (
                     <DataTable
                       columns={columns}
-                      dataSource={dataSource}
+                      dataSource={listData}
                       showOrderButton={false}
                       pagination={false}
                     />
