@@ -242,7 +242,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         ? validarSituacaoEmprestimoLinha(linha.situacaoEmprestimo)
         : false;
 
-      const esconderBotoes = itemDevolvido || itemEstaCancelado;
+      const naoPodeEditar =
+        !validarSeEhBibliografico(linha.tipoAcervoId) && validarSituacaoLinha(linha.situacaoId);
+
+      const esconderBotoes = itemDevolvido || itemEstaCancelado || naoPodeEditar;
 
       const podeProrrogarDevolverItem =
         itemEstaFinalizadoManualmente && validarSeEhBibliografico(linha.tipoAcervoId);
