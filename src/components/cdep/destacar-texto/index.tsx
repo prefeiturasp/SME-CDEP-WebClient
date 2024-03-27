@@ -1,40 +1,21 @@
+import latinize from 'latinize';
 import React from 'react';
+import Highlighter from 'react-highlight-words';
 
-interface DestacarTextoProps {
-  palavraPraDestacar: string;
-  palavraComparacao?: string;
+interface HighlightedTextProps {
+  text: string;
+  searchTerm?: Array<string | RegExp>;
 }
 
-export const DestacarTexto: React.FC<DestacarTextoProps> = ({
-  palavraPraDestacar,
-  palavraComparacao,
-}) => {
-  const removerAcentos = (str: string): string => {
-    return str.normalize('NFD').replace(/[\u0300-\u036f]/g, '');
-  };
-
-  if (!palavraComparacao) return palavraPraDestacar;
-
-  const comparacaoNormalizada = removerAcentos(palavraComparacao.toLowerCase());
-
-  const palavras = palavraPraDestacar.split(/(\s+|\/+)/);
-
+export const HighlightedText: React.FC<HighlightedTextProps> = ({ text, searchTerm = [] }) => {
   return (
-    <React.Fragment>
-      {palavras.map((word, index) => {
-        if (word.includes(' ') || word.includes('/')) {
-          return <span key={index}>{word}</span>;
-        }
-
-        const palavraNormalizada = removerAcentos(word.toLowerCase());
-        const destacada = palavraNormalizada === comparacaoNormalizada;
-
-        return (
-          <span key={index} style={{ backgroundColor: destacada ? 'yellow' : 'transparent' }}>
-            {word}
-          </span>
-        );
-      })}
-    </React.Fragment>
+    <div>
+      <Highlighter
+        sanitize={latinize}
+        caseSensitive={false}
+        textToHighlight={text}
+        searchWords={searchTerm}
+      />
+    </div>
   );
 };
