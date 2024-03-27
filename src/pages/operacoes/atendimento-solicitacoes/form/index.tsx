@@ -15,6 +15,7 @@ import {
   CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO,
   CDEP_BUTTON_DEVOLVER_ITEM,
   CDEP_BUTTON_EDITAR,
+  CDEP_BUTTON_FINALIZAR,
   CDEP_BUTTON_VOLTAR,
 } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
@@ -23,6 +24,7 @@ import {
   DESEJA_CANCELAR_ATENDIMENTO,
   DESEJA_CANCELAR_ITEM_E_DESCARTAR_ITENS_NAO_CONFIRMADOS,
   DESEJA_DEVOLVER_ITEM,
+  DESEJA_FINALIZAR_ATENDIMENTO,
   DESEJA_SAIR_MODO_EDICAO,
 } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
@@ -93,6 +95,16 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       atendimentoTaCancelado ||
       temItemFinalizadoManualmente ||
       temItemFinalizadoAutomaticamente
+    );
+  };
+
+  const podeFinalizarAtendimento = () => {
+    return !!(
+      desabilitarCampos ||
+      atendimentoFinalizado ||
+      atendimentoTaCancelado ||
+      formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.ATENDIDO_PARCIALMENTE ||
+      formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO
     );
   };
 
@@ -397,6 +409,23 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     });
   };
 
+  const onClickFinalizarAtendimento = () => {
+    confirmacao({
+      content: DESEJA_FINALIZAR_ATENDIMENTO,
+      onOk() {
+        acervoSolicitacaoService.finalizarAtendimento(acervoSolicitacaoId).then((resposta) => {
+          if (resposta.sucesso) {
+            navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
+            notification.success({
+              message: 'Sucesso',
+              description: 'Atendimento finalizado com sucesso',
+            });
+          }
+        });
+      },
+    });
+  };
+
   const onClickDevolverEmprestimo = (id: number) => {
     confirmacao({
       content: DESEJA_DEVOLVER_ITEM,
@@ -457,6 +486,18 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                           </ButtonSecundary>
                         )}
                       </Form.Item>
+                    </Col>
+                    <Col>
+                      <Button
+                        block
+                        htmlType='submit'
+                        id={CDEP_BUTTON_FINALIZAR}
+                        style={{ fontWeight: 700 }}
+                        disabled={podeFinalizarAtendimento() || !desabilitarConfirmarECancelar}
+                        onClick={onClickFinalizarAtendimento}
+                      >
+                        Finalizar
+                      </Button>
                     </Col>
                     <Col>
                       <Button
