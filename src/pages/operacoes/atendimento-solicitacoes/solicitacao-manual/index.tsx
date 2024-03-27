@@ -72,7 +72,6 @@ export const SolicitacaoManual: React.FC = () => {
   const [formInitialValues, setFormInitialValues] = useState<AcervoSolicitacaoDetalheDTO>();
   const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemDetalheResumidoDTO[]>([]);
 
-  const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
   const temBibliografico: boolean = useMemo(
     () =>
       dataSource?.length
@@ -80,8 +79,6 @@ export const SolicitacaoManual: React.FC = () => {
         : false,
     [dataSource],
   );
-
-  const semAlteracaoItens = _.isEqual(values.itens, formInitialValues?.itens);
 
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
   const ehUsuarioExterno =
@@ -315,6 +312,9 @@ export const SolicitacaoManual: React.FC = () => {
   };
 
   const onClickConfirmarAtendimento = async () => {
+    const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
+    const semAlteracaoItens = _.isEqual(values.itens, formInitialValues?.itens);
+
     if (form.isFieldsTouched() || !semAlteracaoItens) {
       form.validateFields().then(async () => {
         const dataSolicitacao = cloneDeep(values?.dataSolicitacao);
@@ -415,10 +415,14 @@ export const SolicitacaoManual: React.FC = () => {
           <Col span={24}>
             <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
               {(form) => {
+                const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
+
                 const temItens = values?.itens?.length;
                 const temItemSemId = values?.itens?.find(
                   (item: AcervoSolicitacaoItemDetalheResumidoDTO) => item?.id < 1,
                 );
+
+                const semAlteracaoItens = _.isEqual(values.itens, formInitialValues?.itens);
 
                 const desabilitarConfirmar =
                   (!form.isFieldsTouched() && semAlteracaoItens) || !temItens;
@@ -544,6 +548,7 @@ export const SolicitacaoManual: React.FC = () => {
             <Col xs={24}>
               <Form.Item shouldUpdate>
                 {() => {
+                  const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
                   const listData: AcervoSolicitacaoItemDetalheResumidoDTO[] = values.itens?.length
                     ? values.itens
                     : [];
