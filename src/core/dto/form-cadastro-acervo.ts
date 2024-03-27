@@ -1,4 +1,5 @@
 import { ColProps } from 'antd';
+import { AcervoDisponibilidadeEnum } from '../enum/acervo-disponibilidade-enum';
 import { FieldAcervoEnum } from '../enum/field-acervo-enum';
 import { TipoAcervo } from '../enum/tipo-acervo';
 import { AuditoriaDTO } from './auditoria-dto';
@@ -79,4 +80,5 @@ export type FormDefaultCadastroAcervoDTO = {
   resolucao: string;
   arquivos?: any;
   tecnica: string;
+  situacaoSaldo?: AcervoDisponibilidadeEnum;
 };

@@ -1,6 +1,6 @@
 import { Space, Tag, Tooltip, Typography } from 'antd';
 import React from 'react';
-import { AcervoDisponibilidadeEnum } from '~/core/enum/acervo-disponibilidade-enum';
+import { AcervoDisponibilidadeSituacaoEnum } from '~/core/enum/acervo-disponibilidade-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { configTagAcervoDisponibilidadeMap } from '~/pages/operacoes/solicitacao/components/lista-acervos-solicitacao/utils';
 
@@ -43,7 +43,7 @@ export const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcerv
   const validarDisponibilidade = item?.temControleDisponibilidade && item?.estaDisponivel;
 
   if (validarDisponibilidade) {
-    config = configTagAcervoDisponibilidadeMap[AcervoDisponibilidadeEnum.ACERVO_DISPONIVEL];
+    config = configTagAcervoDisponibilidadeMap[AcervoDisponibilidadeSituacaoEnum.DISPONIVEL];
   } else if (!validarDisponibilidade) {
     config = {};
   }

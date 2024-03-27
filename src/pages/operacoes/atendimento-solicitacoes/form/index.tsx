@@ -30,7 +30,7 @@ import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detal
 import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solicitacao-item-detalhe-resumido-dto';
 
 import { FaEdit } from 'react-icons/fa';
-import { AcervoDisponibilidadeEnum } from '~/core/enum/acervo-disponibilidade-enum';
+import { AcervoDisponibilidadeSituacaoEnum } from '~/core/enum/acervo-disponibilidade-enum';
 import { ROUTES } from '~/core/enum/routes';
 import { SituacaoSolicitacaoEnum } from '~/core/enum/situacao-atendimento-enum';
 import { SituacaoEmprestimoEnum } from '~/core/enum/situacao-emprestimo-enum';
@@ -145,7 +145,8 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
           const validarDisponibilidade = linha.temControleDisponibilidade && linha.estaDisponivel;
 
           if (validarDisponibilidade) {
-            config = configTagAcervoDisponibilidadeMap[AcervoDisponibilidadeEnum.ACERVO_DISPONIVEL];
+            config =
+              configTagAcervoDisponibilidadeMap[AcervoDisponibilidadeSituacaoEnum.DISPONIVEL];
           } else if (!validarDisponibilidade) {
             config = {};
           }

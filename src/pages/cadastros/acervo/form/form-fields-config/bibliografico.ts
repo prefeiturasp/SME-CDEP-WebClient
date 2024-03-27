@@ -3,6 +3,10 @@ import { FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 
 export const FieldsBibliografico: FieldAcervoProps[] = [
   {
+    fieldAcervo: FieldAcervoEnum.AcervoDisponivel,
+    sm: 12,
+  },
+  {
     fieldAcervo: FieldAcervoEnum.Titulo,
   },
   {
