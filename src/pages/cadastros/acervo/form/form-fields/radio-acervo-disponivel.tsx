@@ -1,6 +1,7 @@
 import { Form, Radio as RadioAnt } from 'antd';
 import { AbstractCheckboxGroupProps } from 'antd/es/checkbox/Group';
 import React from 'react';
+import { AcervoDisponibilidadeEnum } from '~/core/enum/acervo-disponibilidade-enum';
 import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 
@@ -15,17 +16,17 @@ export const RadioAcervoDisponivel: React.FC<RadioAcervoDisponivelProps> = ({ ex
   const options: AbstractCheckboxGroupProps['options'] = [
     {
       label: 'Sim',
-      value: true,
+      value: AcervoDisponibilidadeEnum.DISPONIVEL,
     },
     {
       label: 'Não',
-      value: false,
+      value: AcervoDisponibilidadeEnum.INDISPONIVEL,
     },
   ];
 
   return (
     <Form.Item
-      initialValue={true}
+      initialValue={AcervoDisponibilidadeEnum.DISPONIVEL}
       name={fieldProps.name}
       label={fieldProps.label}
       rules={[{ required: true }]}

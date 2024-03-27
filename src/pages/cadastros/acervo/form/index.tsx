@@ -26,7 +26,6 @@ import {
   FormDefaultCadastroAcervoDTO,
   FormPageConfigCadastroAcervoProps,
 } from '~/core/dto/form-cadastro-acervo';
-import { AcervoDisponibilidadeEnum } from '~/core/enum/acervo-disponibilidade-enum';
 import { ROUTES } from '~/core/enum/routes';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { confirmacao } from '~/core/services/alerta-service';
@@ -135,14 +134,6 @@ const FormAcervo: React.FC<FormAcervoProps> = ({
         valoresSalvar.numeroPagina;
       } else {
         valoresSalvar.numeroPagina = null;
-      }
-
-      //TODO: ARRUMAR SITUACAO
-      console.log(valoresSalvar.situacaoSaldo);
-      if (valoresSalvar.situacaoSaldo) {
-        valoresSalvar.situacaoSaldo = AcervoDisponibilidadeEnum.DISPONIVEL;
-      } else {
-        valoresSalvar.situacaoSaldo = AcervoDisponibilidadeEnum.INDISPONIVEL;
       }
 
       if (valoresSalvar?.coAutores?.length && valoresSalvar?.listaTipoAutoria?.length) {

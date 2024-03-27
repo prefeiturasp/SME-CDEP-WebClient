@@ -307,7 +307,7 @@ const FieldAcervoNameLabel: FieldAcervoNameLabelProps = {
     label: 'Localização',
   },
   AcervoDisponivel: {
-    name: 'acervoDisponivel',
+    name: 'situacaoSaldo',
     label: 'Acervo disponível',
   },
 };

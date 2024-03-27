@@ -80,5 +80,5 @@ export type FormDefaultCadastroAcervoDTO = {
   resolucao: string;
   arquivos?: any;
   tecnica: string;
-  situacaoSaldo?: AcervoDisponibilidadeEnum;
+  situacaoSaldo: AcervoDisponibilidadeEnum;
 };
