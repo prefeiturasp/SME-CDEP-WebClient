@@ -19,4 +19,8 @@ export const configTagAcervoDisponibilidadeMap: Record<number, ConfigMapItem> = 
     bgColor: Colors.Components.BACKGROUND_TAGS_DISPONIBILIDADE.ACERVO_EMPRESTADO,
     labelColor: Colors.Components.BACKGROUND_TAGS_DISPONIBILIDADE.LABEL_ACERVO_EMPRESTADO,
   },
+  [AcervoDisponibilidadeSituacaoEnum.INDISPONIVEL_PARA_RESERVA_EMPRESTIMO]: {
+    bgColor: Colors.Components.BACKGROUND_TAGS_DISPONIBILIDADE.ACERVO_INDISPONIVEL,
+    labelColor: Colors.Suporte.Primary.ERROR,
+  },
 };

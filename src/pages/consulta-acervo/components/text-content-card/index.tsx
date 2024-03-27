@@ -45,7 +45,10 @@ export const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcerv
   if (validarDisponibilidade) {
     config = configTagAcervoDisponibilidadeMap[AcervoDisponibilidadeSituacaoEnum.DISPONIVEL];
   } else if (!validarDisponibilidade) {
-    config = {};
+    config =
+      configTagAcervoDisponibilidadeMap[
+        AcervoDisponibilidadeSituacaoEnum.INDISPONIVEL_PARA_RESERVA_EMPRESTIMO
+      ];
   }
 
   return (

@@ -32,7 +32,6 @@ import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detal
 import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solicitacao-item-detalhe-resumido-dto';
 
 import { FaEdit } from 'react-icons/fa';
-import { AcervoDisponibilidadeSituacaoEnum } from '~/core/enum/acervo-disponibilidade-enum';
 import { ROUTES } from '~/core/enum/routes';
 import { SituacaoSolicitacaoEnum } from '~/core/enum/situacao-atendimento-enum';
 import { SituacaoEmprestimoEnum } from '~/core/enum/situacao-emprestimo-enum';
@@ -154,13 +153,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       render(value, linha) {
         if (linha && linha.tipoAcervoId) {
           let config;
-          const validarDisponibilidade = linha.temControleDisponibilidade && linha.estaDisponivel;
+          const validarDisponibilidade = linha.temControleDisponibilidade;
 
-          if (validarDisponibilidade) {
-            config =
-              configTagAcervoDisponibilidadeMap[AcervoDisponibilidadeSituacaoEnum.DISPONIVEL];
-          } else if (!validarDisponibilidade) {
-            config = {};
+          if (linha.situacaoSaldo && validarDisponibilidade) {
+            config = configTagAcervoDisponibilidadeMap[linha.situacaoSaldo];
           }
 
           return (
@@ -250,6 +246,11 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       const podeProrrogarDevolverItem =
         itemEstaFinalizadoManualmente && validarSeEhBibliografico(linha.tipoAcervoId);
 
+      const naoPodeEditarAcervoIndisponivel =
+        validarSeEhBibliografico(linha.tipoAcervoId) &&
+        !linha.estaDisponivel &&
+        !podeProrrogarDevolverItem;
+
       const btnEditar = () =>
         esconderBotoes ? (
           <></>
@@ -262,7 +263,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               setInitialValuesModal(linha);
               setIsModalOpen(true);
             }}
-            disabled={desabilitarCampos}
+            disabled={desabilitarCampos || naoPodeEditarAcervoIndisponivel}
           >
             {podeProrrogarDevolverItem ? 'Prorrogar' : 'Editar'}
           </ButtonSecundary>
