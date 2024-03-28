@@ -180,7 +180,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       title: 'Data da visita',
       dataIndex: 'dataVisita',
       width: '10%',
-      render: (value) => formatarDataPorFormato(value, 'DD/MM/YYYY HH:mm'),
+      render: (value) => formatarDataPorFormato(value, 'DD/MM HH:mm'),
     },
   ];
 
