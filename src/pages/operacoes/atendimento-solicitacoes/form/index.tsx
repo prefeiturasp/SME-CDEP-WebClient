@@ -16,6 +16,7 @@ import {
   CDEP_BUTTON_DEVOLVER_ITEM,
   CDEP_BUTTON_EDITAR,
   CDEP_BUTTON_FINALIZAR,
+  CDEP_BUTTON_FINALIZAR_ITEM,
   CDEP_BUTTON_VOLTAR,
 } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_NUMERO_SOLICITACAO } from '~/core/constants/ids/input';
@@ -25,6 +26,7 @@ import {
   DESEJA_CANCELAR_ITEM_E_DESCARTAR_ITENS_NAO_CONFIRMADOS,
   DESEJA_DEVOLVER_ITEM,
   DESEJA_FINALIZAR_ATENDIMENTO,
+  DESEJA_FINALIZAR_ITEM_ATENDIMENTO,
   DESEJA_SAIR_MODO_EDICAO,
 } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
@@ -69,43 +71,17 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   const [dataSource, setDataSource] = useState<AcervoSolicitacaoItemDetalheResumidoDTO[]>([]);
 
   const ehAdminGeral = perfilSelecionado === TipoPerfil.ADMIN_GERAL;
-  const temItemFinalizadoAutomaticamente = formInitialValues?.itens.find(
-    (item) => item.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE,
-  );
-
-  const temItemFinalizadoManualmente = formInitialValues?.itens.find(
-    (item) => item.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_MANUALMENTE,
-  );
-
   const ehUsuarioExterno = formInitialValues?.dadosSolicitante.tipoId != TipoUsuario.CORESSO;
   const acervoSolicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
   const atendimentoFinalizado =
     formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.FINALIZADO_ATENDIMENTO;
 
-  const atendimentoTaCancelado =
-    formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.CANCELADO;
+  const podeCancelarAtendimento =
+    desabilitarCampos || !(ehAdminGeral && formInitialValues?.podeCancelar);
 
-  const podeCancelarAtendimento = () => {
-    if (!ehAdminGeral) return true;
-
-    return !!(
-      desabilitarCampos ||
-      atendimentoTaCancelado ||
-      temItemFinalizadoManualmente ||
-      temItemFinalizadoAutomaticamente
-    );
-  };
-
-  const podeFinalizarAtendimento = () => {
-    return !!(
-      desabilitarCampos ||
-      atendimentoFinalizado ||
-      atendimentoTaCancelado ||
-      formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.ATENDIDO_PARCIALMENTE ||
-      formInitialValues?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO
-    );
-  };
+  const podeFinalizarAtendimento =
+    desabilitarCampos || !(ehAdminGeral && formInitialValues?.podeFinalizar);
 
   const validarSituacaoLinha = (situacaoId?: number) => {
     switch (situacaoId) {
@@ -294,18 +270,28 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
             {esconderBotoes ? (
               <></>
             ) : (
-              <ButtonSecundary
-                size='small'
-                id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
-                onClick={() => onClickCancelarItemAtendimento(linha.id)}
-                disabled={
-                  (linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) ||
-                  desabilitarCampos ||
-                  atendimentoFinalizado
-                }
-              >
-                Cancelar item
-              </ButtonSecundary>
+              <Space>
+                <ButtonSecundary
+                  size='small'
+                  id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
+                  onClick={() => onClickCancelarItemAtendimento(linha.id)}
+                  disabled={
+                    (linha.situacaoId && validarSituacaoLinha(linha.situacaoId)) ||
+                    desabilitarCampos ||
+                    atendimentoFinalizado
+                  }
+                >
+                  Cancelar item
+                </ButtonSecundary>
+                <ButtonSecundary
+                  size='small'
+                  id={CDEP_BUTTON_FINALIZAR_ITEM}
+                  onClick={() => onClickfinalizarItemAtendimento(linha.id)}
+                  disabled={!linha.podeFinalizarItem}
+                >
+                  Finalizar item
+                </ButtonSecundary>
+              </Space>
             )}
           </Space>
         </Row>
@@ -430,6 +416,26 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     });
   };
 
+  const onClickfinalizarItemAtendimento = async (acervoSolicitacaoItemId: number) => {
+    confirmacao({
+      content: DESEJA_FINALIZAR_ITEM_ATENDIMENTO,
+      onOk: async () => {
+        const resposta = await acervoSolicitacaoService.finalizarItemAtendimento(
+          acervoSolicitacaoItemId,
+        );
+
+        if (resposta.sucesso) {
+          notification.success({
+            message: 'Sucesso',
+            description: 'Item finalizado com sucesso',
+          });
+        }
+
+        carregarDados();
+      },
+    });
+  };
+
   const onClickDevolverEmprestimo = (id: number) => {
     confirmacao({
       content: DESEJA_DEVOLVER_ITEM,
@@ -497,7 +503,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                         htmlType='submit'
                         id={CDEP_BUTTON_FINALIZAR}
                         style={{ fontWeight: 700 }}
-                        disabled={podeFinalizarAtendimento() || !desabilitarConfirmarECancelar}
+                        disabled={podeFinalizarAtendimento || !desabilitarConfirmarECancelar}
                         onClick={onClickFinalizarAtendimento}
                       >
                         Finalizar
@@ -508,7 +514,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                         block
                         id={CDEP_BUTTON_CANCELAR_ATENDIMENTO}
                         style={{ fontWeight: 700 }}
-                        disabled={podeCancelarAtendimento()}
+                        disabled={podeCancelarAtendimento}
                         onClick={onClickCancelarAtendimento}
                       >
                         Cancelar atendimento

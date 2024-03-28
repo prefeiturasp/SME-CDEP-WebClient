@@ -7,11 +7,11 @@ import { AcervoSolicitacaoConfirmarDTO } from '../dto/acervo-solicitacao-confirm
 import { AcervoSolicitacaoDetalheDTO } from '../dto/acervo-solicitacao-detalhe-dto';
 import { AcervoSolicitacaoItemCadastroDTO } from '../dto/acervo-solicitacao-item-cadastro-dto';
 import { AcervoSolicitacaoItemRetornoDTO } from '../dto/acervo-solicitacao-item-retorno-dto';
+import { AcervoSolicitacaoManualDTO } from '../dto/acervo-solicitacao-manual-dto';
 import { AcervoSolicitacaoRetornoCadastroDTO } from '../dto/acervo-solicitacao-retorno-cadastro-dto';
 import { AlterarDataVisitaAcervoSolicitacaoItemDTO } from '../dto/alterar-data-visita-acervo-solicitacao-item-dto';
 import { TipoAtendimentoDTO } from '../dto/tipo-atendimento-dto';
 import { inserirRegistro } from './api';
-import { AcervoSolicitacaoManualDTO } from '../dto/acervo-solicitacao-manual-dto';
 
 const obterItensDoAcervoPorFiltros = (acervosIds: number[]) =>
   obterRegistro<AcervoSolicitacaoItemRetornoDTO[]>(URL_API_ACERVO_SOLICITACAO, {
@@ -72,7 +72,13 @@ const finalizarAtendimento = (acervoSolicitacaoId: number) =>
     `${URL_API_ACERVO_SOLICITACAO}/${acervoSolicitacaoId}/finalizar-atendimento`,
   );
 
+const finalizarItemAtendimento = (acervoSolicitacaoItemId: number) =>
+  alterarRegistro<boolean>(
+    `${URL_API_ACERVO_SOLICITACAO}/${acervoSolicitacaoItemId}/finalizar-atendimento-item`,
+  );
+
 export default {
+  finalizarItemAtendimento,
   obterItensDoAcervoPorFiltros,
   inserir,
   obterPorId,

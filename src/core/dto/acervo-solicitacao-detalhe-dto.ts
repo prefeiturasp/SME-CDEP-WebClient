@@ -11,4 +11,6 @@ export type AcervoSolicitacaoDetalheDTO = {
   situacao: string;
   situacaoId: number;
   itens: AcervoSolicitacaoItemDetalheResumidoDTO[];
+  podeCancelar: boolean;
+  podeFinalizar: boolean;
 };
