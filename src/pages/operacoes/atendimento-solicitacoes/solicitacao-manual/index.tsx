@@ -368,12 +368,12 @@ export const SolicitacaoManual: React.FC = () => {
               description: 'Atendimento confirmado com sucesso',
             });
 
-            if (!acervoSolicitacaoId) {
+            if (acervoSolicitacaoId) {
+              carregarDados();
+            } else {
               const newId = resposta.dados;
               navigate(`${ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL}/${newId}`);
             }
-
-            carregarDados();
           }
         });
       });
