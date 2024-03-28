@@ -19,6 +19,8 @@ export const DESEJA_CANCELAR_ITEM_E_DESCARTAR_ITENS_NAO_CONFIRMADOS =
 export const DESEJA_DEVOLVER_ITEM = 'Você tem certeza que deseja devolver o item?';
 export const DESEJA_CANCELAR_ATENDIMENTO = 'Deseja realmente cancelar o atendimento?';
 export const DESEJA_FINALIZAR_ATENDIMENTO = 'Deseja realmente finalizar o atendimento?';
+export const DESEJA_FINALIZAR_ITEM_ATENDIMENTO =
+  'Deseja realmente finalizar o atendimento do item?';
 export const ACERVO_EXCLUIDO_SUCESSO = 'Acervo excluído com sucesso';
 export const ACERVO_EXCLUIR_LINHA = 'Deseja realmente excluir esta linha?';
 export const DESEJA_DESCARTAR_DADOS_PLANILHA_ATUAL_E_CARREGAR_SELECIONADA =
