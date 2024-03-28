@@ -60,8 +60,9 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
       const values = form.getFieldsValue(true);
 
       const [horas, minutos] = values && values.horaVisita ? values.horaVisita.split(':') : [];
+
       const dataVisitaFormatada = dayjs(values.dataVisita)
-        .utc()
+        .utc(true)
         .hour(parseInt(horas))
         .minute(parseInt(minutos));
 
