@@ -79,10 +79,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     formInitialValues?.situacaoId === SituacaoSolicitacaoEnum.FINALIZADO_ATENDIMENTO;
 
   const podeCancelarAtendimento =
-    desabilitarCampos || (ehAdminGeral && !formInitialValues?.podeCancelar);
+    desabilitarCampos || !(ehAdminGeral && formInitialValues?.podeCancelar);
 
   const podeFinalizarAtendimento =
-    desabilitarCampos || (ehAdminGeral && !formInitialValues?.podeFinalizar);
+    desabilitarCampos || !(ehAdminGeral && formInitialValues?.podeFinalizar);
 
   const validarSituacaoLinha = (situacaoId?: number) => {
     switch (situacaoId) {
