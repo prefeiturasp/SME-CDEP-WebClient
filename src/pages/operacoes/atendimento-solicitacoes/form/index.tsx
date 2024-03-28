@@ -414,18 +414,22 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     });
   };
 
-  const onClickfinalizarItemAtendimento = (acervoSolicitacaoItemId: number) => {
+  const onClickfinalizarItemAtendimento = async (acervoSolicitacaoItemId: number) => {
     confirmacao({
       content: DESEJA_FINALIZAR_ITEM_ATENDIMENTO,
-      onOk() {
-        acervoSolicitacaoService.finalizarAtendimento(acervoSolicitacaoItemId).then((resposta) => {
-          if (resposta.sucesso) {
-            notification.success({
-              message: 'Sucesso',
-              description: 'Item finalizado com sucesso',
-            });
-          }
-        });
+      onOk: async () => {
+        const resposta = await acervoSolicitacaoService.finalizarItemAtendimento(
+          acervoSolicitacaoItemId,
+        );
+
+        if (resposta.sucesso) {
+          notification.success({
+            message: 'Sucesso',
+            description: 'Item finalizado com sucesso',
+          });
+        }
+
+        carregarDados();
       },
     });
   };
