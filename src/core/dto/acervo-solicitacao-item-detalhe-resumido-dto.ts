@@ -27,5 +27,6 @@ export type AcervoSolicitacaoItemDetalheResumidoDTO = {
   estaDisponivel?: boolean;
   temControleDisponibilidade?: boolean;
   horaVisita?: string;
+  podeEditar?: boolean;
   podeFinalizarItem?: boolean;
 };

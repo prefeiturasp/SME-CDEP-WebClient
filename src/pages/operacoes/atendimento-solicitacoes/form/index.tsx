@@ -222,11 +222,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       const podeProrrogarDevolverItem =
         itemEstaFinalizadoManualmente && validarSeEhBibliografico(linha.tipoAcervoId);
 
-      const naoPodeEditarAcervoIndisponivel =
-        validarSeEhBibliografico(linha.tipoAcervoId) &&
-        !linha.estaDisponivel &&
-        !podeProrrogarDevolverItem;
-
       const btnEditar = () =>
         esconderBotoes ? (
           <></>
@@ -239,7 +234,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               setInitialValuesModal(linha);
               setIsModalOpen(true);
             }}
-            disabled={desabilitarCampos || naoPodeEditarAcervoIndisponivel}
+            disabled={desabilitarCampos || !linha.podeEditar}
           >
             {podeProrrogarDevolverItem ? 'Prorrogar' : 'Editar'}
           </ButtonSecundary>
