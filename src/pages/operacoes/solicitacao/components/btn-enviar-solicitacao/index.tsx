@@ -13,6 +13,7 @@ import {
   AcervoDisponibilidadeSituacaoEnum,
 } from '~/core/enum/acervo-disponibilidade-enum';
 import { ROUTES } from '~/core/enum/routes';
+import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions';
 import { obterTermoDeCompromisso } from '~/core/services/acervo-service';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
@@ -36,6 +37,14 @@ const BtnEnviarSolicitacoes: React.FC = () => {
 
   const [dados, setDados] = useState<string>('');
 
+  const ehBibliografico = useMemo(
+    () =>
+      dataSource?.length
+        ? !!dataSource?.find((item) => item?.tipoAcervoId === TipoAcervo.Bibliografico)
+        : false,
+    [dataSource],
+  );
+
   const temAcervoIndisponivel: boolean = useMemo(
     () =>
       dataSource?.length
@@ -48,9 +57,14 @@ const BtnEnviarSolicitacoes: React.FC = () => {
     [dataSource],
   );
 
+  const acervoBibliograficoIndisponivel = ehBibliografico && temAcervoIndisponivel;
+
   const desabilitarBtnEnviarSolicitacao: boolean = useMemo(
     () =>
-      !permissao?.podeIncluir || !!solicitacaoId || !dataSource?.length || temAcervoIndisponivel,
+      !permissao?.podeIncluir ||
+      !!solicitacaoId ||
+      !dataSource?.length ||
+      acervoBibliograficoIndisponivel,
     [dataSource, solicitacaoId, permissao],
   );
 
