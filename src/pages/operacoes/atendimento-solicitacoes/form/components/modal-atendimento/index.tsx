@@ -54,6 +54,7 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
   const { desabilitarCampos } = useContext(PermissaoContext);
 
   const dataAtual = dayjs();
+
   const formatoData = 'DD/MM/YYYY';
   const minDateDataEmprestimo = dayjs(dataVisitaWatch).add(0, 'day');
   const minDateDataDevolucao =
@@ -75,7 +76,7 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
 
         const [horas, minutos] = values && values.horaVisita ? values.horaVisita.split(':') : [];
         const dataVisitaFormatada = dayjs(values.dataVisita)
-          .utc()
+          .utc(true)
           .hour(parseInt(horas))
           .minute(parseInt(minutos));
 
