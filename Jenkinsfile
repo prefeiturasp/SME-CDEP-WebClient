@@ -5,13 +5,13 @@ pipeline {
       registryCredential = 'jenkins_registry'
       namespace = "${env.branchname == 'development' ? 'cdep-dev' : env.branchname == 'release' ? 'cdep-hom' : env.branchname == 'release-r2' ? 'cdep-hom2' : 'sme-cdep' }"
     }
-    
 
-    agent { kubernetes { 
+
+    agent { kubernetes {
                   label 'builder'
                   defaultContainer 'builder'
                 }
-              } 
+              }
 
     options {
       buildDiscarder(logRotator(numToKeepStr: '20', artifactNumToKeepStr: '5'))
