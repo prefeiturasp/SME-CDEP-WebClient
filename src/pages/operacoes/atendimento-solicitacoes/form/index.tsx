@@ -34,7 +34,6 @@ import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detal
 import { AcervoSolicitacaoItemDetalheResumidoDTO } from '~/core/dto/acervo-solicitacao-item-detalhe-resumido-dto';
 
 import { FaEdit } from 'react-icons/fa';
-import { AcervoDisponibilidadeEnum } from '~/core/enum/acervo-disponibilidade-enum';
 import { ROUTES } from '~/core/enum/routes';
 import { SituacaoSolicitacaoEnum } from '~/core/enum/situacao-atendimento-enum';
 import { SituacaoEmprestimoEnum } from '~/core/enum/situacao-emprestimo-enum';
@@ -130,12 +129,10 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       render(value, linha) {
         if (linha && linha.tipoAcervoId) {
           let config;
-          const validarDisponibilidade = linha.temControleDisponibilidade && linha.estaDisponivel;
+          const validarDisponibilidade = linha.temControleDisponibilidade;
 
-          if (validarDisponibilidade) {
-            config = configTagAcervoDisponibilidadeMap[AcervoDisponibilidadeEnum.ACERVO_DISPONIVEL];
-          } else if (!validarDisponibilidade) {
-            config = {};
+          if (linha.situacaoSaldo && validarDisponibilidade) {
+            config = configTagAcervoDisponibilidadeMap[linha.situacaoSaldo];
           }
 
           return (
@@ -183,7 +180,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
       title: 'Data da visita',
       dataIndex: 'dataVisita',
       width: '10%',
-      render: (value) => formatarDataPorFormato(value, 'DD/MM/YYYY HH:mm'),
+      render: (value) => formatarDataPorFormato(value, 'DD/MM HH:mm'),
     },
   ];
 
@@ -237,7 +234,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
               setInitialValuesModal(linha);
               setIsModalOpen(true);
             }}
-            disabled={desabilitarCampos}
+            disabled={desabilitarCampos || !linha.podeEditar}
           >
             {podeProrrogarDevolverItem ? 'Prorrogar' : 'Editar'}
           </ButtonSecundary>

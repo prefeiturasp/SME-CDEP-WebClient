@@ -8,7 +8,12 @@ import Modal from '~/components/lib/modal';
 import { notification } from '~/components/lib/notification';
 import { CDEP_BUTTON_NOVO } from '~/core/constants/ids/button/intex';
 import { AcervoSolicitacaoItemCadastroDTO } from '~/core/dto/acervo-solicitacao-item-cadastro-dto';
+import {
+  AcervoDisponibilidadeEnumDisplay,
+  AcervoDisponibilidadeSituacaoEnum,
+} from '~/core/enum/acervo-disponibilidade-enum';
 import { ROUTES } from '~/core/enum/routes';
+import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions';
 import { obterTermoDeCompromisso } from '~/core/services/acervo-service';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
@@ -32,8 +37,34 @@ const BtnEnviarSolicitacoes: React.FC = () => {
 
   const [dados, setDados] = useState<string>('');
 
+  const ehBibliografico = useMemo(
+    () =>
+      dataSource?.length
+        ? !!dataSource?.find((item) => item?.tipoAcervoId === TipoAcervo.Bibliografico)
+        : false,
+    [dataSource],
+  );
+
+  const temAcervoIndisponivel: boolean = useMemo(
+    () =>
+      dataSource?.length
+        ? !!dataSource?.find(
+            (item) =>
+              item?.situacaoDisponibilidade !==
+              AcervoDisponibilidadeEnumDisplay[AcervoDisponibilidadeSituacaoEnum.DISPONIVEL],
+          )
+        : false,
+    [dataSource],
+  );
+
+  const acervoBibliograficoIndisponivel = ehBibliografico && temAcervoIndisponivel;
+
   const desabilitarBtnEnviarSolicitacao: boolean = useMemo(
-    () => !permissao?.podeIncluir || !!solicitacaoId || !dataSource?.length,
+    () =>
+      !permissao?.podeIncluir ||
+      !!solicitacaoId ||
+      !dataSource?.length ||
+      acervoBibliograficoIndisponivel,
     [dataSource, solicitacaoId, permissao],
   );
 

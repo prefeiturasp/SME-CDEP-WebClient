@@ -46,6 +46,7 @@ type FormAcervoProps = {
   modalFormInitialValues?: FormDefaultCadastroAcervoDTO;
   errosAcervoLinhaRetorno?: AcervoLinhaRetornoDTO;
 };
+
 const FormAcervo: React.FC<FormAcervoProps> = ({
   setOpenFormModal,
   modalFormInitialValues,
@@ -69,8 +70,8 @@ const FormAcervo: React.FC<FormAcervoProps> = ({
 
   const tipo = stateTipoAcervoId || formTipoAcervoId;
 
-  const [fieldsConfig, setFieldsConfig] = useState<FormPageConfigCadastroAcervoProps | undefined>();
   const [formInitialValues, setFormInitialValues] = useState<FormDefaultCadastroAcervoDTO>();
+  const [fieldsConfig, setFieldsConfig] = useState<FormPageConfigCadastroAcervoProps | undefined>();
 
   const [loadingModal, setLoadingModal] = useState<boolean>(false);
 
