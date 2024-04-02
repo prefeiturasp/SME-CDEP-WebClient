@@ -9,4 +9,5 @@ export interface AcervoSolicitacaoItemRetornoDTO {
   autoresCreditos: string[];
   situacaoDisponibilidade: string;
   estaDisponivel: boolean;
+  temControleDisponibilidade: boolean;
 }

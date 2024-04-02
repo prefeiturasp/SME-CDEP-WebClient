@@ -35,7 +35,7 @@ const BtnCancelarSolicitacoes: React.FC = () => {
     <ButtonSecundary
       id={CDEP_BUTTON_CANCELAR_SOLICITACAO}
       onClick={() => onClickCancelar()}
-      disabled={!podeCancelarSolicitacao && permissao.podeAlterar}
+      disabled={!podeCancelarSolicitacao || !permissao.podeAlterar}
     >
       Cancelar solicitação
     </ButtonSecundary>

@@ -23,10 +23,6 @@ import {
 import { Dayjs, dayjs } from '~/core/date/dayjs';
 import { AcervoSolicitacaoItemRetornoCadastroDTO } from '~/core/dto/acervo-solicitacao-item-retorno-cadastro-dto';
 import { ArquivoCodigoNomeDTO } from '~/core/dto/arquivo-codigo-nome-dto';
-import {
-  AcervoDisponibilidadeSituacaoEnum,
-  AcervoDisponibilidadeSituacaoEnumDisplay,
-} from '~/core/enum/acervo-disponibilidade-enum';
 import { ROUTES } from '~/core/enum/routes';
 import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimento-enum';
 import { TipoAcervo, TipoAcervoDisplay } from '~/core/enum/tipo-acervo';
@@ -107,10 +103,10 @@ const ListaAcervosSolicitacao: React.FC = () => {
   }, [setDataSource, solicitacao]);
 
   useEffect(() => {
-    if (solicitacao?.acervosSelecionados?.length) {
+    if (!solicitacaoId && solicitacao?.acervosSelecionados?.length) {
       obterDados();
     }
-  }, [solicitacao, obterDados]);
+  }, [solicitacaoId, solicitacao, obterDados]);
 
   const obterDadosPorId = useCallback(async () => {
     const resposta = await acervoSolicitacaoService.obterPorId(solicitacaoId);
@@ -132,7 +128,7 @@ const ListaAcervosSolicitacao: React.FC = () => {
   }, [setDataSource, setPodeCancelarSolicitacao, solicitacaoId]);
 
   useEffect(() => {
-    if (solicitacaoId && !solicitacao?.acervosSelecionados?.length) {
+    if (solicitacaoId) {
       obterDadosPorId();
     }
   }, [solicitacao, obterDadosPorId, solicitacaoId]);
@@ -404,30 +400,24 @@ const ListaAcervosSolicitacao: React.FC = () => {
       align: 'center',
       width: '100px',
       render: (_, linha: AcervoSolicitacaoItemRetornoCadastroDTO) => {
-        const temAcervoDisponivel =
-          linha?.situacaoDisponibilidade ===
-          AcervoDisponibilidadeSituacaoEnumDisplay[AcervoDisponibilidadeSituacaoEnum.DISPONIVEL];
+        const naoPodeCancelarItem =
+          linha?.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_MANUALMENTE ||
+          linha?.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_AUTOMATICAMENTE ||
+          linha?.situacaoId === SituacaoSolicitacaoItemEnum.CANCELADO;
 
-        return linha?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA ? (
+        const aguardandoVisitaSemData =
+          linha?.situacaoId === SituacaoSolicitacaoItemEnum.AGUARDANDO_VISITA &&
+          !linha.alteraDataVisita;
+
+        return (
           <ButtonPrimary
             type='text'
             id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
             onClick={() => onClickCancelarItemAtendimento(linha.id)}
-            disabled={!linha.alteraDataVisita}
+            disabled={naoPodeCancelarItem || aguardandoVisitaSemData}
           >
             Cancelar item
           </ButtonPrimary>
-        ) : linha.tipoAcervo === TipoAcervoDisplay[TipoAcervo.Bibliografico] &&
-          !temAcervoDisponivel ? (
-          <ButtonPrimary
-            type='text'
-            id={CDEP_BUTTON_CANCELAR_ITEM_SOLICITACAO}
-            onClick={() => onClickCancelarItemAtendimento(linha.id)}
-          >
-            Cancelar item
-          </ButtonPrimary>
-        ) : (
-          <></>
         );
       },
     });
