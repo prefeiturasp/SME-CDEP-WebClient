@@ -4,7 +4,6 @@ import useFormInstance from 'antd/es/form/hooks/useFormInstance';
 import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import { HighlightedText } from '~/components/cdep/destacar-texto';
 import { FiltroTextoLivreTipoAcervoDTO } from '~/core/dto/filtro-texto-livre-tipo-acervo-dto';
 import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
 import { FieldAcervoEnum, PropsByFieldAcervoEnum } from '~/core/enum/field-acervo-enum';
@@ -142,45 +141,42 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                   <Row gutter={[6, 6]} style={{ display: 'grid' }} wrap>
                     <TextItemCardContentConsultaAcervo
                       label='Tipo de acervo: '
-                      description={
-                        <HighlightedText
-                          text={tipoAcervoNome(item.tipo)}
-                          searchTerm={termoPesquisado}
-                        />
-                      }
+                      description={tipoAcervoNome(item.tipo)}
+                      termoPesquisado={termoPesquisado}
+                      hasHighlightedText
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Titulo].label}: `}
-                      description={
-                        <HighlightedText text={item.titulo} searchTerm={termoPesquisado} />
-                      }
+                      description={item.titulo}
                       item={item}
+                      termoPesquisado={termoPesquisado}
+                      hasHighlightedText
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label='Autoria/Crédito: '
-                      description={
-                        <HighlightedText text={item.creditoAutoria} searchTerm={termoPesquisado} />
-                      }
+                      description={item.creditoAutoria}
+                      termoPesquisado={termoPesquisado}
+                      hasHighlightedText
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Assunto].label}: `}
-                      description={
-                        <HighlightedText text={item.assunto} searchTerm={termoPesquisado} />
-                      }
+                      description={item.assunto}
                       ellipsis
                       exibirTooltip
+                      termoPesquisado={termoPesquisado}
+                      hasHighlightedText
                     />
 
                     <TextItemCardContentConsultaAcervo
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Descricao].label}: `}
-                      description={
-                        <HighlightedText text={item.descricao} searchTerm={termoPesquisado} />
-                      }
+                      description={item.descricao}
                       ellipsis
                       exibirTooltip
+                      termoPesquisado={termoPesquisado}
+                      hasHighlightedText
                     />
 
                     <TextItemCardContentConsultaAcervo
