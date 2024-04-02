@@ -34,7 +34,11 @@ const CheckboxSelecionarAcervo: React.FC<CheckboxSelecionarAcervoProps> = ({ pes
   };
 
   return (
-    <Checkbox onChange={onChange} checked={!!selected}>
+    <Checkbox
+      onChange={onChange}
+      checked={!!selected}
+      disabled={pesquisaAcervo?.temControleDisponibilidade && !pesquisaAcervo?.estaDisponivel}
+    >
       {label}
     </Checkbox>
   );
