@@ -76,6 +76,7 @@ const ConsultaAcervoContextProvider: React.FC<PropsWithChildren> = ({ children }
           setListParams({
             ...listParams,
             total: response.dados.totalRegistros,
+            hideOnSinglePage: !response?.dados?.totalRegistros,
           });
         } else {
           setDataSource([]);
