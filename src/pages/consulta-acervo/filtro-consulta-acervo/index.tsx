@@ -9,6 +9,7 @@ import { Colors } from '~/core/styles/colors';
 import { removerTudoQueNaoEhDigito } from '~/core/utils/functions';
 import { InputAno } from '~/pages/cadastros/acervo/form/form-fields';
 import { ConsultaAcervoContext } from '../provider';
+import { notification } from '~/components/lib/notification';
 
 export const FiltroConsultaAcervo: React.FC = () => {
   const form = useFormInstance();
@@ -127,7 +128,22 @@ export const FiltroConsultaAcervo: React.FC = () => {
               <Button
                 style={{ backgroundColor: '#8F2D40', color: 'white' }}
                 onClick={() => {
-                  onClickBuscar(form);
+                  const { anoInicial, anoFinal } = form.getFieldsValue(['anoInicial', 'anoFinal']);
+
+                  const validateDates = (anoInicial: string, anoFinal: string) => {
+                    if (anoInicial && anoFinal && parseInt(anoInicial) > parseInt(anoFinal)) {
+                      notification.error({
+                        message: 'Erro',
+                        description: 'Ano inicial não pode ser maior que ano final',
+                      });
+                      return false;
+                    }
+                    return true;
+                  };
+
+                  if (validateDates(anoInicial, anoFinal)) {
+                    onClickBuscar(form);
+                  }
                 }}
               >
                 Buscar
