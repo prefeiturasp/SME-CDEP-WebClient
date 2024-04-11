@@ -13,7 +13,7 @@ const InputDimensaoProfundidade: React.FC<InputDimensaoProfundidadeProps> = ({ e
   <InputNumero
     inputProps={{
       id: CDEP_INPUT_DIMENSAO_PROFUNDIDADE,
-      maxLength: 5,
+      maxLength: 6,
       placeholder: fieldProps.label,
     }}
     formItemProps={{
