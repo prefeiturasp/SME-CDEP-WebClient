@@ -56,6 +56,7 @@ const ListaAcervosSolicitacao: React.FC = () => {
   const location = useLocation();
   const paramsRoute = useParams();
   const dispatch = useAppDispatch();
+  const dataAtual = dayjs();
 
   const [dataVisitasEditaveis, setDataVisitasEditaveis] = useState<{
     [key: number]: Dayjs;
@@ -320,11 +321,12 @@ const ListaAcervosSolicitacao: React.FC = () => {
           <Row gutter={[8, 8]} align='middle'>
             <Col>
               <DatePicker
-                allowClear={false}
                 value={value}
-                onChange={(date: any) => onChangeDataVisita(date, linha)}
+                allowClear={false}
                 format='DD/MM/YYYY'
+                minDate={dataAtual}
                 style={{ width: '100%' }}
+                onChange={(date: any) => onChangeDataVisita(date, linha)}
               />
             </Col>
             {exibirConfirmar && (
