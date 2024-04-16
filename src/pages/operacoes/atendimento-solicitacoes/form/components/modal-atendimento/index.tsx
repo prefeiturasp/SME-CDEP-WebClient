@@ -236,6 +236,7 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
       okText='Confirmar'
       open={isModalOpen}
       onCancel={onCancel}
+      maskClosable={false}
       cancelText='Cancelar'
       title='Editar solicitação'
       okButtonProps={{
