@@ -34,6 +34,11 @@ const obterPorId = (acervoSolicitacaoId: number | string) =>
     `${URL_API_ACERVO_SOLICITACAO}/${acervoSolicitacaoId}`,
   );
 
+const obterMinhaSolicitacaoPorId = (acervoSolicitacaoId: number | string) =>
+  obterRegistro<AcervoSolicitacaoRetornoCadastroDTO>(
+    `${URL_API_ACERVO_SOLICITACAO}/minha-solicitacao/${acervoSolicitacaoId}`,
+  );
+
 const obterSituacoesAtendimento = () =>
   obterRegistro<SituacaoItemDTO[]>(`${URL_API_ACERVO_SOLICITACAO}/situacoes-item`);
 
@@ -92,4 +97,5 @@ export default {
   confirmarAtendimento,
   obterTipoAtendimento,
   finalizarAtendimento,
+  obterMinhaSolicitacaoPorId,
 };

@@ -109,7 +109,7 @@ const ListaAcervosSolicitacao: React.FC = () => {
   }, [solicitacaoId, solicitacao, obterDados]);
 
   const obterDadosPorId = useCallback(async () => {
-    const resposta = await acervoSolicitacaoService.obterPorId(solicitacaoId);
+    const resposta = await acervoSolicitacaoService.obterMinhaSolicitacaoPorId(solicitacaoId);
 
     if (resposta.sucesso) {
       setDataSource(resposta.dados.itens);
