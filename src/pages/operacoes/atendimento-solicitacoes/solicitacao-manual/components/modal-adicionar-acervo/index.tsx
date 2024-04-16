@@ -208,12 +208,13 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   return (
     <Modal
       destroyOnClose
-      open={isModalOpen}
-      okText='Adicionar'
-      title='Inserir acervo à solicitação'
       onOk={onFinish}
-      cancelText='Cancelar'
+      okText='Adicionar'
+      open={isModalOpen}
       onCancel={onCancel}
+      maskClosable={false}
+      cancelText='Cancelar'
+      title='Inserir acervo à solicitação'
       okButtonProps={{
         disabled: desabilitarAdicionar,
       }}
