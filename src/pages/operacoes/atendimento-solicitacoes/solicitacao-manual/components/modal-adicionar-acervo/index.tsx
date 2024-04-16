@@ -269,6 +269,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                         placeholder='Selecione uma data'
                         locale={localeDatePicker}
                         minDate={minDateMenos7}
+                        maxDate={dataAtual}
                       />
                     </Form.Item>
                   </Col>
