@@ -1,4 +1,4 @@
-import { Col, Empty, Form, Progress, ProgressProps, Row, Tabs, Typography, Upload } from 'antd';
+import { Col, Empty, Form, Row, Tabs, Tag, Upload } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FaDownload, FaUpload } from 'react-icons/fa';
@@ -174,25 +174,6 @@ const ImportarAcervo: React.FC = () => {
   const carregarTabelasImportacao = () => {
     if (tipoAcervo) {
       if (dataSourceArquivoImportacao?.length) {
-        let percentProgress;
-        let statusProgress: ProgressProps['status'] = undefined;
-
-        switch (statusImportacao) {
-          case 1:
-            percentProgress = 50;
-            statusProgress = 'active';
-            break;
-
-          case 2:
-            percentProgress = 100;
-            statusProgress = 'exception';
-            break;
-
-          default:
-            percentProgress = 100;
-            statusProgress = 'success';
-            break;
-        }
         return (
           <Row gutter={[16, 24]}>
             <Col span={24}>
@@ -226,17 +207,10 @@ const ImportarAcervo: React.FC = () => {
                 />
               </Col>
             ) : (
-              <Col span={24}>
-                <Progress
-                  status={statusProgress}
-                  percent={percentProgress}
-                  strokeColor={Colors.Components.BACKGROUND_FILTRO_AREA_PUBLICA}
-                />
-                <Typography>
-                  Aguarde enquanto processamos seu arquivo. Clique em &apos;Atualizar Dados&apos;
-                  para obter o status mais recente.
-                </Typography>
-              </Col>
+              <Tag color='error'>
+                Aguarde enquanto processamos seu arquivo. Clique em &apos;Atualizar&apos; para obter
+                o status mais recente.
+              </Tag>
             )}
           </Row>
         );
@@ -302,7 +276,7 @@ const ImportarAcervo: React.FC = () => {
                       id={CDEP_BUTTON_AATUALIZAR_DADOS}
                       onClick={atualizarDados}
                     >
-                      Atualizar Dados
+                      Atualizar
                     </ButtonSecundary>
                   </Col>
                 </Row>
