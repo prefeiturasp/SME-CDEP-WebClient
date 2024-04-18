@@ -1,7 +1,8 @@
-import { Col, Empty, Form, Row, Tabs, Upload } from 'antd';
+import { Col, Empty, Form, Progress, ProgressProps, Row, Tabs, Typography, Upload } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import React, { useCallback, useEffect, useState } from 'react';
 import { FaDownload, FaUpload } from 'react-icons/fa';
+import { LuRefreshCw } from 'react-icons/lu';
 import { useNavigate } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
@@ -9,6 +10,7 @@ import ButtonSecundary from '~/components/lib/button/secundary';
 import CardContent from '~/components/lib/card-content';
 import HeaderPage from '~/components/lib/header-page';
 import {
+  CDEP_BUTTON_AATUALIZAR_DADOS,
   CDEP_BUTTON_BAIXAR_MODELO,
   CDEP_BUTTON_IMPORTAR_ARQUIVO,
   CDEP_BUTTON_VOLTAR,
@@ -159,6 +161,8 @@ const ImportarAcervo: React.FC = () => {
     });
   };
 
+  const atualizarDados = () => obterDados();
+
   useEffect(() => {
     if (tipoAcervo) {
       obterDados();
@@ -170,36 +174,66 @@ const ImportarAcervo: React.FC = () => {
   const carregarTabelasImportacao = () => {
     if (tipoAcervo) {
       if (dataSourceArquivoImportacao?.length) {
+        let percentProgress;
+        let statusProgress: ProgressProps['status'] = undefined;
+
+        switch (statusImportacao) {
+          case 1:
+            percentProgress = 50;
+            statusProgress = 'active';
+            break;
+
+          case 2:
+            percentProgress = 100;
+            statusProgress = 'exception';
+            break;
+
+          default:
+            percentProgress = 100;
+            statusProgress = 'success';
+            break;
+        }
         return (
           <Row gutter={[16, 24]}>
             <Col span={24}>
               <TableImportacao dataSource={dataSourceArquivoImportacao} />
             </Col>
-            <Col span={24}>
-              <Tabs
-                type='card'
-                defaultActiveKey='1'
-                items={[
-                  {
-                    key: '1',
-                    label: <div style={{ color: Colors.Suporte.Primary.ERROR }}>Erro</div>,
-                    children: (
-                      <TableImportacaoErro
-                        obterDados={obterDados}
-                        dataSource={dataSourceArquivoImportacao}
-                        atualizarLinhaParaSucesso={atualizarLinhaParaSucesso}
-                        removerLinhaDoArquivo={removerLinhaDoArquivo}
-                      />
-                    ),
-                  },
-                  {
-                    key: '2',
-                    label: <div style={{ color: Colors.Suporte.Primary.SUCCESS }}>Sucesso</div>,
-                    children: <TableImportacaoSucesso dataSource={dataSourceArquivoImportacao} />,
-                  },
-                ]}
-              />
-            </Col>
+
+            {statusImportacao !== 1 ? (
+              <Col span={24}>
+                <Tabs
+                  type='card'
+                  defaultActiveKey='1'
+                  items={[
+                    {
+                      key: '1',
+                      label: <div style={{ color: Colors.Suporte.Primary.ERROR }}>Erro</div>,
+                      children: (
+                        <TableImportacaoErro
+                          obterDados={obterDados}
+                          dataSource={dataSourceArquivoImportacao}
+                          atualizarLinhaParaSucesso={atualizarLinhaParaSucesso}
+                          removerLinhaDoArquivo={removerLinhaDoArquivo}
+                        />
+                      ),
+                    },
+                    {
+                      key: '2',
+                      label: <div style={{ color: Colors.Suporte.Primary.SUCCESS }}>Sucesso</div>,
+                      children: <TableImportacaoSucesso dataSource={dataSourceArquivoImportacao} />,
+                    },
+                  ]}
+                />
+              </Col>
+            ) : (
+              <Col span={24}>
+                <Progress status={statusProgress} percent={percentProgress} />
+                <Typography>
+                  Aguarde enquanto processamos seu arquivo. Clique em &apos;Atualizar Dados&apos;
+                  para obter o status mais recente.
+                </Typography>
+              </Col>
+            )}
           </Row>
         );
       }
@@ -256,6 +290,16 @@ const ImportarAcervo: React.FC = () => {
                         Importar Arquivo
                       </ButtonSecundary>
                     </Upload>
+                  </Col>
+                  <Col>
+                    <ButtonSecundary
+                      disabled={!tipoAcervo}
+                      icon={<LuRefreshCw size={16} />}
+                      id={CDEP_BUTTON_AATUALIZAR_DADOS}
+                      onClick={atualizarDados}
+                    >
+                      Atualizar Dados
+                    </ButtonSecundary>
                   </Col>
                 </Row>
               </>
