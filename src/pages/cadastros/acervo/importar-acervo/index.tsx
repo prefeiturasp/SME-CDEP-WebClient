@@ -227,7 +227,11 @@ const ImportarAcervo: React.FC = () => {
               </Col>
             ) : (
               <Col span={24}>
-                <Progress status={statusProgress} percent={percentProgress} />
+                <Progress
+                  status={statusProgress}
+                  percent={percentProgress}
+                  strokeColor={Colors.Components.BACKGROUND_FILTRO_AREA_PUBLICA}
+                />
                 <Typography>
                   Aguarde enquanto processamos seu arquivo. Clique em &apos;Atualizar Dados&apos;
                   para obter o status mais recente.
