@@ -1,0 +1,58 @@
+import { ImportacaoStatusEnum } from '../enum/importacao-status-enum';
+import { TipoAcervo } from '../enum/tipo-acervo';
+import { LinhaConteudoAjustarRetornoDTO } from './linha-conteudo-ajustar-retorno-dto';
+
+export type AcervoLinhaRetornoCamposDTO = {
+  titulo: LinhaConteudoAjustarRetornoDTO;
+  subTitulo: LinhaConteudoAjustarRetornoDTO;
+  codigo: LinhaConteudoAjustarRetornoDTO;
+  codigoNovo: LinhaConteudoAjustarRetornoDTO;
+  materialId: LinhaConteudoAjustarRetornoDTO;
+  editoraId: LinhaConteudoAjustarRetornoDTO;
+  idiomaId: LinhaConteudoAjustarRetornoDTO;
+  serieColecaoId: LinhaConteudoAjustarRetornoDTO;
+  ano: LinhaConteudoAjustarRetornoDTO;
+  edicao: LinhaConteudoAjustarRetornoDTO;
+  numeroPagina: LinhaConteudoAjustarRetornoDTO;
+  acessoDocumentosIds: LinhaConteudoAjustarRetornoDTO;
+  volume: LinhaConteudoAjustarRetornoDTO;
+  tipoAnexo: LinhaConteudoAjustarRetornoDTO;
+  creditosAutoresIds: LinhaConteudoAjustarRetornoDTO;
+  assuntosIds: LinhaConteudoAjustarRetornoDTO;
+  coAutores: LinhaConteudoAjustarRetornoDTO;
+  listaTipoAutoria: LinhaConteudoAjustarRetornoDTO;
+  localizacao: LinhaConteudoAjustarRetornoDTO;
+  localizacaoCDD: LinhaConteudoAjustarRetornoDTO;
+  localizacaoPHA: LinhaConteudoAjustarRetornoDTO;
+  notasGerais: LinhaConteudoAjustarRetornoDTO;
+  isbn: LinhaConteudoAjustarRetornoDTO;
+  procedencia: LinhaConteudoAjustarRetornoDTO;
+  dataAcervo: LinhaConteudoAjustarRetornoDTO;
+  duracao: LinhaConteudoAjustarRetornoDTO;
+  copiaDigital: LinhaConteudoAjustarRetornoDTO;
+  permiteUsoImagem: LinhaConteudoAjustarRetornoDTO;
+  conservacaoId: LinhaConteudoAjustarRetornoDTO;
+  descricao: LinhaConteudoAjustarRetornoDTO;
+  quantidade: LinhaConteudoAjustarRetornoDTO;
+  largura: LinhaConteudoAjustarRetornoDTO;
+  altura: LinhaConteudoAjustarRetornoDTO;
+  diametro: LinhaConteudoAjustarRetornoDTO;
+  profundidade: LinhaConteudoAjustarRetornoDTO;
+  suporteId: LinhaConteudoAjustarRetornoDTO;
+  formatoId: LinhaConteudoAjustarRetornoDTO;
+  tamanhoArquivo: LinhaConteudoAjustarRetornoDTO;
+  acessibilidade: LinhaConteudoAjustarRetornoDTO;
+  disponibilizacao: LinhaConteudoAjustarRetornoDTO;
+  cromiaId: LinhaConteudoAjustarRetornoDTO;
+  resolucao: LinhaConteudoAjustarRetornoDTO;
+  arquivos: LinhaConteudoAjustarRetornoDTO;
+  tecnica: LinhaConteudoAjustarRetornoDTO;
+};
+
+export type AcervoLinhaRetornoDTO = {
+  status: ImportacaoStatusEnum;
+  mensagem: string;
+  errosCampos: string[];
+  numeroLinha: number;
+  tipoAcervoId: TipoAcervo;
+} & AcervoLinhaRetornoCamposDTO;
