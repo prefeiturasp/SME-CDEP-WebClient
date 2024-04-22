@@ -239,7 +239,7 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
       cancelText='Cancelar'
       title='Editar solicitação'
       okButtonProps={{
-        disabled: desabilitarCampos || validarSituacaoItem(initialValuesModal?.id),
+        disabled: desabilitarCampos || validarSituacaoItem(initialValuesModal?.situacaoId),
       }}
       {...modalProps}
     >
