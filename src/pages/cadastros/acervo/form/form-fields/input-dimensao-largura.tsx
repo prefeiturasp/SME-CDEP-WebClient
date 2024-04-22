@@ -13,7 +13,7 @@ const InputDimensaoLargura: React.FC<InputDimensaoLarguraProps> = ({ extra }) =>
   <InputNumero
     inputProps={{
       id: CDEP_INPUT_DIMENSAO_LARGURA,
-      maxLength: 5,
+      maxLength: 6,
       placeholder: fieldProps.label,
     }}
     formItemProps={{

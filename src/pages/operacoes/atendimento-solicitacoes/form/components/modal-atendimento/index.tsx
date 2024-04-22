@@ -1,7 +1,6 @@
 import { Col, DatePicker, Form, ModalProps, Row } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import { FormProps, useForm, useWatch } from 'antd/es/form/Form';
-import dayjs from 'dayjs';
 import React, { useContext, useEffect } from 'react';
 import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento';
 import InputNumero from '~/components/lib/inputs/number';
@@ -9,7 +8,7 @@ import Modal from '~/components/lib/modal';
 import { notification } from '~/components/lib/notification';
 import { DESEJA_CANCELAR_ALTERACOES } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
-import { Dayjs } from '~/core/date/dayjs';
+import { Dayjs, dayjs } from '~/core/date/dayjs';
 import { AcervoEmprestimoProrrogacaoDTO } from '~/core/dto/acervo-emprestimo-prorrogacao-dto';
 import { AcervoSolicitacaoConfirmarDTO } from '~/core/dto/acervo-solicitacao-confirmar-dto';
 import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detalhe-dto';
@@ -236,6 +235,7 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
       okText='Confirmar'
       open={isModalOpen}
       onCancel={onCancel}
+      maskClosable={false}
       cancelText='Cancelar'
       title='Editar solicitação'
       okButtonProps={{

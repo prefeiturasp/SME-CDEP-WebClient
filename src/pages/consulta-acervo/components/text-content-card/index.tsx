@@ -1,4 +1,5 @@
 import { Col, Row, Tag, Typography } from 'antd';
+import parse, { DOMNode, Element, HTMLReactParserOptions, domToReact } from 'html-react-parser';
 import React from 'react';
 import { HighlightedText } from '~/components/cdep/destacar-texto';
 import { AcervoDisponibilidadeSituacaoEnum } from '~/core/enum/acervo-disponibilidade-enum';
@@ -11,7 +12,7 @@ type InfoTituloConsultaAcervoProps = {
   ellipsis?: boolean;
   exibirLabelSemValor?: boolean;
   exibirTooltip?: boolean;
-  dangerouslyInnerHTML?: boolean;
+  esconderTagsHTML?: boolean;
   item?: any;
   hasHighlightedText?: boolean;
   termoPesquisado?: any;
@@ -24,7 +25,7 @@ export const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcerv
   ellipsis = false,
   exibirTooltip = false,
   exibirLabelSemValor = false,
-  dangerouslyInnerHTML = false,
+  esconderTagsHTML = false,
   hasHighlightedText = false,
   termoPesquisado = [],
 }) => {
@@ -32,8 +33,16 @@ export const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcerv
 
   let conteudo: string | React.ReactNode = description;
 
-  if (dangerouslyInnerHTML) {
-    conteudo = <Typography dangerouslySetInnerHTML={{ __html: description ?? '' }} />;
+  const optionsParseDescription: HTMLReactParserOptions = {
+    replace: (domNode) => {
+      if (domNode instanceof Element && domNode.name === 'p') {
+        return <p style={{ marginBottom: 0 }}>{domToReact(domNode.children as DOMNode[])}</p>;
+      }
+    },
+  };
+
+  if (esconderTagsHTML) {
+    conteudo = parse(description, optionsParseDescription);
   }
 
   let config;
