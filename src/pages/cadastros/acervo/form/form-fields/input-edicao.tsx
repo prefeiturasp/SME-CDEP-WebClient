@@ -15,7 +15,7 @@ const InputEdicao: React.FC<InputEdicaoProps> = ({ extra }) => (
     rules={[{ whitespace: true }]}
     extra={extra}
   >
-    <Input type='text' placeholder={fieldProps.label} maxLength={15} id={CDEP_INPUT_EDICAO} />
+    <Input type='text' placeholder={fieldProps.label} maxLength={30} id={CDEP_INPUT_EDICAO} />
   </Form.Item>
 );
 

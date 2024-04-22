@@ -1,17 +1,21 @@
-import { Space, Tag, Tooltip, Typography } from 'antd';
+import { Col, Row, Tag, Typography } from 'antd';
+import parse, { DOMNode, Element, HTMLReactParserOptions, domToReact } from 'html-react-parser';
 import React from 'react';
+import { HighlightedText } from '~/components/cdep/destacar-texto';
 import { AcervoDisponibilidadeSituacaoEnum } from '~/core/enum/acervo-disponibilidade-enum';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { configTagAcervoDisponibilidadeMap } from '~/pages/operacoes/solicitacao/components/lista-acervos-solicitacao/utils';
 
 type InfoTituloConsultaAcervoProps = {
   label: string;
-  description: string | React.ReactNode;
+  description: string;
   ellipsis?: boolean;
   exibirLabelSemValor?: boolean;
   exibirTooltip?: boolean;
-  dangerouslyInnerHTML?: boolean;
+  esconderTagsHTML?: boolean;
   item?: any;
+  hasHighlightedText?: boolean;
+  termoPesquisado?: any;
 };
 
 export const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcervoProps> = ({
@@ -21,22 +25,24 @@ export const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcerv
   ellipsis = false,
   exibirTooltip = false,
   exibirLabelSemValor = false,
-  dangerouslyInnerHTML = false,
+  esconderTagsHTML = false,
+  hasHighlightedText = false,
+  termoPesquisado = [],
 }) => {
   if (!exibirLabelSemValor && !description) return <></>;
 
   let conteudo: string | React.ReactNode = description;
 
-  const getDescription = () => {
-    if (typeof description === 'string') {
-      if (description?.length > 250) return `${description?.substring(0, 250)}...`;
-
-      return description;
-    }
+  const optionsParseDescription: HTMLReactParserOptions = {
+    replace: (domNode) => {
+      if (domNode instanceof Element && domNode.name === 'p') {
+        return <p style={{ marginBottom: 0 }}>{domToReact(domNode.children as DOMNode[])}</p>;
+      }
+    },
   };
 
-  if (dangerouslyInnerHTML) {
-    conteudo = <Typography dangerouslySetInnerHTML={{ __html: description ?? '' }} />;
+  if (esconderTagsHTML) {
+    conteudo = parse(description, optionsParseDescription);
   }
 
   let config;
@@ -51,31 +57,32 @@ export const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcerv
       ];
   }
 
+  if (hasHighlightedText) {
+    conteudo = <HighlightedText text={description} searchTerm={termoPesquisado} />;
+  }
+
   return (
-    <Space>
-      <Typography.Text strong ellipsis={ellipsis} style={{ width: '100%' }}>
-        {label}
-        <span style={{ fontWeight: 'normal' }}>
-          {exibirTooltip ? (
-            <Tooltip autoAdjustOverflow title={getDescription()}>
-              {conteudo}
-            </Tooltip>
-          ) : (
-            conteudo
-          )}
-        </span>
-      </Typography.Text>
-      {(item?.tipo || item?.tipoAcervoId) === TipoAcervo?.Bibliografico && (
-        <Tag color={config?.bgColor}>
-          <Typography.Text
-            style={{
-              color: config?.labelColor,
-            }}
-          >
-            {item?.situacaoDisponibilidade}
-          </Typography.Text>
-        </Tag>
-      )}
-    </Space>
+    <Row wrap={false} gutter={12}>
+      <Col>
+        <Typography.Text ellipsis={ellipsis} title={exibirTooltip ? description : ''}>
+          <span style={{ fontWeight: 700 }}>{label}</span>
+          <span>{conteudo}</span>
+        </Typography.Text>
+      </Col>
+
+      <Col>
+        {(item?.tipo || item?.tipoAcervoId) === TipoAcervo?.Bibliografico && (
+          <Tag color={config?.bgColor}>
+            <Typography.Text
+              style={{
+                color: config?.labelColor,
+              }}
+            >
+              {item?.situacaoDisponibilidade}
+            </Typography.Text>
+          </Tag>
+        )}
+      </Col>
+    </Row>
   );
 };

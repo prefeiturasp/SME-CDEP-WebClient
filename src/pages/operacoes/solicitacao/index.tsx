@@ -1,6 +1,6 @@
 import { Col, Row } from 'antd';
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import CardContent from '~/components/lib/card-content';
 import HeaderPage from '~/components/lib/header-page';
@@ -14,13 +14,16 @@ import BtnCancelarSolicitacoes from './components/btn-cancelar-solicitacao';
 
 const EnviarSolicitacoes: React.FC = () => {
   const navigate = useNavigate();
+  const paramsRoute = useParams();
+
+  const solicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
   return (
     <AcervoSolicitacaoContextProvider>
       <Col>
-        <HeaderPage title='Solicitação'>
+        <HeaderPage title={solicitacaoId ? `Solicitação - Nº${solicitacaoId}` : 'Nova Solicitação'}>
           <Col span={24}>
             <Row gutter={[8, 8]}>
               <Col>

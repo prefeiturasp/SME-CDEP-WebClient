@@ -7,15 +7,11 @@ interface HighlightedTextProps {
   searchTerm?: Array<string | RegExp>;
 }
 
-export const HighlightedText: React.FC<HighlightedTextProps> = ({ text, searchTerm = [] }) => {
-  return (
-    <div>
-      <Highlighter
-        sanitize={latinize}
-        caseSensitive={false}
-        textToHighlight={text}
-        searchWords={searchTerm}
-      />
-    </div>
-  );
-};
+export const HighlightedText: React.FC<HighlightedTextProps> = ({ text, searchTerm = [] }) => (
+  <Highlighter
+    sanitize={latinize}
+    caseSensitive={false}
+    textToHighlight={text}
+    searchWords={searchTerm}
+  />
+);

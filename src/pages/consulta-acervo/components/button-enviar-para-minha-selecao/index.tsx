@@ -19,6 +19,10 @@ export const ButtonEnviarParaMinhaSelecao: React.FC<ButtonEnviarParaMinhaSelecao
 
   const acervosSelecionados = solicitacao?.acervosSelecionados;
 
+  const disabled =
+    (pesquisaAcervo?.temControleDisponibilidade && !pesquisaAcervo?.estaDisponivel) ||
+    (!acervosSelecionados.length && !pesquisaAcervo?.acervoId);
+
   const onClick = () => {
     if (pesquisaAcervo) {
       const temNaLista = acervosSelecionados.find(
@@ -44,7 +48,7 @@ export const ButtonEnviarParaMinhaSelecao: React.FC<ButtonEnviarParaMinhaSelecao
         alignItems: 'center',
       }}
       onClick={onClick}
-      disabled={acervosSelecionados.length == 0 && !pesquisaAcervo?.acervoId}
+      disabled={disabled}
     >
       Enviar para a minha seleção
     </ButtonPrimary>

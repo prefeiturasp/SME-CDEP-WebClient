@@ -9,12 +9,7 @@ type InputLocalizacaoPHAProps = {
   extra?: React.ReactNode;
 };
 const InputLocalizacaoPHA: React.FC<InputLocalizacaoPHAProps> = ({ extra }) => (
-  <Form.Item
-    label={fieldProps.label}
-    name={fieldProps.name}
-    rules={[{ required: true }]}
-    extra={extra}
-  >
+  <Form.Item label={fieldProps.label} name={fieldProps.name} extra={extra}>
     <Input
       type='text'
       placeholder={fieldProps.label}
