@@ -4,17 +4,18 @@ import React, { useContext } from 'react';
 import InputTipoAcervoConsulta from '~/components/cdep/input/busca-acervo';
 import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
 import LimparBuscaButton from '~/components/lib/limpar-busca-button';
+import { notification } from '~/components/lib/notification';
 import { CDEP_INPUT_ANO_FINAL, CDEP_INPUT_ANO_INICIAL } from '~/core/constants/ids/input';
 import { Colors } from '~/core/styles/colors';
 import { removerTudoQueNaoEhDigito } from '~/core/utils/functions';
 import { InputAno } from '~/pages/cadastros/acervo/form/form-fields';
 import { ConsultaAcervoContext } from '../provider';
-import { notification } from '~/components/lib/notification';
 
 export const FiltroConsultaAcervo: React.FC = () => {
   const form = useFormInstance();
 
   const { onClickBuscar, limparDados } = useContext(ConsultaAcervoContext);
+  const colorInputLabel = Colors.Neutral.WHITE;
 
   const rulesAnoInicialFinal = {
     message: (
@@ -37,7 +38,7 @@ export const FiltroConsultaAcervo: React.FC = () => {
         position: 'sticky',
         top: 72,
         zIndex: 5,
-        backgroundColor: Colors.Components.BACKGROUND_FILTRO_AREA_PUBLICA,
+        backgroundColor: Colors.SystemSME.CDEP.PRIMARY,
         padding: '20px 60px',
       }}
     >
@@ -47,7 +48,7 @@ export const FiltroConsultaAcervo: React.FC = () => {
             style={{
               fontSize: 24,
               fontWeight: 'bold',
-              color: Colors.Components.LABEL_FILTRO_AREA_PUBLICA,
+              color: colorInputLabel,
             }}
           >
             Faça sua busca
@@ -64,9 +65,7 @@ export const FiltroConsultaAcervo: React.FC = () => {
               rules: [rulesAnoInicialFinal, { required: false }],
               name: 'anoInicial',
               label: (
-                <Typography
-                  style={{ fontWeight: 500, color: Colors.Components.LABEL_FILTRO_AREA_PUBLICA }}
-                >
+                <Typography style={{ fontWeight: 500, color: colorInputLabel }}>
                   Ano inicial
                 </Typography>
               ),
@@ -85,9 +84,7 @@ export const FiltroConsultaAcervo: React.FC = () => {
               rules: [rulesAnoInicialFinal, { required: false }],
               name: 'anoFinal',
               label: (
-                <Typography
-                  style={{ fontWeight: 500, color: Colors.Components.LABEL_FILTRO_AREA_PUBLICA }}
-                >
+                <Typography style={{ fontWeight: 500, color: colorInputLabel }}>
                   Ano final
                 </Typography>
               ),
@@ -101,9 +98,7 @@ export const FiltroConsultaAcervo: React.FC = () => {
           <SelectTipoAcervo
             formItemProps={{
               label: (
-                <Typography
-                  style={{ fontWeight: 500, color: Colors.Components.LABEL_FILTRO_AREA_PUBLICA }}
-                >
+                <Typography style={{ fontWeight: 500, color: colorInputLabel }}>
                   Busca por tipos de acervos
                 </Typography>
               ),
@@ -118,6 +113,8 @@ export const FiltroConsultaAcervo: React.FC = () => {
             <Col>
               <LimparBuscaButton
                 buttonProps={{
+                  type: 'text',
+                  style: { color: colorInputLabel },
                   onClick: () => {
                     limparDados(form);
                   },
@@ -126,7 +123,6 @@ export const FiltroConsultaAcervo: React.FC = () => {
             </Col>
             <Col>
               <Button
-                style={{ backgroundColor: '#8F2D40', color: 'white' }}
                 onClick={() => {
                   const { anoInicial, anoFinal } = form.getFieldsValue(['anoInicial', 'anoFinal']);
 
