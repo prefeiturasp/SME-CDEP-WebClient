@@ -12,7 +12,7 @@ type DetalhesAcervoAreaPublicaProps = {
   dados?: ConsultaAcervoDetalhesDTO;
 };
 
-function renderizarLinksDisponiveis(dados : string) {
+const renderizarLinksDisponiveis = (dados : string) => {
   return (
     <div>
       {dados.split(/\s+/).map((url, index) => (
@@ -22,7 +22,8 @@ function renderizarLinksDisponiveis(dados : string) {
       ))}
     </div>
   );
-}
+};
+
 const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ fields, dados }) => {
   if (!fields?.length || !dados) return;
 
