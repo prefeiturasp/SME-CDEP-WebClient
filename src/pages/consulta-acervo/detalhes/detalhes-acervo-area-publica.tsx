@@ -11,6 +11,19 @@ type DetalhesAcervoAreaPublicaProps = {
   fields: FieldAcervoDetalhesProps[];
   dados?: ConsultaAcervoDetalhesDTO;
 };
+
+const renderizarLinksDisponiveis = (dados : string) => {
+  return (
+    <div>
+      {dados.split(/\s+/).map((url, index) => (
+        <div key={index}>
+          <a href={url} target="_blank" rel="noopener noreferrer">{url}</a>
+        </div>
+      ))}
+    </div>
+  );
+};
+
 const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ fields, dados }) => {
   if (!fields?.length || !dados) return;
 
@@ -386,7 +399,7 @@ const DetalhesAcervoAreaPublica: React.FC<DetalhesAcervoAreaPublicaProps> = ({ f
             input = dados.disponibilizacao && (
               <TextItemCardContentConsultaAcervo
                 label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Disponibilizacao].label}: `}
-                description={dados.disponibilizacao}
+                description={renderizarLinksDisponiveis(dados.disponibilizacao)}
                 ellipsis={!!field.ellipsis}
               />
             );
