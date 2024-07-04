@@ -31,7 +31,7 @@ import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import armazenamentoService from '~/core/services/armazenamento-service';
 import { Colors } from '~/core/styles/colors';
-import { downloadBlob, formatarDataParaDDMMYYYY } from '~/core/utils/functions';
+import { downloadBlob, formatarDataPorFormato } from '~/core/utils/functions';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { AcervoSolicitacaoContext } from '../../provider';
 
@@ -344,7 +344,7 @@ const ListaAcervosSolicitacao: React.FC = () => {
         );
       }
 
-      return dataVisita ? formatarDataParaDDMMYYYY(dataVisita) : '';
+      return dataVisita ? formatarDataPorFormato(dataVisita, 'DD/MM HH:mm') : '';
     },
   });
 
