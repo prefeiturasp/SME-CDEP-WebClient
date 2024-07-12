@@ -1,9 +1,8 @@
-import { Col, DatePicker, Form, ModalProps, Row } from 'antd';
+import { Col, DatePicker, Form, ModalProps, Row, TimePicker } from 'antd';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import { FormProps, useForm, useWatch } from 'antd/es/form/Form';
 import React, { useContext, useEffect } from 'react';
 import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento';
-import InputNumero from '~/components/lib/inputs/number';
 import Modal from '~/components/lib/modal';
 import { notification } from '~/components/lib/notification';
 import { DESEJA_CANCELAR_ALTERACOES } from '~/core/constants/mensagens';
@@ -21,7 +20,6 @@ import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
 import { prorrogarEmprestimo } from '~/core/services/acervo-emprestimo';
 import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
 import { confirmacao } from '~/core/services/alerta-service';
-import { formatarHora } from '~/core/utils/functions';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 type ModalAtendimentoProps = {
@@ -73,11 +71,16 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
       form.validateFields().then(async () => {
         const values: AcervoSolicitacaoItemDetalheResumidoDTO = form.getFieldsValue(true);
 
-        const [horas, minutos] = values && values.horaVisita ? values.horaVisita.split(':') : [];
+        const [horas, minutos] = values 
+                                 && values.horaVisita 
+                                 && dayjs.isDayjs(values.horaVisita) 
+                                  ? [values.horaVisita.hour(), values.horaVisita.minute()] 
+                                  : [0,0];
+
         const dataVisitaFormatada = dayjs(values.dataVisita)
           .utc(true)
-          .hour(parseInt(horas))
-          .minute(parseInt(minutos));
+          .hour(horas)
+          .minute(minutos);
 
         let novaDataVisita;
         if (values.tipoAtendimento === TipoAtendimentoEnum.Email) {
@@ -194,7 +197,7 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
       }
 
       if (initialValuesModal?.dataVisitaFormatada) {
-        initialValuesModal.horaVisita = initialValuesModal.dataVisitaFormatada.split(' ')[1];
+        initialValuesModal.horaVisita = dayjs(initialValuesModal.dataVisitaFormatada.split(' ')[1], 'HH:mm');
         form.setFieldValue('horaVisita', initialValuesModal.horaVisita);
       }
 
@@ -303,29 +306,23 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
                     </Form.Item>
                   </Col>
                   <Col xs={12}>
-                    <InputNumero
-                      formItemProps={{
-                        label: 'Hora da visita',
-                        name: 'horaVisita',
-                        getValueFromEvent: (e: React.ChangeEvent<HTMLInputElement>) =>
-                          formatarHora(e.target.value),
-                        dependencies: ['dataVisita'],
-                        rules: [
-                          ({ getFieldValue }) => ({
-                            required: getFieldValue('dataVisita'),
-                            message: 'É necessário informar a hora da visita.',
-                          }),
-                        ],
-                      }}
-                      inputProps={{
-                        placeholder: 'Informe a hora',
-                        maxLength: 5,
-                        disabled:
-                          desabilitarCampos ||
-                          atendimentoFinalizado ||
-                          validarSituacaoItem(situacaoItemAtendimento),
-                      }}
-                    />
+                    <Form.Item
+                          label= 'Hora da visita'
+                          name= 'horaVisita'
+                          dependencies={['dataVisita']}
+                          rules={[({ getFieldValue }) => ({
+                                  required: getFieldValue('dataVisita'),
+                                  message: 'É necessário informar a hora da visita.',
+                                }),]}
+                      >
+                          <TimePicker 
+                              format="HH:mm" 
+                              placeholder='Informe a hora'
+                              style={{ width: '100%' }}
+                              disabled={desabilitarCampos ||
+                                        atendimentoFinalizado ||
+                                        validarSituacaoItem(situacaoItemAtendimento)}/>
+                      </Form.Item>
                   </Col>
                 </Row>
               </Col>
