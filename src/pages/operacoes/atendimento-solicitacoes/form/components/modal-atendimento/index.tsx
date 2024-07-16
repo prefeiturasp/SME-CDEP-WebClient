@@ -204,7 +204,7 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
       if (initialValuesModal?.dataEmprestimo) {
         form.setFieldValue('dataEmprestimo', dayjs(initialValuesModal.dataEmprestimo));
       }
-
+      
       if (initialValuesModal?.dataDevolucao) {
         form.setFieldValue('dataDevolucao', dayjs(initialValuesModal.dataDevolucao));
       }
@@ -214,21 +214,22 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
   }, [form, isModalOpen, initialValuesModal]);
 
   const onFinish = () => {
-    if (initialValuesModal) {
-      const itemEstaFinalizadoManualmente =
-        initialValuesModal.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_MANUALMENTE;
+    form.validateFields().then(() => {
+      if (initialValuesModal) {
+        const itemEstaFinalizadoManualmente =
+          initialValuesModal.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_MANUALMENTE;
+        if (ehBibliografico && itemEstaFinalizadoManualmente) {
+          const params: AcervoEmprestimoProrrogacaoDTO = {
+            acervoSolicitacaoItemId: initialValuesModal.id,
+            dataDevolucao: dataDevolucaoWatch,
+          };
 
-      if (ehBibliografico && itemEstaFinalizadoManualmente) {
-        const params: AcervoEmprestimoProrrogacaoDTO = {
-          acervoSolicitacaoItemId: initialValuesModal.id,
-          dataDevolucao: dataDevolucaoWatch,
-        };
-
-        onClickProrrogarDevolucao(params);
-      } else {
-        onClickConfirmarParcial();
+          onClickProrrogarDevolucao(params);
+        } else {
+          onClickConfirmarParcial();
+        }
       }
-    }
+    });
   };
 
   return (
@@ -362,6 +363,8 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
                     name='dataDevolucao'
                     label='Data da devolução'
                     dependencies={['dataEmprestimo', 'dataVisita']}
+                    rules={[
+                      { required: true },]}
                   >
                     <DatePicker
                       allowClear
