@@ -29,6 +29,7 @@ import {
   DESEJA_FINALIZAR_ATENDIMENTO,
   DESEJA_REMOVER_ACERVO,
   DESEJA_SAIR_MODO_EDICAO,
+  DESEJA_SAIR_MODO_EDICAO_CONFIRMANDO_ITENS_SOLICITACAO_ALTERADOS,
   DESEJA_SAIR_MODO_EDICAO_FINALIZANDO_ATENDIMENTO,
 } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
@@ -261,6 +262,13 @@ export const SolicitacaoManual: React.FC = () => {
     }
   }, [carregarDados, acervoSolicitacaoId]);
 
+  const obterDadosForm = (): [AcervoSolicitacaoDetalheDTO, boolean] => {  
+    const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);  
+    const semAlteracaoItens = _.isEqual(values.itens, formInitialValues?.itens);  
+    
+    return [values, semAlteracaoItens];  
+  } 
+
   const removerAcervo = (index: number) => {
     const values = form.getFieldsValue(true);
 
@@ -270,10 +278,16 @@ export const SolicitacaoManual: React.FC = () => {
   };
 
   const onClickVoltar = () => {
-    if (form.isFieldsTouched()) {
+    const [values, semAlteracaoItens] = obterDadosForm();  
+    const contemAlteracaoItensEmSolicitacaoManualJaConfirmada = acervoSolicitacaoId && !semAlteracaoItens;
+    if (form.isFieldsTouched() || !semAlteracaoItens) {
       confirmacao({
-        content: DESEJA_SAIR_MODO_EDICAO,
+        content:  contemAlteracaoItensEmSolicitacaoManualJaConfirmada
+                  ? DESEJA_SAIR_MODO_EDICAO_CONFIRMANDO_ITENS_SOLICITACAO_ALTERADOS
+                  : DESEJA_SAIR_MODO_EDICAO,
         onOk() {
+          if (acervoSolicitacaoId)
+            confirmarAtendimento(values);
           navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
         },
       });
@@ -321,73 +335,74 @@ export const SolicitacaoManual: React.FC = () => {
     });
   };
 
-  const onClickConfirmarAtendimento = async () => {
-    const values: AcervoSolicitacaoDetalheDTO = form.getFieldsValue(true);
-    const semAlteracaoItens = _.isEqual(values.itens, formInitialValues?.itens);
+  const confirmarAtendimento = async (values: AcervoSolicitacaoDetalheDTO) => {
+    form.validateFields().then(async () => {
+      const dataSolicitacao = cloneDeep(values?.dataSolicitacao);
 
-    if (form.isFieldsTouched() || !semAlteracaoItens) {
-      form.validateFields().then(async () => {
-        const dataSolicitacao = cloneDeep(values?.dataSolicitacao);
+      const endpoint = acervoSolicitacaoId
+        ? acervoSolicitacaoService.alterarAtendimentoManual
+        : acervoSolicitacaoService.confirmarAtendimentoManual;
 
-        const endpoint = acervoSolicitacaoId
-          ? acervoSolicitacaoService.alterarAtendimentoManual
-          : acervoSolicitacaoService.confirmarAtendimentoManual;
+      const itens: AcervoSolicitacaoItemManualDTO[] = values.itens.map(
+        (item: AcervoSolicitacaoItemDetalheResumidoDTO): AcervoSolicitacaoItemManualDTO => {
+          const linha: AcervoSolicitacaoItemManualDTO = {
+            acervoId: item.acervoId,
+            tipoAcervo: item.tipoAcervoId,
+            tipoAtendimento: item.tipoAtendimento,
+          };
 
-        const itens: AcervoSolicitacaoItemManualDTO[] = values.itens.map(
-          (item: AcervoSolicitacaoItemDetalheResumidoDTO): AcervoSolicitacaoItemManualDTO => {
-            const linha: AcervoSolicitacaoItemManualDTO = {
-              acervoId: item.acervoId,
-              tipoAcervo: item.tipoAcervoId,
-              tipoAtendimento: item.tipoAtendimento,
-            };
-
-            if (item.id) {
-              linha.id = item.id;
-            }
-
-            if (item.dataVisita) {
-              linha.dataVisita = item.dataVisita;
-            }
-
-            if (item.dataEmprestimo) {
-              linha.dataEmprestimo = item.dataEmprestimo;
-            }
-
-            if (item.dataDevolucao) {
-              linha.dataDevolucao = item.dataDevolucao;
-            }
-
-            return linha;
-          },
-        );
-
-        const params: AcervoSolicitacaoManualDTO = {
-          usuarioId: values?.dadosSolicitante?.id,
-          dataSolicitacao: dayjs(dataSolicitacao).format('YYYY-MM-DD'),
-          itens,
-        };
-
-        if (acervoSolicitacaoId) {
-          params.id = acervoSolicitacaoId;
-        }
-
-        endpoint(params).then((resposta) => {
-          if (resposta.sucesso) {
-            notification.success({
-              message: 'Sucesso',
-              description: 'Atendimento confirmado com sucesso',
-            });
-            
-            if (acervoSolicitacaoId) {
-              carregarDados();
-            } else {
-              const newId = resposta.dados;
-              navigate(`${ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL}/${newId}`);
-            }
+          if (item.id) {
+            linha.id = item.id;
           }
-        });
+
+          if (item.dataVisita) {
+            linha.dataVisita = item.dataVisita;
+          }
+
+          if (item.dataEmprestimo) {
+            linha.dataEmprestimo = item.dataEmprestimo;
+          }
+
+          if (item.dataDevolucao) {
+            linha.dataDevolucao = item.dataDevolucao;
+          }
+
+          return linha;
+        },
+      );
+
+      const params: AcervoSolicitacaoManualDTO = {
+        usuarioId: values?.dadosSolicitante?.id,
+        dataSolicitacao: dayjs(dataSolicitacao).format('YYYY-MM-DD'),
+        itens,
+      };
+
+      if (acervoSolicitacaoId) {
+        params.id = acervoSolicitacaoId;
+      }
+
+      endpoint(params).then((resposta) => {
+        if (resposta.sucesso) {
+          notification.success({
+            message: 'Sucesso',
+            description: 'Atendimento confirmado com sucesso',
+          });
+          
+          if (acervoSolicitacaoId) {
+            carregarDados();
+          } else {
+            const newId = resposta.dados;
+            navigate(`${ROUTES.ATENDIMENTO_SOLICITACAO_MANUAL}/${newId}`);
+          }
+        }
       });
-    }
+    });
+  }
+
+  const onClickConfirmarAtendimento = async () => {
+    const [values, semAlteracaoItens] = obterDadosForm();  
+    if (form.isFieldsTouched() || !semAlteracaoItens) 
+      confirmarAtendimento(values);
   };
 
   const finalizarAtendimento = () => {
@@ -440,7 +455,7 @@ export const SolicitacaoManual: React.FC = () => {
 
                 const desabilitarConfirmar =
                   (!form.isFieldsTouched() && semAlteracaoItens) || !temItens;
-                
+
                 const botaoFinalizarDesabilitado = !temItens || !!temItemSemId || desabilitarCampos || !desabilitarConfirmar;  
                 return (
                   <Row gutter={[8, 8]}>
