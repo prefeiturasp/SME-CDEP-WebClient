@@ -29,6 +29,7 @@ import {
   DESEJA_FINALIZAR_ATENDIMENTO,
   DESEJA_REMOVER_ACERVO,
   DESEJA_SAIR_MODO_EDICAO,
+  DESEJA_SAIR_MODO_EDICAO_FINALIZANDO_ATENDIMENTO,
 } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
 import { dayjs } from '~/core/date/dayjs';
@@ -281,6 +282,15 @@ export const SolicitacaoManual: React.FC = () => {
     }
   };
 
+  const onClickVoltarFinalizacao = () => {
+    confirmacao({
+      content: DESEJA_SAIR_MODO_EDICAO_FINALIZANDO_ATENDIMENTO,
+      onOk() {
+        finalizarAtendimento();
+      },
+    });   
+  };
+
   const onClickCancelar = () => {
     if (form.isFieldsTouched()) {
       confirmacao({
@@ -367,7 +377,7 @@ export const SolicitacaoManual: React.FC = () => {
               message: 'Sucesso',
               description: 'Atendimento confirmado com sucesso',
             });
-
+            
             if (acervoSolicitacaoId) {
               carregarDados();
             } else {
@@ -380,19 +390,23 @@ export const SolicitacaoManual: React.FC = () => {
     }
   };
 
+  const finalizarAtendimento = () => {
+    acervoSolicitacaoService.finalizarAtendimento(acervoSolicitacaoId).then((resposta) => {
+      if (resposta.sucesso) {
+        navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
+        notification.success({
+          message: 'Sucesso',
+          description: 'Atendimento finalizado com sucesso',
+        });
+      }
+    });
+  };
+
   const onClickFinalizarAtendimento = () => {
     confirmacao({
       content: DESEJA_FINALIZAR_ATENDIMENTO,
       onOk() {
-        acervoSolicitacaoService.finalizarAtendimento(acervoSolicitacaoId).then((resposta) => {
-          if (resposta.sucesso) {
-            navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
-            notification.success({
-              message: 'Sucesso',
-              description: 'Atendimento finalizado com sucesso',
-            });
-          }
-        });
+        finalizarAtendimento();
       },
     });
   };
@@ -426,11 +440,16 @@ export const SolicitacaoManual: React.FC = () => {
 
                 const desabilitarConfirmar =
                   (!form.isFieldsTouched() && semAlteracaoItens) || !temItens;
-
+                
+                const botaoFinalizarDesabilitado = !temItens || !!temItemSemId || desabilitarCampos || !desabilitarConfirmar;  
                 return (
                   <Row gutter={[8, 8]}>
                     <Col>
-                      <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
+                      <ButtonVoltar 
+                        onClick={() => botaoFinalizarDesabilitado 
+                                        ? onClickVoltar()
+                                        : onClickVoltarFinalizacao()} 
+                        id={CDEP_BUTTON_VOLTAR} />
                     </Col>
 
                     <Col>
@@ -446,9 +465,7 @@ export const SolicitacaoManual: React.FC = () => {
                       <ButtonSecundary
                         id={CDEP_BUTTON_FINALIZAR}
                         style={{ fontWeight: 700 }}
-                        disabled={
-                          !temItens || !!temItemSemId || desabilitarCampos || !desabilitarConfirmar
-                        }
+                        disabled={ botaoFinalizarDesabilitado }
                         onClick={onClickFinalizarAtendimento}
                       >
                         Finalizar
