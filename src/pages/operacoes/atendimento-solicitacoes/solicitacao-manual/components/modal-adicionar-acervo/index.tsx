@@ -1,10 +1,9 @@
-import { Col, Form, Input, ModalProps, Row } from 'antd';
+import { Col, Form, Input, ModalProps, Row, TimePicker } from 'antd';
 import { Rule } from 'antd/es/form';
 import { FormInstance, FormProps, useForm, useWatch } from 'antd/es/form/Form';
 import dayjs, { Dayjs } from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import InputDatePicker from '~/components/cdep/input/date';
-import InputNumero from '~/components/cdep/input/numero';
 import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento';
 import { InputCodigoTombo } from '~/components/cdep/input/tombo-codigo';
 import Modal from '~/components/lib/modal';
@@ -18,7 +17,6 @@ import { SituacaoSolicitacaoItemEnum } from '~/core/enum/situacao-item-atendimen
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { TipoAtendimentoEnum } from '~/core/enum/tipo-atendimento-enum';
 import { confirmacao } from '~/core/services/alerta-service';
-import { formatarHora } from '~/core/utils/functions';
 
 type ModalAdicionarAcervoProps = {
   modalProps?: ModalProps;
@@ -58,8 +56,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
   const onFinish = () => {
     form.validateFields().then(() => {
       const values = form.getFieldsValue(true);
-
-      const [horas, minutos] = values && values.horaVisita ? values.horaVisita.split(':') : [];
+      const [horas, minutos] = values && values.horaVisita ? [values.horaVisita.hour(), values.horaVisita.minute()] : [];
 
       const dataVisitaFormatada = dayjs(values.dataVisita)
         .utc(true)
@@ -164,10 +161,10 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
       if (initialValuesModal?.dataVisita) {
         form.setFieldValue('dataVisita', dayjs(initialValuesModal.dataVisita));
       }
-
+      
       if (initialValuesModal?.horaVisita || initialValuesModal.dataVisitaFormatada) {
         if (initialValuesModal.dataVisitaFormatada) {
-          initialValuesModal.horaVisita = initialValuesModal.dataVisitaFormatada.split(' ')[1];
+          initialValuesModal.horaVisita = dayjs(initialValuesModal.dataVisitaFormatada.split(' ')[1], 'HH:mm');
         }
 
         form.setFieldValue('horaVisita', initialValuesModal.horaVisita);
@@ -271,22 +268,20 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                     />
                   </Col>
                   <Col xs={12}>
-                    <InputNumero
-                      formItemProps={{
-                        label: 'Hora da visita',
-                        name: 'horaVisita',
-                        getValueFromEvent: (e: React.ChangeEvent<HTMLInputElement>) =>
-                          formatarHora(e.target.value),
-                        dependencies: ['dataVisita'],
-                        rules: [
-                          ({ getFieldValue }) => ({
-                            required: getFieldValue('dataVisita'),
-                            message: 'É necessário informar a hora da visita.',
-                          }),
-                        ],
-                      }}
-                      inputProps={{ placeholder: 'Informe a hora', maxLength: 5 }}
-                    />
+                    <Form.Item
+                        label= 'Hora da visita'
+                        name= 'horaVisita'
+                        dependencies={['dataVisita']}
+                        rules={[({ getFieldValue }) => ({
+                                required: getFieldValue('dataVisita'),
+                                message: 'É necessário informar a hora da visita.',
+                              }),]}
+                    >
+                        <TimePicker 
+                            format="HH:mm" 
+                            placeholder='Informe a hora'
+                            style={{ width: '100%' }}/>
+                    </Form.Item>
                   </Col>
                 </Row>
               </Col>
