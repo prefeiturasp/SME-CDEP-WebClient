@@ -2,7 +2,7 @@
 import { FormInstance } from 'antd';
 import { PaginationConfig } from 'antd/es/pagination';
 import React, { PropsWithChildren, createContext, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { FiltroTextoLivreTipoAcervoDTO } from '~/core/dto/filtro-texto-livre-tipo-acervo-dto';
 import { PesquisaAcervoDTO } from '~/core/dto/pesquisa-acervo-dto';
 import { ROUTES } from '~/core/enum/routes';
@@ -46,6 +46,7 @@ export const ConsultaAcervoContext = createContext<ConsultaAcervoContextProps>(D
 
 const ConsultaAcervoContextProvider: React.FC<PropsWithChildren> = ({ children }) => {
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [loading, setLoading] = useState<boolean>(DEFAULT_VALUES.loading);
   const [listParams, setListParams] = useState<PaginationConfig>(DEFAULT_VALUES.listParams);
@@ -57,6 +58,8 @@ const ConsultaAcervoContextProvider: React.FC<PropsWithChildren> = ({ children }
   const limparDados = (form: FormInstance) => {
     form.resetFields();
     setDataSource(DEFAULT_VALUES.dataSource);
+    if (dataSource && location.pathname.includes(ROUTES.CONSULTA_ACERVO_DETALHES))
+      navigate(ROUTES.CONSULTA_ACERVO);
     setListParams(DEFAULT_VALUES.listParams);
     setTextoLivrePesquisado(DEFAULT_VALUES.textoLivrePesquisado);
   };
