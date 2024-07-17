@@ -1,7 +1,7 @@
 import { Col, Form, Input, ModalProps, Row, TimePicker } from 'antd';
 import { Rule } from 'antd/es/form';
 import { FormInstance, FormProps, useForm, useWatch } from 'antd/es/form/Form';
-import dayjs, { Dayjs } from 'dayjs';
+import dayjs from 'dayjs';
 import React, { useEffect, useState } from 'react';
 import InputDatePicker from '~/components/cdep/input/date';
 import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento';
