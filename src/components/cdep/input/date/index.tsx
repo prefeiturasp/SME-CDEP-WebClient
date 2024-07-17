@@ -21,7 +21,7 @@ const InputDatePicker: React.FC<InputDatePickerProps> = ({ dateProps, formItemPr
   };
 
   return (
-    <Form.Item label='Data' name='Data' {...formItemProps}>
+    <Form.Item label='Data' name='data' {...formItemProps}>
       <DatePicker
             placeholder='Selecione uma data'
             id='INPUT_DATE'
