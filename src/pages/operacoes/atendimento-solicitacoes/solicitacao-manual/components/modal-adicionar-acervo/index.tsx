@@ -8,6 +8,7 @@ import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento'
 import { InputCodigoTombo } from '~/components/cdep/input/tombo-codigo';
 import Modal from '~/components/lib/modal';
 import { notification } from '~/components/lib/notification';
+import { CDEP_INPUT_DATA_EMPRESTIMO, CDEP_INPUT_DATA_VISITA } from '~/core/constants/ids/input';
 import { DESEJA_CANCELAR_ALTERACOES } from '~/core/constants/mensagens';
 import { validateMessages } from '~/core/constants/validate-messages';
 import { AcervoSolicitacaoDetalheDTO } from '~/core/dto/acervo-solicitacao-detalhe-dto';
@@ -194,11 +195,11 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
       } else {
         setDesabilitarAdicionar(true);
       }
-
-      form.setFieldValue('tipoAtendimento', TipoAtendimentoEnum.Presencial);
-      form.setFieldValue('dataVisita', dayjs());
-      form.setFieldValue('dataEmprestimo', dayjs());
-      form.setFieldValue('dataDevolucao', dayjs().add(7, 'day'));
+      
+      form.setFieldValue('tipoAtendimento', initialValuesModal?.tipoAtendimento || TipoAtendimentoEnum.Presencial);
+      form.setFieldValue('dataVisita', initialValuesModal?.dataVisita ? dayjs(initialValuesModal?.dataVisita) : dayjs());
+      form.setFieldValue('dataEmprestimo', initialValuesModal?.dataEmprestimo ? dayjs(initialValuesModal?.dataEmprestimo) : dayjs());
+      form.setFieldValue('dataDevolucao', initialValuesModal?.dataDevolucao ? dayjs(initialValuesModal?.dataDevolucao) : dayjs().add(7, 'day'));
     }
   }, [form, tipoAcervo, ehBibliografico]);
 
@@ -263,7 +264,8 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                       }}
                       dateProps={{ style:{ width: '100%' },
                           minDate: minDateMenos7,
-                          maxDate: dataAtual
+                          maxDate: dataAtual,
+                          id: CDEP_INPUT_DATA_VISITA
                         }}
                     />
                   </Col>
@@ -299,7 +301,8 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                       }}
                       dateProps={{ style:{ width: '100%' },
                           minDate: minDateDataEmprestimo,
-                          maxDate: dataAtual
+                          maxDate: dataAtual,
+                          id: CDEP_INPUT_DATA_EMPRESTIMO
                         }}
                     />
                 </Col>
@@ -309,10 +312,11 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                         label: 'Data da devolução',
                         name: 'dataDevolucao',
                         dependencies: ['dataEmprestimo', 'dataVisita'],
-                        rules: [...rules],
+                        rules: [...rules]
                       }}
                       dateProps={{ style:{ width: '100%' },
-                          minDate: dataAtual
+                          minDate: dataAtual,
+                          id: CDEP_INPUT_DATA_EMPRESTIMO
                         }}
                     />
                 </Col>
