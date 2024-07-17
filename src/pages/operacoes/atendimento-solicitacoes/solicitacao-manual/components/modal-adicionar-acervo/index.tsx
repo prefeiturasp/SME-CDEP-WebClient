@@ -1,9 +1,9 @@
-import { Col, DatePicker, Form, Input, ModalProps, Row, TimePicker } from 'antd';
-import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
+import { Col, Form, Input, ModalProps, Row, TimePicker } from 'antd';
 import { Rule } from 'antd/es/form';
 import { FormInstance, FormProps, useForm, useWatch } from 'antd/es/form/Form';
-import dayjs from 'dayjs';
+import dayjs, { Dayjs } from 'dayjs';
 import React, { useEffect, useState } from 'react';
+import InputDatePicker from '~/components/cdep/input/date';
 import { SelectTipoAtendimento } from '~/components/cdep/input/tipo-atendimento';
 import { InputCodigoTombo } from '~/components/cdep/input/tombo-codigo';
 import Modal from '~/components/lib/modal';
@@ -254,21 +254,18 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
               <Col xs={24}>
                 <Row gutter={[16, 16]}>
                   <Col xs={12}>
-                    <Form.Item
-                      name='dataVisita'
-                      label='Data da visita'
-                      dependencies={ehBibliografico ? ['dataEmprestimo', 'dataDevolucao'] : []}
-                      rules={[...rules]}
-                    >
-                      <DatePicker
-                        style={{ width: '100%' }}
-                        format='DD/MM/YYYY'
-                        placeholder='Selecione uma data'
-                        locale={localeDatePicker}
-                        minDate={minDateMenos7}
-                        maxDate={dataAtual}
-                      />
-                    </Form.Item>
+                    <InputDatePicker
+                      formItemProps={{
+                        label: 'Data da visita',
+                        name: 'dataVisita',
+                        dependencies: ehBibliografico ? ['dataEmprestimo', 'dataDevolucao'] : [],
+                        rules: [...rules],
+                      }}
+                      dateProps={{ style:{ width: '100%' },
+                          minDate: minDateMenos7,
+                          maxDate: dataAtual
+                        }}
+                    />
                   </Col>
                   <Col xs={12}>
                     <Form.Item
@@ -293,37 +290,31 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
             {(temDataEhPresencial || ehPresencialWatch) && ehBibliografico && (
               <>
                 <Col xs={12}>
-                  <Form.Item
-                    name='dataEmprestimo'
-                    label='Data do empréstimo'
-                    dependencies={['dataVisita', 'dataDevolucao']}
-                    rules={[...rules]}
-                  >
-                    <DatePicker
-                      style={{ width: '100%' }}
-                      format='DD/MM/YYYY'
-                      placeholder='Selecione uma data'
-                      locale={localeDatePicker}
-                      minDate={minDateDataEmprestimo}
-                      maxDate={dataAtual}
+                  <InputDatePicker
+                      formItemProps={{
+                        label: 'Data do empréstimo',
+                        name: 'dataEmprestimo',
+                        dependencies: ['dataVisita', 'dataDevolucao'],
+                        rules: [...rules],
+                      }}
+                      dateProps={{ style:{ width: '100%' },
+                          minDate: minDateDataEmprestimo,
+                          maxDate: dataAtual
+                        }}
                     />
-                  </Form.Item>
                 </Col>
                 <Col xs={12}>
-                  <Form.Item
-                    label='Data da devolução'
-                    name='dataDevolucao'
-                    dependencies={['dataEmprestimo', 'dataVisita']}
-                    rules={[...rules]}
-                  >
-                    <DatePicker
-                      style={{ width: '100%' }}
-                      format='DD/MM/YYYY'
-                      placeholder='Selecione uma data'
-                      locale={localeDatePicker}
-                      minDate={dataAtual}
+                <InputDatePicker
+                      formItemProps={{
+                        label: 'Data da devolução',
+                        name: 'dataDevolucao',
+                        dependencies: ['dataEmprestimo', 'dataVisita'],
+                        rules: [...rules],
+                      }}
+                      dateProps={{ style:{ width: '100%' },
+                          minDate: dataAtual
+                        }}
                     />
-                  </Form.Item>
                 </Col>
               </>
             )}
