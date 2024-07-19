@@ -204,7 +204,6 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
   columns.push({
     title: 'Ações',
     align: 'center',
-    width: '10%',
     render: (_, linha: AcervoSolicitacaoItemDetalheResumidoDTO, index: number) => {
       const itemEstaFinalizadoManualmente =
         linha.situacaoId === SituacaoSolicitacaoItemEnum.FINALIZADO_MANUALMENTE;
@@ -589,7 +588,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
             <Form.Item shouldUpdate>
               {() => {
                 return (
-                  <DataTable columns={columns} dataSource={dataSource} showOrderButton={false} />
+                  <DataTable scroll={{x: true}} columns={columns} dataSource={dataSource} showOrderButton={false} />
                 );
               }}
             </Form.Item>
