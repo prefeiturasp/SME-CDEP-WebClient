@@ -188,6 +188,7 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
                       inputProps={{ 
                         placeholder: 'N° da solicitação', 
                         id: CDEP_INPUT_NUMERO_SOLICITACAO,
+                        maxLength: 18,
                         onChange: obterFiltros
                       }}
                   />
