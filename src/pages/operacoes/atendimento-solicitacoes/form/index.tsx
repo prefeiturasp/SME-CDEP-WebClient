@@ -55,6 +55,7 @@ import {
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { configTagAcervoDisponibilidadeMap } from '../../solicitacao/components/lista-acervos-solicitacao/utils';
 import { ModalAtendimento } from './components/modal-atendimento';
+import { MailOutlined } from '@ant-design/icons';
 
 export const FormAtendimentoSolicitacoes: React.FC = () => {
   const [form] = useForm();
@@ -448,6 +449,13 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
     });
   };
 
+  const handleOpenEmail = () => {
+    const email = form.getFieldValue(['dadosSolicitante', 'email']);
+    if (email) {
+      window.location.href = `mailto:${email}`;
+    }
+  };
+
   useEffect(() => {
     if (acervoSolicitacaoId) {
       carregarDados();
@@ -557,11 +565,16 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 </>
               )}
 
-              <Col xs={24} md={8}>
-                <Form.Item label='E-mail' name={['dadosSolicitante', 'email']}>
-                  <Input type='text' placeholder='email' disabled />
-                </Form.Item>
-              </Col>
+            <Col xs={24} md={8} style={{ display: 'flex' }}>
+              <Form.Item label='E-mail' name={['dadosSolicitante', 'email']} style={{ flex: 1, marginBottom: 0 }}>
+                <Input type='text' placeholder='email' disabled style={{ width: '100%' }} />
+              </Form.Item>
+              <Button
+                icon={<MailOutlined />}
+                onClick={handleOpenEmail}
+                style={{ marginLeft: 5, alignSelf: 'flex-end', marginBottom: '24px' }}
+              />
+            </Col>
 
               {ehUsuarioExterno && (
                 <Col xs={24} md={16}>
