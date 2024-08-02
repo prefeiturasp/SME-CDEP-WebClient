@@ -364,7 +364,7 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
                     label='Data da devolução'
                     dependencies={['dataEmprestimo', 'dataVisita']}
                     rules={[
-                      { required: true },]}
+                      { required: false },]}
                   >
                     <DatePicker
                       allowClear
