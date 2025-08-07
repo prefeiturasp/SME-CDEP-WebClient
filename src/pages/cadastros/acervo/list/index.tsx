@@ -6,6 +6,7 @@ import { FaFileExcel } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import SelectCreditoAutoria from '~/components/cdep/input/credito-autoria';
+import SelectEditora from '~/components/cdep/input/editora';
 import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
 import ButtonPrimary from '~/components/lib/button/primary';
 import ButtonSecundary from '~/components/lib/button/secundary';
@@ -33,6 +34,10 @@ const ListAcervo: React.FC = () => {
     {
       title: 'Tipo de acervo',
       dataIndex: 'tipoAcervo',
+    },
+    {
+      title: 'Editora',
+      dataIndex: 'editora',
     },
     {
       title: 'Título',
@@ -100,29 +105,31 @@ const ListAcervo: React.FC = () => {
           <Form.Item shouldUpdate>
             {() => (
               <Row gutter={[16, 8]}>
-                <Col xs={24} sm={12}>
-                  <SelectTipoAcervo />
-                </Col>
 
-                <Col xs={24} sm={12}>
-                  <Form.Item label='Título' name='titulo'>
-                    <Input type='text' placeholder='Título' id={CDEP_INPUT_TITULO} />
+                  <Col xs={24} sm={12}>
+                  <Form.Item label="Título" name="titulo">
+                    <Input type="text" placeholder="Título" id={CDEP_INPUT_TITULO} />
                   </Form.Item>
                 </Col>
-
-                <Col xs={24} sm={12}>
+                 <Col xs={24} sm={12}>
                   <SelectCreditoAutoria />
                 </Col>
 
-                <Col xs={24} sm={12}>
-                  <Form.Item label='Tombo/Código' name='codigo'>
-                    <Input type='text' placeholder='Tombo/Código' id={CDEP_INPUT_CODIGO} />
+                <Col xs={24} sm={8}>
+                  <Form.Item label="Tombo/Código" name="codigo">
+                    <Input type="text" placeholder="Tombo/Código" id={CDEP_INPUT_CODIGO} />
                   </Form.Item>
+                </Col>
+                <Col xs={24} sm={8}>
+                  <SelectTipoAcervo />
+                </Col>
+                <Col xs={24} sm={8}>
+                  <SelectEditora />
                 </Col>
 
                 <Col span={24}>
                   <DataTable
-                    rowKey='acervoId'
+                    rowKey="acervoId"
                     filters={form.getFieldsValue()}
                     url={URL_API_ACERVO}
                     columns={columns}

@@ -155,6 +155,13 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                     />
 
                     <TextItemCardContentConsultaAcervo
+                      label='Editora: '
+                      description={item.editora}
+                      termoPesquisado={termoPesquisado}
+                      hasHighlightedText
+                    />
+
+                    <TextItemCardContentConsultaAcervo
                       label='Autoria/Crédito: '
                       description={item.creditoAutoria}
                       termoPesquisado={termoPesquisado}
