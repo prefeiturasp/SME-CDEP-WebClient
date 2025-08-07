@@ -38,7 +38,7 @@ const SelectMaterial: React.FC<SelectMaterialProps> = ({
         setHabilitaBotaoAdicionar(false);
         tipoMaterial = TipoMaterial.BIBLIOGRAFICO;
         break;
-      case TipoAcervo.DocumentacaoHistorica:
+      case TipoAcervo.DocumentacaoTextual:
         tipoMaterial = TipoMaterial.DOCUMENTAL;
         break;
       default:

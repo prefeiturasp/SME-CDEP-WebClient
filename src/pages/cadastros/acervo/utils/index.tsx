@@ -10,7 +10,6 @@ export const mapearDtoCadastrosAcervo = (dados: FormDefaultCadastroAcervoDTO) =>
       status: 'done',
     }));
   }
-
   if (dados?.ano) {
     dados.ano = String(dados.ano);
   }
