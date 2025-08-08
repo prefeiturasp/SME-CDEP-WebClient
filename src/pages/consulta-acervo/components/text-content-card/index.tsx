@@ -8,7 +8,7 @@ import { configTagAcervoDisponibilidadeMap } from '~/pages/operacoes/solicitacao
 
 type InfoTituloConsultaAcervoProps = {
   label: string;
-  description: string;
+  description: string | React.ReactNode;
   ellipsis?: boolean;
   exibirLabelSemValor?: boolean;
   exibirTooltip?: boolean;
@@ -33,6 +33,8 @@ export const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcerv
 
   let conteudo: string | React.ReactNode = description;
 
+  const descriptionEhString = typeof description === 'string';
+
   const optionsParseDescription: HTMLReactParserOptions = {
     replace: (domNode) => {
       if (domNode instanceof Element && domNode.name === 'p') {
@@ -42,7 +44,7 @@ export const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcerv
   };
 
   if (esconderTagsHTML) {
-    conteudo = parse(description, optionsParseDescription);
+    conteudo = descriptionEhString ? parse(description, optionsParseDescription) : description;
   }
 
   let config;
@@ -58,13 +60,13 @@ export const TextItemCardContentConsultaAcervo: React.FC<InfoTituloConsultaAcerv
   }
 
   if (hasHighlightedText) {
-    conteudo = <HighlightedText text={description} searchTerm={termoPesquisado} />;
+    conteudo = <HighlightedText text={descriptionEhString ? description : ''} searchTerm={termoPesquisado} />;
   }
 
   return (
     <Row wrap={false} gutter={12}>
       <Col>
-        <Typography.Text ellipsis={ellipsis} title={exibirTooltip ? description : ''}>
+        <Typography.Text ellipsis={ellipsis} title={exibirTooltip && descriptionEhString ? description : ''}>
           <span style={{ fontWeight: 700 }}>{label}</span>
           <span>{conteudo}</span>
         </Typography.Text>

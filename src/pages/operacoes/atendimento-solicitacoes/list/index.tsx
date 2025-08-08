@@ -26,6 +26,7 @@ import { SolicitacaoDTO } from '~/core/dto/solicitacao-dto';
 import { ROUTES } from '~/core/enum/routes';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { InputRfCpfSolicitante } from './components/rf-cpf-solicitante';
+import InputNumero from '~/components/lib/inputs/number';
 
 export type FiltroSolicitacaoProps = {
   tipoAcervo: number | null;
@@ -179,14 +180,18 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
             {() => (
               <Row gutter={[16, 8]}>
                 <Col xs={24} md={8}>
-                  <Form.Item label='N° da solicitação' name='acervoSolicitacaoId'>
-                    <Input
-                      type='text'
-                      placeholder='N° da solicitação'
-                      id={CDEP_INPUT_NUMERO_SOLICITACAO}
-                      onChange={obterFiltros}
-                    />
-                  </Form.Item>
+                  <InputNumero
+                    formItemProps={{
+                      label: 'N° da solicitação',
+                      name: 'acervoSolicitacaoId',
+                      }}
+                      inputProps={{ 
+                        placeholder: 'N° da solicitação', 
+                        id: CDEP_INPUT_NUMERO_SOLICITACAO,
+                        maxLength: 18,
+                        onChange: obterFiltros
+                      }}
+                  />
                 </Col>
                 <Col xs={24} md={8}>
                   <SelectTipoAcervo

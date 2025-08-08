@@ -25,6 +25,9 @@ export const InputRfCpf: React.FC<InputRfCpfProps> = ({ inputProps, formItemProp
 
         form.setFieldValue('dadosSolicitante', { ...dados });
         form.setFieldValue('dataSolicitacao', dataAtual);
+      } else {
+        form.setFieldValue(['dadosSolicitante'], []);
+        form.setFieldValue('dataSolicitacao', null);
       }
     });
     setLoading(false);
