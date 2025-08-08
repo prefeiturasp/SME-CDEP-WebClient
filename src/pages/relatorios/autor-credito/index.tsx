@@ -95,15 +95,11 @@ const RelatorioAutorCredito = () => {
         >
           <Row gutter={16}>
             <Col xs={24} sm={12}>
-              <SelectCreditoAutoria />
+              <SelectCreditoAutoria selectProps={{ mode: 'multiple' }} />
             </Col>
 
             <Col span={8}>
-              <Form.Item
-                label='Tipo de acervo'
-                name='tipoAcervo'
-                rules={[{ required: true, message: 'Campo obrigatório' }]}
-              >
+              <Form.Item label='Tipo de acervo' name='tipoAcervo'>
                 <Select
                   showSearch
                   allowClear
