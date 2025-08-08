@@ -15,7 +15,7 @@ const InputNumeroDePaginas: React.FC<InputNumeroDePaginasProps> = ({ tipoAcervo,
 
   const validarCampoObrigatorio = () => {
     switch (tipoAcervo) {
-      case TipoAcervo.DocumentacaoHistorica:
+      case TipoAcervo.DocumentacaoTextual:
         setRequired(true);
         break;
 

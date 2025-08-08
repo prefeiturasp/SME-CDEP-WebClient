@@ -1,7 +1,7 @@
 import { FieldAcervoDetalhesProps } from '~/core/dto/form-cadastro-detalhes';
 import { FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 
-export const FieldsDetalhesDocumentacaoHistorica: FieldAcervoDetalhesProps[] = [
+export const FieldsDetalhesDocumentacaoTextual: FieldAcervoDetalhesProps[] = [
   {
     fieldAcervo: FieldAcervoEnum.Titulo,
   },
