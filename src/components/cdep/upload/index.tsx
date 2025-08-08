@@ -31,6 +31,7 @@ const UploadArquivosCDEP: React.FC<UploadArquivosCDEPProps> = ({
         break;
 
       default:
+        setPermiteMultiplos(true);
         break;
     }
   };
