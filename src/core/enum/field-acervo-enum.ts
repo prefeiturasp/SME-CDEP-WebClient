@@ -313,7 +313,7 @@ const FieldAcervoNameLabel: FieldAcervoNameLabelProps = {
     label: 'Acervo disponível',
   },
   ImagemCapa: {
-    name: 'urlImagemCapa',
+    name: 'capaDocumento',
     label: 'Adicionar Capa',
   }
 };

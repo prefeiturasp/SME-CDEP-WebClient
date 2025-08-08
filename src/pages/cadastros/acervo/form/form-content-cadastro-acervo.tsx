@@ -1,5 +1,5 @@
-import { Alert, Col, FormInstance } from 'antd';
-import React, { useContext, useState } from 'react';
+import { Alert, Col, Form, FormInstance } from 'antd';
+import React, { useContext } from 'react';
 import UploadArquivosCDEP from '~/components/cdep/upload';
 import {
   AcervoLinhaRetornoCamposDTO,
@@ -75,7 +75,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
   const { desabilitarCampos } = useContext(PermissaoContext);
 
   if (!fieldsConfig?.fields?.length) return;
-
+  
   const montarAlerta = (description: string, message: string) => (
     <Alert
       style={{ margin: '-5px 0px 15px' }}
@@ -97,8 +97,6 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
 
     return undefined;
   };
-  // Coloquei o estado aqui, mas não podemos ter isso
-  const [coverImageFile, setCoverImageFile] = useState<File | null>(null);
 
   return (
     <>
@@ -117,8 +115,9 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
             break;
           case FieldAcervoEnum.ImagemCapa:
             input = (
-              // Aqui esta o componente de upload de imagem de capa
-              <UploadImagemCapa onFileChange={setCoverImageFile} />
+              <Form.Item name={PropsByFieldAcervoEnum[FieldAcervoEnum.ImagemCapa].name}>
+                <UploadImagemCapa />
+              </Form.Item>
             );
           break;
           case FieldAcervoEnum.Subtitulo:

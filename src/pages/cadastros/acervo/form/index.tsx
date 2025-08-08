@@ -118,10 +118,10 @@ const FormAcervo: React.FC<FormAcervoProps> = ({
     if (fieldsConfig) {
       let response = null;
 
-      if (valoresSalvar?.urlImagemCapa) {
-        valoresSalvar.urlImagemCapa;
+      if (valoresSalvar?.capaDocumento) {
+        valoresSalvar.capaDocumento;
       } else {
-        valoresSalvar.urlImagemCapa = null;
+        valoresSalvar.capaDocumento = null;
       }
 
       if (valoresSalvar?.codigo) {

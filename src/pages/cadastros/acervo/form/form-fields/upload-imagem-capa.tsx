@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import { Form, FormItemProps, Upload, message } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Upload, message } from 'antd';
 import { PropsByFieldAcervoEnum, FieldAcervoEnum } from '~/core/enum/field-acervo-enum';
 import type { UploadProps, RcFile } from 'antd/es/upload';
 import { MdAddPhotoAlternate, MdClose } from 'react-icons/md';
 import styles from './upload-imagem-capa.module.css';
 
 interface UploadImagemCapaProps {
-  onFileChange: (file: File | null) => void;
-  formItemProps?: FormItemProps;
+  value?: string | null;
+  onChange?: (base64: string | null) => void;
 }
 
 const MAX_FILE_SIZE_MB = 5;
@@ -19,14 +19,15 @@ const getBase64 = (file: RcFile, callback: (result: string) => void) => {
   reader.readAsDataURL(file);
 };
 const fieldProps = PropsByFieldAcervoEnum[FieldAcervoEnum.ImagemCapa];
-const UploadImagemCapa: React.FC<UploadImagemCapaProps> = ({ onFileChange, formItemProps }) => {
+const UploadImagemCapa: React.FC<UploadImagemCapaProps> = ({ value, onChange }) => {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
 
-  /**
-   * @description Handles the file selection and validation logic before uploading.
-   * @param {RcFile} file - The selected file.
-   * @returns {boolean} Returns false to prevent automatic upload and handle it manually.
-   */
+  useEffect(() => {
+    if (value) {
+      setImageUrl(value);
+    }
+  }, [value]);
+
   const beforeUpload = (file: RcFile): boolean => {
     const isFileTypeAllowed = ALLOWED_FILE_TYPES.includes(file.type);
     if (!isFileTypeAllowed) {
@@ -39,27 +40,20 @@ const UploadImagemCapa: React.FC<UploadImagemCapaProps> = ({ onFileChange, formI
       message.error(`A imagem deve ser menor que ${MAX_FILE_SIZE_MB}MB!`);
       return false;
     }
-    
-    // Convert to base64 for preview and update parent state
     getBase64(file, (url) => {
-      console.log('Imagem convertida para base64:', url);
       setImageUrl(url);
+      onChange?.(url);
     });
-    onFileChange(file);
 
-    // Prevent ant design's default upload behaviour
     return false;
   };
 
-  /**
-   * @description Removes the currently selected image.
-   */
   const handleRemoveImage = (e: React.MouseEvent) => {
-    e.stopPropagation(); // prevent triggering the upload
+    e.stopPropagation();
     setImageUrl(null);
-    onFileChange(null);
+    onChange?.(null);
   };
-  
+
   const uploadButton = (
     <div className={styles.uploadButtonContainer}>
       <MdAddPhotoAlternate className={styles.uploadIcon} />
@@ -76,15 +70,11 @@ const UploadImagemCapa: React.FC<UploadImagemCapaProps> = ({ onFileChange, formI
   };
 
   return (
-    <Form.Item
-      name={fieldProps.name}
-      {...formItemProps}
-    >
     <div className={styles.container}>
       <Upload {...props}>
         {imageUrl ? (
           <div className={styles.imagePreviewWrapper}>
-            <img src={imageUrl} alt="Prévia da Capa" className={styles.imagePreview} />
+            <img src={imageUrl} alt="Prévia da Capa do Documento" className={styles.imagePreview} />
             <button onClick={handleRemoveImage} className={styles.removeButton}>
               <MdClose />
             </button>
@@ -94,7 +84,6 @@ const UploadImagemCapa: React.FC<UploadImagemCapaProps> = ({ onFileChange, formI
         )}
       </Upload>
     </div>
-    </Form.Item>
   );
 };
 
