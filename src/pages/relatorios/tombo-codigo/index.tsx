@@ -27,7 +27,7 @@ const RelatorioTomboCodigo = () => {
 
   const handleFormChange = () => {
     const values = form.getFieldsValue();
-    if (values.tipoAcervo && values.situacao) {
+    if (values.tipoAcervo) {
       setCanSubmit(true);
     }
   };
@@ -115,11 +115,7 @@ const RelatorioTomboCodigo = () => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item
-                name='situacao'
-                label='Situação do tombo'
-                rules={[{ required: true, message: 'Campo obrigatório' }]}
-              >
+              <Form.Item name='situacao' label='Situação do tombo'>
                 <Select placeholder='Selecione a situação' mode='multiple'>
                   {situacao.map((op) => (
                     <Option value={op.value} key={op.value}>
