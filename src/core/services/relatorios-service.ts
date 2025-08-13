@@ -7,9 +7,19 @@ export type RelatorioControleLivrosEmprestadosRequest = {
   solicitante?: string;
   tombo?: string;
   situacaoSolicitacaoItem?: number;
-  situacaoEmprestimo?: number;
+  situacaoEmprestimo?: string;
   modelo: number;
   somenteDevolvidos?: boolean;
+};
+
+export type RelatorioControleAcervoRequest = {
+  situacaoAcervo: string;
+  tipoAcervo: string;
+};
+
+export type RelatorioControleAcervoAutorRequest = {
+  autores: string;
+  tipoAcervo: string;
 };
 
 const gerarRelatorioControleLivrosEmprestados = (
@@ -19,6 +29,22 @@ const gerarRelatorioControleLivrosEmprestados = (
     responseType: 'blob',
   });
 
+const gerarRelatorioControleAcervo = (
+  dados: RelatorioControleAcervoRequest,
+): Promise<AxiosResponse<Blob>> =>
+  api.post(`${URL_DEFAULT}/controle-acervo`, dados, {
+    responseType: 'blob',
+  });
+
+const gerarRelatorioControleAcervoPorAutor = (
+  dados: RelatorioControleAcervoAutorRequest,
+): Promise<AxiosResponse<Blob>> =>
+  api.post(`${URL_DEFAULT}/controle-acervo-autor`, dados, {
+    responseType: 'blob',
+  });
+
 export default {
   gerarRelatorioControleLivrosEmprestados,
+  gerarRelatorioControleAcervo,
+  gerarRelatorioControleAcervoPorAutor,
 };

@@ -10,6 +10,7 @@ import { CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { InputRfCpfSolicitante } from '../../operacoes/atendimento-solicitacoes/list/components/rf-cpf-solicitante';
 import relatorioService from '~/core/services/relatorios-service';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { SelectSituacaoEmprestimoFiltrado } from '~/components/cdep/input/situacao-emprestimo-sem-devolvido';
 
 const { Option } = Select;
 
@@ -23,13 +24,9 @@ const apresentarDevolvidos = [
   { label: 'Não', value: false },
 ];
 
-const situacaoEmprestimo = [
-  { label: 'Emprestado', value: 1 },
-  { label: 'Prorrogado', value: 3 },
-];
-
 export type FiltroSolicitacaoProps = {
   solicitanteRf: string | null;
+  situacaoEmprestimo: string | null;
 };
 
 const RelatorioLivrosEmprestados = () => {
@@ -45,11 +42,7 @@ const RelatorioLivrosEmprestados = () => {
   const handleFormChange = () => {
     const values = form.getFieldsValue();
     if (values.modelo === 2) {
-      setCanSubmit(
-        !!values.modelo &&
-          values.situacaoEmprestimo !== undefined &&
-          values.somenteDevolvidos !== undefined,
-      );
+      setCanSubmit(!!values.modelo);
     } else if (values.modelo === 1) {
       setCanSubmit(!!values.modelo);
     } else {
@@ -66,13 +59,10 @@ const RelatorioLivrosEmprestados = () => {
       const payload = {
         solicitante: filters?.solicitanteRf || '',
         tombo: values.tombo || '',
-        situacaoEmprestimo: values.situacaoEmprestimo
-          ? Number(values.situacaoEmprestimo)
-          : undefined,
+        situacaoEmprestimo: filters?.situacaoEmprestimo || '',
         modelo: values.modelo,
         somenteDevolvidos: values.somenteDevolvidos,
       };
-
       const response = await relatorioService.gerarRelatorioControleLivrosEmprestados(payload);
 
       if (response.status === 404) {
@@ -132,6 +122,7 @@ const RelatorioLivrosEmprestados = () => {
   const obterFiltros = () => {
     setFilters({
       solicitanteRf: form?.getFieldValue('solicitanteRf'),
+      situacaoEmprestimo: form?.getFieldValue('situacaoEmprestimo'),
     });
   };
   return (
@@ -204,20 +195,13 @@ const RelatorioLivrosEmprestados = () => {
 
             {tipoRelatorio === 2 && (
               <>
-                <Col span={8}>
-                  <Form.Item
-                    name='situacaoEmprestimo'
-                    label='Situação do empréstimo'
-                    rules={[{ required: true, message: 'Campo obrigatório' }]}
-                  >
-                    <Select placeholder='Selecione a situação'>
-                      {situacaoEmprestimo.map((op) => (
-                        <Option value={op.value} key={op.value}>
-                          {op.label}
-                        </Option>
-                      ))}
-                    </Select>
-                  </Form.Item>
+                <Col xs={24} md={8}>
+                  <SelectSituacaoEmprestimoFiltrado
+                    selectProps={{
+                      onChange: obterFiltros,
+                      mode: 'multiple',
+                    }}
+                  />
                 </Col>
                 <Col span={8}>
                   <Form.Item

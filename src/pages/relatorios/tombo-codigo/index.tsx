@@ -9,52 +9,101 @@ import { ROUTES } from '~/core/enum/routes';
 import { CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { CDEP_SELECT_TIPO_ACERVO } from '~/core/constants/ids/select';
 import { obterTiposAcervo } from '~/core/services/acervo-service';
+import relatorioService from '~/core/services/relatorios-service';
 import { DefaultOptionType } from 'antd/es/select';
+import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 
 const { Option } = Select;
 
 const situacao = [
-  { label: 'Ativo', value: 'ativo' },
-  { label: 'Inativo', value: 'inativo' },
+  { label: 'Ativo', value: 1 },
+  { label: 'Inativo', value: 2 },
 ];
 
 const RelatorioTomboCodigo = () => {
   const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
   const [loadingRelatorio, setLoadingRelatorio] = useState(false);
-  const [relatorioUrl, setRelatorioUrl] = useState('');
+  const [relatorioBlob, setRelatorioBlob] = useState<Blob | null>(null);
+  const [erroModal, setErroModal] = useState<string | null>(null);
   const [canSubmit, setCanSubmit] = useState(false);
+  const [options, setOptions] = useState<DefaultOptionType[]>([]);
 
   const handleFormChange = () => {
     const values = form.getFieldsValue();
-    if (values.tipoAcervo) {
-      setCanSubmit(true);
-    }
+    setCanSubmit(!!values.tipoAcervo && !!values.situacao);
   };
 
-  const onFinish = async () => {
-    setModalVisible(true);
-    setLoadingRelatorio(true);
-    setTimeout(() => {
+  const onFinish = async (values: any) => {
+    try {
+      setModalVisible(true);
+      setLoadingRelatorio(true);
+      setErroModal(null);
+
+      const payload = {
+        situacaoAcervo: Array.isArray(values.situacao) ? values.situacao[0] : values.situacao,
+        tipoAcervo: values.tipoAcervo,
+      };
+
+      const response = await relatorioService.gerarRelatorioControleAcervo(payload);
+
+      if (response.status === 404) {
+        setErroModal(
+          'Seu relatório não retornou nenhum dado. Por favor, tente novamente mais tarde.',
+        );
+        return;
+      }
+      if (!response.data || response.data.size === 0) {
+        setErroModal('Nenhum dado encontrado para os filtros selecionados.');
+        return;
+      }
+
+      const blob = new Blob([response.data], {
+        type: 'application/vnd.ms-excel',
+      });
+
+      setRelatorioBlob(blob);
+    } catch (err: any) {
+      if (err?.response?.status === 404) {
+        setErroModal(
+          'Seu relatório não retornou nenhum dado. Por favor, tente novamente mais tarde ou mude os filtros escolhidos.',
+        );
+      } else {
+        setErroModal(
+          'Parece que houve um problema ao solicitar o relatório. Por favor, tente novamente mais tarde.',
+        );
+      }
+      setRelatorioBlob(null);
+    } finally {
       setLoadingRelatorio(false);
-      setRelatorioUrl('/path/to/relatorio.pdf');
-    }, 1500);
+    }
   };
 
   const fecharModal = () => {
     setModalVisible(false);
-    setLoadingRelatorio(false);
-    setRelatorioUrl('');
+    setRelatorioBlob(null);
+    setErroModal(null);
+  };
+
+  const baixarRelatorio = () => {
+    if (relatorioBlob) {
+      const url = window.URL.createObjectURL(relatorioBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'relatorio_controle_acervo.xls';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      fecharModal();
+    }
   };
 
   const navigate = useNavigate();
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
-  const [options, setOptions] = useState<DefaultOptionType[]>([]);
-
   const obterTipos = async () => {
     const resposta = await obterTiposAcervo();
-
     if (resposta.sucesso) {
       const newOptions = resposta.dados.map((item) => ({ label: item.nome, value: item.id }));
       setOptions(newOptions);
@@ -88,16 +137,9 @@ const RelatorioTomboCodigo = () => {
           </Row>
         </Col>
       </HeaderPage>
+
       <CardContent>
-        <Form
-          form={form}
-          layout='vertical'
-          onFinish={onFinish}
-          onValuesChange={handleFormChange}
-          initialValues={{
-            devolvidos: 'nao',
-          }}
-        >
+        <Form form={form} layout='vertical' onFinish={onFinish} onValuesChange={handleFormChange}>
           <Row gutter={16}>
             <Col span={8}>
               <Form.Item
@@ -115,8 +157,12 @@ const RelatorioTomboCodigo = () => {
               </Form.Item>
             </Col>
             <Col span={8}>
-              <Form.Item name='situacao' label='Situação do tombo'>
-                <Select placeholder='Selecione a situação' mode='multiple'>
+              <Form.Item
+                name='situacao'
+                label='Situação do tombo'
+                rules={[{ required: true, message: 'Campo obrigatório' }]}
+              >
+                <Select placeholder='Selecione a situação'>
                   {situacao.map((op) => (
                     <Option value={op.value} key={op.value}>
                       {op.label}
@@ -128,6 +174,7 @@ const RelatorioTomboCodigo = () => {
           </Row>
         </Form>
       </CardContent>
+
       <Modal
         open={modalVisible}
         closable={!loadingRelatorio}
@@ -137,43 +184,33 @@ const RelatorioTomboCodigo = () => {
         centered
         maskClosable={false}
       >
-        {loadingRelatorio ? (
+        {loadingRelatorio && !erroModal ? (
           <div style={{ textAlign: 'center', padding: 32 }}>
             <Spin size='large' />
             <div style={{ marginTop: 16, fontWeight: 700 }}>Aguarde um momento!</div>
             <div>Estamos gerando o seu relatório...</div>
           </div>
+        ) : erroModal ? (
+          <div style={{ textAlign: 'center', padding: 20 }}>
+            <span style={{ fontSize: 32 }}>
+              <CloseCircleOutlined style={{ color: 'red' }} />
+            </span>
+            <div style={{ fontWeight: 700, fontSize: 20, marginBottom: 8 }}>Desculpe!</div>
+            <div style={{ marginBottom: 24 }}>{erroModal}</div>
+            <Button onClick={fecharModal} block>
+              Voltar
+            </Button>
+          </div>
         ) : (
           <div style={{ textAlign: 'center', padding: 16 }}>
-            <div
-              style={{
-                display: 'inline-block',
-                color: '#3bb346',
-                border: '2px solid #3bb346',
-                borderRadius: '50%',
-                padding: 6,
-                marginBottom: 16,
-              }}
-            >
-              <span className='anticon anticon-check' style={{ fontSize: 32, lineHeight: '32px' }}>
-                ✔
-              </span>
-            </div>
-            <div style={{ marginBottom: 8, fontWeight: 700 }}>
-              Solicitação de relatório gerada com sucesso!
-            </div>
+            <span style={{ fontSize: 32 }}>
+              <CheckCircleOutlined style={{ color: 'green' }} />
+            </span>
+            <div style={{ marginBottom: 8, fontWeight: 700 }}>Relatório gerado com sucesso!</div>
             <div style={{ marginBottom: 16 }}>
               Clique no botão "Baixar Relatório" para obter o seu arquivo.
             </div>
-            <Button
-              type='primary'
-              block
-              onClick={() => {
-                window.open(relatorioUrl, '_blank');
-                fecharModal();
-              }}
-              style={{ marginBottom: 4 }}
-            >
+            <Button type='primary' block onClick={baixarRelatorio} disabled={!relatorioBlob}>
               Baixar relatório
             </Button>
           </div>
