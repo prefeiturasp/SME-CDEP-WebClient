@@ -82,9 +82,21 @@ type UploadArquivosProps = {
   tamanhoMaxUploadPorArquivo?: number;
   downloadService: (codigosArquivo: string) => any;
   uploadService: (formData: FormData, configuracaoHeader: any) => any;
+  permiteMultiplosArquivos?: boolean;
 };
 
 const TAMANHO_PADRAO_MAXIMO_UPLOAD = 100;
+const LIMITE_DE_ARQUIVOS_NA_NOTIFICACAO = 3;
+const formatarListaDeNomes = (nomes: string[]): string => {
+  if (nomes.length <= LIMITE_DE_ARQUIVOS_NA_NOTIFICACAO) {
+    return nomes.join(', ');
+  }
+
+  const nomesExibidos = nomes.slice(0, LIMITE_DE_ARQUIVOS_NA_NOTIFICACAO).join(', ');
+  const quantidadeOmitida = nomes.length - LIMITE_DE_ARQUIVOS_NA_NOTIFICACAO;
+  
+  return `${nomesExibidos}, ... e mais ${quantidadeOmitida} arquivo(s).`;
+};
 
 const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
   const {
@@ -95,6 +107,7 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
     downloadService,
     tiposArquivosPermitidos = '',
     tamanhoMaxUploadPorArquivo = TAMANHO_PADRAO_MAXIMO_UPLOAD,
+    permiteMultiplosArquivos = false,
   } = props;
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -121,18 +134,10 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
 
   const beforeUploadDefault = (arquivo: RcFile) => {
     if (!permiteInserirFormato(arquivo, tiposArquivosPermitidos)) {
-      notification.error({
-        message: 'Erro',
-        description: 'Formato não permitido',
-      });
       return false;
     }
 
     if (excedeuLimiteMaximo(arquivo)) {
-      notification.error({
-        message: 'Erro',
-        description: `Tamanho máximo ${tamanhoMaxUploadPorArquivo}MB`,
-      });
       return false;
     }
 
@@ -177,46 +182,65 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
     }
     return false;
   };
+  const [errosDeFormato, setErrosDeFormato] = useState<string[]>([]);
+  const [errosDeTamanho, setErrosDeTamanho] = useState<string[]>([]);
 
-  const atualizaListaArquivos = (fileList: any, file: UploadFile<any>) => {
-    const novaLista = fileList.filter((item: any) => item.uid !== file.uid);
-    const novoMap = [...novaLista];
+  const onChangeDefault = ({ file, fileList }: { file: UploadFile, fileList: UploadFile[] }) => {
+    const arquivosNovos = fileList.filter(f => !f.status);
 
-    setNovoValor(novoMap);
-  };
+    if (arquivosNovos.length === 0) {
+      setNovoValor(fileList);
+    } else {
+      const arquivosValidosParaUpload: UploadFile[] = [];
+      const arquivosJaExistentes = fileList.filter(f => f.status);
 
-  const onChangeDefault = ({ file, fileList }: any) => {
-    const { status } = file;
+      const novosErrosDeFormato = new Set<string>();
+      const novosErrosDeTamanho = new Set<string>();
 
-    if (excedeuLimiteMaximo(file)) {
-      atualizaListaArquivos(fileList, file);
-      return;
-    }
-
-    if (!permiteInserirFormato(file, tiposArquivosPermitidos)) {
-      atualizaListaArquivos(fileList, file);
-      return;
-    }
-
-    const novoMap = [...fileList]?.filter((f) => f?.status !== 'removed');
-
-    if (status === 'done') {
-      notification.success({
-        message: 'Sucesso',
-        description: `${file.name} arquivo carregado com sucesso`,
+      arquivosNovos.forEach((f: UploadFile) => {
+        if (!permiteInserirFormato(f, tiposArquivosPermitidos)) {
+          novosErrosDeFormato.add(f.name);
+        } else if (excedeuLimiteMaximo(f as RcFile)) {
+          novosErrosDeTamanho.add(f.name);
+        } else {
+          arquivosValidosParaUpload.push(f);
+        }
       });
-    } else if (status === 'error') {
-      atualizaListaArquivos(fileList, file);
-      return;
-    }
 
-    if (status === 'done' || status === 'removed') {
-      if (form && form.setFieldValue) {
-        form.setFieldValue(formItemProps.name, novoMap);
+      if (novosErrosDeFormato.size > 0) {
+        setErrosDeFormato(prev => [...new Set([...prev, ...novosErrosDeFormato])]);
+      }
+      if (novosErrosDeTamanho.size > 0) {
+        setErrosDeTamanho(prev => [...new Set([...prev, ...novosErrosDeTamanho])]);
+      }
+
+      const listaFinal = [...arquivosJaExistentes, ...arquivosValidosParaUpload];
+      setNovoValor(listaFinal);
+    }
+    const uploadEmAndamento = fileList.some((f: UploadFile) => f.status === 'uploading');
+    if (file.status === 'done' && !uploadEmAndamento) { debugger;
+      if (errosDeFormato.length > 0) {
+        notification.error({
+          message: 'Formato de arquivo não permitido',
+          description: `Arquivos ignorados: ${formatarListaDeNomes(errosDeFormato)}`,
+        });
+        setErrosDeFormato([]);
+      }
+      if (errosDeTamanho.length > 0) {
+        notification.error({
+          message: 'Tamanho de arquivo excedido',
+          description: `Arquivos ignorados: ${formatarListaDeNomes(errosDeTamanho)}`,
+        });
+        setErrosDeTamanho([]);
+      }
+      const arquivosSucesso = fileList.filter(f => f.status === 'done');
+      if (arquivosSucesso.length > 0) {
+        notification.success({
+            message: 'Upload Concluído',
+            description: `${arquivosSucesso.length} arquivo(s) foram carregados com sucesso.`,
+        });
       }
     }
-
-    setNovoValor(novoMap);
   };
 
   const onDownloadDefault = (arquivo: UploadFile<any>) => {
@@ -271,7 +295,7 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
     if (Array.isArray(e)) {
       return e;
     }
-    return listaDeArquivos;
+    return e?.fileList || listaDeArquivos;
   };
 
  
@@ -306,6 +330,7 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
           name='file'
           listType='text'
           fileList={listaDeArquivos}
+          multiple={permiteMultiplosArquivos}
           showUploadList={{ showDownloadIcon: true }}
           itemRender={customItemRender}
           onRemove={draggerProps?.onRemove || onRemoveDefault}
@@ -318,8 +343,10 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
           <p className='ant-upload-drag-icon'>
             <InboxOutlined />
           </p>
-          <p className='ant-upload-text'>Clique ou arraste para fazer o upload do arquivo</p>
-          <p className='ant-upload-hint'>{`Deve permitir apenas arquivos com no máximo ${tamanhoMaxUploadPorArquivo}MB cada`}</p>
+          <p className='ant-upload-text'>{permiteMultiplosArquivos
+            ? `Clique ou arraste para fazer o upload dos arquivos`
+            : `Clique ou arraste para fazer o upload do arquivo`}</p>
+        <p className='ant-upload-hint'>{`Deve permitir apenas arquivos com no máximo ${tamanhoMaxUploadPorArquivo}MB cada`}</p>
         </ContainerDraggerUpload>
       </Form.Item>
 

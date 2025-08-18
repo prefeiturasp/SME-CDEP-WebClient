@@ -14,7 +14,7 @@ const InputTipoAcervoConsulta: React.FC = () => (
   >
     <Input
       type='text'
-      placeholder='Busque por título, assunto, autor ou crédito'
+      placeholder='Busque por título, assunto, autor, editora, descrição ou crédito'
       id={CDEP_INPUT_BUSCA_TEXTO_LIVRE}
     />
   </Form.Item>

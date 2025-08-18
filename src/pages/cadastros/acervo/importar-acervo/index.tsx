@@ -54,7 +54,7 @@ const ImportarAcervo: React.FC = () => {
     switch (tipoAcervo) {
       case TipoAcervo.Bibliografico:
         return acervoBibliograficoImportacaoService;
-      case TipoAcervo.DocumentacaoHistorica:
+      case TipoAcervo.DocumentacaoTextual:
         return acervoDocumentalImportacaoService;
       case TipoAcervo.ArtesGraficas:
         return acervoArteGraficaImportacaoService;
