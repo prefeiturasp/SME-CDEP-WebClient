@@ -1,10 +1,12 @@
 import { InboxOutlined } from '@ant-design/icons';
-import { Form, FormInstance, FormItemProps, Upload } from 'antd';
+import { Button, Form, FormInstance, FormItemProps, Upload } from 'antd';
 import { DraggerProps, RcFile, UploadFile } from 'antd/es/upload';
+import { FaRegEye } from 'react-icons/fa';
 import { notification } from '~/components/lib/notification';
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Modal from '~/components/lib/modal';
 
 const { Dragger } = Upload;
 
@@ -58,6 +60,18 @@ export const ContainerDraggerUpload = styled(Dragger)`
     .ant-upload-list-item-action {
     opacity: 1;
   }
+
+  .ant-upload-list-item {
+    position: relative;
+  }
+
+  .visualizar-btn {
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.6;
+  }
 `;
 
 type UploadArquivosProps = {
@@ -95,6 +109,10 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
     tamanhoMaxUploadPorArquivo = TAMANHO_PADRAO_MAXIMO_UPLOAD,
     permiteMultiplosArquivos = false,
   } = props;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imagemSelecionada, setImagemSelecionada] = useState<UploadFile | null>(null);
+  const [imagemUrl, setImagemUrl] = useState<string>('');
 
   if (!formItemProps.name) {
     formItemProps.name = 'arquivos';
@@ -239,6 +257,40 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
       );
   };
 
+  const handleVisualizarImagem = async (arquivo: UploadFile<any>) => {
+    setImagemSelecionada(arquivo);
+    setIsModalOpen(true);
+    
+    try {
+      const codigoArquivo = arquivo.xhr;
+      const resposta = await downloadService(codigoArquivo);
+      const blob = new Blob([resposta.data], { type: 'image/jpeg' }); 
+      const urlImagem = URL.createObjectURL(blob);
+      setImagemUrl(urlImagem);
+    } catch (error) {
+      notification.error({
+        message: 'Erro',
+        description: 'Erro ao carregar imagem para visualização',
+      });
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setImagemSelecionada(null);
+    
+    // Limpa a URL do blob para liberar memória
+    if (imagemUrl) {
+      URL.revokeObjectURL(imagemUrl);
+      setImagemUrl('');
+    }
+  };
+
+  const isImageFile = (fileName: string) => {
+    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.tiff', '.tif'];
+    return imageExtensions.some(ext => fileName.toLowerCase().endsWith(ext));
+  };
+
   const normFile = (e: any) => {
     if (Array.isArray(e)) {
       return e;
@@ -246,30 +298,85 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
     return e?.fileList || listaDeArquivos;
   };
 
+ 
+
+  const customItemRender = (originNode: React.ReactElement, file: UploadFile) => {
+    if (!isImageFile(file.name || '')) {
+      return originNode;
+    }
+
+    return (
+      <div style={{ position: 'relative' }}>
+        {originNode}
+        <Button
+          size="small"
+          icon={<FaRegEye />}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleVisualizarImagem(file);
+          }}
+          title="Visualizar imagem"
+          className="visualizar-btn"
+          type="text"
+        />
+      </div>
+    );
+  };
+
   return (
-    <Form.Item valuePropName='fileList' getValueFromEvent={normFile} {...formItemProps}>
-      <ContainerDraggerUpload
-        name='file'
-        listType='text'
-        multiple={permiteMultiplosArquivos}
-        fileList={listaDeArquivos}
-        showUploadList={{ showDownloadIcon: true }}
-        onRemove={draggerProps?.onRemove || onRemoveDefault}
-        onChange={draggerProps?.onChange || onChangeDefault}
-        onDownload={draggerProps?.onDownload || onDownloadDefault}
-        beforeUpload={draggerProps?.beforeUpload || beforeUploadDefault}
-        customRequest={draggerProps?.customRequest || customRequestDefault}
-        {...draggerProps}
-      >
-        <p className='ant-upload-drag-icon'>
-          <InboxOutlined />
-        </p>
-        <p className='ant-upload-text'>{permiteMultiplosArquivos
+    <>
+      <Form.Item valuePropName='fileList' getValueFromEvent={normFile} {...formItemProps}>
+        <ContainerDraggerUpload
+          name='file'
+          listType='text'
+          fileList={listaDeArquivos}
+          multiple={permiteMultiplosArquivos}
+          showUploadList={{ showDownloadIcon: true }}
+          itemRender={customItemRender}
+          onRemove={draggerProps?.onRemove || onRemoveDefault}
+          onChange={draggerProps?.onChange || onChangeDefault}
+          onDownload={draggerProps?.onDownload || onDownloadDefault}
+          beforeUpload={draggerProps?.beforeUpload || beforeUploadDefault}
+          customRequest={draggerProps?.customRequest || customRequestDefault}
+          {...draggerProps}
+        >
+          <p className='ant-upload-drag-icon'>
+            <InboxOutlined />
+          </p>
+          <p className='ant-upload-text'>{permiteMultiplosArquivos
             ? `Clique ou arraste para fazer o upload dos arquivos`
             : `Clique ou arraste para fazer o upload do arquivo`}</p>
         <p className='ant-upload-hint'>{`Deve permitir apenas arquivos com no máximo ${tamanhoMaxUploadPorArquivo}MB cada`}</p>
-      </ContainerDraggerUpload>
-    </Form.Item>
+        </ContainerDraggerUpload>
+      </Form.Item>
+
+      {/* Modal para visualizar imagem */}
+      <Modal
+        open={isModalOpen}
+        onCancel={handleCloseModal}
+        footer={null}
+        title="Visualizar Imagem"
+        width={800}
+        centered
+      >
+        {imagemSelecionada && (
+          <div style={{ textAlign: 'center' }}>
+            {imagemUrl ? (
+              <img
+                src={imagemUrl}
+                alt={imagemSelecionada.name || 'Imagem'}
+                style={{ maxWidth: '100%', maxHeight: '70vh', objectFit: 'contain' }}
+              />
+            ) : (
+              <div style={{ padding: '40px', textAlign: 'center' }}>
+                Carregando imagem...
+              </div>
+            )}
+            <p style={{ marginTop: 16, color: '#666' }}>{imagemSelecionada.name}</p>
+          </div>
+        )}
+      </Modal>
+    </>
   );
 };
 
