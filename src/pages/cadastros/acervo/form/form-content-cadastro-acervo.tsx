@@ -58,6 +58,7 @@ import {
   SelectMaterial,
   SelectSerieColecao,
   SelectSuporte,
+  SelectSituacaoAcervo,
 } from './form-fields';
 import { RadioAcervoDisponivel } from './form-fields/radio-acervo-disponivel';
 
@@ -569,6 +570,18 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
                 extra={obterConteudoExtraPorCampo(
                   PropsByFieldAcervoEnum[FieldAcervoEnum.Disponibilizacao].name,
                 )}
+              />
+            );
+            break;
+
+          case FieldAcervoEnum.SituacaoAcervo:
+            input = (
+              <SelectSituacaoAcervo
+                formItemProps={{
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.SituacaoAcervo].name,
+                  ),
+                }}
               />
             );
             break;

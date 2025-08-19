@@ -44,3 +44,4 @@ export { default as SelectIdioma } from './select-idioma';
 export { default as SelectMaterial } from './select-material';
 export { default as SelectSerieColecao } from './select-serie-colecao';
 export { default as SelectSuporte } from './select-suporte';
+export { default as SelectSituacaoAcervo } from './select-situacao-acervo';

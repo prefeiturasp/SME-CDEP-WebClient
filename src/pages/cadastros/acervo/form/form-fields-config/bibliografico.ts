@@ -78,4 +78,5 @@ export const FieldsBibliografico: FieldAcervoProps[] = [
     fieldAcervo: FieldAcervoEnum.Tombo,
     sm: 12,
   },
+  { fieldAcervo: FieldAcervoEnum.SituacaoAcervo, sm: 12 },
 ];
