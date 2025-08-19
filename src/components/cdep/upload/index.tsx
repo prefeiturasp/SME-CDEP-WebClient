@@ -20,23 +20,25 @@ const UploadArquivosCDEP: React.FC<UploadArquivosCDEPProps> = ({
   const [tiposArquivosPermitidos, setTiposArquivosPermitidos] = useState<string>(
     '.jpg,.jpeg,.png,.tiff,.tif',
   );
-  const [tamanhoMaxUploadArquivoMB, setTamanhoMaxUploadArquivoMB] = useState<number>(5);
+  const [tamanhoMaxUploadArquivoMB, setTamanhoMaxUploadArquivoMB] = useState<number>(50);
+  const [permiteMultiplos, setPermiteMultiplos] = useState<boolean>(true);
 
   const configUploadTipoAcervo = () => {
     switch (tipoAcervo) {
-      case TipoAcervo.DocumentacaoHistorica:
+      case TipoAcervo.DocumentacaoTextual:
         setTiposArquivosPermitidos('.pdf');
-        setTamanhoMaxUploadArquivoMB(15);
+        setTamanhoMaxUploadArquivoMB(20);
         break;
 
       default:
+        setPermiteMultiplos(true);
         break;
     }
   };
 
   useEffect(() => {
     configUploadTipoAcervo();
-  }, []);
+  }, [tipoAcervo]);
 
   return (
     <UploadArquivosSME
@@ -47,6 +49,7 @@ const UploadArquivosCDEP: React.FC<UploadArquivosCDEPProps> = ({
       uploadService={armazenamentoService.fazerUploadArquivo}
       downloadService={armazenamentoService.obterArquivoParaDownload}
       tamanhoMaxUploadPorArquivo={tamanhoMaxUploadArquivoMB}
+      permiteMultiplosArquivos={permiteMultiplos}
     />
   );
 };

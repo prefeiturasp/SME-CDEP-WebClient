@@ -24,6 +24,14 @@ const ButtonOrdenacao: React.FC<ButtonOrdenacaoProps> = ({ onClick }) => {
       label: 'Por ordem alfabética (Z–A)',
       key: TipoOrdenacaoEnum.ZA,
     },
+    {
+      label: 'Crescente por Tombo/Código',
+      key: TipoOrdenacaoEnum.CODIGO_ASCENDENTE,
+    },
+    {
+      label: 'Decrescente por Tombo/Código',
+      key: TipoOrdenacaoEnum.CODIGO_DESCENDENTE,
+    }
   ];
 
   const menuProps = {
