@@ -320,8 +320,8 @@ const FieldAcervoNameLabel: FieldAcervoNameLabelProps = {
   },
   ImagemCapa: {
     name: 'capaDocumento',
-    label: 'Adicionar Capa',
-  },
+    label: 'Adicionar capa',
+  }
 };
 
 export const FieldAcervoEnumByName: Record<string, FieldAcervoEnum> = {
