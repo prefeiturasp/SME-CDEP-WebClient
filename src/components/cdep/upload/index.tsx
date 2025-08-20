@@ -18,7 +18,7 @@ const UploadArquivosCDEP: React.FC<UploadArquivosCDEPProps> = ({
   tipoAcervo,
 }) => {
   const [tiposArquivosPermitidos, setTiposArquivosPermitidos] = useState<string>(
-    '.jpg,.jpeg,.png,.tiff,.tif',
+    '.jpg,.jpeg,.png,.tiff,.tif,.webp,.pdf',
   );
   const [tamanhoMaxUploadArquivoMB, setTamanhoMaxUploadArquivoMB] = useState<number>(5);
 

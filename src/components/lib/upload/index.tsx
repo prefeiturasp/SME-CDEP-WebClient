@@ -236,11 +236,14 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
   const handleVisualizarImagem = async (arquivo: UploadFile<any>) => {
     setImagemSelecionada(arquivo);
     setIsModalOpen(true);
-    
+
     try {
       const codigoArquivo = arquivo.xhr;
       const resposta = await downloadService(codigoArquivo);
-      const blob = new Blob([resposta.data], { type: 'image/jpeg' }); 
+
+      const isPdf = arquivo.name?.toLowerCase().endsWith('.pdf');
+
+      const blob = new Blob([resposta.data], { type: isPdf ? 'application/pdf' : 'image/jpeg' });
       const urlImagem = URL.createObjectURL(blob);
       setImagemUrl(urlImagem);
     } catch (error) {
@@ -254,7 +257,7 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
     setImagemSelecionada(null);
-    
+
     // Limpa a URL do blob para liberar memória
     if (imagemUrl) {
       URL.revokeObjectURL(imagemUrl);
@@ -263,7 +266,7 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
   };
 
   const isImageFile = (fileName: string) => {
-    const imageExtensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp', '.webp', '.tiff', '.tif'];
+    const imageExtensions = ['.tif', '.jpg', '.jpeg', '.png', '.tiff', '.webp', '.pdf'];
     return imageExtensions.some(ext => fileName.toLowerCase().endsWith(ext));
   };
 
@@ -274,7 +277,7 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
     return listaDeArquivos;
   };
 
- 
+
 
   const customItemRender = (originNode: React.ReactElement, file: UploadFile) => {
     if (!isImageFile(file.name || '')) {
@@ -335,15 +338,21 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
         {imagemSelecionada && (
           <div style={{ textAlign: 'center' }}>
             {imagemUrl ? (
-              <img
-                src={imagemUrl}
-                alt={imagemSelecionada.name || 'Imagem'}
-                style={{ maxWidth: '100%', maxHeight: '70vh', objectFit: 'contain' }}
-              />
+              imagemSelecionada.name?.toLowerCase().endsWith('.pdf') ? (
+                <iframe
+                  src={imagemUrl}
+                  style={{ width: '100%', height: '70vh', border: 'none' }}
+                  title={imagemSelecionada.name}
+                />
+              ) : (
+                <img
+                  src={imagemUrl}
+                  alt={imagemSelecionada.name || 'Imagem'}
+                  style={{ maxWidth: '100%', maxHeight: '70vh', objectFit: 'contain' }}
+                />
+              )
             ) : (
-              <div style={{ padding: '40px', textAlign: 'center' }}>
-                Carregando imagem...
-              </div>
+              <div style={{ padding: '40px', textAlign: 'center' }}>Carregando arquivo...</div>
             )}
             <p style={{ marginTop: 16, color: '#666' }}>{imagemSelecionada.name}</p>
           </div>
