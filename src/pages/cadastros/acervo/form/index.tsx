@@ -36,7 +36,7 @@ import FormContentCadastroAcervo from './form-content-cadastro-acervo';
 import { FieldsArtesGraficas } from './form-fields-config/artes-graficas';
 import { FieldsAudiovisual } from './form-fields-config/audiovisual';
 import { FieldsBibliografico } from './form-fields-config/bibliografico';
-import { FieldsDocumentacaoHistorica } from './form-fields-config/documentacao-historica';
+import { FieldsDocumentacaoTextual } from './form-fields-config/documentacao-textual';
 import { FieldsAcervoFotografico } from './form-fields-config/fotografico';
 import { FieldsTridimensional } from './form-fields-config/tridimensional';
 import FormCadastroAcervoHeader from './form-header-cadastro-acervo';
@@ -117,6 +117,12 @@ const FormAcervo: React.FC<FormAcervoProps> = ({
 
     if (fieldsConfig) {
       let response = null;
+
+      if (valoresSalvar?.capaDocumento) {
+        valoresSalvar.capaDocumento;
+      } else {
+        valoresSalvar.capaDocumento = null;
+      }
 
       if (valoresSalvar?.codigo) {
         valoresSalvar.codigo;
@@ -209,11 +215,11 @@ const FormAcervo: React.FC<FormAcervoProps> = ({
           urlBase: URL_API_ACERVO_AUDIOVISUAL,
           fields: FieldsAudiovisual,
         };
-      case TipoAcervo.DocumentacaoHistorica:
+      case TipoAcervo.DocumentacaoTextual:
         return {
-          tipo: TipoAcervo.DocumentacaoHistorica,
+          tipo: TipoAcervo.DocumentacaoTextual,
           urlBase: URL_API_ACERVO_DOCUMENTACAO_HISTORICA,
-          fields: FieldsDocumentacaoHistorica,
+          fields: FieldsDocumentacaoTextual,
         };
       case TipoAcervo.Bibliografico:
         return {

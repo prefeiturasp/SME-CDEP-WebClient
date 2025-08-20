@@ -16,7 +16,7 @@ import DetalhesAcervoAreaPublica from './detalhes-acervo-area-publica';
 import { FieldsDetalhesArtesGraficas } from './form-fields-config/artes-graficas';
 import { FieldsDetalhesAudiovisual } from './form-fields-config/audiovisual';
 import { FieldsDetalhesBibliografico } from './form-fields-config/bibliografico';
-import { FieldsDetalhesDocumentacaoHistorica } from './form-fields-config/documentacao-historica';
+import { FieldsDetalhesDocumentacaoTextual } from './form-fields-config/documentacao-historica';
 import { FieldsDetalhesFotografico } from './form-fields-config/fotografico';
 import { FieldsDetalhesTridimensional } from './form-fields-config/tridimensional';
 import { ButtonEnviarParaMinhaSelecao } from '../components/button-enviar-para-minha-selecao';
@@ -50,8 +50,8 @@ export const DetalhesConsultaAcervo: React.FC = () => {
       case TipoAcervo.Audiovisual:
         setFields(FieldsDetalhesAudiovisual);
         break;
-      case TipoAcervo.DocumentacaoHistorica:
-        setFields(FieldsDetalhesDocumentacaoHistorica);
+      case TipoAcervo.DocumentacaoTextual:
+        setFields(FieldsDetalhesDocumentacaoTextual);
         break;
       case TipoAcervo.Bibliografico:
         setFields(FieldsDetalhesBibliografico);

@@ -6,6 +6,7 @@ import { MENU_CADASTRO } from './lista-menus/menu-cadastros';
 import { MENU_GESTAO } from './lista-menus/menu-gestao';
 import { MENU_MEUS_DADOS } from './lista-menus/menu-meus-dados';
 import { MENU_OPERACOES } from './lista-menus/menu-operacoes';
+import { MENU_RELATORIOS } from './lista-menus/menu-relatorios';
 
 export interface RolesMenu {
   podeConsultar: PermissaoEnum;
@@ -26,4 +27,5 @@ export const menus: MenuItemCDEPProps[] = [
   MENU_CADASTRO,
   MENU_OPERACOES,
   MENU_GESTAO,
+  MENU_RELATORIOS,
 ];
