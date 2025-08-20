@@ -133,16 +133,24 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
   };
 
   const beforeUploadDefault = (arquivo: RcFile) => {
-    if (!permiteInserirFormato(arquivo, tiposArquivosPermitidos)) {
-      return false;
-    }
+  if (!permiteInserirFormato(arquivo, tiposArquivosPermitidos)) {
+     notification.error({
+      message: 'Formato de arquivo não permitido',
+      description: `Arquivo ignorado: ${arquivo.name}`,
+    });
+    return Upload.LIST_IGNORE;
+  }
 
-    if (excedeuLimiteMaximo(arquivo)) {
-      return false;
-    }
+  if (excedeuLimiteMaximo(arquivo)) {
+    notification.error({
+      message: 'Tamanho de arquivo excedido',
+      description: `Arquivo ignorado: ${arquivo.name}`,
+    });
+    return Upload.LIST_IGNORE;
+  }
 
-    return true;
-  };
+  return true;
+};
 
   const customRequestDefault = (options: any) => {
     const { onSuccess, onError, file, onProgress } = options;
