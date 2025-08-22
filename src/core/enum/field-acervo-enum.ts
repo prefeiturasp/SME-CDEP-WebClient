@@ -316,7 +316,7 @@ const FieldAcervoNameLabel: FieldAcervoNameLabelProps = {
   },
   SituacaoAcervo: {
     name: 'situacaoAcervo',
-    label: 'Situação do Acervo',
+    label: 'Situação do tombo',
   },
   ImagemCapa: {
     name: 'capaDocumento',
