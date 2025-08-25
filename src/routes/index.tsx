@@ -37,6 +37,7 @@ import GuardPermissao from './config/guard/permissao';
 import RelatorioLivrosEmprestados from '~/pages/relatorios/livros-emprestados';
 import RelatorioTomboCodigo from '~/pages/relatorios/tombo-codigo';
 import RelatorioAutorCredito from '~/pages/relatorios/autor-credito';
+import RelatorioEditora from '~/pages/relatorios/editora';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
@@ -204,6 +205,9 @@ const RoutesConfig = () => {
                 </Route>
                 <Route element={<GuardPermissao menuKey={MenuEnum.AutorCredito} />}>
                   <Route path={ROUTES.AUTOR_CREDITO} element={<RelatorioAutorCredito />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.RelatorioEditora} />}>
+                  <Route path={ROUTES.RELATORIO_EDITORA} element={<RelatorioEditora />} />
                 </Route>
               </Route>
             </Route>

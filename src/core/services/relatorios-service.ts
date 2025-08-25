@@ -22,6 +22,10 @@ export type RelatorioControleAcervoAutorRequest = {
   tipoAcervo: string;
 };
 
+export type RelatorioControleEditoraRequest = {
+  editoraId: string;
+};
+
 const gerarRelatorioControleLivrosEmprestados = (
   dados: RelatorioControleLivrosEmprestadosRequest,
 ): Promise<AxiosResponse<Blob>> =>
@@ -43,8 +47,16 @@ const gerarRelatorioControleAcervoPorAutor = (
     responseType: 'blob',
   });
 
+const gerarRelatorioControleEditora = (
+  dados: RelatorioControleEditoraRequest,
+): Promise<AxiosResponse<Blob>> =>
+  api.post(`${URL_DEFAULT}/controle-editora`, dados, {
+    responseType: 'blob',
+  });
+
 export default {
   gerarRelatorioControleLivrosEmprestados,
   gerarRelatorioControleAcervo,
   gerarRelatorioControleAcervoPorAutor,
+  gerarRelatorioControleEditora,
 };
