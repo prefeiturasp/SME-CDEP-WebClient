@@ -26,6 +26,11 @@ export type RelatorioControleEditoraRequest = {
   editoraId: string;
 };
 
+export type RelatorioControleDevolucaoLivrosRequest = {
+  solicitante?: string;
+  somenteEmAtraso: boolean;
+};
+
 const gerarRelatorioControleLivrosEmprestados = (
   dados: RelatorioControleLivrosEmprestadosRequest,
 ): Promise<AxiosResponse<Blob>> =>
@@ -54,9 +59,17 @@ const gerarRelatorioControleEditora = (
     responseType: 'blob',
   });
 
+const gerarRelatorioControleDevolucaoLivros = (
+  dados: RelatorioControleDevolucaoLivrosRequest,
+): Promise<AxiosResponse<Blob>> =>
+  api.post(`${URL_DEFAULT}/controle-devolucao-livros`, dados, {
+    responseType: 'blob',
+  });
+
 export default {
   gerarRelatorioControleLivrosEmprestados,
   gerarRelatorioControleAcervo,
   gerarRelatorioControleAcervoPorAutor,
   gerarRelatorioControleEditora,
+  gerarRelatorioControleDevolucaoLivros,
 };

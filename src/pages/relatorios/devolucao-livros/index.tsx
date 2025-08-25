@@ -9,6 +9,7 @@ import { FaPrint } from 'react-icons/fa';
 import CardContent from '~/components/lib/card-content';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { InputRfCpfSolicitante } from '~/pages/operacoes/atendimento-solicitacoes/list/components/rf-cpf-solicitante';
+import relatoriosService from '~/core/services/relatorios-service';
 
 const { Option } = Select;
 const apresentarSomenteDevolucaoEmAtraso = [
@@ -49,6 +50,52 @@ const RelatorioDevolucaoLivros = () => {
             URL.revokeObjectURL(url);
         }
     }
+
+    const onFinish = async (values: any) => {
+        try {
+            setModalVisible(true);
+            setLoadingRelatorio(true);
+            setErroModal(null);
+
+            const payload = {
+                solicitante: values.solicitanteRf,
+                somenteEmAtraso: values.somenteEmAtraso,
+            };
+
+            const response = await relatoriosService.gerarRelatorioControleDevolucaoLivros(payload);
+
+            if (response.status === 404) {
+                setErroModal(
+                'Seu relatório não retornou nenhum dado. Por favor, tente novamente mais tarde.',
+                );
+                return;
+            }
+            if (!response.data || response.data.size === 0) {
+                setErroModal('Nenhum dado encontrado para os filtros selecionados.');
+                return;
+            }
+
+            const blob = new Blob([response.data], {
+                type: 'application/vnd.ms-excel',
+            });
+
+            setRelatorioBlob(blob);
+        } catch (err: any) {
+        if (err?.response?.status === 404) {
+            setErroModal(
+            'Seu relatório não retornou nenhum dado. Por favor, tente novamente mais tarde ou mude os filtros escolhidos.',
+            );
+        } else {
+            setErroModal(
+            'Parece que houve um problema ao solicitar o relatório. Por favor, tente novamente mais tarde.',
+            );
+        }
+        setRelatorioBlob(null);
+        } finally {
+        setLoadingRelatorio(false);
+        }
+    };
+
     return (
         <Col>
             <HeaderPage title="Controle de Devoluções de Livros">
@@ -75,10 +122,10 @@ const RelatorioDevolucaoLivros = () => {
                 <Form 
                     form={form} 
                     layout='vertical' 
-                    onFinish={() => {}} 
+                    onFinish={onFinish} 
                     onValuesChange={handleFormChange}
                     initialValues={{
-                        somenteDevolucaoEmAtrasado: false,
+                        somenteEmAtraso: false,
                     }}
                     >
                     <Row gutter={[16, 16]}>
@@ -93,7 +140,7 @@ const RelatorioDevolucaoLivros = () => {
                         </Col>
                         <Col span={8}>
                             <Form.Item
-                            name='somenteDevolucaoEmAtrasado'
+                            name='somenteEmAtraso'
                             label='Apresentar somente devoluções em atraso?'
                             rules={[{ required: true, message: 'Campo obrigatório' }]}
                             >
