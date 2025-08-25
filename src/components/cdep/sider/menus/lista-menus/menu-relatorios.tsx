@@ -42,5 +42,16 @@ export const MENU_RELATORIOS: MenuItemCDEPProps = {
         podeAlterar: PermissaoEnum.CadastroEditora_A,
       },
     },
+    {
+      key: MenuEnum.RelatorioDevolucaoLivro,
+      title: 'Controle de Devoluções de Livros',
+      url: ROUTES.RELATORIO_DEVOLUCAO_LIVRO,
+      roles: {
+        podeConsultar: PermissaoEnum.CadastroCredito_C,
+        podeIncluir: PermissaoEnum.CadastroCredito_I,
+        podeExcluir: PermissaoEnum.CadastroCredito_E,
+        podeAlterar: PermissaoEnum.CadastroCredito_A,
+      },
+    },    
   ],
 };
