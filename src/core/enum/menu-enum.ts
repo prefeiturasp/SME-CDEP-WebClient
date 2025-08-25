@@ -19,5 +19,6 @@ export enum MenuEnum {
   LivrosEmprestados,
   TomboCodigo,
   AutorCredito,
+  RelatorioEditora,
   RelatorioDevolucaoLivro
 }
