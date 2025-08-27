@@ -13,6 +13,8 @@ import CardContent from '~/components/lib/card-content';
 import { CDEP_SELECT_EDITORA } from '~/core/constants/ids/select';
 import { CheckCircleOutlined, CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
 
+import styles from './relatorio-editora.module.css';
+
 const RelatorioEditora = () => {
     const [form] = Form.useForm();
     const [modalVisible, setModalVisible] = useState(false);
@@ -140,6 +142,7 @@ const RelatorioEditora = () => {
                 name='editoraId'
                 label='Editora'
                 extra='Você pode selecionar mais de uma editora.'
+                className={styles.editoraFormItem}
                 rules={[{ required: false }]}
               >
                 <Select

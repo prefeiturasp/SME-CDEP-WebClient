@@ -1,0 +1,7 @@
+.editoraFormItem :global(.ant-form-item-extra) {
+    padding-top: 3px;
+    font-size: 12px;
+    font-weight: 400;
+    line-height: 1.2;
+    color: #42424A;
+}
