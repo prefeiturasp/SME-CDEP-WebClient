@@ -38,6 +38,7 @@ import RelatorioLivrosEmprestados from '~/pages/relatorios/livros-emprestados';
 import RelatorioTomboCodigo from '~/pages/relatorios/tombo-codigo';
 import RelatorioAutorCredito from '~/pages/relatorios/autor-credito';
 import RelatorioEditora from '~/pages/relatorios/editora';
+import RelatorioDevolucaoLivros from '~/pages/relatorios/devolucao-livros';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
@@ -206,8 +207,14 @@ const RoutesConfig = () => {
                 <Route element={<GuardPermissao menuKey={MenuEnum.AutorCredito} />}>
                   <Route path={ROUTES.AUTOR_CREDITO} element={<RelatorioAutorCredito />} />
                 </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.RelatorioDevolucaoLivro} />}>
+                  <Route path={ROUTES.RELATORIO_DEVOLUCAO_LIVRO} element={<RelatorioDevolucaoLivros />} />
+                </Route>
                 <Route element={<GuardPermissao menuKey={MenuEnum.RelatorioEditora} />}>
                   <Route path={ROUTES.RELATORIO_EDITORA} element={<RelatorioEditora />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.RelatorioDevolucaoLivro} />}>
+                  <Route path={ROUTES.RELATORIO_DEVOLUCAO_LIVRO} element={<RelatorioDevolucaoLivros />} />
                 </Route>
               </Route>
             </Route>

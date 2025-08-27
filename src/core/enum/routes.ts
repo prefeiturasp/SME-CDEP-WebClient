@@ -46,5 +46,6 @@ export enum ROUTES {
   LIVROS_EMPRESTADOS = '/relatorios/livros-emprestados',
   TOMBO_CODIGO = '/relatorios/tombo-codigo',
   AUTOR_CREDITO = '/relatorios/autor-credito',
-  RELATORIO_EDITORA = '/relatorios/editora'
+  RELATORIO_EDITORA = '/relatorios/editora',
+  RELATORIO_DEVOLUCAO_LIVRO = '/relatorios/devolucao-livro'
 }
