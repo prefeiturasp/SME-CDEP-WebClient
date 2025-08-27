@@ -43,7 +43,7 @@ const RelatorioDevolucaoLivros = () => {
             const url = URL.createObjectURL(relatorioBlob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'relatorio_devolucao_livros.pdf';
+            a.download = 'relatorio_devolucao_livros.xls';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
