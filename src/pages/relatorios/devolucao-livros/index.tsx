@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Col, Form, Input, Modal, Radio, Row, Select, Spin } from 'antd';
+import { Button, Col, Form, Input, Modal, Radio, Row, Spin } from 'antd';
 import HeaderPage from '~/components/lib/header-page';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import { CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
@@ -10,12 +10,6 @@ import CardContent from '~/components/lib/card-content';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { InputRfCpfSolicitante } from '~/pages/operacoes/atendimento-solicitacoes/list/components/rf-cpf-solicitante';
 import relatoriosService from '~/core/services/relatorios-service';
-
-const { Option } = Select;
-const apresentarSomenteDevolucaoEmAtraso = [
-  { label: 'Sim', value: true },
-  { label: 'Não', value: false },
-];
 
 const RelatorioDevolucaoLivros = () => {
     const [form] = Form.useForm();
