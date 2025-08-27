@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Button, Col, Form, Input, Modal, Row, Select, Spin } from 'antd';
 import HeaderPage from '~/components/lib/header-page';
 import ButtonVoltar from '~/components/cdep/button/voltar';
