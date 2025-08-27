@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Button, Col, Form, Input, Modal, Row, Select, Spin } from 'antd';
+import { Button, Col, Form, Input, Modal, Radio, Row, Select, Spin } from 'antd';
 import HeaderPage from '~/components/lib/header-page';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import { CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
@@ -98,7 +98,7 @@ const RelatorioDevolucaoLivros = () => {
 
     return (
         <Col>
-            <HeaderPage title="Controle de Devoluções de Livros">
+            <HeaderPage title="Controle de Devoluções de Livros em Atraso">
                 <Col span={24}>
                 <Row gutter={[8, 8]}>
                     <Col>
@@ -139,18 +139,11 @@ const RelatorioDevolucaoLivros = () => {
                             </Form.Item>
                         </Col>
                         <Col span={8}>
-                            <Form.Item
-                            name='somenteEmAtraso'
-                            label='Apresentar somente devoluções em atraso?'
-                            rules={[{ required: true, message: 'Campo obrigatório' }]}
-                            >
-                            <Select placeholder='Selecione uma opção'>
-                                {apresentarSomenteDevolucaoEmAtraso.map((op) => (
-                                <Option value={op.value} key={String(op.value)}>
-                                    {op.label}
-                                </Option>
-                                ))}
-                            </Select>
+                            <Form.Item name='somenteEmAtraso' label='Devoluções em atraso:'>
+                                <Radio.Group>
+                                    <Radio value={false}>Não</Radio>
+                                    <Radio value={true}>Sim</Radio>
+                                </Radio.Group>
                             </Form.Item>
                         </Col>
                     </Row>
