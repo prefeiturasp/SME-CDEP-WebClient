@@ -11,7 +11,7 @@ import { CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { FaPrint } from 'react-icons/fa';
 import CardContent from '~/components/lib/card-content';
 import { CDEP_SELECT_EDITORA } from '~/core/constants/ids/select';
-import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { CheckCircleOutlined, CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
 
 const RelatorioEditora = () => {
     const [form] = Form.useForm();
@@ -112,7 +112,7 @@ const RelatorioEditora = () => {
 
   return (
     <Col>
-      <HeaderPage title='Controle por Editora'>
+      <HeaderPage title='Controle por editora'>
         <Col span={24}>
           <Row gutter={[8, 8]}>
             <Col>
@@ -135,19 +135,21 @@ const RelatorioEditora = () => {
       <CardContent>
         <Form form={form} layout='vertical' onFinish={onFinish}>
           <Row gutter={[16, 16]}>
-            <Col xs={24} sm={12}>
+            <Col span={24}>
               <Form.Item
                 name='editoraId'
                 label='Editora'
+                extra='Você pode selecionar mais de uma editora.'
                 rules={[{ required: false }]}
               >
                 <Select
                   showSearch
                   allowClear
-                  placeholder='Todas as editoras'
+                  placeholder='Exemplo: Willian Shakespeare'
                   options={options}
                   loading={loadingEditoras}
                   id={CDEP_SELECT_EDITORA}
+                  suffixIcon={<SearchOutlined />}
                   mode='multiple'
                 />
               </Form.Item>
