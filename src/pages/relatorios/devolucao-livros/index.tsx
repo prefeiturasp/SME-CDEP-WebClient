@@ -92,7 +92,7 @@ const RelatorioDevolucaoLivros = () => {
 
     return (
         <Col>
-            <HeaderPage title="Controle de Devoluções de Livros em Atraso">
+            <HeaderPage title="Controle de devoluções de livros em atraso">
                 <Col span={24}>
                 <Row gutter={[8, 8]}>
                     <Col>
