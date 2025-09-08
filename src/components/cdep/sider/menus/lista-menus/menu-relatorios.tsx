@@ -55,7 +55,7 @@ export const MENU_RELATORIOS: MenuItemCDEPProps = {
     },
     {
       key: MenuEnum.RelatorioDevolucaoLivro,
-      title: 'Controle de devolução de livros em atraso',
+      title: 'Controle de devolução de livros',
       url: ROUTES.RELATORIO_DEVOLUCAO_LIVRO,
       roles: {
         podeConsultar: PermissaoEnum.CadastroCredito_C,

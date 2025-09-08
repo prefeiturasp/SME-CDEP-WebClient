@@ -92,7 +92,7 @@ const RelatorioDevolucaoLivros = () => {
 
     return (
         <Col>
-            <HeaderPage title="Controle de devoluções de livros em atraso">
+            <HeaderPage title="Controle de devolução de livros">
                 <Col span={24}>
                 <Row gutter={[8, 8]}>
                     <Col>
@@ -133,7 +133,7 @@ const RelatorioDevolucaoLivros = () => {
                             </Form.Item>
                         </Col>
                         <Col span={8}>
-                            <Form.Item name='somenteEmAtraso' label='Devoluções em atraso:'>
+                            <Form.Item name='somenteEmAtraso' label='Somente devoluções em atraso:'>
                                 <Radio.Group>
                                     <Radio value={false}>Não</Radio>
                                     <Radio value={true}>Sim</Radio>
