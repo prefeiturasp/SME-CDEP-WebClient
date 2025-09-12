@@ -42,4 +42,10 @@ export enum ROUTES {
   ATENDIMENTO_SOLICITACAO_MANUAL_EDITAR = '/atendimento-solicitacoes/solicitacao-manual/:id',
   GESTAO = '/gestao',
   CALENDARIO = '/gestao/calendario',
+  RELATORIOS = '/relatorios',
+  LIVROS_EMPRESTADOS = '/relatorios/livros-emprestados',
+  TOMBO_CODIGO = '/relatorios/tombo-codigo',
+  AUTOR_CREDITO = '/relatorios/autor-credito',
+  RELATORIO_EDITORA = '/relatorios/editora',
+  RELATORIO_DEVOLUCAO_LIVRO = '/relatorios/devolucao-livro'
 }

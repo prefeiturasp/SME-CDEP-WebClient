@@ -25,7 +25,7 @@ const InputCodigoNovo: React.FC<InputCodigoNovoProps> = ({ extra }) => (
           <Input
             type='text'
             placeholder={fieldProps.label}
-            maxLength={15}
+            maxLength={50}
             id={CDEP_INPUT_CODIGO_NOVO}
           />
         </Form.Item>

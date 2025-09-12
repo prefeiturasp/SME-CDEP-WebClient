@@ -59,4 +59,5 @@ export const FieldsAudiovisual: FieldAcervoProps[] = [
   {
     fieldAcervo: FieldAcervoEnum.Disponibilizacao,
   },
+  { fieldAcervo: FieldAcervoEnum.SituacaoAcervo, sm: 12 },
 ];

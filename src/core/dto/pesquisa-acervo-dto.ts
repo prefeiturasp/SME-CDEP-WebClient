@@ -7,6 +7,7 @@ export type PesquisaAcervoDTO = {
   creditoAutoria: string;
   assunto: string;
   descricao: string;
+  editora: string;
   ano: string;
   dataAcervo: string;
   tipoAcervoTag: TipoAcervoTag;
