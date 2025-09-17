@@ -26,7 +26,7 @@ const apresentarDevolvidos = [
 
 export type FiltroSolicitacaoProps = {
   solicitanteRf: string | null;
-  situacaoEmprestimo: string | null;
+  situacaoEmprestimo: string;
 };
 
 const RelatorioLivrosEmprestados = () => {
