@@ -7,7 +7,7 @@ export type RelatorioControleLivrosEmprestadosRequest = {
   solicitante?: string;
   tombo?: string;
   situacaoSolicitacaoItem?: number;
-  situacaoEmprestimo?: string;
+  situacaoEmprestimo?: string | null;
   modelo: number;
   somenteDevolvidos?: boolean;
 };

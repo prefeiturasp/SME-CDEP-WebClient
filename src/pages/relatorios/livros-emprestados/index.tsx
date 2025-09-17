@@ -26,7 +26,7 @@ const apresentarDevolvidos = [
 
 export type FiltroSolicitacaoProps = {
   solicitanteRf: string | null;
-  situacaoEmprestimo: string | null;
+  situacaoEmprestimo: string;
 };
 
 const RelatorioLivrosEmprestados = () => {
@@ -59,7 +59,7 @@ const RelatorioLivrosEmprestados = () => {
       const payload = {
         solicitante: filters?.solicitanteRf || '',
         tombo: values.tombo || '',
-        situacaoEmprestimo: filters?.situacaoEmprestimo || '',
+        situacaoEmprestimo: filters?.situacaoEmprestimo || null,
         modelo: values.modelo,
         somenteDevolvidos: values.somenteDevolvidos,
       };
