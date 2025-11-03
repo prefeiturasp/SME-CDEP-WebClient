@@ -65,6 +65,7 @@ export const FieldsArtesGraficas: FieldAcervoProps[] = [
   {
     fieldAcervo: FieldAcervoEnum.Descricao,
   },
+  { fieldAcervo: FieldAcervoEnum.SituacaoAcervo, sm: 12 },
   {
     fieldAcervo: FieldAcervoEnum.Anexos,
   },

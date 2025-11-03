@@ -34,6 +34,11 @@ import RedefinirSenha from '~/pages/redefinir-senha';
 import RedefinirSenhaToken from '~/pages/redefinir-senha-token';
 import GuardAutenticacao from './config/guard/autenticacao';
 import GuardPermissao from './config/guard/permissao';
+import RelatorioLivrosEmprestados from '~/pages/relatorios/livros-emprestados';
+import RelatorioTomboCodigo from '~/pages/relatorios/tombo-codigo';
+import RelatorioAutorCredito from '~/pages/relatorios/autor-credito';
+import RelatorioEditora from '~/pages/relatorios/editora';
+import RelatorioDevolucaoLivros from '~/pages/relatorios/devolucao-livros';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
@@ -186,6 +191,30 @@ const RoutesConfig = () => {
               <Route path={ROUTES.GESTAO}>
                 <Route element={<GuardPermissao menuKey={MenuEnum.Calendario} />}>
                   <Route path={ROUTES.CALENDARIO} element={<Calendario />} />
+                </Route>
+              </Route>
+
+              <Route path={ROUTES.RELATORIOS}>
+                <Route element={<GuardPermissao menuKey={MenuEnum.LivrosEmprestados} />}>
+                  <Route
+                    path={ROUTES.LIVROS_EMPRESTADOS}
+                    element={<RelatorioLivrosEmprestados />}
+                  />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.TomboCodigo} />}>
+                  <Route path={ROUTES.TOMBO_CODIGO} element={<RelatorioTomboCodigo />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.AutorCredito} />}>
+                  <Route path={ROUTES.AUTOR_CREDITO} element={<RelatorioAutorCredito />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.RelatorioDevolucaoLivro} />}>
+                  <Route path={ROUTES.RELATORIO_DEVOLUCAO_LIVRO} element={<RelatorioDevolucaoLivros />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.RelatorioEditora} />}>
+                  <Route path={ROUTES.RELATORIO_EDITORA} element={<RelatorioEditora />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.RelatorioDevolucaoLivro} />}>
+                  <Route path={ROUTES.RELATORIO_DEVOLUCAO_LIVRO} element={<RelatorioDevolucaoLivros />} />
                 </Route>
               </Route>
             </Route>

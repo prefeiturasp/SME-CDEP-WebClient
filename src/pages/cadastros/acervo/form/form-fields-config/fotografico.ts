@@ -73,6 +73,7 @@ export const FieldsAcervoFotografico: FieldAcervoProps[] = [
     fieldAcervo: FieldAcervoEnum.Resolucao,
     sm: 12,
   },
+  { fieldAcervo: FieldAcervoEnum.SituacaoAcervo, sm: 12 },
   {
     fieldAcervo: FieldAcervoEnum.Anexos,
   },

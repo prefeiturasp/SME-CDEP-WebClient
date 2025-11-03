@@ -1,10 +1,12 @@
 import { InboxOutlined } from '@ant-design/icons';
-import { Form, FormInstance, FormItemProps, Upload } from 'antd';
+import { Button, Form, FormInstance, FormItemProps, Upload } from 'antd';
 import { DraggerProps, RcFile, UploadFile } from 'antd/es/upload';
+import { FaRegEye } from 'react-icons/fa';
 import { notification } from '~/components/lib/notification';
 
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
+import Modal from '~/components/lib/modal';
 
 const { Dragger } = Upload;
 
@@ -58,6 +60,18 @@ export const ContainerDraggerUpload = styled(Dragger)`
     .ant-upload-list-item-action {
     opacity: 1;
   }
+
+  .ant-upload-list-item {
+    position: relative;
+  }
+
+  .visualizar-btn {
+    position: absolute;
+    right: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.6;
+  }
 `;
 
 type UploadArquivosProps = {
@@ -68,9 +82,21 @@ type UploadArquivosProps = {
   tamanhoMaxUploadPorArquivo?: number;
   downloadService: (codigosArquivo: string) => any;
   uploadService: (formData: FormData, configuracaoHeader: any) => any;
+  permiteMultiplosArquivos?: boolean;
 };
 
 const TAMANHO_PADRAO_MAXIMO_UPLOAD = 100;
+const LIMITE_DE_ARQUIVOS_NA_NOTIFICACAO = 3;
+const formatarListaDeNomes = (nomes: string[]): string => {
+  if (nomes.length <= LIMITE_DE_ARQUIVOS_NA_NOTIFICACAO) {
+    return nomes.join(', ');
+  }
+
+  const nomesExibidos = nomes.slice(0, LIMITE_DE_ARQUIVOS_NA_NOTIFICACAO).join(', ');
+  const quantidadeOmitida = nomes.length - LIMITE_DE_ARQUIVOS_NA_NOTIFICACAO;
+  
+  return `${nomesExibidos}, ... e mais ${quantidadeOmitida} arquivo(s).`;
+};
 
 const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
   const {
@@ -81,7 +107,12 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
     downloadService,
     tiposArquivosPermitidos = '',
     tamanhoMaxUploadPorArquivo = TAMANHO_PADRAO_MAXIMO_UPLOAD,
+    permiteMultiplosArquivos = false,
   } = props;
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [imagemSelecionada, setImagemSelecionada] = useState<UploadFile | null>(null);
+  const [imagemUrl, setImagemUrl] = useState<string>('');
 
   if (!formItemProps.name) {
     formItemProps.name = 'arquivos';
@@ -102,24 +133,24 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
   };
 
   const beforeUploadDefault = (arquivo: RcFile) => {
-    if (!permiteInserirFormato(arquivo, tiposArquivosPermitidos)) {
-      notification.error({
-        message: 'Erro',
-        description: 'Formato não permitido',
-      });
-      return false;
-    }
+  if (!permiteInserirFormato(arquivo, tiposArquivosPermitidos)) {
+     notification.error({
+      message: 'Formato de arquivo não permitido',
+      description: `Arquivo ignorado: ${arquivo.name}`,
+    });
+    return Upload.LIST_IGNORE;
+  }
 
-    if (excedeuLimiteMaximo(arquivo)) {
-      notification.error({
-        message: 'Erro',
-        description: `Tamanho máximo ${tamanhoMaxUploadPorArquivo}MB`,
-      });
-      return false;
-    }
+  if (excedeuLimiteMaximo(arquivo)) {
+    notification.error({
+      message: 'Tamanho de arquivo excedido',
+      description: `Arquivo ignorado: ${arquivo.name}`,
+    });
+    return Upload.LIST_IGNORE;
+  }
 
-    return true;
-  };
+  return true;
+};
 
   const customRequestDefault = (options: any) => {
     const { onSuccess, onError, file, onProgress } = options;
@@ -159,46 +190,65 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
     }
     return false;
   };
+  const [errosDeFormato, setErrosDeFormato] = useState<string[]>([]);
+  const [errosDeTamanho, setErrosDeTamanho] = useState<string[]>([]);
 
-  const atualizaListaArquivos = (fileList: any, file: UploadFile<any>) => {
-    const novaLista = fileList.filter((item: any) => item.uid !== file.uid);
-    const novoMap = [...novaLista];
+  const onChangeDefault = ({ file, fileList }: { file: UploadFile, fileList: UploadFile[] }) => {
+    const arquivosNovos = fileList.filter(f => !f.status);
 
-    setNovoValor(novoMap);
-  };
+    if (arquivosNovos.length === 0) {
+      setNovoValor(fileList);
+    } else {
+      const arquivosValidosParaUpload: UploadFile[] = [];
+      const arquivosJaExistentes = fileList.filter(f => f.status);
 
-  const onChangeDefault = ({ file, fileList }: any) => {
-    const { status } = file;
+      const novosErrosDeFormato = new Set<string>();
+      const novosErrosDeTamanho = new Set<string>();
 
-    if (excedeuLimiteMaximo(file)) {
-      atualizaListaArquivos(fileList, file);
-      return;
-    }
-
-    if (!permiteInserirFormato(file, tiposArquivosPermitidos)) {
-      atualizaListaArquivos(fileList, file);
-      return;
-    }
-
-    const novoMap = [...fileList]?.filter((f) => f?.status !== 'removed');
-
-    if (status === 'done') {
-      notification.success({
-        message: 'Sucesso',
-        description: `${file.name} arquivo carregado com sucesso`,
+      arquivosNovos.forEach((f: UploadFile) => {
+        if (!permiteInserirFormato(f, tiposArquivosPermitidos)) {
+          novosErrosDeFormato.add(f.name);
+        } else if (excedeuLimiteMaximo(f as RcFile)) {
+          novosErrosDeTamanho.add(f.name);
+        } else {
+          arquivosValidosParaUpload.push(f);
+        }
       });
-    } else if (status === 'error') {
-      atualizaListaArquivos(fileList, file);
-      return;
-    }
 
-    if (status === 'done' || status === 'removed') {
-      if (form && form.setFieldValue) {
-        form.setFieldValue(formItemProps.name, novoMap);
+      if (novosErrosDeFormato.size > 0) {
+        setErrosDeFormato(prev => [...new Set([...prev, ...novosErrosDeFormato])]);
+      }
+      if (novosErrosDeTamanho.size > 0) {
+        setErrosDeTamanho(prev => [...new Set([...prev, ...novosErrosDeTamanho])]);
+      }
+
+      const listaFinal = [...arquivosJaExistentes, ...arquivosValidosParaUpload];
+      setNovoValor(listaFinal);
+    }
+    const uploadEmAndamento = fileList.some((f: UploadFile) => f.status === 'uploading');
+    if (file.status === 'done' && !uploadEmAndamento) { debugger;
+      if (errosDeFormato.length > 0) {
+        notification.error({
+          message: 'Formato de arquivo não permitido',
+          description: `Arquivos ignorados: ${formatarListaDeNomes(errosDeFormato)}`,
+        });
+        setErrosDeFormato([]);
+      }
+      if (errosDeTamanho.length > 0) {
+        notification.error({
+          message: 'Tamanho de arquivo excedido',
+          description: `Arquivos ignorados: ${formatarListaDeNomes(errosDeTamanho)}`,
+        });
+        setErrosDeTamanho([]);
+      }
+      const arquivosSucesso = fileList.filter(f => f.status === 'done');
+      if (arquivosSucesso.length > 0) {
+        notification.success({
+            message: 'Upload Concluído',
+            description: `${arquivosSucesso.length} arquivo(s) foram carregados com sucesso.`,
+        });
       }
     }
-
-    setNovoValor(novoMap);
   };
 
   const onDownloadDefault = (arquivo: UploadFile<any>) => {
@@ -215,34 +265,135 @@ const UploadArquivosSME: React.FC<UploadArquivosProps> = (props) => {
       );
   };
 
+  const handleVisualizarImagem = async (arquivo: UploadFile<any>) => {
+    setImagemSelecionada(arquivo);
+    setIsModalOpen(true);
+
+    try {
+      const codigoArquivo = arquivo.xhr;
+      const resposta = await downloadService(codigoArquivo);
+
+      const isPdf = arquivo.name?.toLowerCase().endsWith('.pdf');
+
+      const blob = new Blob([resposta.data], { type: isPdf ? 'application/pdf' : 'image/jpeg' });
+      const urlImagem = URL.createObjectURL(blob);
+      setImagemUrl(urlImagem);
+    } catch (error) {
+      notification.error({
+        message: 'Erro',
+        description: 'Erro ao carregar imagem para visualização',
+      });
+    }
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false);
+    setImagemSelecionada(null);
+
+    // Limpa a URL do blob para liberar memória
+    if (imagemUrl) {
+      URL.revokeObjectURL(imagemUrl);
+      setImagemUrl('');
+    }
+  };
+
+  const isImageFile = (fileName: string) => {
+    const imageExtensions = ['.tif', '.jpg', '.jpeg', '.png', '.tiff', '.webp', '.pdf'];
+    return imageExtensions.some(ext => fileName.toLowerCase().endsWith(ext));
+  };
+
   const normFile = (e: any) => {
     if (Array.isArray(e)) {
       return e;
     }
-    return listaDeArquivos;
+    return e?.fileList || listaDeArquivos;
+  };
+
+
+
+  const customItemRender = (originNode: React.ReactElement, file: UploadFile) => {
+    if (!isImageFile(file.name || '')) {
+      return originNode;
+    }
+
+    return (
+      <div style={{ position: 'relative' }}>
+        {originNode}
+        <Button
+          size="small"
+          icon={<FaRegEye />}
+          onClick={(e) => {
+            e.stopPropagation();
+            handleVisualizarImagem(file);
+          }}
+          title="Visualizar imagem"
+          className="visualizar-btn"
+          type="text"
+        />
+      </div>
+    );
   };
 
   return (
-    <Form.Item valuePropName='fileList' getValueFromEvent={normFile} {...formItemProps}>
-      <ContainerDraggerUpload
-        name='file'
-        listType='text'
-        fileList={listaDeArquivos}
-        showUploadList={{ showDownloadIcon: true }}
-        onRemove={draggerProps?.onRemove || onRemoveDefault}
-        onChange={draggerProps?.onChange || onChangeDefault}
-        onDownload={draggerProps?.onDownload || onDownloadDefault}
-        beforeUpload={draggerProps?.beforeUpload || beforeUploadDefault}
-        customRequest={draggerProps?.customRequest || customRequestDefault}
-        {...draggerProps}
-      >
-        <p className='ant-upload-drag-icon'>
-          <InboxOutlined />
-        </p>
-        <p className='ant-upload-text'>Clique ou arraste para fazer o upload do arquivo</p>
+    <>
+      <Form.Item valuePropName='fileList' getValueFromEvent={normFile} {...formItemProps}>
+        <ContainerDraggerUpload
+          name='file'
+          listType='text'
+          fileList={listaDeArquivos}
+          multiple={permiteMultiplosArquivos}
+          showUploadList={{ showDownloadIcon: true }}
+          itemRender={customItemRender}
+          onRemove={draggerProps?.onRemove || onRemoveDefault}
+          onChange={draggerProps?.onChange || onChangeDefault}
+          onDownload={draggerProps?.onDownload || onDownloadDefault}
+          beforeUpload={draggerProps?.beforeUpload || beforeUploadDefault}
+          customRequest={draggerProps?.customRequest || customRequestDefault}
+          {...draggerProps}
+        >
+          <p className='ant-upload-drag-icon'>
+            <InboxOutlined />
+          </p>
+          <p className='ant-upload-text'>{permiteMultiplosArquivos
+            ? `Clique ou arraste para fazer o upload dos arquivos`
+            : `Clique ou arraste para fazer o upload do arquivo`}</p>
         <p className='ant-upload-hint'>{`Deve permitir apenas arquivos com no máximo ${tamanhoMaxUploadPorArquivo}MB cada`}</p>
-      </ContainerDraggerUpload>
-    </Form.Item>
+        </ContainerDraggerUpload>
+      </Form.Item>
+
+      {/* Modal para visualizar imagem */}
+      <Modal
+        open={isModalOpen}
+        onCancel={handleCloseModal}
+        footer={null}
+        title="Visualizar Imagem"
+        width={800}
+        centered
+      >
+        {imagemSelecionada && (
+          <div style={{ textAlign: 'center' }}>
+            {imagemUrl ? (
+              imagemSelecionada.name?.toLowerCase().endsWith('.pdf') ? (
+                <iframe
+                  src={imagemUrl}
+                  style={{ width: '100%', height: '70vh', border: 'none' }}
+                  title={imagemSelecionada.name}
+                />
+              ) : (
+                <img
+                  src={imagemUrl}
+                  alt={imagemSelecionada.name || 'Imagem'}
+                  style={{ maxWidth: '100%', maxHeight: '70vh', objectFit: 'contain' }}
+                />
+              )
+            ) : (
+              <div style={{ padding: '40px', textAlign: 'center' }}>Carregando arquivo...</div>
+            )}
+            <p style={{ marginTop: 16, color: '#666' }}>{imagemSelecionada.name}</p>
+          </div>
+        )}
+      </Modal>
+    </>
   );
 };
 

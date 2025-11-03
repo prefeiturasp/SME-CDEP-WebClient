@@ -26,7 +26,7 @@ const tagAcervo = (tipo: TipoAcervo) => {
   switch (tipo) {
     case TipoAcervo.Bibliografico:
       return TipoAcervoTagDisplay[TipoAcervoTag.Biblioteca];
-    case TipoAcervo.DocumentacaoHistorica:
+    case TipoAcervo.DocumentacaoTextual:
       return TipoAcervoTagDisplay[TipoAcervoTag.MemoriaDocumental];
     case TipoAcervo.ArtesGraficas:
     case TipoAcervo.Audiovisual:
@@ -40,8 +40,8 @@ const tipoAcervoNome = (tipo: TipoAcervo) => {
   switch (tipo) {
     case TipoAcervo.Bibliografico:
       return TipoAcervoDisplay[TipoAcervo.Bibliografico];
-    case TipoAcervo.DocumentacaoHistorica:
-      return TipoAcervoDisplay[TipoAcervo.DocumentacaoHistorica];
+    case TipoAcervo.DocumentacaoTextual:
+      return TipoAcervoDisplay[TipoAcervo.DocumentacaoTextual];
     case TipoAcervo.ArtesGraficas:
       return TipoAcervoDisplay[TipoAcervo.ArtesGraficas];
     case TipoAcervo.Audiovisual:
@@ -150,6 +150,13 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
                       label={`${PropsByFieldAcervoEnum[FieldAcervoEnum.Titulo].label}: `}
                       description={item.titulo}
                       item={item}
+                      termoPesquisado={termoPesquisado}
+                      hasHighlightedText
+                    />
+
+                    <TextItemCardContentConsultaAcervo
+                      label='Editora: '
+                      description={item.editora}
                       termoPesquisado={termoPesquisado}
                       hasHighlightedText
                     />

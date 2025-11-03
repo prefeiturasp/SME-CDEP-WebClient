@@ -43,6 +43,7 @@ export const FieldsTridimensional: FieldAcervoProps[] = [
     fieldAcervo: FieldAcervoEnum.DimensaoDiametro,
     sm: 12,
   },
+  { fieldAcervo: FieldAcervoEnum.SituacaoAcervo, sm: 12 },
   {
     fieldAcervo: FieldAcervoEnum.Anexos,
   },

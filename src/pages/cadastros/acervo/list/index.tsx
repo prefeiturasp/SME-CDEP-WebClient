@@ -6,6 +6,7 @@ import { FaFileExcel } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import SelectCreditoAutoria from '~/components/cdep/input/credito-autoria';
+import SelectEditora from '~/components/cdep/input/editora';
 import SelectTipoAcervo from '~/components/cdep/input/tipo-acervo';
 import ButtonPrimary from '~/components/lib/button/primary';
 import ButtonSecundary from '~/components/lib/button/secundary';
@@ -19,20 +20,26 @@ import {
 } from '~/core/constants/ids/button/intex';
 import { CDEP_INPUT_CODIGO, CDEP_INPUT_TITULO } from '~/core/constants/ids/input';
 import { URL_API_ACERVO } from '~/core/constants/urls-api';
-import { IdTipoTituloCreditoAutoriaCodigoAcervoDTO } from '~/core/dto/id-tipo-titulo-credito-autoria-codigo-acervo-dto';
+import { AcervoTableRow } from '~/core/dto/acervo-table-row';
 import { ROUTES } from '~/core/enum/routes';
+import { TipoAcervo } from '~/core/enum/tipo-acervo';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 const ListAcervo: React.FC = () => {
   const navigate = useNavigate();
   const [form] = useForm();
+  const tipoAcervoSelecionado = Form.useWatch('tipoAcervo', form);
 
   const { permissao } = useContext(PermissaoContext);
 
-  const columns: ColumnsType<IdTipoTituloCreditoAutoriaCodigoAcervoDTO> = [
+  const baseColumns: ColumnsType<AcervoTableRow> = [
     {
       title: 'Tipo de acervo',
       dataIndex: 'tipoAcervo',
+    },
+    {
+      title: 'Editora',
+      dataIndex: 'editora',
     },
     {
       title: 'Título',
@@ -49,13 +56,36 @@ const ListAcervo: React.FC = () => {
     },
   ];
 
+  const columnsWithImage: ColumnsType<AcervoTableRow> = [
+    {
+      title: 'Capa',
+      dataIndex: 'capaDocumento',
+      width: 120,
+      render: (capaDocumento: string, record) => {
+        if (record.tipoAcervo === 'Documentação textual' && capaDocumento) {
+          return (
+            <img
+              src={capaDocumento}
+              alt={`Capa de ${record.titulo}`}
+              style={{ maxWidth: '100px', maxHeight: '100px', objectFit: 'cover' }}
+            />
+          );
+        }
+        return null;
+      },
+    },
+    ...baseColumns,
+  ];
+  
+  const columns = tipoAcervoSelecionado === TipoAcervo.DocumentacaoTextual ? columnsWithImage : baseColumns;
+
   const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
 
   const onClickNovo = () => {
     if (permissao.podeIncluir) navigate(ROUTES.ACERVO_NOVO);
   };
 
-  const onClickEditar = (row: IdTipoTituloCreditoAutoriaCodigoAcervoDTO) =>
+  const onClickEditar = (row: AcervoTableRow) =>
     navigate(`${ROUTES.ACERVO}/editar/${row.acervoId}`, {
       state: { tipoAcervoId: row.tipoAcervoId },
       replace: true,
@@ -100,29 +130,31 @@ const ListAcervo: React.FC = () => {
           <Form.Item shouldUpdate>
             {() => (
               <Row gutter={[16, 8]}>
-                <Col xs={24} sm={12}>
-                  <SelectTipoAcervo />
-                </Col>
 
-                <Col xs={24} sm={12}>
-                  <Form.Item label='Título' name='titulo'>
-                    <Input type='text' placeholder='Título' id={CDEP_INPUT_TITULO} />
+                  <Col xs={24} sm={12}>
+                  <Form.Item label="Título" name="titulo">
+                    <Input type="text" placeholder="Título" id={CDEP_INPUT_TITULO} />
                   </Form.Item>
                 </Col>
-
-                <Col xs={24} sm={12}>
+                 <Col xs={24} sm={12}>
                   <SelectCreditoAutoria />
                 </Col>
 
-                <Col xs={24} sm={12}>
-                  <Form.Item label='Tombo/Código' name='codigo'>
-                    <Input type='text' placeholder='Tombo/Código' id={CDEP_INPUT_CODIGO} />
+                <Col xs={24} sm={8}>
+                  <Form.Item label="Tombo/Código" name="codigo">
+                    <Input type="text" placeholder="Tombo/Código" id={CDEP_INPUT_CODIGO} />
                   </Form.Item>
+                </Col>
+                <Col xs={24} sm={8}>
+                  <SelectTipoAcervo />
+                </Col>
+                <Col xs={24} sm={8}>
+                  <SelectEditora />
                 </Col>
 
                 <Col span={24}>
                   <DataTable
-                    rowKey='acervoId'
+                    rowKey="acervoId"
                     filters={form.getFieldsValue()}
                     url={URL_API_ACERVO}
                     columns={columns}

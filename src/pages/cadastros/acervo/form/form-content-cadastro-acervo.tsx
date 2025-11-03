@@ -1,4 +1,4 @@
-import { Alert, Col, FormInstance } from 'antd';
+import { Alert, Col, Form, FormInstance } from 'antd';
 import React, { useContext } from 'react';
 import UploadArquivosCDEP from '~/components/cdep/upload';
 import {
@@ -58,8 +58,10 @@ import {
   SelectMaterial,
   SelectSerieColecao,
   SelectSuporte,
+  SelectSituacaoAcervo,
 } from './form-fields';
 import { RadioAcervoDisponivel } from './form-fields/radio-acervo-disponivel';
+import UploadImagemCapa from './form-fields/upload-imagem-capa';
 
 type FormContentCadastroAcervoProps = {
   fieldsConfig: FormPageConfigCadastroAcervoProps | undefined;
@@ -74,7 +76,7 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
   const { desabilitarCampos } = useContext(PermissaoContext);
 
   if (!fieldsConfig?.fields?.length) return;
-
+  
   const montarAlerta = (description: string, message: string) => (
     <Alert
       style={{ margin: '-5px 0px 15px' }}
@@ -112,6 +114,13 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
               />
             );
             break;
+          case FieldAcervoEnum.ImagemCapa:
+            input = (
+              <Form.Item name={PropsByFieldAcervoEnum[FieldAcervoEnum.ImagemCapa].name}>
+                <UploadImagemCapa />
+              </Form.Item>
+            );
+          break;
           case FieldAcervoEnum.Subtitulo:
             input = (
               <InputSubtitulo
@@ -569,6 +578,18 @@ const FormContentCadastroAcervo: React.FC<FormContentCadastroAcervoProps> = ({
                 extra={obterConteudoExtraPorCampo(
                   PropsByFieldAcervoEnum[FieldAcervoEnum.Disponibilizacao].name,
                 )}
+              />
+            );
+            break;
+
+          case FieldAcervoEnum.SituacaoAcervo:
+            input = (
+              <SelectSituacaoAcervo
+                formItemProps={{
+                  extra: obterConteudoExtraPorCampo(
+                    PropsByFieldAcervoEnum[FieldAcervoEnum.SituacaoAcervo].name,
+                  ),
+                }}
               />
             );
             break;

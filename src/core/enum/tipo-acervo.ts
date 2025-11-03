@@ -1,6 +1,6 @@
 export enum TipoAcervo {
   Bibliografico = 1,
-  DocumentacaoHistorica = 2,
+  DocumentacaoTextual = 2,
   ArtesGraficas = 3,
   Audiovisual = 4,
   Fotografico = 5,
@@ -9,7 +9,7 @@ export enum TipoAcervo {
 
 export const TipoAcervoDisplay: Record<TipoAcervo, string> = {
   [TipoAcervo.Bibliografico]: 'Bibliográfico',
-  [TipoAcervo.DocumentacaoHistorica]: 'Documentação histórica',
+  [TipoAcervo.DocumentacaoTextual]: 'Documentação histórica',
   [TipoAcervo.ArtesGraficas]: 'Artes gráficas',
   [TipoAcervo.Audiovisual]: 'Audiovisual',
   [TipoAcervo.Fotografico]: 'Fotográfico',
@@ -18,7 +18,7 @@ export const TipoAcervoDisplay: Record<TipoAcervo, string> = {
 
 export const TipoAcervoSuffix: Record<TipoAcervo, string> = {
   [TipoAcervo.Bibliografico]: '',
-  [TipoAcervo.DocumentacaoHistorica]: '',
+  [TipoAcervo.DocumentacaoTextual]: '',
   [TipoAcervo.ArtesGraficas]: '.AG',
   [TipoAcervo.Audiovisual]: '.AV',
   [TipoAcervo.Fotografico]: '.FT',
@@ -27,7 +27,7 @@ export const TipoAcervoSuffix: Record<TipoAcervo, string> = {
 
 export const TipoAcervoPlanilhaModelo: Record<TipoAcervo, string> = {
   [TipoAcervo.Bibliografico]: 'planilha_acervo_bibliografico.xlsx',
-  [TipoAcervo.DocumentacaoHistorica]: 'planilha_acervo_documental.xlsx',
+  [TipoAcervo.DocumentacaoTextual]: 'planilha_acervo_documental.xlsx',
   [TipoAcervo.ArtesGraficas]: 'planilha_acervo_arte_grafica.xlsx',
   [TipoAcervo.Audiovisual]: 'planilha_acervo_audiovisual.xlsx',
   [TipoAcervo.Fotografico]: 'planilha_acervo_fotografico.xlsx',

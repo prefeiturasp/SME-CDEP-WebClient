@@ -15,4 +15,10 @@ export enum MenuEnum {
   Gestao,
   Calendario,
   AtendimentoSolicitacoes,
+  Relatorios,
+  LivrosEmprestados,
+  TomboCodigo,
+  AutorCredito,
+  RelatorioEditora,
+  RelatorioDevolucaoLivro
 }
