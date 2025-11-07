@@ -80,11 +80,13 @@ const TitulosMaisPesquisados = () => {
           message.warning('O intervalo entre as datas não pode ultrapassar 1 ano.');
           return;
         }
-        if (values.dataFim.isBefore(values.dataInicio)) {
-          values.dataFim;
+        if (
+          dayjs(values.dataFim).startOf('day').isBefore(dayjs(values.dataInicio).startOf('day'))
+        ) {
           message.warning('A data final não pode ser anterior à data inicial.');
           return;
         }
+
         if (values.dataFim.isAfter(dayjs())) {
           message.warning('A data final não pode ser maior que hoje');
           return;
@@ -96,8 +98,10 @@ const TitulosMaisPesquisados = () => {
       setErroModal(null);
 
       const payload = {
-        dataInicio: values.dataInicio ? values.dataInicio.toDate().toISOString() : null,
-        dataFim: values.dataFim ? values.dataFim.toDate().toISOString() : null,
+        dataInicio: values.dataInicio
+          ? dayjs(values.dataInicio).utc().startOf('day').toISOString()
+          : null,
+        dataFim: values.dataFim ? dayjs(values.dataFim).utc().endOf('day').toISOString() : null,
         tipoAcervos: values.tipoAcervo ?? [],
       };
 
