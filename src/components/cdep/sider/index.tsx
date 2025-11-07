@@ -22,7 +22,7 @@ const SiderCDEP: React.FC = () => {
         if (menu?.children?.length) {
           const children = validarExibicaoMenus(menu.children).filter((subMenu) => {
             if (subMenu.key === MenuEnum.RelatorioDownloadAcervos) return true;
-
+            if (subMenu.key === MenuEnum.TitulosMaisPesquisados) return true;
             const permissaoMenu = permissaoPorMenu[subMenu?.key];
             return !!permissaoMenu?.exibir;
           });

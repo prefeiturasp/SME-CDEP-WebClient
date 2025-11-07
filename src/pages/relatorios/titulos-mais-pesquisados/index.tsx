@@ -1,58 +1,115 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, Modal, Row, Select, Spin } from 'antd';
-import CardContent from '~/components/lib/card-content';
+import { Button, Col, DatePicker, Form, message, Modal, Row, Select, Spin } from 'antd';
 import HeaderPage from '~/components/lib/header-page';
-import { FaPrint } from 'react-icons/fa';
-import { useNavigate } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
-import { ROUTES } from '~/core/enum/routes';
 import { CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
-import { CDEP_SELECT_TIPO_ACERVO } from '~/core/constants/ids/select';
-import { obterTiposAcervo } from '~/core/services/acervo-service';
-import relatorioService from '~/core/services/relatorios-service';
-import { DefaultOptionType } from 'antd/es/select';
+import { ROUTES } from '~/core/enum/routes';
+import { useNavigate } from 'react-router';
+import { FaPrint } from 'react-icons/fa';
+import CardContent from '~/components/lib/card-content';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import relatoriosService from '~/core/services/relatorios-service';
+import { DefaultOptionType } from 'antd/es/select';
+import { obterTiposAcervo } from '~/core/services/acervo-service';
+import { CDEP_SELECT_TIPO_ACERVO } from '~/core/constants/ids/select';
+import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
+import dayjs from 'dayjs';
 
-const { Option } = Select;
-
-const situacao = [
-  { label: 'Ativo', value: 1 },
-  { label: 'Inativo', value: 2 },
-];
-
-const RelatorioDownloadAcervos = () => {
+const TitulosMaisPesquisados = () => {
   const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
   const [loadingRelatorio, setLoadingRelatorio] = useState(false);
   const [relatorioBlob, setRelatorioBlob] = useState<Blob | null>(null);
   const [erroModal, setErroModal] = useState<string | null>(null);
   const [canSubmit, setCanSubmit] = useState(false);
+
+  const formatoData = 'DD/MM/YYYY';
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
-  const [options2, setOptions2] = useState<DefaultOptionType[]>([]);
+
+  useEffect(() => {
+    obterTipos();
+  }, []);
+
+  const obterTipos = async () => {
+    const resposta = await obterTiposAcervo();
+    if (resposta.sucesso) {
+      const newOptions = resposta.dados.map((item) => ({ label: item.nome, value: item.id }));
+      setOptions(newOptions);
+    } else {
+      setOptions([]);
+    }
+  };
 
   const handleFormChange = () => {
     const values = form.getFieldsValue();
 
-    setCanSubmit(!!values.tipoAcervo && !!values.tituloAcervo);
+    if (values.dataInicio && values.dataFim) {
+      setCanSubmit(true);
+    } else {
+      setCanSubmit(false);
+    }
+  };
+
+  const navigate = useNavigate();
+  const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
+
+  const fecharModal = () => {
+    setModalVisible(false);
+    setRelatorioBlob(null);
+    setErroModal(null);
+  };
+
+  const baixarRelatorio = () => {
+    if (relatorioBlob) {
+      const url = URL.createObjectURL(relatorioBlob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'titulos_mais_pesquisados.xls';
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    }
   };
 
   const onFinish = async (values: any) => {
     try {
+      if (values.dataInicio && values.dataFim) {
+        const diffYears = values.dataFim.diff(values.dataInicio, 'year', true);
+        if (diffYears > 1) {
+          message.warning('O intervalo entre as datas não pode ultrapassar 1 ano.');
+          return;
+        }
+        if (values.dataFim.isBefore(values.dataInicio)) {
+          values.dataFim;
+          message.warning('A data final não pode ser anterior à data inicial.');
+          return;
+        }
+        if (values.dataFim.isAfter(dayjs())) {
+          message.warning('A data final não pode ser maior que hoje');
+          return;
+        }
+      }
+
       setModalVisible(true);
       setLoadingRelatorio(true);
       setErroModal(null);
 
       const payload = {
-        situacaoAcervo: Array.isArray(values.situacao) ? values.situacao[0] : values.situacao,
-        tipoAcervo: values.tipoAcervo,
+        dataInicio: values.dataInicio ? values.dataInicio.toDate().toISOString() : null,
+        dataFim: values.dataFim ? values.dataFim.toDate().toISOString() : null,
+        tipoAcervos: values.tipoAcervo ?? [],
       };
 
-      const response = await relatorioService.gerarRelatorioControleAcervo(payload);
+      const response = await relatoriosService.gerarRelatorioTitulosMaisPesquisados(payload);
 
       if (response.status === 404) {
         setErroModal(
           'Seu relatório não retornou nenhum dado. Por favor, tente novamente mais tarde.',
         );
+        return;
+      } else if (response.status === 204) {
+        setErroModal('Não existem dados para a sua consulta');
         return;
       }
       if (!response.data || response.data.size === 0) {
@@ -81,46 +138,9 @@ const RelatorioDownloadAcervos = () => {
     }
   };
 
-  const fecharModal = () => {
-    setModalVisible(false);
-    setRelatorioBlob(null);
-    setErroModal(null);
-  };
-
-  const baixarRelatorio = () => {
-    if (relatorioBlob) {
-      const url = window.URL.createObjectURL(relatorioBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = 'relatorio_controle_acervo.xls';
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-      fecharModal();
-    }
-  };
-
-  const navigate = useNavigate();
-  const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
-
-  const obterTipos = async () => {
-    const resposta = await obterTiposAcervo();
-    if (resposta.sucesso) {
-      const newOptions = resposta.dados.map((item) => ({ label: item.nome, value: item.id }));
-      setOptions(newOptions);
-    } else {
-      setOptions([]);
-    }
-  };
-
-  useEffect(() => {
-    obterTipos();
-  }, []);
-
   return (
     <Col>
-      <HeaderPage title='Controle de download de acervos'>
+      <HeaderPage title='Títulos mais pesquisados'>
         <Col span={24}>
           <Row gutter={[8, 8]}>
             <Col>
@@ -141,38 +161,56 @@ const RelatorioDownloadAcervos = () => {
       </HeaderPage>
 
       <CardContent>
-        <Form form={form} layout='vertical' onFinish={onFinish} onValuesChange={handleFormChange}>
+        <Form
+          form={form}
+          layout='vertical'
+          onFinish={onFinish}
+          onValuesChange={handleFormChange}
+          initialValues={{
+            somenteEmAtraso: false,
+          }}
+        >
           <Row gutter={[16, 16]}>
-            <Col span={12}>
+            <Col span={13}>
+              <Form.Item label='Período'>
+                <Row gutter={[8, 8]}>
+                  <Col span={12}>
+                    <Form.Item name='dataInicio' noStyle>
+                      <DatePicker
+                        placeholder='Data inicial'
+                        format={formatoData}
+                        locale={localeDatePicker}
+                        style={{ width: '100%' }}
+                      />
+                    </Form.Item>
+                  </Col>
+                  <Col span={12}>
+                    <Form.Item name='dataFim' noStyle>
+                      <DatePicker
+                        placeholder='Data final'
+                        format={formatoData}
+                        locale={localeDatePicker}
+                        style={{ width: '100%' }}
+                      />
+                    </Form.Item>
+                  </Col>
+                </Row>
+              </Form.Item>
+              <span style={{ fontSize: 12, color: '#595959' }}>
+                O intervalo entre as datas não pode ultrapassar 1 ano.
+              </span>
+            </Col>
+
+            <Col span={11}>
               <Form.Item label='Tipo de acervo' name='tipoAcervo'>
                 <Select
+                  mode='multiple'
                   showSearch
                   allowClear
                   id={CDEP_SELECT_TIPO_ACERVO}
                   options={options}
                   placeholder='Tipo de acervo'
-                />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label='Título do acervo' name='tituloAcervo'>
-                <Select
-                  showSearch
-                  allowClear
-                  placeholder='Exemplo: Willian Shakespeare'
-                  filterOption={false}
-                  onSearch={(value) => {
-                    if (value.length >= 3) {
-                      const filtered = situacao.filter((op) =>
-                        op.label.toLowerCase().includes(value.toLowerCase()),
-                      );
-                      setOptions2(filtered.map((op) => ({ label: op.label, value: op.value })));
-                    } else {
-                      setOptions2([]);
-                    }
-                  }}
-                  notFoundContent='Digite ao menos 3 letras para buscar'
-                  options={options2}
+                  style={{ width: '100%' }}
                 />
               </Form.Item>
             </Col>
@@ -225,4 +263,4 @@ const RelatorioDownloadAcervos = () => {
   );
 };
 
-export default RelatorioDownloadAcervos;
+export default TitulosMaisPesquisados;
