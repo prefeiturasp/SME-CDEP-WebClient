@@ -43,7 +43,7 @@ const TitulosMaisPesquisados = () => {
   const handleFormChange = () => {
     const values = form.getFieldsValue();
 
-    if (values.tipoAcervo && values.dataInicio && values.dataFim) {
+    if (values.dataInicio && values.dataFim) {
       setCanSubmit(true);
     } else {
       setCanSubmit(false);
@@ -98,7 +98,7 @@ const TitulosMaisPesquisados = () => {
       const payload = {
         dataInicio: values.dataInicio ? values.dataInicio.toDate().toISOString() : null,
         dataFim: values.dataFim ? values.dataFim.toDate().toISOString() : null,
-        tipoAcervos: values.tipoAcervo,
+        tipoAcervos: values.tipoAcervo ?? [],
       };
 
       const response = await relatoriosService.gerarRelatorioTitulosMaisPesquisados(payload);
