@@ -64,5 +64,16 @@ export const MENU_RELATORIOS: MenuItemCDEPProps = {
         podeAlterar: PermissaoEnum.CadastroCredito_A,
       },
     },
+    {
+      key: MenuEnum.RelatorioDownloadAcervos,
+      title: 'Controle de download de acervos',
+      url: ROUTES.RELATORIO_DOWNLOAD_ACERVOS,
+      roles: {
+        podeConsultar: PermissaoEnum.CadastroCredito_C,
+        podeIncluir: PermissaoEnum.CadastroCredito_I,
+        podeExcluir: PermissaoEnum.CadastroCredito_E,
+        podeAlterar: PermissaoEnum.CadastroCredito_A,
+      },
+    },
   ],
 };
