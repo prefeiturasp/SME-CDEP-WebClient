@@ -13,6 +13,7 @@ import { DefaultOptionType } from 'antd/es/select';
 import { obterTiposAcervo } from '~/core/services/acervo-service';
 import { CDEP_SELECT_TIPO_ACERVO } from '~/core/constants/ids/select';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
+import dayjs from 'dayjs';
 
 const TitulosMaisPesquisados = () => {
   const [form] = Form.useForm();
@@ -42,7 +43,7 @@ const TitulosMaisPesquisados = () => {
   const handleFormChange = () => {
     const values = form.getFieldsValue();
 
-    if (values.tipoAcervo && values.dataInicio && values.dataFim) {
+    if (values.dataInicio && values.dataFim) {
       setCanSubmit(true);
     } else {
       setCanSubmit(false);
@@ -73,7 +74,6 @@ const TitulosMaisPesquisados = () => {
 
   const onFinish = async (values: any) => {
     try {
-
       if (values.dataInicio && values.dataFim) {
         const diffYears = values.dataFim.diff(values.dataInicio, 'year', true);
         if (diffYears > 1) {
@@ -85,6 +85,10 @@ const TitulosMaisPesquisados = () => {
           message.warning('A data final não pode ser anterior à data inicial.');
           return;
         }
+        if (values.dataFim.isAfter(dayjs())) {
+          message.warning('A data final não pode ser maior que hoje');
+          return;
+        }
       }
 
       setModalVisible(true);
@@ -94,7 +98,7 @@ const TitulosMaisPesquisados = () => {
       const payload = {
         dataInicio: values.dataInicio ? values.dataInicio.toDate().toISOString() : null,
         dataFim: values.dataFim ? values.dataFim.toDate().toISOString() : null,
-        tipoAcervos: [values.tipoAcervo],
+        tipoAcervos: values.tipoAcervo ?? [],
       };
 
       const response = await relatoriosService.gerarRelatorioTitulosMaisPesquisados(payload);
@@ -200,6 +204,7 @@ const TitulosMaisPesquisados = () => {
             <Col span={11}>
               <Form.Item label='Tipo de acervo' name='tipoAcervo'>
                 <Select
+                  mode='multiple'
                   showSearch
                   allowClear
                   id={CDEP_SELECT_TIPO_ACERVO}
