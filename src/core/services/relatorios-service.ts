@@ -31,6 +31,12 @@ export type RelatorioControleDevolucaoLivrosRequest = {
   somenteEmAtraso: boolean;
 };
 
+export type RelatorioTitulosMaisPesquisadosRequest = {
+  dataInicio: any;
+  dataFim: any;
+  tipoAcervos: any;
+};
+
 const gerarRelatorioControleLivrosEmprestados = (
   dados: RelatorioControleLivrosEmprestadosRequest,
 ): Promise<AxiosResponse<Blob>> =>
@@ -66,10 +72,18 @@ const gerarRelatorioControleDevolucaoLivros = (
     responseType: 'blob',
   });
 
+const gerarRelatorioTitulosMaisPesquisados = (
+  dados: RelatorioTitulosMaisPesquisadosRequest,
+): Promise<AxiosResponse<Blob>> =>
+  api.post(`${URL_DEFAULT}/titulos-mais-pesquisados`, dados, {
+    responseType: 'blob',
+  });
+
 export default {
   gerarRelatorioControleLivrosEmprestados,
   gerarRelatorioControleAcervo,
   gerarRelatorioControleAcervoPorAutor,
   gerarRelatorioControleEditora,
   gerarRelatorioControleDevolucaoLivros,
+  gerarRelatorioTitulosMaisPesquisados,
 };

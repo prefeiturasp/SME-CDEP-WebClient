@@ -20,5 +20,6 @@ export enum MenuEnum {
   TomboCodigo,
   AutorCredito,
   RelatorioEditora,
-  RelatorioDevolucaoLivro
+  RelatorioDevolucaoLivro,
+  TitulosMaisPesquisados
 }
