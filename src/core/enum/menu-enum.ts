@@ -21,5 +21,6 @@ export enum MenuEnum {
   AutorCredito,
   RelatorioEditora,
   RelatorioDevolucaoLivro,
-  TitulosMaisPesquisados
+  RelatorioDownloadAcervos,
+  TitulosMaisPesquisados,
 }

@@ -39,6 +39,7 @@ import RelatorioTomboCodigo from '~/pages/relatorios/tombo-codigo';
 import RelatorioAutorCredito from '~/pages/relatorios/autor-credito';
 import RelatorioEditora from '~/pages/relatorios/editora';
 import RelatorioDevolucaoLivros from '~/pages/relatorios/devolucao-livros';
+import RelatorioDownloadAcervos from '~/pages/relatorios/download-acervos';
 import TitulosMaisPesquisados from '~/pages/relatorios/titulos-mais-pesquisados';
 
 const RoutesConfig = () => {
@@ -216,6 +217,9 @@ const RoutesConfig = () => {
                 </Route>
                 <Route element={<GuardPermissao menuKey={MenuEnum.RelatorioDevolucaoLivro} />}>
                   <Route path={ROUTES.RELATORIO_DEVOLUCAO_LIVRO} element={<RelatorioDevolucaoLivros />} />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.RelatorioDownloadAcervos} />}>
+                  <Route path={ROUTES.RELATORIO_DOWNLOAD_ACERVOS} element={<RelatorioDownloadAcervos />} />
                 </Route>
                 <Route element={<GuardPermissao menuKey={MenuEnum.TitulosMaisPesquisados} />}>
                   <Route path={ROUTES.TITULOS_MAIS_PESQUISADOS} element={<TitulosMaisPesquisados />} />
