@@ -37,10 +37,15 @@ const obterCodigoTombo = (codigoTombo: string) =>
     params: { codigoTombo },
   });
 
+
+const obterTituloAcervo = (termoDeBusca: string) =>
+  obterRegistro<string[]>(`${URL_API_ACERVO}/autocompletar-titulo?termoPesquisado=${termoDeBusca}`);
+
 export {
   obterCodigoTombo,
   obterDetalhamentoPorTipoAcervoECodigoAreaPublica,
   obterTermoDeCompromisso,
   obterTiposAcervo,
   pesquisarAcervosAreaPublica,
+  obterTituloAcervo,
 };

@@ -8,17 +8,10 @@ import ButtonVoltar from '~/components/cdep/button/voltar';
 import { ROUTES } from '~/core/enum/routes';
 import { CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { CDEP_SELECT_TIPO_ACERVO } from '~/core/constants/ids/select';
-import { obterTiposAcervo } from '~/core/services/acervo-service';
+import { obterTiposAcervo, obterTituloAcervo } from '~/core/services/acervo-service';
 import relatorioService from '~/core/services/relatorios-service';
 import { DefaultOptionType } from 'antd/es/select';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
-
-const { Option } = Select;
-
-const situacao = [
-  { label: 'Ativo', value: 1 },
-  { label: 'Inativo', value: 2 },
-];
 
 const RelatorioDownloadAcervos = () => {
   const [form] = Form.useForm();
@@ -26,14 +19,24 @@ const RelatorioDownloadAcervos = () => {
   const [loadingRelatorio, setLoadingRelatorio] = useState(false);
   const [relatorioBlob, setRelatorioBlob] = useState<Blob | null>(null);
   const [erroModal, setErroModal] = useState<string | null>(null);
-  const [canSubmit, setCanSubmit] = useState(false);
+  const [canSubmit, setCanSubmit] = useState(true);
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
-  const [options2, setOptions2] = useState<DefaultOptionType[]>([]);
+  const [optionsTitulos, setOptionsTitulos] = useState<DefaultOptionType[]>([]);
+
+  const [tituloBusca, setTituloBusca] = useState<string>('');
+
+  useEffect(() => {
+    if (tituloBusca && tituloBusca.length > 2) {
+      obterTitulos(tituloBusca);
+    } else {
+      setOptionsTitulos([]);
+    }
+  }, [tituloBusca]);
 
   const handleFormChange = () => {
     const values = form.getFieldsValue();
 
-    setCanSubmit(!!values.tipoAcervo && !!values.tituloAcervo);
+    //setCanSubmit(!!values.tipoAcervo && !!values.tituloAcervo);
   };
 
   const onFinish = async (values: any) => {
@@ -43,11 +46,11 @@ const RelatorioDownloadAcervos = () => {
       setErroModal(null);
 
       const payload = {
-        situacaoAcervo: Array.isArray(values.situacao) ? values.situacao[0] : values.situacao,
-        tipoAcervo: values.tipoAcervo,
+        TipoAcervo: values.tipoAcervo,
+        Titulo: values.tituloAcervo,
       };
 
-      const response = await relatorioService.gerarRelatorioControleAcervo(payload);
+      const response = await relatorioService.gerarRelatorioDownloadAcervos(payload);
 
       if (response.status === 404) {
         setErroModal(
@@ -115,6 +118,34 @@ const RelatorioDownloadAcervos = () => {
   };
 
   useEffect(() => {
+    if (tituloBusca && tituloBusca.length > 2) {
+      obterTitulos(tituloBusca);
+    } else {
+      setOptionsTitulos([]);
+    }
+  }, [tituloBusca]);
+
+  const obterTitulos = async (busca: string) => {
+    try {
+      const resposta = await obterTituloAcervo(busca);
+
+      if (resposta?.sucesso && Array.isArray(resposta.dados)) {
+        const newOptions = resposta.dados.map((item: string) => ({
+          label: item,
+          value: item,
+        }));
+        setOptionsTitulos(newOptions);
+      } else {
+        console.warn('Falha ao obter títulos ou dados vazios');
+        setOptionsTitulos([]);
+      }
+    } catch (erro) {
+      console.error('Erro ao obter títulos:', erro);
+      setOptionsTitulos([]);
+    }
+  };
+
+  useEffect(() => {
     obterTipos();
   }, []);
 
@@ -161,18 +192,9 @@ const RelatorioDownloadAcervos = () => {
                   allowClear
                   placeholder='Exemplo: Willian Shakespeare'
                   filterOption={false}
-                  onSearch={(value) => {
-                    if (value.length >= 3) {
-                      const filtered = situacao.filter((op) =>
-                        op.label.toLowerCase().includes(value.toLowerCase()),
-                      );
-                      setOptions2(filtered.map((op) => ({ label: op.label, value: op.value })));
-                    } else {
-                      setOptions2([]);
-                    }
-                  }}
+                  onSearch={(value) => setTituloBusca(value)}
                   notFoundContent='Digite ao menos 3 letras para buscar'
-                  options={options2}
+                  options={optionsTitulos}
                 />
               </Form.Item>
             </Col>
