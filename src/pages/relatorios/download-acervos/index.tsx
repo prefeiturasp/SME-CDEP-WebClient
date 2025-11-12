@@ -34,9 +34,7 @@ const RelatorioDownloadAcervos = () => {
   }, [tituloBusca]);
 
   const handleFormChange = () => {
-    const values = form.getFieldsValue();
-
-    //setCanSubmit(!!values.tipoAcervo && !!values.tituloAcervo);
+    setCanSubmit(true);
   };
 
   const onFinish = async (values: any) => {
