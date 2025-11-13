@@ -1,0 +1,18 @@
+.breadcrumb-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  vertical-align: middle;
+  line-height: 1;
+}
+
+.breadcrumb-icon {
+  object-fit: contain;
+  display: inline-block;
+}
+
+.breadcrumb-text {
+  font-size: 12px;
+  display: inline-block;
+  padding-top: 1px;
+}
