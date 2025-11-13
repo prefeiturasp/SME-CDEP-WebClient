@@ -1,20 +1,31 @@
 import { HomeOutlined } from '@ant-design/icons';
 import { Breadcrumb } from 'antd';
 import React from 'react';
+import { useBreadcrumb } from '~/core/hooks/use-breadcrumb';
 
 export type BreadcrumbCDEPProps = {
   menu?: string;
   mainPage?: string;
-  urlMainPage: string;
+  urlMainPage?: string;
   title?: string;
+  auto?: boolean; // Nova prop para controlar se deve usar o breadcrumb automático
 };
 
 const BreadcrumbCDEP: React.FC<BreadcrumbCDEPProps> = ({
   menu = 'Menu',
   mainPage = '',
-  urlMainPage,
+  urlMainPage = '',
   title = 'Nome da Página',
+  auto = false,
 }) => {
+  const autoBreadcrumbItems = useBreadcrumb();
+
+  // Se auto=true, usa o breadcrumb automático baseado na rota
+  if (auto) {
+    return <Breadcrumb separator='>' items={autoBreadcrumbItems} />;
+  }
+
+  // Caso contrário, usa o comportamento antigo (retrocompatibilidade)
   const items = [
     {
       href: '/',
