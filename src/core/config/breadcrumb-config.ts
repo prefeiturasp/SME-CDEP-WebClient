@@ -5,7 +5,6 @@ export type BreadcrumbRouteConfig = {
   path?: string;
 };
 
-
 export const BREADCRUMB_ROUTES: Record<string, BreadcrumbRouteConfig> = {
   // Principal
   [ROUTES.PRINCIPAL]: {
@@ -101,7 +100,7 @@ export const BREADCRUMB_ROUTES: Record<string, BreadcrumbRouteConfig> = {
 
   // Solicitações
   '/acervo': {
-    label: 'Acervo',
+    label: 'Operações',
   },
   [ROUTES.SOLICITACAO]: {
     label: 'Nova solicitação',
@@ -114,7 +113,7 @@ export const BREADCRUMB_ROUTES: Record<string, BreadcrumbRouteConfig> = {
   // Atendimento de Solicitações
   [ROUTES.ATENDIMENTO_SOLICITACOES]: {
     label: 'Atendimento de solicitações',
-    path: ROUTES.ATENDIMENTO_SOLICITACOES,
+    path: '/acervo',
   },
   '/atendimento-solicitacoes/editar': {
     label: 'Atender',
