@@ -5,7 +5,7 @@ export type BreadcrumbRouteConfig = {
   path?: string;
 };
 
-// Mapeamento de rotas para labels do breadcrumb
+
 export const BREADCRUMB_ROUTES: Record<string, BreadcrumbRouteConfig> = {
   // Principal
   [ROUTES.PRINCIPAL]: {
@@ -15,7 +15,7 @@ export const BREADCRUMB_ROUTES: Record<string, BreadcrumbRouteConfig> = {
 
   // Meus Dados
   [ROUTES.MEUS_DADOS]: {
-    label: 'Meus Dados',
+    label: 'Meus dados',
     path: ROUTES.MEUS_DADOS,
   },
 
@@ -104,7 +104,7 @@ export const BREADCRUMB_ROUTES: Record<string, BreadcrumbRouteConfig> = {
     label: 'Acervo',
   },
   [ROUTES.SOLICITACAO]: {
-    label: 'Solicitação',
+    label: 'Nova solicitação',
     path: ROUTES.SOLICITACAO,
   },
   '/acervo/solicitacao/novo': {
@@ -113,7 +113,7 @@ export const BREADCRUMB_ROUTES: Record<string, BreadcrumbRouteConfig> = {
 
   // Atendimento de Solicitações
   [ROUTES.ATENDIMENTO_SOLICITACOES]: {
-    label: 'Atendimento de Solicitações',
+    label: 'Atendimento de solicitações',
     path: ROUTES.ATENDIMENTO_SOLICITACOES,
   },
   '/atendimento-solicitacoes/editar': {
@@ -137,31 +137,31 @@ export const BREADCRUMB_ROUTES: Record<string, BreadcrumbRouteConfig> = {
     label: 'Relatórios',
   },
   [ROUTES.LIVROS_EMPRESTADOS]: {
-    label: 'Livros Emprestados',
+    label: 'Controle de livros emprestados',
     path: ROUTES.LIVROS_EMPRESTADOS,
   },
   [ROUTES.TOMBO_CODIGO]: {
-    label: 'Tombo/Código',
+    label: 'Controle de tombo/código',
     path: ROUTES.TOMBO_CODIGO,
   },
   [ROUTES.AUTOR_CREDITO]: {
-    label: 'Autor/Crédito',
+    label: 'Controle por autor/crédito',
     path: ROUTES.AUTOR_CREDITO,
   },
   [ROUTES.RELATORIO_EDITORA]: {
-    label: 'Editora',
+    label: 'Controle por editora',
     path: ROUTES.RELATORIO_EDITORA,
   },
   [ROUTES.RELATORIO_DEVOLUCAO_LIVRO]: {
-    label: 'Devolução de Livros',
+    label: 'Controle de devolução de livros',
     path: ROUTES.RELATORIO_DEVOLUCAO_LIVRO,
   },
   [ROUTES.RELATORIO_DOWNLOAD_ACERVOS]: {
-    label: 'Download de Acervos',
+    label: 'Controle de download de acervos',
     path: ROUTES.RELATORIO_DOWNLOAD_ACERVOS,
   },
   [ROUTES.TITULOS_MAIS_PESQUISADOS]: {
-    label: 'Títulos Mais Pesquisados',
+    label: 'Títulos mais pesquisados',
     path: ROUTES.TITULOS_MAIS_PESQUISADOS,
   },
 };

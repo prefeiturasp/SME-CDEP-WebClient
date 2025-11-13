@@ -2,6 +2,7 @@ import { useLocation } from 'react-router-dom';
 import { BREADCRUMB_ROUTES } from '../config/breadcrumb-config';
 import { ROUTES } from '../enum/routes';
 import React from 'react';
+import './use-breadcrumb.css';
 
 export type BreadcrumbItem = {
   href?: string;
@@ -19,34 +20,14 @@ const BreadcrumbLabel = ({
   color: string;
   iconSize?: number;
 }) => (
-  <div
-    style={{
-      display: 'inline-flex',
-      alignItems: 'center',
-      gap: '6px',
-      verticalAlign: 'middle',
-      lineHeight: 1,
-      height: '20px',
-    }}
-  >
+  <div className='breadcrumb-label' style={{ height: `${iconSize + 4}px` }}>
     <img
       src={icon}
       alt=''
-      style={{
-        width: iconSize,
-        height: iconSize,
-        objectFit: 'contain',
-        display: 'inline-block',
-      }}
+      className='breadcrumb-icon'
+      style={{ width: iconSize, height: iconSize }}
     />
-    <span
-      style={{
-        color,
-        fontSize: 12,
-        display: 'inline-block',
-        lineHeight: `${iconSize}px`,
-      }}
-    >
+    <span className='breadcrumb-text' style={{ color, lineHeight: `${iconSize}px` }}>
       {label}
     </span>
   </div>

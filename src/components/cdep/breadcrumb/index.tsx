@@ -7,7 +7,7 @@ export type BreadcrumbCDEPProps = {
   mainPage?: string;
   urlMainPage?: string;
   title?: string;
-  auto?: boolean; // Nova prop para controlar se deve usar o breadcrumb automático
+  auto?: boolean;
 };
 
 const BreadcrumbCDEP: React.FC<BreadcrumbCDEPProps> = ({
@@ -19,12 +19,10 @@ const BreadcrumbCDEP: React.FC<BreadcrumbCDEPProps> = ({
 }) => {
   const autoBreadcrumbItems = useBreadcrumb();
 
-  // Se auto=true, usa o breadcrumb automático baseado na rota
   if (auto) {
     return <Breadcrumb separator='>' items={autoBreadcrumbItems} />;
   }
 
-  // Caso contrário, usa o comportamento antigo (retrocompatibilidade)
   const items = [
     {
       href: '/',
