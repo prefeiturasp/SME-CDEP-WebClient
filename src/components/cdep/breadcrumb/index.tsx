@@ -1,4 +1,3 @@
-import { HomeOutlined } from '@ant-design/icons';
 import { Breadcrumb } from 'antd';
 import React from 'react';
 import { useBreadcrumb } from '~/core/hooks/use-breadcrumb';
@@ -30,29 +29,56 @@ const BreadcrumbCDEP: React.FC<BreadcrumbCDEPProps> = ({
     {
       href: '/',
       title: (
-        <>
-          <HomeOutlined />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <img
+            src="/ic_round-home.svg"
+            alt="Home"
+            style={{ width: '16px', height: '16px' }}
+          />
           <span>Inicio</span>
-        </>
+        </div>
       ),
     },
     {
       href: '',
       title: (
-        <>
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <img
+            src="/icon-park-solid_right-c.svg"
+            alt=""
+            style={{ width: '16px', height: '16px' }}
+          />
           <span>{menu}</span>
-        </>
+        </div>
       ),
     },
     {
       href: urlMainPage,
-      title: <span>{mainPage}</span>,
+      title: (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <img
+            src="/icon-park-solid_right-c.svg"
+            alt=""
+            style={{ width: '16px', height: '16px' }}
+          />
+          <span>{mainPage}</span>
+        </div>
+      ),
     },
   ];
   if (title) {
     items.push({
       href: '',
-      title: <span>{title}</span>,
+      title: (
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <img
+            src="/icon-park-solid_right-c.svg"
+            alt=""
+            style={{ width: '16px', height: '16px' }}
+          />
+          <span>{title}</span>
+        </div>
+      ),
     });
   }
   return (

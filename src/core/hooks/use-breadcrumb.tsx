@@ -1,4 +1,3 @@
-import { HomeOutlined } from '@ant-design/icons';
 import { useLocation } from 'react-router-dom';
 import { BREADCRUMB_ROUTES } from '../config/breadcrumb-config';
 import { ROUTES } from '../enum/routes';
@@ -17,10 +16,14 @@ export const useBreadcrumb = (): BreadcrumbItem[] => {
     {
       href: ROUTES.PRINCIPAL,
       title: (
-        <>
-          <HomeOutlined />
+        <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+          <img
+            src="/ic_round-home.svg"
+            alt="Home"
+            style={{ width: '16px', height: '16px' }}
+          />
           <span>Início</span>
-        </>
+        </div>
       ),
     },
   ];
@@ -48,7 +51,16 @@ export const useBreadcrumb = (): BreadcrumbItem[] => {
 
       breadcrumbItems.push({
         href: !isLastItem && config.path ? config.path : undefined,
-        title: <span>{config.label}</span>,
+        title: (
+          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+            <img
+              src="/icon-park-solid_right-c.svg"
+              alt=""
+              style={{ width: '16px', height: '16px' }}
+            />
+            <span>{config.label}</span>
+          </div>
+        ),
       });
     }
   });
