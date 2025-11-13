@@ -30,11 +30,7 @@ const BreadcrumbCDEP: React.FC<BreadcrumbCDEPProps> = ({
       href: '/',
       title: (
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-          <img
-            src="/ic_round-home.svg"
-            alt="Home"
-            style={{ width: '16px', height: '16px' }}
-          />
+          <img src='/ic_round-home.svg' alt='Home' style={{ width: '140px', height: '14px' }} />
           <span>Inicio</span>
         </div>
       ),
@@ -44,9 +40,9 @@ const BreadcrumbCDEP: React.FC<BreadcrumbCDEPProps> = ({
       title: (
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <img
-            src="/icon-park-solid_right-c.svg"
-            alt=""
-            style={{ width: '16px', height: '16px' }}
+            src='/icon-park-solid_right-c.svg'
+            alt=''
+            style={{ width: '12px', height: '12px' }}
           />
           <span>{menu}</span>
         </div>
@@ -57,9 +53,9 @@ const BreadcrumbCDEP: React.FC<BreadcrumbCDEPProps> = ({
       title: (
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <img
-            src="/icon-park-solid_right-c.svg"
-            alt=""
-            style={{ width: '16px', height: '16px' }}
+            src='/icon-park-solid_right-c.svg'
+            alt=''
+            style={{ width: '12px', height: '12px' }}
           />
           <span>{mainPage}</span>
         </div>
@@ -72,9 +68,9 @@ const BreadcrumbCDEP: React.FC<BreadcrumbCDEPProps> = ({
       title: (
         <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
           <img
-            src="/icon-park-solid_right-c.svg"
-            alt=""
-            style={{ width: '16px', height: '16px' }}
+            src='/icon-park-solid_right-c.svg'
+            alt=''
+            style={{ width: '12px', height: '12px' }}
           />
           <span>{title}</span>
         </div>
