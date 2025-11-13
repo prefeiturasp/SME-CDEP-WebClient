@@ -51,18 +51,42 @@ export const useBreadcrumb = (): BreadcrumbItem[] => {
   }
 
   let currentPath = '';
+  let lastAddedLabel = '';
+
   pathSegments.forEach((segment, index) => {
     currentPath += `/${segment}`;
-    const pathWithoutParams = currentPath.replace(/\/\d+$/, '');
-    const configKey = pathWithoutParams;
 
-    const config = BREADCRUMB_ROUTES[configKey] || BREADCRUMB_ROUTES[currentPath];
+    const isNumericSegment = /^\d+$/.test(segment);
+    const isLastSegment = index === pathSegments.length - 1;
 
-    if (config) {
-      const isLastItem = index === pathSegments.length - 1;
+    if (isNumericSegment && isLastSegment) {
+      const pathWithoutId = currentPath.replace(/\/\d+$/, '');
+      
+      const editConfig = BREADCRUMB_ROUTES[`${pathWithoutId}/editar`];
 
+      if (editConfig && editConfig.label !== lastAddedLabel) {
+        breadcrumbItems.push({
+          href: undefined,
+          title: (
+            <BreadcrumbLabel
+              icon='/icon-park-solid_right-c.svg'
+              label={editConfig.label}
+              color='#929394'
+              iconSize={12}
+            />
+          ),
+        });
+        lastAddedLabel = editConfig.label;
+      }
+      return;
+    }
+    
+    const config = BREADCRUMB_ROUTES[currentPath];
+
+    
+    if (config && config.label !== lastAddedLabel) {
       breadcrumbItems.push({
-        href: !isLastItem && config.path ? config.path : undefined,
+        href: !isLastSegment && config.path ? config.path : undefined,
         title: (
           <BreadcrumbLabel
             icon='/icon-park-solid_right-c.svg'
@@ -72,6 +96,8 @@ export const useBreadcrumb = (): BreadcrumbItem[] => {
           />
         ),
       });
+
+      lastAddedLabel = config.label;
     }
   });
 

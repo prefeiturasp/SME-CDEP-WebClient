@@ -98,28 +98,27 @@ export const BREADCRUMB_ROUTES: Record<string, BreadcrumbRouteConfig> = {
     label: 'Importar',
   },
 
-  // Solicitações
+  // Operações
   '/acervo': {
     label: 'Operações',
   },
+
+  // Solicitações
   [ROUTES.SOLICITACAO]: {
     label: 'Nova solicitação',
     path: ROUTES.SOLICITACAO,
-  },
-  '/acervo/solicitacao/novo': {
-    label: 'Nova Solicitação',
   },
 
   // Atendimento de Solicitações
   [ROUTES.ATENDIMENTO_SOLICITACOES]: {
     label: 'Atendimento de solicitações',
-    path: '/acervo',
+    path: ROUTES.ATENDIMENTO_SOLICITACOES,
   },
-  '/atendimento-solicitacoes/editar': {
-    label: 'Atender',
+  '/acervo/atendimento-solicitacoes/editar': {
+    label: 'Visualizar',
   },
-  '/atendimento-solicitacoes/solicitacao-manual': {
-    label: 'Solicitação Manual',
+  '/acervo/atendimento-solicitacoes/solicitacao-manual': {
+    label: 'Nova solicitação',
   },
 
   // Gestão
