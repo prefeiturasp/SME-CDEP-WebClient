@@ -9,7 +9,7 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "prettier": "npx prettier src --check",
     "preview": "vite preview",
-    "test": "jest"
+    "test": "jest --coverage"
   },
   "dependencies": {
     "@ant-design/icons": "^5.1.4",
