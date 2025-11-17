@@ -1,8 +1,8 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen } from '~/tests/test-utils';
 import RelatorioDownloadAcervos from './';
 
-test('renderiza o texto "Hello World"', () => {
+test('renderiza o componente RelatorioDownloadAcervos', () => {
   render(<RelatorioDownloadAcervos />);
-  const element = screen.getByText(/hello world/i);
+  const element = screen.getByText(/Download de Acervos/i);
   expect(element).toBeInTheDocument();
 });
