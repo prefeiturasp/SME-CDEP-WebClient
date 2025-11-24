@@ -1,4 +1,4 @@
-FROM node:16.15-alpine3.16 as build-deps
+FROM node:22-alpine as build-deps
 WORKDIR /usr/src/app
 
 ENV NODE_OPTIONS --max_old_space_size=4096
