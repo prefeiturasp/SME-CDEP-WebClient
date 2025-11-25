@@ -41,6 +41,7 @@ import RelatorioEditora from '~/pages/relatorios/editora';
 import RelatorioDevolucaoLivros from '~/pages/relatorios/devolucao-livros';
 import RelatorioDownloadAcervos from '~/pages/relatorios/download-acervos';
 import TitulosMaisPesquisados from '~/pages/relatorios/titulos-mais-pesquisados';
+import Indicadores from '~/pages/indicadores';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
@@ -210,19 +211,35 @@ const RoutesConfig = () => {
                   <Route path={ROUTES.AUTOR_CREDITO} element={<RelatorioAutorCredito />} />
                 </Route>
                 <Route element={<GuardPermissao menuKey={MenuEnum.RelatorioDevolucaoLivro} />}>
-                  <Route path={ROUTES.RELATORIO_DEVOLUCAO_LIVRO} element={<RelatorioDevolucaoLivros />} />
+                  <Route
+                    path={ROUTES.RELATORIO_DEVOLUCAO_LIVRO}
+                    element={<RelatorioDevolucaoLivros />}
+                  />
                 </Route>
                 <Route element={<GuardPermissao menuKey={MenuEnum.RelatorioEditora} />}>
                   <Route path={ROUTES.RELATORIO_EDITORA} element={<RelatorioEditora />} />
                 </Route>
                 <Route element={<GuardPermissao menuKey={MenuEnum.RelatorioDevolucaoLivro} />}>
-                  <Route path={ROUTES.RELATORIO_DEVOLUCAO_LIVRO} element={<RelatorioDevolucaoLivros />} />
+                  <Route
+                    path={ROUTES.RELATORIO_DEVOLUCAO_LIVRO}
+                    element={<RelatorioDevolucaoLivros />}
+                  />
                 </Route>
                 <Route element={<GuardPermissao menuKey={MenuEnum.RelatorioDownloadAcervos} />}>
-                  <Route path={ROUTES.RELATORIO_DOWNLOAD_ACERVOS} element={<RelatorioDownloadAcervos />} />
+                  <Route
+                    path={ROUTES.RELATORIO_DOWNLOAD_ACERVOS}
+                    element={<RelatorioDownloadAcervos />}
+                  />
                 </Route>
                 <Route element={<GuardPermissao menuKey={MenuEnum.TitulosMaisPesquisados} />}>
-                  <Route path={ROUTES.TITULOS_MAIS_PESQUISADOS} element={<TitulosMaisPesquisados />} />
+                  <Route
+                    path={ROUTES.TITULOS_MAIS_PESQUISADOS}
+                    element={<TitulosMaisPesquisados />}
+                  />
+                </Route>
+
+                <Route element={<GuardPermissao menuKey={MenuEnum.Indicadores} />}>
+                  <Route path={ROUTES.INDICADORES} element={<Indicadores />} />
                 </Route>
               </Route>
             </Route>
