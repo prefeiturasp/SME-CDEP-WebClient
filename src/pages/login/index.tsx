@@ -25,6 +25,7 @@ import { AutenticacaoDTO } from '~/core/dto/autenticacao-dto';
 import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 import { ValidateErrorEntity } from '~/core/dto/validate-error-entity';
 import { ROUTES } from '~/core/enum/routes';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
 import { setSpinning } from '~/core/redux/modules/spin/actions';
 import { validarAutenticacao } from '~/core/utils/perfil';
 
@@ -71,11 +72,29 @@ const Login = () => {
       .then((resposta) => {
         if (resposta?.data?.autenticado) {
           window.clarity('identify', resposta.data.usuarioLogin);
-          validarAutenticacao(resposta.data);
+          const perfilSelecionado = validarAutenticacao(resposta.data);
+
+          const perfisAdmin = [
+            TipoPerfil.ADMIN_GERAL,
+            TipoPerfil.ADMIN_BIBLIOTECA,
+            TipoPerfil.ADMIN_MEMORIA,
+            TipoPerfil.ADMIN_MEMORIAL,
+          ];
+
+          const ehPerfilAdmin =
+            perfilSelecionado && perfisAdmin.includes(perfilSelecionado.perfil as TipoPerfil);
 
           if (temAcervosSelecionados) {
             setTimeout(() => {
               navigate(ROUTES.SOLICITACAO);
+            }, 100);
+          } else if (ehPerfilAdmin) {
+            setTimeout(() => {
+              navigate(ROUTES.INDICADORES);
+            }, 100);
+          } else {
+            setTimeout(() => {
+              navigate(ROUTES.PRINCIPAL);
             }, 100);
           }
         }

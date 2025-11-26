@@ -112,6 +112,8 @@ export const validarAutenticacao = (data: RetornoPerfilUsuarioDTO) => {
 
   store.dispatch(setRoles(roles));
   carregarMenusEPermissao(roles);
+
+  return perfilSelecionado;
 };
 
 export const obterPermissaoPorMenu = (menuEnum: MenuEnum) =>
