@@ -10,7 +10,11 @@ const obterAcervosCadastrados = (): Promise<AxiosResponse<AcervosCadastradosDTO[
 const obterQuantidadePesquisasMensais = (): Promise<AxiosResponse<AcervosCadastradosDTO[]>> =>
   api.get(`${URL_DEFAULT}/quantidade-pesquisas-mensais`);
 
+const obterQuantidadeSolicitacoesMensais = (): Promise<AxiosResponse<AcervosCadastradosDTO[]>> =>
+  api.get(`${URL_DEFAULT}/quantidade-solicitacoes-mensais`);
+
 export default {
   obterAcervosCadastrados,
   obterQuantidadePesquisasMensais,
+  obterQuantidadeSolicitacoesMensais
 };

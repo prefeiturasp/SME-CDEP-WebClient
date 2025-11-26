@@ -19,7 +19,7 @@ interface GraficoAreaChartProps {
   dados: AcervosCadastradosDTO[];
 }
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, labelHorizontal }: any) => {
   if (active && payload && payload.length) {
     return (
       <div
@@ -31,7 +31,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
         }}
       >
         <p style={{ margin: 0, color: '#89162D' }}>
-          <strong>Tipo de acervo:</strong> {label}
+          <strong>{labelHorizontal}:</strong> {payload[0].payload.nome}
         </p>
 
         <p style={{ margin: 0 }}>
@@ -48,32 +48,53 @@ interface GraficoAreaChartProps {
   dados: AcervosCadastradosDTO[];
   titulo: string;
   subtitulo: string;
+  labelvertical: string;
+  labelHorizontal: string;
 }
 
-export default function GraficoBarChart({ dados, titulo, subtitulo }: GraficoAreaChartProps) {
+export default function GraficoBarChart({
+  dados,
+  titulo,
+  subtitulo,
+  labelvertical,
+  labelHorizontal,
+}: GraficoAreaChartProps) {
   if (!dados || dados.length === 0) return 'NADA FOI ENCONTRADO';
 
   return (
     <>
-      <Space direction='vertical' size={4} style={{ marginBottom: 16 }}>
-        <Title level={4} style={{ margin: 0 }}>
+      <Space direction='vertical' size={16} style={{ marginBottom: 16 }}>
+        <Title level={4} style={{ margin: 0, color: '#595959' }}>
           {titulo}
         </Title>
 
-        <Text type='secondary'>{subtitulo}</Text>
+        <Text
+          type='secondary'
+          style={{
+            marginTop: 16,
+            fontFamily: 'Roboto',
+            fontWeight: 400,
+            fontStyle: 'normal',
+            fontSize: 14,
+            lineHeight: '100%',
+            letterSpacing: 0,
+            color: '#595959',
+          }}
+        >
+          {subtitulo}
+        </Text>
       </Space>
 
       <Row>
         <Col span={24}>
           <div style={{ width: '100%', height: '50vh' }}>
             <ResponsiveContainer width='100%' height='100%'>
-              {/* ===== BAR CHART ===== */}
               <BarChart
                 data={dados}
                 syncId='anyId'
                 margin={{ top: 20, right: 20, left: 30, bottom: 70 }}
               >
-                <CartesianGrid strokeDasharray='3 3' />
+                <CartesianGrid strokeDasharray='3 3' vertical={false} />
 
                 <XAxis
                   dataKey='nome'
@@ -84,7 +105,7 @@ export default function GraficoBarChart({ dados, titulo, subtitulo }: GraficoAre
                   style={{ textAnchor: 'middle', fontSize: 14, fill: '#595959' }}
                 >
                   <Label
-                    value='Tipos de acervo'
+                    value={labelHorizontal}
                     position='bottom'
                     offset={50}
                     style={{
@@ -105,7 +126,7 @@ export default function GraficoBarChart({ dados, titulo, subtitulo }: GraficoAre
                   style={{ textAnchor: 'middle', fontSize: 14, fill: '#595959' }}
                 >
                   <Label
-                    value='Quantidade de acervos'
+                    value={labelvertical}
                     angle={-90}
                     position='insideLeft'
                     dx={-20}
@@ -118,9 +139,8 @@ export default function GraficoBarChart({ dados, titulo, subtitulo }: GraficoAre
                   />
                 </YAxis>
 
-                <Tooltip content={<CustomTooltip />} />
+                <Tooltip content={<CustomTooltip labelHorizontal={labelHorizontal} />} />
 
-                {/* ===== BAR ===== */}
                 <Bar dataKey='valor' fill='#89162D' radius={[4, 4, 0, 0]}>
                   <LabelList
                     dataKey='valor'

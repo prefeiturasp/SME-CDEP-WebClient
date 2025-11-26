@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { Col } from 'antd';
+import { Card, Col } from 'antd';
 import CardContent from '~/components/lib/card-content';
 import HeaderPage from '~/components/lib/header-page';
-import GraficoAreaChart from '~/components/lib/line-chart';
+import GraficoAreaChart from '~/components/lib/area-chart';
 import { AcervosCadastradosDTO } from '~/core/dto/acervos-cadastrados-dto';
 import service from '~/core/services/indicadores-service';
 import GraficoBarChart from '~/components/lib/bar-chart';
@@ -12,6 +12,9 @@ const Indicadores = () => {
     [],
   );
   const [dadosquantidadePesquisasMensais, setDadosQuantidadePesquisasMensais] = useState<
+    AcervosCadastradosDTO[]
+  >([]);
+  const [dadosquantidadeSolicitacoesMensais, setDadosQuantidadeSolicitacoesMensais] = useState<
     AcervosCadastradosDTO[]
   >([]);
 
@@ -67,9 +70,22 @@ const Indicadores = () => {
     }
   };
 
+  const quantidadeSolicitacoesMensais = async () => {
+    try {
+      const retorno = await service.obterQuantidadeSolicitacoesMensais();
+
+      const dadosOrdenados = [...retorno.data].sort((a, b) => a.id - b.id);
+
+      setDadosQuantidadeSolicitacoesMensais(dadosOrdenados);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   useEffect(() => {
     acervosCadastrados();
     quantidadePesquisasMensais();
+    quantidadeSolicitacoesMensais();
   }, []);
 
   return (
@@ -88,6 +104,22 @@ const Indicadores = () => {
         ></GraficoAreaChart>
       </CardContent>
 
+      <br></br>
+
+      <CardContent>
+        <GraficoBarChart
+          dados={dadosquantidadeSolicitacoesMensais}
+          titulo={'Solicitações por tipo de acervo'}
+          subtitulo={
+            'Exibe a quantidade de solicitações realizadas para cada tipo de acervo, permitindo identificar quais são os mais demandados.'
+          }
+          labelvertical='Quantidade de solicitações'
+          labelHorizontal='Meses'
+        ></GraficoBarChart>
+      </CardContent>
+
+      <br></br>
+
       <CardContent>
         <GraficoAreaChart
           dados={dadosquantidadePesquisasMensais}
@@ -95,8 +127,8 @@ const Indicadores = () => {
           subtitulo={
             'Exibe o total de pesquisas realizadas no ano atual, facilitando a visualização do uso ao longo do tempo.'
           }
-          labelvertical='Quantidade de acervos'
-          labelHorizontal='Tipos de acervo'
+          labelvertical='Quantidade de pesquisas'
+          labelHorizontal='Meses'
         ></GraficoAreaChart>
       </CardContent>
     </Col>

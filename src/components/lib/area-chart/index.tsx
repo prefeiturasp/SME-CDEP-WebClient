@@ -18,7 +18,7 @@ interface GraficoAreaChartProps {
   dados: AcervosCadastradosDTO[];
 }
 
-const CustomTooltip = ({ active, payload, label }: any) => {
+const CustomTooltip = ({ active, payload, labelHorizontal }: any) => {
   if (active && payload && payload.length) {
     return (
       <div
@@ -30,7 +30,7 @@ const CustomTooltip = ({ active, payload, label }: any) => {
         }}
       >
         <p style={{ margin: 0, color: '#89162D' }}>
-          <strong>Tipo de acervo:</strong> {label}
+          <strong>{labelHorizontal}:</strong> {payload[0].payload.nome}
         </p>
 
         <p style={{ margin: 0 }}>
@@ -51,17 +51,37 @@ interface GraficoAreaChartProps {
   labelHorizontal: string;
 }
 
-export default function GraficoAreaChart({ dados, titulo, subtitulo, labelvertical, labelHorizontal }: GraficoAreaChartProps) {
+export default function GraficoAreaChart({
+  dados,
+  titulo,
+  subtitulo,
+  labelvertical,
+  labelHorizontal,
+}: GraficoAreaChartProps) {
   if (!dados || dados.length === 0) return 'NADA FOI ENCONTRADO';
 
   return (
     <>
-      <Space direction='vertical' size={4} style={{ marginBottom: 16 }}>
-        <Title level={4} style={{ margin: 0 }}>
+      <Space direction='vertical' size={16} style={{ marginBottom: 16 }}>
+        <Title level={4} style={{ margin: 0, color: '#595959' }}>
           {titulo}
         </Title>
 
-        <Text type='secondary'>{subtitulo}</Text>
+        <Text
+          type='secondary'
+          style={{
+            marginTop: 16,
+            fontFamily: 'Roboto',
+            fontWeight: 400,
+            fontStyle: 'normal',
+            fontSize: 14,
+            lineHeight: '100%',
+            letterSpacing: 0,
+            color: '#595959',
+          }}
+        >
+          {subtitulo}
+        </Text>
       </Space>
 
       <Row>
@@ -80,7 +100,7 @@ export default function GraficoAreaChart({ dados, titulo, subtitulo, labelvertic
                   </linearGradient>
                 </defs>
 
-                <CartesianGrid strokeDasharray='3 3' />
+                <CartesianGrid strokeDasharray='3 3' vertical={false} />
 
                 <XAxis
                   dataKey='nome'
@@ -125,9 +145,18 @@ export default function GraficoAreaChart({ dados, titulo, subtitulo, labelvertic
                   />
                 </YAxis>
 
-                <Tooltip content={<CustomTooltip />} />
+                <Tooltip
+                  content={<CustomTooltip labelHorizontal={labelHorizontal} />}
+                  cursor={false}
+                />
 
-                <Area dataKey='valor' stroke='#89162D' strokeWidth={2} fill='url(#fadeWhite)' />
+                <Area
+                  dataKey='valor'
+                  stroke='#89162D'
+                  strokeWidth={2}
+                  fill='url(#fadeWhite)'
+                  dot={true}
+                />
               </AreaChart>
             </ResponsiveContainer>
           </div>
