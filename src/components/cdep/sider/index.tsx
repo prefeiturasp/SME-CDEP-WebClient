@@ -8,7 +8,7 @@ import { ROUTES } from '~/core/enum/routes';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import SiderSME, { MenuItemSMEProps } from '../../lib/sider';
 import { MenuItemCDEPProps, menus } from './menus';
-import { MenuEnum } from '~/core/enum/menu-enum';
+// import { MenuEnum } from '~/core/enum/menu-enum';
 
 const SiderCDEP: React.FC = () => {
   const navigate = useNavigate();
@@ -23,7 +23,7 @@ const SiderCDEP: React.FC = () => {
           const children = validarExibicaoMenus(menu.children).filter((subMenu) => {
             //if (subMenu.key === MenuEnum.RelatorioDownloadAcervos) return true;
             //if (subMenu.key === MenuEnum.TitulosMaisPesquisados) return true;
-            if (subMenu.key === MenuEnum.Indicadores) return true;
+            //if (subMenu.key === MenuEnum.Indicadores) return true;
             const permissaoMenu = permissaoPorMenu[subMenu?.key];
             return !!permissaoMenu?.exibir;
           });
