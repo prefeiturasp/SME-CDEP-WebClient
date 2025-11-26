@@ -6,6 +6,7 @@ import GraficoAreaChart from '~/components/lib/area-chart';
 import { AcervosCadastradosDTO } from '~/core/dto/acervos-cadastrados-dto';
 import service from '~/core/services/indicadores-service';
 import GraficoBarChart from '~/components/lib/bar-chart';
+import './index.css';
 
 const Indicadores = () => {
   const [dadosAcervosCadastrados, setDadosAcervosCadastrados] = useState<AcervosCadastradosDTO[]>(
@@ -93,43 +94,49 @@ const Indicadores = () => {
       <HeaderPage title='Painel de indicadores'></HeaderPage>
 
       <CardContent>
-        <GraficoAreaChart
-          dados={dadosAcervosCadastrados}
-          titulo={'Acervos cadastrados'}
-          subtitulo={
-            'Exibe a quantidade total de acervos cadastrados em cada tipo, permitindo acompanhar a composição geral do acervo.'
-          }
-          labelvertical='Quantidade de acervos'
-          labelHorizontal='Tipos de acervo'
-        ></GraficoAreaChart>
+        <div className="grafico-container">
+          <GraficoAreaChart
+            dados={dadosAcervosCadastrados}
+            titulo={'Acervos cadastrados'}
+            subtitulo={
+              'Exibe a quantidade total de acervos cadastrados em cada tipo, permitindo acompanhar a composição geral do acervo.'
+            }
+            labelvertical='Quantidade de acervos'
+            labelHorizontal='Tipos de acervo'
+          ></GraficoAreaChart>
+        </div>
       </CardContent>
 
       <br></br>
 
       <CardContent>
-        <GraficoBarChart
-          dados={dadosquantidadeSolicitacoesMensais}
-          titulo={'Solicitações por tipo de acervo'}
-          subtitulo={
-            'Exibe a quantidade de solicitações realizadas para cada tipo de acervo, permitindo identificar quais são os mais demandados.'
-          }
-          labelvertical='Quantidade de solicitações'
-          labelHorizontal='Meses'
-        ></GraficoBarChart>
+        <div className="grafico-container">
+          <GraficoBarChart
+            dados={dadosquantidadeSolicitacoesMensais}
+            titulo={'Solicitações por tipo de acervo'}
+            subtitulo={
+              'Exibe a quantidade de solicitações realizadas para cada tipo de acervo, permitindo identificar quais são os mais demandados.'
+            }
+            labelvertical='Quantidade de solicitações'
+            labelHorizontal='Meses'
+          ></GraficoBarChart>
+        </div>
       </CardContent>
 
       <br></br>
 
       <CardContent>
-        <GraficoAreaChart
-          dados={dadosquantidadePesquisasMensais}
-          titulo={'Quantidade de pesquisas mensais'}
-          subtitulo={
-            'Exibe o total de pesquisas realizadas no ano atual, facilitando a visualização do uso ao longo do tempo.'
-          }
-          labelvertical='Quantidade de pesquisas'
-          labelHorizontal='Meses'
-        ></GraficoAreaChart>
+        <div className="grafico-container">
+          <GraficoAreaChart
+            dados={dadosquantidadePesquisasMensais}
+            titulo={'Quantidade de pesquisas mensais'}
+            subtitulo={
+              'Exibe o total de pesquisas realizadas no ano atual, facilitando a visualização do uso ao longo do tempo.'
+            }
+            labelvertical='Quantidade de pesquisas'
+            labelHorizontal='Meses'
+          ></GraficoAreaChart>
+        </div>
       </CardContent>
     </Col>
   );
