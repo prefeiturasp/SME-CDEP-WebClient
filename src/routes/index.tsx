@@ -237,9 +237,11 @@ const RoutesConfig = () => {
                     element={<TitulosMaisPesquisados />}
                   />
                 </Route>
+              </Route>
 
+              <Route path={ROUTES.INDICADORES}>
                 <Route element={<GuardPermissao menuKey={MenuEnum.Indicadores} />}>
-                  <Route path={ROUTES.INDICADORES} element={<Indicadores />} />
+                  <Route path='' element={<Indicadores />} />
                 </Route>
               </Route>
             </Route>

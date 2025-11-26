@@ -86,16 +86,5 @@ export const MENU_RELATORIOS: MenuItemCDEPProps = {
         podeAlterar: PermissaoEnum.CadastroCredito_A,
       },
     },
-    {
-      key: MenuEnum.Indicadores,
-      title: 'Indicadores',
-      url: ROUTES.INDICADORES,
-      roles: {
-        podeConsultar: PermissaoEnum.CadastroCredito_C,
-        podeIncluir: PermissaoEnum.CadastroCredito_I,
-        podeExcluir: PermissaoEnum.CadastroCredito_E,
-        podeAlterar: PermissaoEnum.CadastroCredito_A,
-      },
-    },
   ],
 };

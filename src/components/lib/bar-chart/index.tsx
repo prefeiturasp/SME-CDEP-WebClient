@@ -8,6 +8,7 @@ import {
   Bar,
   ResponsiveContainer,
   LabelList,
+  Cell,
 } from 'recharts';
 
 import { Typography, Space, Row, Col } from 'antd';
@@ -139,16 +140,44 @@ export default function GraficoBarChart({
                   />
                 </YAxis>
 
-                <Tooltip content={<CustomTooltip labelHorizontal={labelHorizontal} />} />
+                <Tooltip
+                  content={(props: any) => {
+                    const { active, payload } = props;
 
-                <Bar dataKey='valor' fill='#89162D' radius={[4, 4, 0, 0]}>
+                    if (!active || !payload || !payload.length) return null;
+
+                    if (payload[0].payload.esconder) return null;
+
+                    return <CustomTooltip {...props} labelHorizontal={labelHorizontal} />;
+                  }}
+                />
+
+                <Bar dataKey='valor' radius={[4, 4, 0, 0]}>
+                  {dados.map((entry, index) => (
+                    <Cell key={index} fill={entry.esconder ? '#BFBFBF33' : '#89162D'} />
+                  ))}
+
                   <LabelList
                     dataKey='valor'
-                    position='insideBottom'
-                    style={{
-                      fill: '#FFFFFF',
-                      fontWeight: 'bold',
-                      fontSize: 12,
+                    content={(props: any) => {
+                      const { value, x, y, width, height, index } = props;
+
+                      const item = dados[index];
+
+                      if (!item || item.esconder) return null;
+
+                      return (
+                        <text
+                          x={x + width / 2}
+                          y={y + height - 8}
+                          fill='#FFFFFF'
+                          fontWeight='bold'
+                          fontSize={12}
+                          textAnchor='middle'
+                        >
+                          {value}
+                        </text>
+                      );
                     }}
                   />
                 </Bar>
