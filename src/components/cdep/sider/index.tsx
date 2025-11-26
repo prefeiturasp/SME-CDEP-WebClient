@@ -21,8 +21,8 @@ const SiderCDEP: React.FC = () => {
       const newMapMenus = menusParaValidar.map((menu) => {
         if (menu?.children?.length) {
           const children = validarExibicaoMenus(menu.children).filter((subMenu) => {
-            if (subMenu.key === MenuEnum.RelatorioDownloadAcervos) return true;
-            if (subMenu.key === MenuEnum.TitulosMaisPesquisados) return true;
+            //if (subMenu.key === MenuEnum.RelatorioDownloadAcervos) return true;
+            //if (subMenu.key === MenuEnum.TitulosMaisPesquisados) return true;
             if (subMenu.key === MenuEnum.Indicadores) return true;
             const permissaoMenu = permissaoPorMenu[subMenu?.key];
             return !!permissaoMenu?.exibir;
