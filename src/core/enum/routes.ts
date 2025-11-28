@@ -50,5 +50,6 @@ export enum ROUTES {
   RELATORIO_DEVOLUCAO_LIVRO = '/relatorios/devolucao-livro',
   RELATORIO_DOWNLOAD_ACERVOS = '/relatorios/download-acervos',
   TITULOS_MAIS_PESQUISADOS = '/relatorios/titulos-mais-pesquisados',
+  HISTORICO_SOLICITACOES = '/relatorios/historico-solicitacoes',
   INDICADORES = '/indicadores',
 }

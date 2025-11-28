@@ -42,6 +42,7 @@ import RelatorioDevolucaoLivros from '~/pages/relatorios/devolucao-livros';
 import RelatorioDownloadAcervos from '~/pages/relatorios/download-acervos';
 import TitulosMaisPesquisados from '~/pages/relatorios/titulos-mais-pesquisados';
 import Indicadores from '~/pages/indicadores';
+import RelatorioHistoricoSolicitacoes from '~/pages/relatorios/historico-solicitacoes';
 
 const RoutesConfig = () => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
@@ -235,6 +236,12 @@ const RoutesConfig = () => {
                   <Route
                     path={ROUTES.TITULOS_MAIS_PESQUISADOS}
                     element={<TitulosMaisPesquisados />}
+                  />
+                </Route>
+                <Route element={<GuardPermissao menuKey={MenuEnum.HistoricoSolicitacoes} />}>
+                  <Route
+                    path={ROUTES.HISTORICO_SOLICITACOES}
+                    element={<RelatorioHistoricoSolicitacoes />}
                   />
                 </Route>
               </Route>
