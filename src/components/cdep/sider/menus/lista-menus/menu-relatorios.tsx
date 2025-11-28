@@ -86,5 +86,16 @@ export const MENU_RELATORIOS: MenuItemCDEPProps = {
         podeAlterar: PermissaoEnum.CadastroCredito_A,
       },
     },
+    {
+      key: MenuEnum.HistoricoSolicitacoes,
+      title: 'Relatório de Histórico de Solicitações',
+      url: ROUTES.HISTORICO_SOLICITACOES,
+      roles: {
+        podeConsultar: PermissaoEnum.CadastroCredito_C,
+        podeIncluir: PermissaoEnum.CadastroCredito_I,
+        podeExcluir: PermissaoEnum.CadastroCredito_E,
+        podeAlterar: PermissaoEnum.CadastroCredito_A,
+      },
+    },
   ],
 };
