@@ -14,103 +14,119 @@ import { CDEP_SELECT_EDITORA } from '~/core/constants/ids/select';
 import { CheckCircleOutlined, CloseCircleOutlined, SearchOutlined } from '@ant-design/icons';
 
 import styles from './relatorio-editora.module.css';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
+import { useAppSelector } from '~/core/hooks/use-redux';
 
 const RelatorioEditora = () => {
-    const [form] = Form.useForm();
-    const [modalVisible, setModalVisible] = useState(false);
-    const [loadingRelatorio, setLoadingRelatorio] = useState(false);
-    const [relatorioBlob, setRelatorioBlob] = useState<Blob | null>(null);
-    const [erroModal, setErroModal] = useState<string | null>(null);
-    const [options, setOptions] = useState<DefaultOptionType[]>([]);
-    const [loadingEditoras, setLoadingEditoras] = useState(false);
-  
-    const onFinish = async (values: any) => {
-        try {
-            setModalVisible(true);
-            setLoadingRelatorio(true);
-            setErroModal(null);
+  const [form] = Form.useForm();
+  const [modalVisible, setModalVisible] = useState(false);
+  const [loadingRelatorio, setLoadingRelatorio] = useState(false);
+  const [relatorioBlob, setRelatorioBlob] = useState<Blob | null>(null);
+  const [erroModal, setErroModal] = useState<string | null>(null);
+  const [options, setOptions] = useState<DefaultOptionType[]>([]);
+  const [loadingEditoras, setLoadingEditoras] = useState(false);
 
-            const payload = {
-            editoraId: values.editoraId
-            };
-
-            const response = await relatoriosService.gerarRelatorioControleEditora(payload);
-
-            if (response.status === 404) {
-                setErroModal(
-                'Seu relatório não retornou nenhum dado. Por favor, tente novamente mais tarde.',
-                );
-                return;
-            }
-            if (!response.data || response.data.size === 0) {
-                setErroModal('Nenhum dado encontrado para os filtros selecionados.');
-                return;
-            }
-
-            const blob = new Blob([response.data], {
-                type: 'application/vnd.ms-excel',
-            });
-
-            setRelatorioBlob(blob);
-        } catch (error: any) {
-            if (error?.response?.status === 404) {
-            setErroModal(
-                'Seu relatório não retornou nenhum dado. Por favor, tente novamente mais tarde.',
-            );
-            } else {
-            setErroModal('Ocorreu um erro ao gerar o relatório. Por favor, tente novamente mais tarde.');
-            }
-            setRelatorioBlob(null);
-        } finally {
-        setLoadingRelatorio(false);
-        }
-    };
-  
-    const fecharModal = () => {
-      setModalVisible(false);
-      setRelatorioBlob(null);
+  const onFinish = async (values: any) => {
+    try {
+      setModalVisible(true);
+      setLoadingRelatorio(true);
       setErroModal(null);
-    };
-  
-    const baixarRelatorio = () => {
-      if (relatorioBlob) {
-        const url = window.URL.createObjectURL(relatorioBlob);
-        const link = document.createElement('a');
-        link.href = url;
-        link.download = 'relatorio_controle_editora.xls';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        window.URL.revokeObjectURL(url);
-        fecharModal();
+
+      const payload = {
+        editoraId: values.editoraId,
+      };
+
+      const response = await relatoriosService.gerarRelatorioControleEditora(payload);
+
+      if (response.status === 404) {
+        setErroModal(
+          'Seu relatório não retornou nenhum dado. Por favor, tente novamente mais tarde.',
+        );
+        return;
       }
-    };
-  
-    const navigate = useNavigate();
-    const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
-
-    const obterEditoras = async () => {
-      try {
-        setLoadingEditoras(true);
-        const resposta = await obterEditoraResumido();
-        const editorasOrdenadas = resposta.dados.sort((a, b) => a.nome.localeCompare(b.nome));
-
-        if (resposta.sucesso) {
-            const newOptions = editorasOrdenadas.map((item) => ({ label: item.nome, value: item.id }));
-            setOptions(newOptions);
-        } else {
-            setOptions([]);
-        }
-      } catch (error) {
-        console.error('Erro ao obter editoras:', error);
-      } finally {
-        setLoadingEditoras(false);
+      if (!response.data || response.data.size === 0) {
+        setErroModal('Nenhum dado encontrado para os filtros selecionados.');
+        return;
       }
-    };
 
-    useEffect(() => {
-      obterEditoras();
-    }, []);
+      const blob = new Blob([response.data], {
+        type: 'application/vnd.ms-excel',
+      });
+
+      setRelatorioBlob(blob);
+    } catch (error: any) {
+      if (error?.response?.status === 404) {
+        setErroModal(
+          'Seu relatório não retornou nenhum dado. Por favor, tente novamente mais tarde.',
+        );
+      } else {
+        setErroModal(
+          'Ocorreu um erro ao gerar o relatório. Por favor, tente novamente mais tarde.',
+        );
+      }
+      setRelatorioBlob(null);
+    } finally {
+      setLoadingRelatorio(false);
+    }
+  };
+
+  const fecharModal = () => {
+    setModalVisible(false);
+    setRelatorioBlob(null);
+    setErroModal(null);
+  };
+
+  const baixarRelatorio = () => {
+    if (relatorioBlob) {
+      const url = window.URL.createObjectURL(relatorioBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = 'relatorio_controle_editora.xls';
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      fecharModal();
+    }
+  };
+
+  const navigate = useNavigate();
+  const perfil = useAppSelector((state) => state.perfil);
+
+  const perfisAdmin = [
+    TipoPerfil.ADMIN_GERAL,
+    TipoPerfil.ADMIN_BIBLIOTECA,
+    TipoPerfil.ADMIN_MEMORIA,
+    TipoPerfil.ADMIN_MEMORIAL,
+  ];
+
+  const ehPerfilAdmin =
+    perfil && perfisAdmin.includes(perfil.perfilSelecionado?.perfil as TipoPerfil);
+
+  const onClickVoltar = () => navigate(ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL);
+
+  const obterEditoras = async () => {
+    try {
+      setLoadingEditoras(true);
+      const resposta = await obterEditoraResumido();
+      const editorasOrdenadas = resposta.dados.sort((a, b) => a.nome.localeCompare(b.nome));
+
+      if (resposta.sucesso) {
+        const newOptions = editorasOrdenadas.map((item) => ({ label: item.nome, value: item.id }));
+        setOptions(newOptions);
+      } else {
+        setOptions([]);
+      }
+    } catch (error) {
+      console.error('Erro ao obter editoras:', error);
+    } finally {
+      setLoadingEditoras(false);
+    }
+  };
+
+  useEffect(() => {
+    obterEditoras();
+  }, []);
 
   return (
     <Col>

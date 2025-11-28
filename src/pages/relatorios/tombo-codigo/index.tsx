@@ -12,6 +12,8 @@ import { obterTiposAcervo } from '~/core/services/acervo-service';
 import relatorioService from '~/core/services/relatorios-service';
 import { DefaultOptionType } from 'antd/es/select';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { useAppSelector } from '~/core/hooks/use-redux';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
 
 const { Option } = Select;
 
@@ -100,7 +102,20 @@ const RelatorioTomboCodigo = () => {
   };
 
   const navigate = useNavigate();
-  const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
+
+  const perfil = useAppSelector((state) => state.perfil);
+
+  const perfisAdmin = [
+    TipoPerfil.ADMIN_GERAL,
+    TipoPerfil.ADMIN_BIBLIOTECA,
+    TipoPerfil.ADMIN_MEMORIA,
+    TipoPerfil.ADMIN_MEMORIAL,
+  ];
+
+  const ehPerfilAdmin =
+    perfil && perfisAdmin.includes(perfil.perfilSelecionado?.perfil as TipoPerfil);
+
+  const onClickVoltar = () => navigate(ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL);
 
   const obterTipos = async () => {
     const resposta = await obterTiposAcervo();

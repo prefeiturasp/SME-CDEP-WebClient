@@ -46,6 +46,7 @@ import { LISTA_TIPO_USUARIO } from '~/core/constants/lista-tipo-usuario';
 import ModalEditTipoUsuarioButton from './components/modal-edit-tipo-usuario/modal-edit-tipo-usuario-button';
 import InputTipoUsuario from '~/components/cdep/input/tipo-usuario';
 import InputInstituicao from '~/components/cdep/input/instituicao';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
 
 export const DadosPerfil = styled.div`
   color: #a4a4a4;
@@ -87,7 +88,19 @@ const MeusDados: React.FC = () => {
 
   const usuarioCORESSO = meusDados?.tipo === TipoUsuario.CORESSO;
 
-  const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
+  const perfil2 = useAppSelector((state) => state.perfil);
+
+  const perfisAdmin = [
+    TipoPerfil.ADMIN_GERAL,
+    TipoPerfil.ADMIN_BIBLIOTECA,
+    TipoPerfil.ADMIN_MEMORIA,
+    TipoPerfil.ADMIN_MEMORIAL,
+  ];
+
+  const ehPerfilAdmin =
+    perfil2 && perfisAdmin.includes(perfil.perfilSelecionado?.perfil as TipoPerfil);
+
+  const onClickVoltar = () => navigate(ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL);
 
   const obterDados = useCallback(() => {
     dispatch(setSpinning(true));
