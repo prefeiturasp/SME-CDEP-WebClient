@@ -11,6 +11,8 @@ import CardDadosSolicitante from './components/card-dados-solicitante';
 import ListaAcervosSolicitacao from './components/lista-acervos-solicitacao';
 import AcervoSolicitacaoContextProvider from './provider';
 import BtnCancelarSolicitacoes from './components/btn-cancelar-solicitacao';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
+import { useAppSelector } from '~/core/hooks/use-redux';
 
 const EnviarSolicitacoes: React.FC = () => {
   const navigate = useNavigate();
@@ -18,7 +20,19 @@ const EnviarSolicitacoes: React.FC = () => {
 
   const solicitacaoId = paramsRoute?.id ? Number(paramsRoute.id) : 0;
 
-  const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
+  const perfil = useAppSelector((state) => state.perfil);
+
+  const perfisAdmin = [
+    TipoPerfil.ADMIN_GERAL,
+    TipoPerfil.ADMIN_BIBLIOTECA,
+    TipoPerfil.ADMIN_MEMORIA,
+    TipoPerfil.ADMIN_MEMORIAL,
+  ];
+
+  const ehPerfilAdmin =
+    perfil && perfisAdmin.includes(perfil.perfilSelecionado?.perfil as TipoPerfil);
+
+  const onClickVoltar = () => navigate(ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL);
 
   return (
     <AcervoSolicitacaoContextProvider>

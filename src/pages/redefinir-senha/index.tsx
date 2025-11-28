@@ -3,7 +3,7 @@ import { useState } from 'react';
 
 import { useForm, useWatch } from 'antd/es/form/Form';
 
-import { useAppDispatch } from '~/core/hooks/use-redux';
+import { useAppDispatch, useAppSelector } from '~/core/hooks/use-redux';
 import usuarioService from '~/core/services/usuario-service';
 
 import { AxiosError } from 'axios';
@@ -18,6 +18,7 @@ import { validateMessages } from '~/core/constants/validate-messages';
 import { RetornoBaseDTO } from '~/core/dto/retorno-base-dto';
 import { ROUTES } from '~/core/enum/routes';
 import { setSpinning } from '~/core/redux/modules/spin/actions';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
 
 const RedefinirSenha = () => {
   const [form] = useForm();
@@ -62,7 +63,19 @@ const RedefinirSenha = () => {
       .finally(() => dispatch(setSpinning(false)));
   };
 
-  const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
+  const perfil = useAppSelector((state) => state.perfil);
+
+  const perfisAdmin = [
+    TipoPerfil.ADMIN_GERAL,
+    TipoPerfil.ADMIN_BIBLIOTECA,
+    TipoPerfil.ADMIN_MEMORIA,
+    TipoPerfil.ADMIN_MEMORIAL,
+  ];
+
+  const ehPerfilAdmin =
+    perfil && perfisAdmin.includes(perfil.perfilSelecionado?.perfil as TipoPerfil);
+
+  const onClickVoltar = () => navigate(ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL);
 
   return (
     <>

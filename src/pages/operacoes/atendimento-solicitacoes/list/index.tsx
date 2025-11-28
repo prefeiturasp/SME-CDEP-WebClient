@@ -27,6 +27,8 @@ import { ROUTES } from '~/core/enum/routes';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 import { InputRfCpfSolicitante } from './components/rf-cpf-solicitante';
 import InputNumero from '~/components/lib/inputs/number';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
+import { useAppSelector } from '~/core/hooks/use-redux';
 
 export type FiltroSolicitacaoProps = {
   tipoAcervo: number | null;
@@ -112,7 +114,19 @@ export const ListAtendimentoSolicitacoes: React.FC = () => {
 
   const [filters, setFilters] = useState<FiltroSolicitacaoProps>(DEFAULT_VALUES);
 
-  const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
+  const perfil = useAppSelector((state) => state.perfil);
+
+  const perfisAdmin = [
+    TipoPerfil.ADMIN_GERAL,
+    TipoPerfil.ADMIN_BIBLIOTECA,
+    TipoPerfil.ADMIN_MEMORIA,
+    TipoPerfil.ADMIN_MEMORIAL,
+  ];
+
+  const ehPerfilAdmin =
+    perfil && perfisAdmin.includes(perfil.perfilSelecionado?.perfil as TipoPerfil);
+
+  const onClickVoltar = () => navigate(ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL);
 
   const onClickCancelar = () => {
     if (form.isFieldsTouched()) {
