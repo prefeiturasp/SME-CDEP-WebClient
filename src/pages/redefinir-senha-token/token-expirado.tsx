@@ -3,11 +3,25 @@ import { Button, Col, Row, Typography } from 'antd';
 import { useNavigate } from 'react-router-dom';
 import { CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { ROUTES } from '~/core/enum/routes';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
+import { useAppSelector } from '~/core/hooks/use-redux';
 
 const TokenExpirado = () => {
   const navigate = useNavigate();
 
-  const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
+  const perfil = useAppSelector((state) => state.perfil);
+
+  const perfisAdmin = [
+    TipoPerfil.ADMIN_GERAL,
+    TipoPerfil.ADMIN_BIBLIOTECA,
+    TipoPerfil.ADMIN_MEMORIA,
+    TipoPerfil.ADMIN_MEMORIAL,
+  ];
+
+  const ehPerfilAdmin =
+    perfil && perfisAdmin.includes(perfil.perfilSelecionado?.perfil as TipoPerfil);
+
+  const onClickVoltar = () => navigate(ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL);
 
   return (
     <Col span={14}>

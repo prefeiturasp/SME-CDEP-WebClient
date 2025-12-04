@@ -3,6 +3,8 @@ import { BREADCRUMB_ROUTES } from '../config/breadcrumb-config';
 import { ROUTES } from '../enum/routes';
 import React from 'react';
 import './use-breadcrumb.css';
+import { useAppSelector } from './use-redux';
+import { TipoPerfil } from '../enum/tipo-perfil-enum';
 
 export type BreadcrumbItem = {
   href?: string;
@@ -36,10 +38,21 @@ const BreadcrumbLabel = ({
 export const useBreadcrumb = (): BreadcrumbItem[] => {
   const location = useLocation();
   const pathSegments = location.pathname.split('/').filter((segment) => segment !== '');
+  const perfil = useAppSelector((state) => state.perfil);
+
+  const perfisAdmin = [
+    TipoPerfil.ADMIN_GERAL,
+    TipoPerfil.ADMIN_BIBLIOTECA,
+    TipoPerfil.ADMIN_MEMORIA,
+    TipoPerfil.ADMIN_MEMORIAL,
+  ];
+
+  const ehPerfilAdmin =
+    perfil && perfisAdmin.includes(perfil.perfilSelecionado?.perfil as TipoPerfil);
 
   const breadcrumbItems: BreadcrumbItem[] = [
     {
-      href: ROUTES.PRINCIPAL,
+      href: ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL,
       title: (
         <BreadcrumbLabel icon='/ic_round-home.svg' label='Início' color='#89162D' iconSize={16} />
       ),
@@ -61,7 +74,7 @@ export const useBreadcrumb = (): BreadcrumbItem[] => {
 
     if (isNumericSegment && isLastSegment) {
       const pathWithoutId = currentPath.replace(/\/\d+$/, '');
-      
+
       const editConfig = BREADCRUMB_ROUTES[`${pathWithoutId}/editar`];
 
       if (editConfig && editConfig.label !== lastAddedLabel) {
@@ -80,10 +93,9 @@ export const useBreadcrumb = (): BreadcrumbItem[] => {
       }
       return;
     }
-    
+
     const config = BREADCRUMB_ROUTES[currentPath];
 
-    
     if (config && config.label !== lastAddedLabel) {
       breadcrumbItems.push({
         href: !isLastSegment && config.path ? config.path : undefined,

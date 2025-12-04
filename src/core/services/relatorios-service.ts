@@ -42,6 +42,14 @@ export type RelatorioDownloadAcervoRequest = {
   Titulo: string;
 };
 
+export type RelatorioHistoricoSolicitacoesRequest = {
+  dataInicio: any;
+  dataFim: any;
+  tipoAcervo?: number[];
+  situacaoSolicitacao?: number[];
+  solicitante: string;
+};
+
 const gerarRelatorioControleLivrosEmprestados = (
   dados: RelatorioControleLivrosEmprestadosRequest,
 ): Promise<AxiosResponse<Blob>> =>
@@ -91,6 +99,13 @@ const gerarRelatorioDownloadAcervos = (
     responseType: 'blob',
   });
 
+const gerarRelatorioHistoricoSolicitacoes = (
+  dados: RelatorioHistoricoSolicitacoesRequest,
+): Promise<AxiosResponse<Blob>> =>
+  api.post(`${URL_DEFAULT}/historico-solicitacoes-acervo`, dados, {
+    responseType: 'blob',
+  });
+
 export default {
   gerarRelatorioControleLivrosEmprestados,
   gerarRelatorioControleAcervo,
@@ -99,4 +114,5 @@ export default {
   gerarRelatorioControleDevolucaoLivros,
   gerarRelatorioTitulosMaisPesquisados,
   gerarRelatorioDownloadAcervos,
+  gerarRelatorioHistoricoSolicitacoes,
 };

@@ -23,4 +23,6 @@ export enum MenuEnum {
   RelatorioDevolucaoLivro,
   RelatorioDownloadAcervos,
   TitulosMaisPesquisados,
+  Indicadores,
+  HistoricoSolicitacoes,
 }

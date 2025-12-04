@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Col, Form, Modal, Row, Select, Spin } from 'antd';
+import { Button, Col, Form, Input, message, Modal, Row, Select, Spin } from 'antd';
 import CardContent from '~/components/lib/card-content';
 import HeaderPage from '~/components/lib/header-page';
 import { FaPrint } from 'react-icons/fa';
@@ -7,50 +7,82 @@ import { useNavigate } from 'react-router-dom';
 import ButtonVoltar from '~/components/cdep/button/voltar';
 import { ROUTES } from '~/core/enum/routes';
 import { CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
-import { CDEP_SELECT_TIPO_ACERVO } from '~/core/constants/ids/select';
-import { obterTiposAcervo, obterTituloAcervo } from '~/core/services/acervo-service';
+import { CDEP_SELECT_SOLICITACAO_SITUACOES } from '~/core/constants/ids/select';
 import relatorioService from '~/core/services/relatorios-service';
 import { DefaultOptionType } from 'antd/es/select';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
+import { InputRfCpfSolicitante } from '~/pages/operacoes/atendimento-solicitacoes/list/components/rf-cpf-solicitante';
+import { RangePicker } from '~/components/cdep/range-picker';
+import dayjs from 'dayjs';
+import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service';
+import { SituacaoItemDTO } from '~/core/dto/situacao-item-dto';
 import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
 import { useAppSelector } from '~/core/hooks/use-redux';
 
-const RelatorioDownloadAcervos = () => {
+const RelatorioHistoricoSolicitacoes = () => {
   const [form] = Form.useForm();
   const [modalVisible, setModalVisible] = useState(false);
   const [loadingRelatorio, setLoadingRelatorio] = useState(false);
   const [relatorioBlob, setRelatorioBlob] = useState<Blob | null>(null);
   const [erroModal, setErroModal] = useState<string | null>(null);
-  const [canSubmit, setCanSubmit] = useState(true);
+  const [canSubmit, setCanSubmit] = useState(false);
   const [options, setOptions] = useState<DefaultOptionType[]>([]);
-  const [optionsTitulos, setOptionsTitulos] = useState<DefaultOptionType[]>([]);
-
-  const [tituloBusca, setTituloBusca] = useState<string>('');
-
-  useEffect(() => {
-    if (tituloBusca && tituloBusca.length > 2) {
-      obterTitulos(tituloBusca);
-    } else {
-      setOptionsTitulos([]);
-    }
-  }, [tituloBusca]);
 
   const handleFormChange = () => {
-    setCanSubmit(true);
+    const values = form.getFieldsValue();
+
+    if (values.periodo?.[0] && values.periodo?.[1]) {
+      setCanSubmit(true);
+    } else {
+      setCanSubmit(false);
+    }
   };
 
   const onFinish = async (values: any) => {
     try {
+      const dataInicio = values.periodo?.[0] ? dayjs(values.periodo[0]).startOf('day') : null;
+      const dataFim = values.periodo?.[1] ? dayjs(values.periodo[1]).endOf('day') : null;
+
+      const payload: any = {};
+
+      if (dataInicio) payload.dataInicio = dataInicio.toISOString();
+      if (dataFim) payload.dataFim = dataFim.toISOString();
+      if (values.solicitanteRf) payload.solicitante = values.solicitanteRf;
+      if (values.situacaoItem) payload.situacaoSolicitacao = [Number(values.situacaoItem)];
+      // if (values.tipoAcervo) payload.tipoAcervo = [Number(values.tipoAcervo)];
+
+      if (dataFim) {
+        if (dataFim.isAfter(dayjs(), 'day')) {
+          message.warning('A data final não pode ser maior que hoje.');
+          return;
+        }
+      }
+
+      if (dataInicio) {
+        if (dataInicio.isAfter(dayjs(), 'day')) {
+          message.warning('A data inicial não pode ser maior que hoje.');
+          return;
+        }
+      }
+
+      if (dataInicio && dataFim) {
+        const diffYears = dataFim.diff(dataInicio, 'year', true);
+        if (diffYears > 1) {
+          message.warning('O intervalo entre as datas deve ser menor que um ano.');
+          return;
+        }
+
+        if (dataFim.isBefore(dataInicio, 'day')) {
+          message.warning('A data final não pode ser anterior à data inicial.');
+          return;
+        }
+      }
+
       setModalVisible(true);
       setLoadingRelatorio(true);
       setErroModal(null);
 
-      const payload = {
-        TipoAcervo: values.tipoAcervo,
-        Titulo: values.tituloAcervo,
-      };
-
-      const response = await relatorioService.gerarRelatorioDownloadAcervos(payload);
+      const response = await relatorioService.gerarRelatorioHistoricoSolicitacoes(payload);
 
       if (response.status === 404) {
         setErroModal(
@@ -95,7 +127,7 @@ const RelatorioDownloadAcervos = () => {
       const url = window.URL.createObjectURL(relatorioBlob);
       const link = document.createElement('a');
       link.href = url;
-      link.download = 'relatorio_controle_acervo.xls';
+      link.download = 'relatorio_historico_solicitacoes.xls';
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
@@ -119,10 +151,13 @@ const RelatorioDownloadAcervos = () => {
 
   const onClickVoltar = () => navigate(ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL);
 
-  const obterTipos = async () => {
-    const resposta = await obterTiposAcervo();
+  const obterDados = async () => {
+    const resposta = await acervoSolicitacaoService.obterSituacoesAtendimento();
     if (resposta.sucesso) {
-      const newOptions = resposta.dados.map((item) => ({ label: item.nome, value: item.id }));
+      const newOptions = resposta.dados.map((item: SituacaoItemDTO) => ({
+        label: item.nome,
+        value: item.id,
+      }));
       setOptions(newOptions);
     } else {
       setOptions([]);
@@ -130,40 +165,12 @@ const RelatorioDownloadAcervos = () => {
   };
 
   useEffect(() => {
-    if (tituloBusca && tituloBusca.length > 2) {
-      obterTitulos(tituloBusca);
-    } else {
-      setOptionsTitulos([]);
-    }
-  }, [tituloBusca]);
-
-  const obterTitulos = async (busca: string) => {
-    try {
-      const resposta = await obterTituloAcervo(busca);
-
-      if (resposta?.sucesso && Array.isArray(resposta.dados)) {
-        const newOptions = resposta.dados.map((item: string) => ({
-          label: item,
-          value: item,
-        }));
-        setOptionsTitulos(newOptions);
-      } else {
-        console.warn('Falha ao obter títulos ou dados vazios');
-        setOptionsTitulos([]);
-      }
-    } catch (erro) {
-      console.error('Erro ao obter títulos:', erro);
-      setOptionsTitulos([]);
-    }
-  };
-
-  useEffect(() => {
-    obterTipos();
+    obterDados();
   }, []);
 
   return (
     <Col>
-      <HeaderPage title='Controle de download de acervos'>
+      <HeaderPage title='Relatório de Histórico de Solicitações'>
         <Col span={24}>
           <Row gutter={[8, 8]}>
             <Col>
@@ -187,7 +194,18 @@ const RelatorioDownloadAcervos = () => {
         <Form form={form} layout='vertical' onFinish={onFinish} onValuesChange={handleFormChange}>
           <Row gutter={[16, 16]}>
             <Col span={12}>
-              <Form.Item label='Tipo de acervo' name='tipoAcervo'>
+              <InputRfCpfSolicitante />
+            </Col>
+
+            <Col span={12}>
+              <Form.Item label='Nome do solicitante' name='nomeSolicitante'>
+                <Input type='text' placeholder='Nome do solicitante' disabled />
+              </Form.Item>
+            </Col>
+          </Row>
+          <Row gutter={[16, 16]}>
+            <Col span={12}>
+              {/* <Form.Item label='Tipo de acervo' name='tipoAcervo'>
                 <Select
                   showSearch
                   allowClear
@@ -195,18 +213,24 @@ const RelatorioDownloadAcervos = () => {
                   options={options}
                   placeholder='Tipo de acervo'
                 />
-              </Form.Item>
-            </Col>
-            <Col span={12}>
-              <Form.Item label='Título do acervo' name='tituloAcervo'>
+              </Form.Item> */}
+              <Form.Item label='Situação do item' name='situacaoItem'>
                 <Select
                   showSearch
                   allowClear
-                  placeholder='Exemplo: Willian Shakespeare'
-                  filterOption={false}
-                  onSearch={(value) => setTituloBusca(value)}
-                  notFoundContent='Digite ao menos 3 letras para buscar'
-                  options={optionsTitulos}
+                  id={CDEP_SELECT_SOLICITACAO_SITUACOES}
+                  options={options}
+                  placeholder='Situação do atendimento'
+                />
+              </Form.Item>
+            </Col>
+            <Col span={12}>
+              <Form.Item>
+                <RangePicker
+                  formItemProps={{
+                    label: 'Período',
+                    name: 'periodo',
+                  }}
                 />
               </Form.Item>
             </Col>
@@ -259,4 +283,4 @@ const RelatorioDownloadAcervos = () => {
   );
 };
 
-export default RelatorioDownloadAcervos;
+export default RelatorioHistoricoSolicitacoes;

@@ -14,6 +14,8 @@ import { obterTiposAcervo } from '~/core/services/acervo-service';
 import { CDEP_SELECT_TIPO_ACERVO } from '~/core/constants/ids/select';
 import localeDatePicker from 'antd/es/date-picker/locale/pt_BR';
 import dayjs from 'dayjs';
+import { useAppSelector } from '~/core/hooks/use-redux';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
 
 const TitulosMaisPesquisados = () => {
   const [form] = Form.useForm();
@@ -51,7 +53,19 @@ const TitulosMaisPesquisados = () => {
   };
 
   const navigate = useNavigate();
-  const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
+  const perfil = useAppSelector((state) => state.perfil);
+
+  const perfisAdmin = [
+    TipoPerfil.ADMIN_GERAL,
+    TipoPerfil.ADMIN_BIBLIOTECA,
+    TipoPerfil.ADMIN_MEMORIA,
+    TipoPerfil.ADMIN_MEMORIAL,
+  ];
+
+  const ehPerfilAdmin =
+    perfil && perfisAdmin.includes(perfil.perfilSelecionado?.perfil as TipoPerfil);
+
+  const onClickVoltar = () => navigate(ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL);
 
   const fecharModal = () => {
     setModalVisible(false);

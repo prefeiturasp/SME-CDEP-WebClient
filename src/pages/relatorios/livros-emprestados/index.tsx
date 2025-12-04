@@ -11,6 +11,8 @@ import { InputRfCpfSolicitante } from '../../operacoes/atendimento-solicitacoes/
 import relatorioService from '~/core/services/relatorios-service';
 import { CheckCircleOutlined, CloseCircleOutlined } from '@ant-design/icons';
 import { SelectSituacaoEmprestimoFiltrado } from '~/components/cdep/input/situacao-emprestimo-sem-devolvido';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
+import { useAppSelector } from '~/core/hooks/use-redux';
 
 const { Option } = Select;
 
@@ -125,13 +127,28 @@ const RelatorioLivrosEmprestados = () => {
       situacaoEmprestimo: form?.getFieldValue('situacaoEmprestimo'),
     });
   };
+
+  const perfil = useAppSelector((state) => state.perfil);
+
+  const perfisAdmin = [
+    TipoPerfil.ADMIN_GERAL,
+    TipoPerfil.ADMIN_BIBLIOTECA,
+    TipoPerfil.ADMIN_MEMORIA,
+    TipoPerfil.ADMIN_MEMORIAL,
+  ];
+
+  const ehPerfilAdmin =
+    perfil && perfisAdmin.includes(perfil.perfilSelecionado?.perfil as TipoPerfil);
+
+  const onClickVoltar = () => navigate(ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL);
+
   return (
     <Col>
       <HeaderPage title='Controle de livros emprestados'>
         <Col span={24}>
           <Row gutter={[8, 8]}>
             <Col>
-              <ButtonVoltar onClick={() => navigate(ROUTES.PRINCIPAL)} id={CDEP_BUTTON_VOLTAR} />
+              <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
             </Col>
             <Col>
               <Button
