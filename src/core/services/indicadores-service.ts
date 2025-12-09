@@ -13,8 +13,20 @@ const obterQuantidadePesquisasMensais = (): Promise<AxiosResponse<AcervosCadastr
 const obterQuantidadeSolicitacoesMensais = (): Promise<AxiosResponse<AcervosCadastradosDTO[]>> =>
   api.get(`${URL_DEFAULT}/quantidade-solicitacoes-mensais`);
 
+const obterSolicitacoesPorSituacao = (): Promise<AxiosResponse<AcervosCadastradosDTO[]>> =>
+  api.get(`${URL_DEFAULT}/solicitacoes-por-situacao`);
+
+const obterControleLivrosEmprestados = (): Promise<AxiosResponse<AcervosCadastradosDTO[]>> =>
+  api.get(`${URL_DEFAULT}/controle-livros-emprestados`);
+
+const obterSolicitacoesTipoAcervo = (): Promise<AxiosResponse<AcervosCadastradosDTO[]>> =>
+  api.get(`${URL_DEFAULT}/solicitacoes-tipo-acervo`);
+
 export default {
   obterAcervosCadastrados,
   obterQuantidadePesquisasMensais,
-  obterQuantidadeSolicitacoesMensais
+  obterQuantidadeSolicitacoesMensais,
+  obterSolicitacoesPorSituacao,
+  obterControleLivrosEmprestados,
+  obterSolicitacoesTipoAcervo
 };
