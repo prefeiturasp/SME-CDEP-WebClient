@@ -15,7 +15,7 @@ const config: Config = {
   },
 
   setupFilesAfterEnv: ['<rootDir>/src/setupTests.ts'],
-  transformIgnorePatterns: ['/node_modules/(?!(@testing-library|react-icons|latinize)/)'],
+  transformIgnorePatterns: ['/node_modules/(?!(@testing-library|react-icons|latinize|antd|rc-picker|dayjs|@babel/runtime)/)'],
 
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json'],
 
