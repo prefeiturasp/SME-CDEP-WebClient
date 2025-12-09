@@ -92,7 +92,7 @@ export default function GraficoBarChart({
             <ResponsiveContainer width='100%' height='100%'>
               <BarChart
                 data={dados}
-                syncId='anyId'
+                syncId={titulo}
                 margin={{ top: 20, right: 20, left: 30, bottom: 70 }}
               >
                 <CartesianGrid strokeDasharray='3 3' vertical={false} />
