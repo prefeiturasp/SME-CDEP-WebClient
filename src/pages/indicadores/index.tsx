@@ -196,6 +196,22 @@ const Indicadores = () => {
           ></GraficoAreaChart>
         </div>
       </CardContent>
+
+      <br></br>
+
+      <CardContent>
+        <div className='grafico-container'>
+          <GraficoBarChart
+            dados={dadosquantidadeSolicitacoesMensais}
+            titulo={'Solicitações por tipo de acervo'}
+            subtitulo={
+              'Exibe a quantidade de solicitações realizadas para cada tipo de acervo, permitindo identificar quais são os mais demandados.'
+            }
+            labelvertical='Quantidade de solicitações'
+            labelHorizontal='Tipos de acervo'
+          ></GraficoBarChart>
+        </div>
+      </CardContent>
     </Col>
   );
 };
