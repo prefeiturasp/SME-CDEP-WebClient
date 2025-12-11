@@ -153,85 +153,31 @@ const Indicadores = () => {
 
   async function solicitacoesPorSituacao() {
     try {
-      //const retorno = await service.obterSolicitacoesPorSituacao();
-      const retorno: AcervosCadastradosDTO[] = [
-        {
-          id: 0,
-          nome: 'Ativo',
-          valor: 2854,
-        },
-        {
-          id: 1,
-          nome: 'Inativo',
-          valor: 3398,
-        },
-      ];
-
-      setDadosSolicitacoesPorSituacao(retorno);
+      const retorno = await service.obterSolicitacoesPorSituacao();
+      retorno.data.sort((a, b) => a.nome.localeCompare(b.nome));
+      setDadosSolicitacoesPorSituacao(retorno.data);
     } catch (error) {
       console.log(error);
     }
   }
 
-  function controleLivrosEmprestados() {
-    //const retorno = await service.obterControleLivrosEmprestados();
-    const retorno: AcervosCadastradosDTO[] = [
-      {
-        id: 0,
-        nome: 'Emprestado',
-        valor: 2854,
-      },
-      {
-        id: 1,
-        nome: 'Devolução em atraso',
-        valor: 3398,
-      },
-      {
-        id: 2,
-        nome: 'Prorrogação',
-        valor: 3398,
-      },
-    ];
-
-    setDadosControleLivrosEmprestados(retorno);
+  async function controleLivrosEmprestados() {
+    try {
+      const retorno = await service.obterControleLivrosEmprestados();
+      setDadosControleLivrosEmprestados(retorno.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
-  function solicitacoesTipoAcervo() {
-    //const retorno = await service.obterSolicitacoesTipoAcervo();
-    const retorno: AcervosCadastradosDTO[] = [
-      {
-        id: 0,
-        nome: 'Fotográfico',
-        valor: 2854,
-      },
-      {
-        id: 1,
-        nome: 'Bibliográfico',
-        valor: 3398,
-      },
-      {
-        id: 2,
-        nome: 'Artes gráficas',
-        valor: 3398,
-      },
-      {
-        id: 3,
-        nome: 'Tridimensional',
-        valor: 2489,
-      },
-      {
-        id: 4,
-        nome: 'Textual',
-        valor: 4158,
-      },
-      {
-        id: 5,
-        nome: 'Audiovisual',
-        valor: 3398,
-      },
-    ];
-
-    setDadosSolicitacoesTipoAcervo(retorno);
+  async function solicitacoesTipoAcervo() {
+    try {
+      const retorno = await service.obterSolicitacoesTipoAcervo();
+      retorno.data.sort((a, b) => a.nome.localeCompare(b.nome));
+      setDadosSolicitacoesTipoAcervo(retorno.data);
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   useEffect(() => {
@@ -264,38 +210,37 @@ const Indicadores = () => {
 
       <br></br>
 
-      <div className='graficos-dupla'>
-        <div className='graficos-unico'>
-          <CardContent>
-            <div className='grafico-container'>
-              <GraficoBarChart
-                dados={dadossolicitacoesPorSituacao}
-                titulo={'Solicitações por situação'}
-                subtitulo={
-                  'Mostra a quantidade de solicitações em cada situação, permitindo acompanhar o status de atendimento de forma clara.'
-                }
-                labelvertical='Quantidade de solicitações'
-                labelHorizontal='Situações'
-              ></GraficoBarChart>
-            </div>
-          </CardContent>
+      <CardContent>
+        <div className='grafico-container'>
+          <GraficoBarChart
+            dados={dadossolicitacoesPorSituacao}
+            titulo={'Solicitações por situação'}
+            subtitulo={
+              'Mostra a quantidade de solicitações em cada situação, permitindo acompanhar o status de atendimento de forma clara.'
+            }
+            labelvertical='Quantidade de solicitações'
+            labelHorizontal='Situações'
+          ></GraficoBarChart>
         </div>
-        <div className='graficos-unico'>
-          <CardContent>
-            <div className='grafico-container'>
-              <GraficoBarChart
-                dados={dadoscontroleLivrosEmprestados}
-                titulo={'Controle de livros emprestados'}
-                subtitulo={
-                  'Exibe o total de livros emprestados em cada situação, permitindo acompanhar o status dos empréstimos de forma clara.'
-                }
-                labelvertical='Quantidade de solicitações'
-                labelHorizontal='Situações'
-              ></GraficoBarChart>
-            </div>
-          </CardContent>
+      </CardContent>          
+
+      <br></br>
+
+      <CardContent>
+        <div className='grafico-container'>
+          <GraficoBarChart
+            dados={dadoscontroleLivrosEmprestados}
+            titulo={'Controle de livros emprestados'}
+            subtitulo={
+              'Exibe o total de livros emprestados em cada situação, permitindo acompanhar o status dos empréstimos de forma clara.'
+            }
+            labelvertical='Quantidade de solicitações'
+            labelHorizontal='Situações'
+          ></GraficoBarChart>
         </div>
-      </div>
+      </CardContent>          
+
+      <br></br>
 
       <CardContent>
         <div className='grafico-container'>
