@@ -25,7 +25,30 @@ module.exports = defineConfig({
       on('task', tasks)
 
       const envKeys = [
-
+        'ACERVO_SOLICITACAO_ITEM_ID',
+        'ANO_FINAL',
+        'ANO_INICIAL',
+        'ASSUNTO_ID',
+        'ASSUNTO_ID_DELETAR',
+        'ASSUNTO_ID_INVALIDO',
+        'ASSUNTO_NOME',
+        'CEP_INVALIDO',
+        'CEP_VALIDO',
+        'CODIGO_ACERVO',
+        'CODIGO_TOMBO',
+        'DATA_DEVOLUCAO',
+        'DATA_DEVOLUCAO_INVALIDA',
+        'IMPORTACAO_PLANILHA_ID',
+        'LOGIN_ADM_GERAL',
+        'PERFIL_ADM_GERAL',
+        'PERFIL_INVALIDO',
+        'SENHA',
+        'SENHA_INVALIDA',
+        'TERMO_PESQUISADO',
+        'TEXTO_LIVRE',
+        'TIPO_ACERVO',
+        'TIPO_ACERVO_CODIGO',
+        'TITULO_ACERVO'
       ]
 
       const customVariable = Object.fromEntries(

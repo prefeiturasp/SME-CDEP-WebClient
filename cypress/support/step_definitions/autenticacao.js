@@ -13,8 +13,8 @@ When('envio os dados de acesso', function () {
       'content-type': 'application/json',
     },
     body: {
-      login: "6339069",
-      senha: "Sgp@1234"
+      login: `${Cypress.env('LOGIN_ADM_GERAL')}`,
+      senha: `${Cypress.env('SENHA')}`
     },
     failOnStatusCode: false
   }).as('response')
@@ -44,7 +44,7 @@ When('envio os dados sem o login', function () {
     },
     body: {
       login:" ",
-      senha: "Sgp@1234"
+      senha: `${Cypress.env('SENHA')}`
     },
     failOnStatusCode: false
   }).as('response')
@@ -70,7 +70,7 @@ When('envio os dados sem a senha', function () {
       'content-type': 'application/json',
     },
     body: {
-      login: "6339069",
+      login: `${Cypress.env('LOGIN_ADM_GERAL')}`,
       senha:""
     },
     failOnStatusCode: false
@@ -98,8 +98,8 @@ When('envio os dados com senha inválida', function () {
       'content-type': 'application/json',
     },
     body: {
-      login: "6339069",
-      senha: "Sgp@1233"
+      login: `${Cypress.env('LOGIN_ADM_GERAL')}`,
+      senha: `${Cypress.env('SENHA_INVALIDA')}`
     },
     failOnStatusCode: false
   }).as('response')
