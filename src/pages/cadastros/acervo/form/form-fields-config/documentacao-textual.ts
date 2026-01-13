@@ -75,7 +75,6 @@ export const FieldsDocumentacaoTextual: FieldAcervoProps[] = [
     fieldAcervo: FieldAcervoEnum.EstadoConservacao,
     sm: 12,
   },
-  { fieldAcervo: FieldAcervoEnum.SituacaoAcervo, sm: 12 },
   {
     fieldAcervo: FieldAcervoEnum.Anexos,
   }
