@@ -42,7 +42,7 @@ export const MENU_RELATORIOS: MenuItemCDEPProps = {
         podeAlterar: PermissaoEnum.CadastroEditora_A,
       },
     },
-     {
+    {
       key: MenuEnum.RelatorioEditora,
       title: 'Controle por editora',
       url: ROUTES.RELATORIO_EDITORA,
@@ -57,6 +57,39 @@ export const MENU_RELATORIOS: MenuItemCDEPProps = {
       key: MenuEnum.RelatorioDevolucaoLivro,
       title: 'Controle de devolução de livros',
       url: ROUTES.RELATORIO_DEVOLUCAO_LIVRO,
+      roles: {
+        podeConsultar: PermissaoEnum.CadastroCredito_C,
+        podeIncluir: PermissaoEnum.CadastroCredito_I,
+        podeExcluir: PermissaoEnum.CadastroCredito_E,
+        podeAlterar: PermissaoEnum.CadastroCredito_A,
+      },
+    },
+    {
+      key: MenuEnum.RelatorioDownloadAcervos,
+      title: 'Controle de download de acervos',
+      url: ROUTES.RELATORIO_DOWNLOAD_ACERVOS,
+      roles: {
+        podeConsultar: PermissaoEnum.CadastroCredito_C,
+        podeIncluir: PermissaoEnum.CadastroCredito_I,
+        podeExcluir: PermissaoEnum.CadastroCredito_E,
+        podeAlterar: PermissaoEnum.CadastroCredito_A,
+      },
+    },
+    {
+      key: MenuEnum.TitulosMaisPesquisados,
+      title: 'Títulos mais pesquisados',
+      url: ROUTES.TITULOS_MAIS_PESQUISADOS,
+      roles: {
+        podeConsultar: PermissaoEnum.CadastroCredito_C,
+        podeIncluir: PermissaoEnum.CadastroCredito_I,
+        podeExcluir: PermissaoEnum.CadastroCredito_E,
+        podeAlterar: PermissaoEnum.CadastroCredito_A,
+      },
+    },
+    {
+      key: MenuEnum.HistoricoSolicitacoes,
+      title: 'Relatório de Histórico de Solicitações',
+      url: ROUTES.HISTORICO_SOLICITACOES,
       roles: {
         podeConsultar: PermissaoEnum.CadastroCredito_C,
         podeIncluir: PermissaoEnum.CadastroCredito_I,

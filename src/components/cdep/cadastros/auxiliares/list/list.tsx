@@ -11,6 +11,8 @@ import HeaderPage from '~/components/lib/header-page';
 import { CDEP_BUTTON_NOVO, CDEP_BUTTON_VOLTAR } from '~/core/constants/ids/button/intex';
 import { CadastroAuxiliarDTO } from '~/core/dto/cadastro-auxiliar-dto';
 import { ROUTES } from '~/core/enum/routes';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
+import { useAppSelector } from '~/core/hooks/use-redux';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 export type ListPageProps = {
@@ -40,7 +42,19 @@ const ListCadastrosAuxiliares: React.FC<ListConfigCadastrosAuxiliaresProps> = ({
     },
   ];
 
-  const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
+  const perfil = useAppSelector((state) => state.perfil);
+
+  const perfisAdmin = [
+    TipoPerfil.ADMIN_GERAL,
+    TipoPerfil.ADMIN_BIBLIOTECA,
+    TipoPerfil.ADMIN_MEMORIA,
+    TipoPerfil.ADMIN_MEMORIAL,
+  ];
+
+  const ehPerfilAdmin =
+    perfil && perfisAdmin.includes(perfil.perfilSelecionado?.perfil as TipoPerfil);
+
+  const onClickVoltar = () => navigate(ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL);
 
   const onClickNovo = () => {
     if (permissao.podeIncluir) navigate(`${breadcrumb.urlMainPage}/novo`);

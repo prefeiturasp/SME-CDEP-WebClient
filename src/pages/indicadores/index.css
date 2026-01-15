@@ -1,0 +1,13 @@
+.grafico-container {
+  padding: 16px;
+}
+
+
+.graficos-dupla {
+  display: flex;
+}
+
+.graficos-unico {
+  width: 50%;
+  
+}

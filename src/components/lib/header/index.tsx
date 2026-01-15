@@ -10,6 +10,7 @@ import { setDeslogar } from '~/core/redux/modules/auth/actions';
 import { BoxShadow, Colors } from '~/core/styles/colors';
 import ExitButton from '../exit-button';
 import DropdownPerfil from '~/components/cdep/perfis';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
 
 const contentStyle: React.CSSProperties = {
   position: 'sticky',
@@ -29,10 +30,23 @@ type HeaderProps = {
 };
 const Header: React.FC<HeaderProps> = ({ logo, style = {} }) => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
+  const perfil = useAppSelector((state) => state.perfil);
+
+  const perfisAdmin = [
+    TipoPerfil.ADMIN_GERAL,
+    TipoPerfil.ADMIN_BIBLIOTECA,
+    TipoPerfil.ADMIN_MEMORIA,
+    TipoPerfil.ADMIN_MEMORIAL,
+  ];
+
+  const ehPerfilAdmin =
+    perfil && perfisAdmin.includes(perfil.perfilSelecionado?.perfil as TipoPerfil);
 
   return (
     <Layout.Header style={{ ...contentStyle, ...style }}>
-      <Link to={autenticado ? ROUTES.PRINCIPAL : ROUTES.LOGIN}>
+      <Link
+        to={autenticado ? (ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL) : ROUTES.LOGIN}
+      >
         {logo || <img style={{ height: '75px' }} src={cdepLogo} alt='CDEP LOGO' />}
       </Link>
       <Row justify='end' style={{ width: '100%' }}>

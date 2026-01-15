@@ -23,6 +23,8 @@ import { URL_API_ACERVO } from '~/core/constants/urls-api';
 import { AcervoTableRow } from '~/core/dto/acervo-table-row';
 import { ROUTES } from '~/core/enum/routes';
 import { TipoAcervo } from '~/core/enum/tipo-acervo';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
+import { useAppSelector } from '~/core/hooks/use-redux';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
 
 const ListAcervo: React.FC = () => {
@@ -79,7 +81,19 @@ const ListAcervo: React.FC = () => {
   
   const columns = tipoAcervoSelecionado === TipoAcervo.DocumentacaoTextual ? columnsWithImage : baseColumns;
 
-  const onClickVoltar = () => navigate(ROUTES.PRINCIPAL);
+  const perfil = useAppSelector((state) => state.perfil);
+
+  const perfisAdmin = [
+    TipoPerfil.ADMIN_GERAL,
+    TipoPerfil.ADMIN_BIBLIOTECA,
+    TipoPerfil.ADMIN_MEMORIA,
+    TipoPerfil.ADMIN_MEMORIAL,
+  ];
+
+  const ehPerfilAdmin =
+    perfil && perfisAdmin.includes(perfil.perfilSelecionado?.perfil as TipoPerfil);
+
+  const onClickVoltar = () => navigate(ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL);
 
   const onClickNovo = () => {
     if (permissao.podeIncluir) navigate(ROUTES.ACERVO_NOVO);

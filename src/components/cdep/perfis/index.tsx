@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
 import { ROUTES } from '~/core/enum/routes';
+import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
 import { useAppSelector } from '~/core/hooks/use-redux';
 import autenticacaoService from '~/core/services/autenticacao-service';
 import { Colors } from '~/core/styles/colors';
@@ -33,7 +34,21 @@ const DropdownPerfil: React.FC = () => {
   const alterarPerfil = (perfilUsuarioId: string) => {
     navigate(ROUTES.PRINCIPAL);
     autenticacaoService.alterarPerfilSelecionado(perfilUsuarioId).then((response) => {
-      validarAutenticacao(response.data);
+      const perfilSelecionado = validarAutenticacao(response.data);
+
+      const perfisAdmin = [
+        TipoPerfil.ADMIN_GERAL,
+        TipoPerfil.ADMIN_BIBLIOTECA,
+        TipoPerfil.ADMIN_MEMORIA,
+        TipoPerfil.ADMIN_MEMORIAL,
+      ];
+
+      const ehPerfilAdmin =
+        perfilSelecionado && perfisAdmin.includes(perfilSelecionado.perfil as TipoPerfil);
+
+      if (ehPerfilAdmin) {
+        navigate(ROUTES.INDICADORES);
+      }
     });
   };
 

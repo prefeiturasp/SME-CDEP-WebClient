@@ -1,0 +1,53 @@
+.area-chart-header {
+  margin-bottom: 16px;
+}
+
+.area-chart-title {
+  margin: 0;
+  color: #595959;
+}
+
+.area-chart-subtitle {
+  margin-top: 16px;
+  font-family: 'Roboto';
+  font-weight: 400;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0;
+  color: #595959;
+}
+
+.area-chart-container {
+  width: 100%;
+  height: 50vh;
+}
+
+.area-chart-tooltip {
+  background: #fff;
+  padding: 12px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+}
+
+.area-chart-tooltip-label {
+  margin: 0;
+  color: #89162D;
+}
+
+.area-chart-tooltip-value {
+  margin: 0;
+}
+
+.area-chart-axis-label {
+  text-anchor: middle;
+  font-size: 14px;
+  fill: #595959;
+}
+
+.area-chart-axis-label-bold {
+  text-anchor: middle;
+  font-size: 14px;
+  font-weight: bold;
+  fill: #595959;
+}
