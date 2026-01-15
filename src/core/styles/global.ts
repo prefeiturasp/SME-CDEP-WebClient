@@ -10,4 +10,8 @@ export default createGlobalStyle`
     padding: 16px;
     border-radius: 4px;
   }
+
+  .ant-notification-notice {
+    background-color: #333638 !important;
+  }
 `;
