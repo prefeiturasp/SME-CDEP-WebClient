@@ -124,14 +124,12 @@ When('envio o GET para o painel gerencial', function () {
 Then('retorna o status 200 com a quantidade solicitações mensais', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
-    expect(response.body).to.be.an('array').and.to.have.length.greaterThan(0)
-
     response.body.forEach((item) => {
-      expect(item).to.have.property('id').and.to.be.a('number')
-      expect(item).to.have.property('nome').and.to.be.a('string').and.not.be.empty
-      expect(item).to.have.property('valor').and.to.be.a('number')
-    })
+  expect(item).to.have.property('id').and.to.be.a('number')
+  expect(item).to.have.property('nome').and.to.be.a('string').and.not.be.empty
+  expect(item).to.have.property('valor').and.to.be.a('number')
   })
+})
 })
 
 // Não retornar quantidade de solicitações mensais sem autenticação

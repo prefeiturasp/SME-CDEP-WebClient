@@ -30,7 +30,7 @@ When('envio uma requisição DELETE', function () {
 
 Then('remove a importação de arquivo do acervo com status 200', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(500)
+    expect(response.status).to.eq(200)
   })
 })
 

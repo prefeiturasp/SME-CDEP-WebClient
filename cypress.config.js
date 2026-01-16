@@ -5,6 +5,11 @@ const cucumber = require('cypress-cucumber-preprocessor').default
 const postgreSQL = require('cypress-postgresql')
 const pg = require('pg')
 
+// upload
+const fs = require('fs')
+const FormData = require('form-data')
+const axios = require('axios')
+
 dotenv.config()
 
 const dbConfig = {
@@ -17,17 +22,66 @@ const dbConfig = {
 module.exports = defineConfig({
   e2e: {
     async setupNodeEvents(on, config) {
+      // Allure
       allureWriter(on, config)
+
+      // Cucumber
       on('file:preprocessor', cucumber())
 
+      // PostgreSQL
       const pool = new pg.Pool(dbConfig)
-      const tasks = postgreSQL.loadDBPlugin(pool)
-      on('task', tasks)
+      const dbTasks = postgreSQL.loadDBPlugin(pool)
 
+      // TASKS (Postgres + Upload)
+      on('task', {
+        ...dbTasks,
+
+        async uploadFile({ method = 'POST', url, headers = {}, filePath }) {
+          try {
+            const form = new FormData()
+
+            // Adiciona arquivo se existir e não estiver vazio
+            if (filePath && filePath.trim() !== '') {
+              form.append('file', fs.createReadStream(filePath))
+            }
+
+            const response = await axios({
+              method,
+              url,
+              headers: {
+                ...headers,
+                ...form.getHeaders(),
+              },
+              data: form,
+              maxBodyLength: Infinity,
+              validateStatus: () => true, 
+            })
+
+            return {
+              status: response.status,
+              body: response.data,
+            }
+          } catch (error) {
+            console.error('Erro na task uploadFile')
+
+            if (error.response) {
+              console.error('STATUS:', error.response.status)
+              console.error('BODY:', error.response.data)
+            } else {
+              console.error(error.message)
+            }
+
+            throw error
+          }
+        },
+      })
+
+      // variáveis de ambiente
       const envKeys = [
         'ACERVO_SOLICITACAO_ITEM_ID',
         'ANO_FINAL',
         'ANO_INICIAL',
+        'ARQUIVO_ARMAZENAMENTO',
         'ASSUNTO_ID',
         'ASSUNTO_ID_DELETAR',
         'ASSUNTO_ID_INVALIDO',
@@ -48,22 +102,20 @@ module.exports = defineConfig({
         'TEXTO_LIVRE',
         'TIPO_ACERVO',
         'TIPO_ACERVO_CODIGO',
-        'TITULO_ACERVO'
+        'TITULO_ACERVO',
       ]
 
       const customVariable = Object.fromEntries(
         envKeys.map((key) => [key, process.env[key] ?? ''])
       )
 
-      const enhancedConfig = {
+      return {
         ...config,
         env: {
           ...config.env,
           ...customVariable,
         },
       }
-
-      return enhancedConfig
     },
 
     baseUrl: 'https://hom-cdep.sme.prefeitura.sp.gov.br',
@@ -80,9 +132,7 @@ module.exports = defineConfig({
     experimentalRunAllSpecs: true,
     failOnStatusCode: false,
 
-    specPattern: [
-      'cypress/e2e/**/*.feature'
-    ],
+    specPattern: ['cypress/e2e/**/*.feature'],
 
     defaultCommandTimeout: 60000,
     requestTimeout: 60000,
