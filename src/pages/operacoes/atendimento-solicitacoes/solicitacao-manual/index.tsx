@@ -297,12 +297,19 @@ export const SolicitacaoManual: React.FC = () => {
   };
 
   const onClickVoltarFinalizacao = () => {
+    const temItemSemDataVisita = dataSource?.some((item) => !item.dataVisita);
+
+    if (temItemSemDataVisita) {
+      navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
+      return;
+    }
+
     confirmacao({
       content: DESEJA_SAIR_MODO_EDICAO_FINALIZANDO_ATENDIMENTO,
       onOk() {
-        finalizarAtendimento();
+        navigate(ROUTES.ATENDIMENTO_SOLICITACOES);
       },
-    });   
+    });
   };
 
   const onClickCancelar = () => {

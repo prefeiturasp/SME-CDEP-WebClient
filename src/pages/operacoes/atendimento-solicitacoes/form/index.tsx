@@ -474,6 +474,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
         autoComplete='off'
         validateMessages={validateMessages}
         initialValues={formInitialValues}
+        onFinish={(e) => e?.preventDefault?.()}
       >
         <HeaderPage title='Atendimento de Solicitações'>
           <Col span={24}>
@@ -484,7 +485,11 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                 return (
                   <Row gutter={[8, 8]}>
                     <Col>
-                      <ButtonVoltar onClick={() => onClickVoltar()} id={CDEP_BUTTON_VOLTAR} />
+                      <ButtonVoltar
+                        onClick={() => onClickVoltar()}
+                        id={CDEP_BUTTON_VOLTAR}
+                        htmlType='button'
+                      />
                     </Col>
                     <Col>
                       <Form.Item shouldUpdate style={{ marginBottom: 0 }}>
@@ -502,7 +507,7 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
                     <Col>
                       <Button
                         block
-                        htmlType='submit'
+                        htmlType='button'
                         id={CDEP_BUTTON_FINALIZAR}
                         style={{ fontWeight: 700 }}
                         disabled={podeFinalizarAtendimento || !desabilitarConfirmarECancelar}
