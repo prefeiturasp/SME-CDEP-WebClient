@@ -12,10 +12,7 @@ import ExitButton from '../exit-button';
 import DropdownPerfil from '~/components/cdep/perfis';
 import { TipoPerfil } from '~/core/enum/tipo-perfil-enum';
 
-const contentStyle: React.CSSProperties = {
-  position: 'sticky',
-  top: 0,
-  zIndex: 11,
+const baseStyle: React.CSSProperties = {
   width: '100%',
   height: '70px',
   display: 'flex',
@@ -24,11 +21,18 @@ const contentStyle: React.CSSProperties = {
   boxShadow: BoxShadow.DEFAULT,
 };
 
+const stickyStyle: React.CSSProperties = {
+  position: 'sticky',
+  top: 0,
+  zIndex: 11,
+};
+
 type HeaderProps = {
   logo?: React.ReactNode;
   style?: React.CSSProperties;
+  disableSticky?: boolean;
 };
-const Header: React.FC<HeaderProps> = ({ logo, style = {} }) => {
+const Header: React.FC<HeaderProps> = ({ logo, style = {}, disableSticky = false }) => {
   const autenticado = useAppSelector((state) => state.auth.autenticado);
   const perfil = useAppSelector((state) => state.perfil);
 
@@ -43,7 +47,7 @@ const Header: React.FC<HeaderProps> = ({ logo, style = {} }) => {
     perfil && perfisAdmin.includes(perfil.perfilSelecionado?.perfil as TipoPerfil);
 
   return (
-    <Layout.Header style={{ ...contentStyle, ...style }}>
+    <Layout.Header style={{ ...baseStyle, ...(disableSticky ? {} : stickyStyle), ...style }}>
       <Link
         to={autenticado ? (ehPerfilAdmin ? ROUTES.INDICADORES : ROUTES.PRINCIPAL) : ROUTES.LOGIN}
       >
