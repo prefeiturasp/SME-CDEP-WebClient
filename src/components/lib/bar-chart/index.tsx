@@ -11,6 +11,7 @@ import {
   Cell,
 } from 'recharts';
 
+import { useState } from 'react';
 import { Typography, Space, Row, Col, Select } from 'antd';
 import { AcervosCadastradosDTO } from '~/core/dto/acervos-cadastrados-dto';
 
@@ -76,7 +77,12 @@ export default function GraficoBarChart({
   const semDados = !dados || dados.length === 0;
 
   const anoAtual = new Date().getFullYear();
-  const anosOptions = Array.from({ length: 3 }, (_, i) => ({
+  const mesAtual = new Date().getMonth();
+
+  const [anoSelecionado, setAnoSelecionado] = useState<number>(anoAtual);
+  const [mesSelecionado, setMesSelecionado] = useState<string>('todos');
+
+  const anosOptions = Array.from({ length: 5 }, (_, i) => ({
     value: anoAtual - i,
     label: String(anoAtual - i),
   }));
@@ -95,12 +101,15 @@ export default function GraficoBarChart({
     'Novembro',
     'Dezembro',
   ];
-  const mesAtual = new Date().getMonth();
-  const ultimosMeses = Array.from({ length: 3 }, (_, i) => {
-    const indice = (mesAtual - i + 12) % 12;
-    return { value: String(indice + 1), label: nomesMeses[indice] };
-  }).reverse();
-  const mesesOptions = [{ value: 'todos', label: 'Todos' }, ...ultimosMeses];
+
+  const quantidadeMeses = anoSelecionado === anoAtual ? mesAtual + 1 : 12;
+  const mesesOptions = [
+    { value: 'todos', label: 'Todos' },
+    ...nomesMeses.slice(0, quantidadeMeses).map((nome, index) => ({
+      value: String(index + 1),
+      label: nome,
+    })),
+  ];
 
   return (
     <>
@@ -134,20 +143,34 @@ export default function GraficoBarChart({
           </Text>
 
           {showFilters && (
-            <Space>
-              <Select
-                defaultValue={anoAtual}
-                options={anosOptions}
-                style={{ width: 100 }}
-                onChange={onAnoChange}
-              />
-              <Select
-                defaultValue='todos'
-                options={mesesOptions}
-                style={{ width: 130 }}
-                onChange={onMesChange}
-              />
-            </Space>
+            <div style={{ display: 'flex', flex: 1, gap: 8, marginLeft: 16 }}>
+              <div style={{ flex: 1 }}>
+                <Text strong>Ano</Text>
+                <Select
+                  value={anoSelecionado}
+                  options={anosOptions}
+                  style={{ width: '100%', display: 'block' }}
+                  onChange={(ano) => {
+                    setAnoSelecionado(ano);
+                    setMesSelecionado('todos');
+                    onAnoChange?.(ano);
+                    onMesChange?.('todos');
+                  }}
+                />
+              </div>
+              <div style={{ flex: 1 }}>
+                <Text strong>Mês</Text>
+                <Select
+                  value={mesSelecionado}
+                  options={mesesOptions}
+                  style={{ width: '100%', display: 'block' }}
+                  onChange={(mes) => {
+                    setMesSelecionado(mes);
+                    onMesChange?.(mes);
+                  }}
+                />
+              </div>
+            </div>
           )}
         </div>
       </Space>
