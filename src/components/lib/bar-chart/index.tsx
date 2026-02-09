@@ -209,6 +209,7 @@ export default function GraficoBarChart({
                     axisLine={false}
                     tickLine={false}
                     tickMargin={10}
+                    domain={[0, (dataMax: number) => Math.ceil(dataMax * 1.3)]}
                     style={{ textAnchor: 'middle', fontSize: 14, fill: '#595959' }}
                   >
                     <Label
