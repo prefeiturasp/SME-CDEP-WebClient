@@ -21,6 +21,7 @@ interface GraficoAreaChartProps {
 }
 
 const CustomTooltip = ({ active, payload, labelHorizontal }: any) => {
+  console.log(labelHorizontal)
   if (active && payload && payload.length) {
     return (
       <div
