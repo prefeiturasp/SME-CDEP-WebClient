@@ -22,6 +22,10 @@ const Indicadores = () => {
   const [dadossolicitacoesPorSituacao, setDadosSolicitacoesPorSituacao] = useState<
     AcervosCadastradosDTO[]
   >([]);
+  const [anoSolicitacoesTipoAcervo, setAnoSolicitacoesTipoAcervo] = useState<number>(
+    new Date().getFullYear(),
+  );
+  const [mesSolicitacoesTipoAcervo, setMesSolicitacoesTipoAcervo] = useState<string>('todos');
   const [dadoscontroleLivrosEmprestados, setDadosControleLivrosEmprestados] = useState<
     AcervosCadastradosDTO[]
   >([]);
@@ -170,9 +174,9 @@ const Indicadores = () => {
     }
   }
 
-  async function solicitacoesTipoAcervo() {
+  async function solicitacoesTipoAcervo(ano: number, mes: string) {
     try {
-      const retorno = await service.obterSolicitacoesTipoAcervo();
+      const retorno = await service.obterSolicitacoesTipoAcervo(ano, mes);
       retorno.data.sort((a, b) => a.nome.localeCompare(b.nome));
       setDadosSolicitacoesTipoAcervo(retorno.data);
     } catch (error) {
@@ -184,11 +188,13 @@ const Indicadores = () => {
     acervosCadastrados();
     quantidadePesquisasMensais();
     quantidadeSolicitacoesMensais();
-
     solicitacoesPorSituacao();
     controleLivrosEmprestados();
-    solicitacoesTipoAcervo();
   }, []);
+
+  useEffect(() => {
+    solicitacoesTipoAcervo(anoSolicitacoesTipoAcervo, mesSolicitacoesTipoAcervo);
+  }, [anoSolicitacoesTipoAcervo, mesSolicitacoesTipoAcervo]);
 
   return (
     <Col>
@@ -220,9 +226,10 @@ const Indicadores = () => {
             }
             labelvertical='Quantidade de solicitações'
             labelHorizontal='Situações'
+            showFilters={false}
           ></GraficoBarChart>
         </div>
-      </CardContent>          
+      </CardContent>
 
       <br></br>
 
@@ -236,9 +243,10 @@ const Indicadores = () => {
             }
             labelvertical='Quantidade de solicitações'
             labelHorizontal='Situações'
+            showFilters={false}
           ></GraficoBarChart>
         </div>
-      </CardContent>          
+      </CardContent>
 
       <br></br>
 
@@ -252,6 +260,7 @@ const Indicadores = () => {
             }
             labelvertical='Quantidade de solicitações'
             labelHorizontal='Meses'
+            showFilters={false}
           ></GraficoBarChart>
         </div>
       </CardContent>
@@ -284,6 +293,10 @@ const Indicadores = () => {
             }
             labelvertical='Quantidade de solicitações'
             labelHorizontal='Tipos de acervo'
+            showFilters={true}
+            labelNoTopo={true}
+            onAnoChange={(ano) => setAnoSolicitacoesTipoAcervo(ano)}
+            onMesChange={(mes) => setMesSolicitacoesTipoAcervo(mes)}
           ></GraficoBarChart>
         </div>
       </CardContent>

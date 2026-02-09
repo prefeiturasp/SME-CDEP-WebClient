@@ -19,8 +19,16 @@ const obterSolicitacoesPorSituacao = (): Promise<AxiosResponse<AcervosCadastrado
 const obterControleLivrosEmprestados = (): Promise<AxiosResponse<AcervosCadastradosDTO[]>> =>
   api.get(`${URL_DEFAULT}/controle-livros-emprestados`);
 
-const obterSolicitacoesTipoAcervo = (): Promise<AxiosResponse<AcervosCadastradosDTO[]>> =>
-  api.get(`${URL_DEFAULT}/solicitacoes-tipo-acervo`);
+const obterSolicitacoesTipoAcervo = (
+  ano?: number,
+  mes?: string,
+): Promise<AxiosResponse<AcervosCadastradosDTO[]>> => {
+  const params = new URLSearchParams();
+  if (ano) params.append('ano', String(ano));
+  if (mes && mes !== 'todos') params.append('mes', mes);
+  const query = params.toString();
+  return api.get(`${URL_DEFAULT}/solicitacoes-tipo-acervo${query ? `?${query}` : ''}`);
+};
 
 export default {
   obterAcervosCadastrados,
