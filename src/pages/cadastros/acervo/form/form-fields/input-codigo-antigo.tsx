@@ -25,7 +25,7 @@ const InputCodigoAntigo: React.FC<InputCodigoAntigoProps> = ({ extra }) => (
           <Input
             type='text'
             placeholder={fieldProps.label}
-            maxLength={50}
+            maxLength={200}
             id={CDEP_INPUT_CODIGO_ANTIGO}
           />
         </Form.Item>

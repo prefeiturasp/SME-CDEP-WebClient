@@ -274,7 +274,7 @@ export const ModalAtendimento: React.FC<ModalAtendimentoProps> = ({
                       label='Data da visita'
                       dependencies={ehBibliografico ? ['dataEmprestimo', 'dataDevolucao'] : []}
                       rules={[
-                        { required: true },
+                        { required: false },
                         ({ getFieldValue }) => ({
                           validator: (_, dataVisita) => {
                             if (dataVisita && !getFieldValue('horaVisita')) {

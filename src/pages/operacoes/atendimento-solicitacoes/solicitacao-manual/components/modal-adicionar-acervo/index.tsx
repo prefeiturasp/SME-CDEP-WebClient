@@ -59,10 +59,12 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
       const values = form.getFieldsValue(true);
       const [horas, minutos] = values && values.horaVisita ? [values.horaVisita.hour(), values.horaVisita.minute()] : [];
 
-      const dataVisitaFormatada = dayjs(values.dataVisita)
-        .utc(true)
-        .hour(parseInt(horas))
-        .minute(parseInt(minutos));
+      const dataVisitaFormatada = values.dataVisita
+        ? dayjs(values.dataVisita)
+            .utc(true)
+            .hour(parseInt(horas))
+            .minute(parseInt(minutos))
+        : undefined;
 
       const ehEmail = values?.tipoAtendimento === TipoAtendimentoEnum.Email;
 
@@ -260,7 +262,7 @@ export const ModalAdicionarAcervo: React.FC<ModalAdicionarAcervoProps> = ({
                         label: 'Data da visita',
                         name: 'dataVisita',
                         dependencies: ehBibliografico ? ['dataEmprestimo', 'dataDevolucao'] : [],
-                        rules: [...rules],
+                        rules: [{ required: false }],
                       }}
                       dateProps={{ style:{ width: '100%' },
                           minDate: minDateMenos7,
