@@ -12,7 +12,7 @@ import {
 } from 'recharts';
 
 import { useState } from 'react';
-import { Typography, Space, Row, Col, Select } from 'antd';
+import { Typography, Space, Row, Col, Select, Empty } from 'antd';
 import { AcervosCadastradosDTO } from '~/core/dto/acervos-cadastrados-dto';
 
 const { Title, Text } = Typography;
@@ -187,9 +187,7 @@ export default function GraficoBarChart({
                 justifyContent: 'center',
               }}
             >
-              <Text type='secondary' style={{ fontSize: 16 }}>
-                NADA FOI ENCONTRADO
-              </Text>
+              <Empty description='Sem dados' />
             </div>
           </Col>
         </Row>
