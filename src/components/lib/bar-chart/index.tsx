@@ -201,17 +201,19 @@ export default function GraficoBarChart({
                     tickLine={false}
                     style={{ textAnchor: 'middle', fontSize: 14, fill: '#595959' }}
                   >
-                    <Label
-                      value={labelHorizontal}
-                      position='bottom'
-                      offset={50}
-                      style={{
-                        textAnchor: 'middle',
-                        fontSize: 14,
-                        fontWeight: 'bold',
-                        fill: '#595959',
-                      }}
-                    />
+                    {!barras && (
+                      <Label
+                        value={labelHorizontal}
+                        position='bottom'
+                        offset={50}
+                        style={{
+                          textAnchor: 'middle',
+                          fontSize: 14,
+                          fontWeight: 'bold',
+                          fill: '#595959',
+                        }}
+                      />
+                    )}
                   </XAxis>
 
                   <YAxis
@@ -294,6 +296,43 @@ export default function GraficoBarChart({
                 </BarChart>
               </ResponsiveContainer>
             </div>
+
+            {barras && barras.length > 0 && (
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  gap: 16,
+                  marginTop: 0,
+                }}
+              >
+                <Text style={{ fontSize: 13, color: '#595959' }}>
+                  <strong>Atendimentos feitos de forma:</strong>
+                </Text>
+                {barras.map((barra: BarraConfig) => (
+                  <div
+                    key={barra.dataKey}
+                    style={{ display: 'flex', alignItems: 'center', gap: 6 }}
+                  >
+                    <span
+                      style={{
+                        display: 'inline-block',
+                        width: 14,
+                        height: 14,
+                        borderRadius: 2,
+                        backgroundColor: barra.color,
+                      }}
+                    />
+                    <Text style={{ fontSize: 13, color: '#595959', fontWeight: 'bold' }}>
+                      {barra.label
+                        ?.replace('Atendimentos manuais', 'Manuais')
+                        .replace('Atendimentos automáticas', 'Automáticos')}
+                    </Text>
+                  </div>
+                ))}
+              </div>
+            )}
           </Col>
         </Row>
       )}
