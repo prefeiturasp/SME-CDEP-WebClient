@@ -33,6 +33,48 @@ const Indicadores = () => {
     AcervosCadastradosDTO[]
   >([]);
 
+  const [anoSolicitacoesMensais, setAnoSolicitacoesMensais] = useState<number>(
+    new Date().getFullYear(),
+  );
+  const [tipoAtendimento, setTipoAtendimento] = useState<string>('total_atendimentos');
+
+  const anoAtual = new Date().getFullYear();
+  const mesAtual = new Date().getMonth();
+
+  const anosOptions = Array.from({ length: 5 }, (_, i) => ({
+    value: anoAtual - i,
+    label: String(anoAtual - i),
+  }));
+
+  const nomesMeses = [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
+  ];
+
+  const quantidadeMesesTipoAcervo = anoSolicitacoesTipoAcervo === anoAtual ? mesAtual + 1 : 12;
+  const mesesOptionsTipoAcervo = [
+    { value: 'todos', label: 'Todos' },
+    ...nomesMeses.slice(0, quantidadeMesesTipoAcervo).map((nome, index) => ({
+      value: String(index + 1),
+      label: nome,
+    })),
+  ];
+
+  const tipoAtendimentoOptions = [
+    { value: 'total_atendimentos', label: 'Total de atendimentos' },
+    { value: 'total_por_tipo', label: 'Total por tipo de atendimento' },
+  ];
+
   const acervosCadastrados = async () => {
     try {
       const retorno = await service.obterAcervosCadastrados();
@@ -106,9 +148,9 @@ const Indicadores = () => {
     }
   };
 
-  const quantidadeSolicitacoesMensais = async () => {
+  const quantidadeSolicitacoesMensais = async (ano: number) => {
     try {
-      const retorno = await service.obterQuantidadeSolicitacoesMensais();
+      const retorno = await service.obterQuantidadeSolicitacoesMensais(ano);
 
       const mesesDoAno = [
         'Janeiro',
@@ -187,10 +229,13 @@ const Indicadores = () => {
   useEffect(() => {
     acervosCadastrados();
     quantidadePesquisasMensais();
-    quantidadeSolicitacoesMensais();
     solicitacoesPorSituacao();
     controleLivrosEmprestados();
   }, []);
+
+  useEffect(() => {
+    quantidadeSolicitacoesMensais(anoSolicitacoesMensais);
+  }, [anoSolicitacoesMensais]);
 
   useEffect(() => {
     solicitacoesTipoAcervo(anoSolicitacoesTipoAcervo, mesSolicitacoesTipoAcervo);
@@ -254,13 +299,39 @@ const Indicadores = () => {
         <div className='grafico-container'>
           <GraficoBarChart
             dados={dadosquantidadeSolicitacoesMensais}
-            titulo={'Quantidade de solicitações mensais'}
+            titulo={'Quantidade de solicitações e atendimentos por período'}
             subtitulo={
               'Exibe o total de solicitações realizadas em cada mês, permitindo acompanhar a demanda ao longo do ano atual.'
             }
             labelvertical='Quantidade de solicitações'
             labelHorizontal='Meses'
-            showFilters={false}
+            showFilters={true}
+            filtros={[
+              {
+                label: 'Ano',
+                value: anoSolicitacoesMensais,
+                options: anosOptions,
+                onChange: (ano) => setAnoSolicitacoesMensais(ano),
+              },
+              {
+                label: 'Tipo de totais',
+                value: tipoAtendimento,
+                options: tipoAtendimentoOptions,
+                onChange: (tipo) => setTipoAtendimento(tipo),
+              },
+            ]}
+            barras={
+              tipoAtendimento === 'total_por_tipo'
+                ? [
+                    { dataKey: 'totalManual', color: '#FFB8C6', label: 'Atendimentos manuais' },
+                    {
+                      dataKey: 'totalAutomatica',
+                      color: '#89162D',
+                      label: 'Atendimentos automáticas',
+                    },
+                  ]
+                : undefined
+            }
           ></GraficoBarChart>
         </div>
       </CardContent>
@@ -295,8 +366,23 @@ const Indicadores = () => {
             labelHorizontal='Tipos de acervo'
             showFilters={true}
             labelNoTopo={true}
-            onAnoChange={(ano) => setAnoSolicitacoesTipoAcervo(ano)}
-            onMesChange={(mes) => setMesSolicitacoesTipoAcervo(mes)}
+            filtros={[
+              {
+                label: 'Ano',
+                value: anoSolicitacoesTipoAcervo,
+                options: anosOptions,
+                onChange: (ano) => {
+                  setAnoSolicitacoesTipoAcervo(ano);
+                  setMesSolicitacoesTipoAcervo('todos');
+                },
+              },
+              {
+                label: 'Mês',
+                value: mesSolicitacoesTipoAcervo,
+                options: mesesOptionsTipoAcervo,
+                onChange: (mes) => setMesSolicitacoesTipoAcervo(mes),
+              },
+            ]}
           ></GraficoBarChart>
         </div>
       </CardContent>

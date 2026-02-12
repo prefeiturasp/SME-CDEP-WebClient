@@ -11,19 +11,59 @@ import {
   Cell,
 } from 'recharts';
 
-import { useState } from 'react';
 import { Typography, Space, Row, Col, Select, Empty } from 'antd';
 import { AcervosCadastradosDTO } from '~/core/dto/acervos-cadastrados-dto';
 
 const { Title, Text } = Typography;
 
-interface GraficoAreaChartProps {
-  dados: AcervosCadastradosDTO[];
+export interface FiltroConfig {
+  label: string;
+  value: string | number;
+  options: { value: string | number; label: string }[];
+  onChange: (value: any) => void;
 }
 
-const CustomTooltip = ({ active, payload, labelHorizontal }: any) => {
-  console.log(labelHorizontal)
+export interface BarraConfig {
+  dataKey: string;
+  color: string;
+  hiddenColor?: string;
+  label?: string;
+}
+
+const formatarNumero = (valor: number) => valor.toLocaleString('pt-BR');
+
+const CustomTooltip = ({ active, payload, barras }: any) => {
   if (active && payload && payload.length) {
+    const data = payload[0].payload;
+
+    if (barras && barras.length > 0) {
+      const total = barras.reduce(
+        (acc: number, barra: BarraConfig) => acc + (Number(data[barra.dataKey]) || 0),
+        0,
+      );
+
+      return (
+        <div
+          style={{
+            background: '#fff',
+            padding: 12,
+            borderRadius: 8,
+            boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+          }}
+        >
+          {/* <p style={{ margin: 0 }}>{data.nome}</p> */}
+          {barras.map((barra: BarraConfig) => (
+            <p key={barra.dataKey} style={{ margin: 0 }}>
+              {barra.label}: <strong>{formatarNumero(Number(data[barra.dataKey]) || 0)}</strong>
+            </p>
+          ))}
+          <p style={{ margin: 0 }}>
+            Total de solicitações: <strong>{formatarNumero(total)}</strong>
+          </p>
+        </div>
+      );
+    }
+
     return (
       <div
         style={{
@@ -33,16 +73,9 @@ const CustomTooltip = ({ active, payload, labelHorizontal }: any) => {
           boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
         }}
       >
-        {/* <p style={{ margin: 0, color: '#89162D' }}>
-          <strong>{labelHorizontal}:</strong> {payload[0].payload.nome}
-        </p> */}
-
+        <p style={{ margin: 0 }}>{data.nome}</p>
         <p style={{ margin: 0 }}>
-          {payload[0].payload.nome}
-        </p>
-
-        <p style={{ margin: 0 }}>
-          <strong>{payload[0].value} Solicitações</strong>
+          <strong>{formatarNumero(payload[0].value)} Solicitações</strong>
         </p>
       </div>
     );
@@ -51,7 +84,7 @@ const CustomTooltip = ({ active, payload, labelHorizontal }: any) => {
   return null;
 };
 
-interface GraficoAreaChartProps {
+interface GraficoBarChartProps {
   dados: AcervosCadastradosDTO[];
   titulo: string;
   subtitulo: string;
@@ -59,8 +92,8 @@ interface GraficoAreaChartProps {
   labelHorizontal: string;
   showFilters: boolean;
   labelNoTopo?: boolean;
-  onAnoChange?: (ano: number) => void;
-  onMesChange?: (mes: string) => void;
+  filtros?: FiltroConfig[];
+  barras?: BarraConfig[];
 }
 
 export default function GraficoBarChart({
@@ -71,45 +104,13 @@ export default function GraficoBarChart({
   labelHorizontal,
   showFilters,
   labelNoTopo = false,
-  onAnoChange,
-  onMesChange,
-}: GraficoAreaChartProps) {
-  const semDados = !dados || dados.length === 0;
-
-  const anoAtual = new Date().getFullYear();
-  const mesAtual = new Date().getMonth();
-
-  const [anoSelecionado, setAnoSelecionado] = useState<number>(anoAtual);
-  const [mesSelecionado, setMesSelecionado] = useState<string>('todos');
-
-  const anosOptions = Array.from({ length: 5 }, (_, i) => ({
-    value: anoAtual - i,
-    label: String(anoAtual - i),
-  }));
-
-  const nomesMeses = [
-    'Janeiro',
-    'Fevereiro',
-    'Março',
-    'Abril',
-    'Maio',
-    'Junho',
-    'Julho',
-    'Agosto',
-    'Setembro',
-    'Outubro',
-    'Novembro',
-    'Dezembro',
-  ];
-
-  const quantidadeMeses = anoSelecionado === anoAtual ? mesAtual + 1 : 12;
-  const mesesOptions = [
-    { value: 'todos', label: 'Todos' },
-    ...nomesMeses.slice(0, quantidadeMeses).map((nome, index) => ({
-      value: String(index + 1),
-      label: nome,
-    })),
-  ];
+  filtros = [],
+  barras,
+}: GraficoBarChartProps) {
+  const semDadosBase = !dados || dados.length === 0;
+  const semDadosBarras =
+    barras && dados?.length > 0 && dados.every((d: any) => barras.every((b) => !d[b.dataKey]));
+  const semDados = semDadosBase || semDadosBarras;
 
   return (
     <>
@@ -142,34 +143,19 @@ export default function GraficoBarChart({
             {subtitulo}
           </Text>
 
-          {showFilters && (
+          {showFilters && filtros.length > 0 && (
             <div style={{ display: 'flex', flex: 1, gap: 8, marginLeft: 16 }}>
-              <div style={{ flex: 1 }}>
-                <Text strong>Ano</Text>
-                <Select
-                  value={anoSelecionado}
-                  options={anosOptions}
-                  style={{ width: '100%', display: 'block' }}
-                  onChange={(ano) => {
-                    setAnoSelecionado(ano);
-                    setMesSelecionado('todos');
-                    onAnoChange?.(ano);
-                    onMesChange?.('todos');
-                  }}
-                />
-              </div>
-              <div style={{ flex: 1 }}>
-                <Text strong>Mês</Text>
-                <Select
-                  value={mesSelecionado}
-                  options={mesesOptions}
-                  style={{ width: '100%', display: 'block' }}
-                  onChange={(mes) => {
-                    setMesSelecionado(mes);
-                    onMesChange?.(mes);
-                  }}
-                />
-              </div>
+              {filtros.map((filtro, index) => (
+                <div key={index} style={{ flex: 1, paddingLeft: 10 }}>
+                  <Text strong>{filtro.label}</Text>
+                  <Select
+                    value={filtro.value}
+                    options={filtro.options}
+                    style={{ width: '100%', display: 'block' }}
+                    onChange={filtro.onChange}
+                  />
+                </div>
+              ))}
             </div>
           )}
         </div>
@@ -255,39 +241,52 @@ export default function GraficoBarChart({
 
                       if (payload[0].payload.esconder) return null;
 
-                      return <CustomTooltip {...props} labelHorizontal={labelHorizontal} />;
+                      return <CustomTooltip {...props} barras={barras} />;
                     }}
                   />
 
-                  <Bar dataKey='valor' radius={[4, 4, 0, 0]}>
-                    {dados.map((entry, index) => (
-                      <Cell key={index} fill={entry.esconder ? '#BFBFBF33' : '#89162D'} />
-                    ))}
+                  {barras ? (
+                    barras.map((barra) => (
+                      <Bar key={barra.dataKey} dataKey={barra.dataKey} radius={[4, 4, 0, 0]}>
+                        {dados.map((entry, index) => (
+                          <Cell
+                            key={index}
+                            fill={entry.esconder ? barra.hiddenColor ?? '#BFBFBF33' : barra.color}
+                          />
+                        ))}
+                      </Bar>
+                    ))
+                  ) : (
+                    <Bar dataKey='valor' radius={[4, 4, 0, 0]}>
+                      {dados.map((entry, index) => (
+                        <Cell key={index} fill={entry.esconder ? '#BFBFBF33' : '#89162D'} />
+                      ))}
 
-                    <LabelList
-                      dataKey='valor'
-                      content={(props: any) => {
-                        const { value, x, y, width, height, index } = props;
+                      <LabelList
+                        dataKey='valor'
+                        content={(props: any) => {
+                          const { value, x, y, width, height, index } = props;
 
-                        const item = dados[index];
+                          const item = dados[index];
 
-                        if (!item || item.esconder) return null;
+                          if (!item || item.esconder) return null;
 
-                        return (
-                          <text
-                            x={x + width / 2}
-                            y={labelNoTopo ? y - 8 : y + height - 8}
-                            fill={labelNoTopo ? '#000000' : '#FFFFFF'}
-                            fontWeight='bold'
-                            fontSize={12}
-                            textAnchor='middle'
-                          >
-                            {value}
-                          </text>
-                        );
-                      }}
-                    />
-                  </Bar>
+                          return (
+                            <text
+                              x={x + width / 2}
+                              y={labelNoTopo ? y - 8 : y + height - 8}
+                              fill={labelNoTopo ? '#000000' : '#FFFFFF'}
+                              fontWeight='bold'
+                              fontSize={12}
+                              textAnchor='middle'
+                            >
+                              {value}
+                            </text>
+                          );
+                        }}
+                      />
+                    </Bar>
+                  )}
                 </BarChart>
               </ResponsiveContainer>
             </div>
