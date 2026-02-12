@@ -275,6 +275,7 @@ const Indicadores = () => {
             }
             labelvertical='Quantidade de solicitações'
             labelHorizontal='Situações'
+            labelNoTopo={true}
             showFilters={false}
           ></GraficoBarChart>
         </div>
@@ -292,6 +293,7 @@ const Indicadores = () => {
             }
             labelvertical='Quantidade de solicitações'
             labelHorizontal='Situações'
+            labelNoTopo={true}
             showFilters={false}
           ></GraficoBarChart>
         </div>
@@ -309,6 +311,7 @@ const Indicadores = () => {
             }
             labelvertical='Quantidade de solicitações'
             labelHorizontal='Meses'
+            labelNoTopo={true}
             showFilters={true}
             filtros={[
               {
