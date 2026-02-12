@@ -170,7 +170,9 @@ const Indicadores = () => {
       const recebidos: AcervosCadastradosDTO[] = retorno.data;
 
       const maiorValor = Math.max(...recebidos.map((m) => m.valor));
-
+      const maiorTotalAutomatica = Math.max(...recebidos.map((m) => m.totalAutomatica ?? 0));
+      const maiorTotalManual = Math.max(...recebidos.map((m) => m.totalManual ?? 0));
+      const maior = Math.max(maiorTotalManual, maiorTotalAutomatica);
       const recebidosMap = new Map(recebidos.map((m) => [m.id, m]));
 
       const mesesCompletos: AcervosCadastradosDTO[] = mesesDoAno.map((nome, index) => {
@@ -187,6 +189,8 @@ const Indicadores = () => {
           id,
           nome,
           valor: maiorValor,
+          totalAutomatica: maior,
+          totalManual: maior,
           esconder: true,
         };
       });

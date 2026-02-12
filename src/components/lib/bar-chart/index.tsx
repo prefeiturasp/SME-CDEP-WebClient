@@ -108,9 +108,13 @@ export default function GraficoBarChart({
   barras,
 }: GraficoBarChartProps) {
   const semDadosBase = !dados || dados.length === 0;
+  const dadosVisiveis = dados?.filter((d) => !d.esconder) ?? [];
   const semDadosBarras =
-    barras && dados?.length > 0 && dados.every((d: any) => barras.every((b) => !d[b.dataKey]));
-  const semDados = semDadosBase || semDadosBarras;
+    barras &&
+    dados?.length > 0 &&
+    dadosVisiveis.every((d: any) => barras.every((b) => !d[b.dataKey]));
+  const semDadosValor = !barras && dados?.length > 0 && dadosVisiveis.every((d) => !d.valor);
+  const semDados = semDadosBase || semDadosBarras || semDadosValor;
 
   return (
     <>
