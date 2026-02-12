@@ -71,7 +71,7 @@ const Indicadores = () => {
   ];
 
   const tipoAtendimentoOptions = [
-    { value: 'total_atendimentos', label: 'Total de atendimentos' },
+    { value: 'total_solicitacoes', label: 'Total de Solicitações' },
     { value: 'total_por_tipo', label: 'Total por tipo de atendimento' },
   ];
 
@@ -327,12 +327,12 @@ const Indicadores = () => {
             barras={
               tipoAtendimento === 'total_por_tipo'
                 ? [
-                    { dataKey: 'totalManual', color: '#FFB8C6', label: 'Atendimentos manuais' },
                     {
                       dataKey: 'totalAutomatica',
-                      color: '#89162D',
-                      label: 'Atendimentos automáticas',
+                      color: '#FFB8C6',
+                      label: 'Atendimentos automáticos',
                     },
+                    { dataKey: 'totalManual', color: '#89162D', label: 'Atendimentos manuais' },
                   ]
                 : undefined
             }
