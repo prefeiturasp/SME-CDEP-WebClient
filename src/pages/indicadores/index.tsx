@@ -36,7 +36,7 @@ const Indicadores = () => {
   const [anoSolicitacoesMensais, setAnoSolicitacoesMensais] = useState<number>(
     new Date().getFullYear(),
   );
-  const [tipoAtendimento, setTipoAtendimento] = useState<string>('total_atendimentos');
+  const [tipoAtendimento, setTipoAtendimento] = useState<string>('total_solicitacoes');
 
   const anoAtual = new Date().getFullYear();
   const mesAtual = new Date().getMonth();
@@ -305,7 +305,7 @@ const Indicadores = () => {
             dados={dadosquantidadeSolicitacoesMensais}
             titulo={'Quantidade de solicitações e atendimentos por período'}
             subtitulo={
-              'Exibe o total de solicitações realizadas em cada mês, permitindo acompanhar a demanda ao longo do ano atual.'
+              'Exibe o total de atendimentos por mês, detalhando quantos foram atendidos no total, manualmente e de forma automática.'
             }
             labelvertical='Quantidade de solicitações'
             labelHorizontal='Meses'
