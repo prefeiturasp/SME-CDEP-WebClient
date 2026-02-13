@@ -1,14 +1,13 @@
-const { defineConfig } = require('cypress')
-const allureWriter = require('@shelex/cypress-allure-plugin/writer')
-const dotenv = require('dotenv')
-const cucumber = require('cypress-cucumber-preprocessor').default
-const postgreSQL = require('cypress-postgresql')
-const pg = require('pg')
-
-// upload
-const fs = require('fs')
-const FormData = require('form-data')
-const axios = require('axios')
+import { defineConfig } from 'cypress'
+import allureWriter from '@shelex/cypress-allure-plugin/writer.js'
+import dotenv from 'dotenv'
+import cucumber from 'cypress-cucumber-preprocessor'
+import preprocessor from '@cypress/webpack-preprocessor'
+import postgreSQL from 'cypress-postgresql'
+import pg from 'pg'
+import fs from 'fs'
+import FormData from 'form-data'
+import axios from 'axios'
 
 dotenv.config()
 
@@ -19,66 +18,62 @@ const dbConfig = {
   database: process.env.DB_DATABASE,
 }
 
-module.exports = defineConfig({
+export default defineConfig({
   e2e: {
     async setupNodeEvents(on, config) {
+      const webpackConfig = {
+        module: {
+          rules: [
+            {
+              test: /\.js$/,
+              use: {
+                loader: 'babel-loader',
+                options: {
+                  plugins: ['@babel/plugin-transform-modules-commonjs'],
+                },
+              },
+            },
+          ],
+        },
+      }
+
       // Allure
       allureWriter(on, config)
 
-      // Cucumber
-      on('file:preprocessor', cucumber())
+      // Cucumber + Webpack
+      on('file:preprocessor', preprocessor({ webpackOptions: webpackConfig }))
+      on('file:preprocessor', cucumber.default())
 
       // PostgreSQL
       const pool = new pg.Pool(dbConfig)
       const dbTasks = postgreSQL.loadDBPlugin(pool)
 
-      // TASKS (Postgres + Upload)
       on('task', {
         ...dbTasks,
-
         async uploadFile({ method = 'POST', url, headers = {}, filePath }) {
-          try {
-            const form = new FormData()
-
-            // Adiciona arquivo se existir e não estiver vazio
-            if (filePath && filePath.trim() !== '') {
-              form.append('file', fs.createReadStream(filePath))
-            }
-
-            const response = await axios({
-              method,
-              url,
-              headers: {
-                ...headers,
-                ...form.getHeaders(),
-              },
-              data: form,
-              maxBodyLength: Infinity,
-              validateStatus: () => true, 
-            })
-
-            return {
-              status: response.status,
-              body: response.data,
-            }
-          } catch (error) {
-            console.error('Erro na task uploadFile')
-
-            if (error.response) {
-              console.error('STATUS:', error.response.status)
-              console.error('BODY:', error.response.data)
-            } else {
-              console.error(error.message)
-            }
-
-            throw error
+          const form = new FormData()
+          if (filePath && filePath.trim() !== '') {
+            form.append('file', fs.createReadStream(filePath))
           }
+
+          const response = await axios({
+            method,
+            url,
+            headers: { ...headers, ...form.getHeaders() },
+            data: form,
+            maxBodyLength: Infinity,
+            validateStatus: () => true,
+          })
+
+          return { status: response.status, body: response.data }
         },
       })
 
-      // variáveis de ambiente
       const envKeys = [
         'ACERVO_SOLICITACAO_ITEM_ID',
+        'ACESSO_DOCUMENTO_NOME',
+        'ACESSO_DOCUMENTO_ID',
+        'ACESSO_DOCUMENTO_INVALIDO_ID',
         'ANO_FINAL',
         'ANO_INICIAL',
         'ARQUIVO_ARMAZENAMENTO',
@@ -111,10 +106,7 @@ module.exports = defineConfig({
 
       return {
         ...config,
-        env: {
-          ...config.env,
-          ...customVariable,
-        },
+        env: { ...config.env, ...customVariable },
       }
     },
 
@@ -123,17 +115,12 @@ module.exports = defineConfig({
     viewportWidth: 1600,
     viewportHeight: 1050,
     video: false,
-    retries: {
-      runMode: 2,
-      openMode: 0,
-    },
+    retries: { runMode: 2, openMode: 0 },
     screenshotOnRunFailure: false,
     chromeWebSecurity: false,
     experimentalRunAllSpecs: true,
     failOnStatusCode: false,
-
     specPattern: ['cypress/e2e/**/*.feature'],
-
     defaultCommandTimeout: 60000,
     requestTimeout: 60000,
     execTimeout: 60000,
