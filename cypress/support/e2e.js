@@ -1,8 +1,8 @@
 // Plugin do Allure (deve vir primeiro)
-import '@shelex/cypress-allure-plugin'
+require('@shelex/cypress-allure-plugin')
 
 // Comandos personalizados - API
-import './commands_api/commands_login'
+require('./commands_api/commands_login')
 
 // Comandos personalizados - UI
 

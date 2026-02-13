@@ -401,7 +401,7 @@ Then('retorna o status 200 através do tipo e texto livre do acervo', function (
 When('envio a requisição GET filtrando o pesquisar', function () { 
   return cy.request({
     method: 'GET',
-    url: Cypress.config('baseUrl') + `/api/v1/Acervo/pesquisar-acervos?TipoAcervo=${Cypress.env('TIPO_ACERVO_CODIGO')}&TextoLivre=${Cypress.env('TEXTO_LIVRE')}&AnoInicial=${Cypress.env('ANO_INICIAL')}`,
+    url: Cypress.config('baseUrl') + `/api/v1/Acervo/pesquisar-acervos?TipoAcervo=${Cypress.env('TIPO_ACERVO_CODIGO')}&TextoLivre=${Cypress.env('TEXTO_LIVRE')}`,
     headers: {
       accept: 'text/plain',
       Authorization: `Bearer ${token}`
