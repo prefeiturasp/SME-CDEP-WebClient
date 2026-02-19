@@ -1,4 +1,4 @@
-import { Button, Col, Form, Input, Row, Space, Tag, Typography } from 'antd';
+import { Button, Col, Form, Input, Row, Space, Tag, Tooltip, Typography } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
 import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
@@ -136,10 +136,19 @@ export const FormAtendimentoSolicitacoes: React.FC = () => {
             config = configTagAcervoDisponibilidadeMap[linha.situacaoSaldo];
           }
 
+          const tituloExibido =
+            value && value.length > 100 ? (
+              <Tooltip title={value} styles={{ root: { maxWidth: 600 } }}>
+                <span>{value.slice(0, 100)}...</span>
+              </Tooltip>
+            ) : (
+              value
+            );
+
           return (
             <Col>
               <Row>
-                <Typography.Text>{value}</Typography.Text>
+                <Typography.Text>{tituloExibido}</Typography.Text>
                 {validarSeEhBibliografico(linha.tipoAcervoId) && validarDisponibilidade && (
                   <Tag color={config?.bgColor}>
                     <Typography.Text

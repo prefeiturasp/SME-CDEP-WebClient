@@ -18,7 +18,7 @@ const StickyButtonEnviar: React.FC = () => {
   if (location.pathname !== ROUTES.CONSULTA_ACERVO || dataSource.length === 0) return null;
 
   return (
-    <Row justify='end' style={{ padding: '20px 60px', backgroundColor: '#fff' }}>
+    <Row justify='end' style={{ padding: '20px 60px', backgroundColor: 'transparent' }}>
       <Col>
         <ButtonEnviarParaMinhaSelecao />
       </Col>
