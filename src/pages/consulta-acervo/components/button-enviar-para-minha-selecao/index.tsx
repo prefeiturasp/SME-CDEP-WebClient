@@ -46,6 +46,7 @@ export const ButtonEnviarParaMinhaSelecao: React.FC<ButtonEnviarParaMinhaSelecao
         borderRadius: 40,
         display: 'flex',
         alignItems: 'center',
+        ...(disabled && { background: '#efefef' }),
       }}
       onClick={onClick}
       disabled={disabled}
