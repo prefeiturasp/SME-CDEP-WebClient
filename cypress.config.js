@@ -70,10 +70,7 @@ export default defineConfig({
       })
 
       const envKeys = [
-        'ACERVO_SOLICITACAO_ITEM_ID',
-        'ACESSO_DOCUMENTO_NOME',
-        'ACESSO_DOCUMENTO_ID',
-        'ACESSO_DOCUMENTO_INVALIDO_ID',
+        'ACERVO_SOLICITACAO_ITEM_ID',            
         'ANO_FINAL',
         'ANO_INICIAL',
         'ARQUIVO_ARMAZENAMENTO',
@@ -84,7 +81,7 @@ export default defineConfig({
         'CEP_INVALIDO',
         'CEP_VALIDO',
         'CODIGO_ACERVO',
-        'CODIGO_TOMBO',
+        'CODIGO_TOMBO',  
         'DATA_DEVOLUCAO',
         'DATA_DEVOLUCAO_INVALIDA',
         'IMPORTACAO_PLANILHA_ID',
@@ -111,6 +108,9 @@ export default defineConfig({
     },
 
     baseUrl: 'https://hom-cdep.sme.prefeitura.sp.gov.br',
+    usuario_homol_admin: process.env.USUARIO_HOMOL_ADMIN,
+    usuario_homol_externo: process.env.USUARIO_HOMOL_EXTERNO,   
+    senha_homol: process.env.SENHA_HOMOL,   
     supportFile: 'cypress/support/e2e.js',
     viewportWidth: 1600,
     viewportHeight: 1050,

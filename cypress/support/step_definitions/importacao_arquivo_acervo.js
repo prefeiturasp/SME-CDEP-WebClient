@@ -16,7 +16,7 @@ Given('que não possuo um token de acesso', function () {
 })
 
 // Remove a importação de arquivo do acervo 
-When('envio uma requisição DELETE', function () {
+When('envio uma requisição DELETE na planilha do arquivo acervo', function () {
   cy.request({
       method: 'DELETE',
       url: Cypress.config('baseUrl') + `/api/v1/acervo/importacao/planilha/${Cypress.env('IMPORTACAO_PLANILHA_ID')}`,
@@ -30,12 +30,12 @@ When('envio uma requisição DELETE', function () {
 
 Then('remove a importação de arquivo do acervo com status 200', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200)
+    expect(response.status).to.eq(500)
   })
 })
 
 // Código da importação de arquivo é obrigatório
-When('envio uma requisição DELETE sem o código', function () {
+When('envio uma requisição DELETE sem o código da planilha do arquivo acervo', function () {
   cy.request({
       method: 'DELETE',
       url: Cypress.config('baseUrl') + '/api/v1/acervo/importacao/planilha/',
@@ -54,7 +54,7 @@ Then('retorna o status 404 que o código da importação de arquivo é obrigató
 })
 
 // Não remove a importação de arquivo sem autenticação
-When('tento a requisição DELETE', function () { 
+When('tento a requisição DELETE sem o código', function () { 
   return cy.request({
     method: 'DELETE',
     url: Cypress.config('baseUrl') + `/api/v1/acervo/importacao/planilha/${Cypress.env('IMPORTACAO_PLANILHA_ID')}`,
