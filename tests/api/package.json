@@ -1,0 +1,28 @@
+{
+  "name": "cypress",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "cypress run",
+    "test:gui": "cypress open"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "devDependencies": {
+    "@cypress/webpack-preprocessor": "^5.17.1",
+    "@faker-js/faker": "^10.2.0",
+    "@shelex/cypress-allure-plugin": "^2.41.2",
+    "cypress": "^13.6.0",
+    "cypress-cucumber-preprocessor": "^4.1.1",
+    "cypress-file-upload": "^5.0.8",
+    "cypress-postgresql": "^1.0.8",
+    "dotenv": "^17.2.3",
+    "webpack": "^5.105.0"
+  },
+  "dependencies": {
+    "axios": "^1.13.2"
+  }
+}
