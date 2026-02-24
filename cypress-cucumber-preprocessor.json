@@ -1,0 +1,4 @@
+{
+  "stepDefinitions": "cypress/support/step_definitions",
+  "nonGlobalStepDefinitions": true
+}
