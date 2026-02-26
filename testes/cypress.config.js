@@ -23,7 +23,9 @@ export default defineConfig({
   e2e: {
     watchForFileChanges: true,
     baseUrl: 'https://hom-cdep.sme.prefeitura.sp.gov.br',
-
+    usuario_homol_admin: process.env.USUARIO_HOMOL_ADMIN,
+    usuario_homol_externo: process.env.USUARIO_HOMOL_EXTERNO,   
+    senha_homol: process.env.SENHA_HOMOL,
     supportFile: 'cypress/support/e2e.js',
 
     viewportWidth: 1600,
