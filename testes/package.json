@@ -21,6 +21,7 @@
     "cypress-file-upload": "^5.0.8",
     "cypress-postgresql": "^1.0.8",
     "dotenv": "^17.2.3",
+    "mocha-allure-reporter": "^1.4.0",
     "ts-node": "^10.9.2",
     "typescript": "^5.9.3",
     "webpack": "^5.105.0"
