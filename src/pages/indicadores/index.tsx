@@ -22,12 +22,58 @@ const Indicadores = () => {
   const [dadossolicitacoesPorSituacao, setDadosSolicitacoesPorSituacao] = useState<
     AcervosCadastradosDTO[]
   >([]);
+  const [anoSolicitacoesTipoAcervo, setAnoSolicitacoesTipoAcervo] = useState<number>(
+    new Date().getFullYear(),
+  );
+  const [mesSolicitacoesTipoAcervo, setMesSolicitacoesTipoAcervo] = useState<string>('todos');
   const [dadoscontroleLivrosEmprestados, setDadosControleLivrosEmprestados] = useState<
     AcervosCadastradosDTO[]
   >([]);
   const [dadossolicitacoesTipoAcervo, setDadosSolicitacoesTipoAcervo] = useState<
     AcervosCadastradosDTO[]
   >([]);
+
+  const [anoSolicitacoesMensais, setAnoSolicitacoesMensais] = useState<number>(
+    new Date().getFullYear(),
+  );
+  const [tipoAtendimento, setTipoAtendimento] = useState<string>('total_solicitacoes');
+
+  const anoAtual = new Date().getFullYear();
+  const mesAtual = new Date().getMonth();
+
+  const anosOptions = Array.from({ length: 5 }, (_, i) => ({
+    value: anoAtual - i,
+    label: String(anoAtual - i),
+  }));
+
+  const nomesMeses = [
+    'Janeiro',
+    'Fevereiro',
+    'Março',
+    'Abril',
+    'Maio',
+    'Junho',
+    'Julho',
+    'Agosto',
+    'Setembro',
+    'Outubro',
+    'Novembro',
+    'Dezembro',
+  ];
+
+  const quantidadeMesesTipoAcervo = anoSolicitacoesTipoAcervo === anoAtual ? mesAtual + 1 : 12;
+  const mesesOptionsTipoAcervo = [
+    { value: 'todos', label: 'Todos' },
+    ...nomesMeses.slice(0, quantidadeMesesTipoAcervo).map((nome, index) => ({
+      value: String(index + 1),
+      label: nome,
+    })),
+  ];
+
+  const tipoAtendimentoOptions = [
+    { value: 'total_solicitacoes', label: 'Total de Solicitações' },
+    { value: 'total_por_tipo', label: 'Total por tipo de atendimento' },
+  ];
 
   const acervosCadastrados = async () => {
     try {
@@ -102,9 +148,9 @@ const Indicadores = () => {
     }
   };
 
-  const quantidadeSolicitacoesMensais = async () => {
+  const quantidadeSolicitacoesMensais = async (ano: number) => {
     try {
-      const retorno = await service.obterQuantidadeSolicitacoesMensais();
+      const retorno = await service.obterQuantidadeSolicitacoesMensais(ano);
 
       const mesesDoAno = [
         'Janeiro',
@@ -124,7 +170,9 @@ const Indicadores = () => {
       const recebidos: AcervosCadastradosDTO[] = retorno.data;
 
       const maiorValor = Math.max(...recebidos.map((m) => m.valor));
-
+      const maiorTotalAutomatica = Math.max(...recebidos.map((m) => m.totalAutomatica ?? 0));
+      const maiorTotalManual = Math.max(...recebidos.map((m) => m.totalManual ?? 0));
+      const maior = Math.max(maiorTotalManual, maiorTotalAutomatica);
       const recebidosMap = new Map(recebidos.map((m) => [m.id, m]));
 
       const mesesCompletos: AcervosCadastradosDTO[] = mesesDoAno.map((nome, index) => {
@@ -141,6 +189,8 @@ const Indicadores = () => {
           id,
           nome,
           valor: maiorValor,
+          totalAutomatica: maior,
+          totalManual: maior,
           esconder: true,
         };
       });
@@ -170,9 +220,9 @@ const Indicadores = () => {
     }
   }
 
-  async function solicitacoesTipoAcervo() {
+  async function solicitacoesTipoAcervo(ano: number, mes: string) {
     try {
-      const retorno = await service.obterSolicitacoesTipoAcervo();
+      const retorno = await service.obterSolicitacoesTipoAcervo(ano, mes);
       retorno.data.sort((a, b) => a.nome.localeCompare(b.nome));
       setDadosSolicitacoesTipoAcervo(retorno.data);
     } catch (error) {
@@ -183,12 +233,17 @@ const Indicadores = () => {
   useEffect(() => {
     acervosCadastrados();
     quantidadePesquisasMensais();
-    quantidadeSolicitacoesMensais();
-
     solicitacoesPorSituacao();
     controleLivrosEmprestados();
-    solicitacoesTipoAcervo();
   }, []);
+
+  useEffect(() => {
+    quantidadeSolicitacoesMensais(anoSolicitacoesMensais);
+  }, [anoSolicitacoesMensais]);
+
+  useEffect(() => {
+    solicitacoesTipoAcervo(anoSolicitacoesTipoAcervo, mesSolicitacoesTipoAcervo);
+  }, [anoSolicitacoesTipoAcervo, mesSolicitacoesTipoAcervo]);
 
   return (
     <Col>
@@ -220,9 +275,11 @@ const Indicadores = () => {
             }
             labelvertical='Quantidade de solicitações'
             labelHorizontal='Situações'
+            labelNoTopo={true}
+            showFilters={false}
           ></GraficoBarChart>
         </div>
-      </CardContent>          
+      </CardContent>
 
       <br></br>
 
@@ -236,9 +293,11 @@ const Indicadores = () => {
             }
             labelvertical='Quantidade de solicitações'
             labelHorizontal='Situações'
+            labelNoTopo={true}
+            showFilters={false}
           ></GraficoBarChart>
         </div>
-      </CardContent>          
+      </CardContent>
 
       <br></br>
 
@@ -246,12 +305,40 @@ const Indicadores = () => {
         <div className='grafico-container'>
           <GraficoBarChart
             dados={dadosquantidadeSolicitacoesMensais}
-            titulo={'Quantidade de solicitações mensais'}
+            titulo={'Quantidade de solicitações e atendimentos por período'}
             subtitulo={
-              'Exibe o total de solicitações realizadas em cada mês, permitindo acompanhar a demanda ao longo do ano atual.'
+              'Exibe o total de atendimentos por mês, detalhando quantos foram atendidos no total, manualmente e de forma automática.'
             }
             labelvertical='Quantidade de solicitações'
             labelHorizontal='Meses'
+            labelNoTopo={true}
+            showFilters={true}
+            filtros={[
+              {
+                label: 'Ano',
+                value: anoSolicitacoesMensais,
+                options: anosOptions,
+                onChange: (ano) => setAnoSolicitacoesMensais(ano),
+              },
+              {
+                label: 'Tipo de totais',
+                value: tipoAtendimento,
+                options: tipoAtendimentoOptions,
+                onChange: (tipo) => setTipoAtendimento(tipo),
+              },
+            ]}
+            barras={
+              tipoAtendimento === 'total_por_tipo'
+                ? [
+                    {
+                      dataKey: 'totalAutomatica',
+                      color: '#FFB8C6',
+                      label: 'Atendimentos automáticos',
+                    },
+                    { dataKey: 'totalManual', color: '#89162D', label: 'Atendimentos manuais' },
+                  ]
+                : undefined
+            }
           ></GraficoBarChart>
         </div>
       </CardContent>
@@ -284,6 +371,25 @@ const Indicadores = () => {
             }
             labelvertical='Quantidade de solicitações'
             labelHorizontal='Tipos de acervo'
+            showFilters={true}
+            labelNoTopo={true}
+            filtros={[
+              {
+                label: 'Ano',
+                value: anoSolicitacoesTipoAcervo,
+                options: anosOptions,
+                onChange: (ano) => {
+                  setAnoSolicitacoesTipoAcervo(ano);
+                  setMesSolicitacoesTipoAcervo('todos');
+                },
+              },
+              {
+                label: 'Mês',
+                value: mesSolicitacoesTipoAcervo,
+                options: mesesOptionsTipoAcervo,
+                onChange: (mes) => setMesSolicitacoesTipoAcervo(mes),
+              },
+            ]}
           ></GraficoBarChart>
         </div>
       </CardContent>

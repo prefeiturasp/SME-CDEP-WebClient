@@ -35,9 +35,6 @@ export const FiltroConsultaAcervo: React.FC = () => {
     <Col
       xs={24}
       style={{
-        position: 'sticky',
-        top: 72,
-        zIndex: 5,
         backgroundColor: Colors.SystemSME.CDEP.PRIMARY,
         padding: '20px 60px',
       }}

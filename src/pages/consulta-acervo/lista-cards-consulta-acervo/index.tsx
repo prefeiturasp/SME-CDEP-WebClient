@@ -11,7 +11,6 @@ import { ROUTES } from '~/core/enum/routes';
 import { TipoAcervo, TipoAcervoDisplay } from '~/core/enum/tipo-acervo';
 import { TipoAcervoTag, TipoAcervoTagDisplay } from '~/core/enum/tipo-acervo-tag';
 import { Colors } from '~/core/styles/colors';
-import { ButtonEnviarParaMinhaSelecao } from '../components/button-enviar-para-minha-selecao';
 import CheckboxSelecionarAcervo from '../components/selecionar-acervo';
 import { TextItemCardContentConsultaAcervo } from '../components/text-content-card';
 import { ConsultaAcervoContext } from '../provider';
@@ -80,16 +79,6 @@ export const ListaCardsConsultaAcervo: React.FC = () => {
 
   return (
     <>
-      {dataSource.length > 0 ? (
-        <Row justify='end' style={{ padding: '20px 60px' }}>
-          <Col>
-            <ButtonEnviarParaMinhaSelecao />
-          </Col>
-        </Row>
-      ) : (
-        <></>
-      )}
-
       <List
         pagination={{ ...listParams, onChange: onListChange }}
         dataSource={dataSource}

@@ -3,4 +3,6 @@ export interface AcervosCadastradosDTO {
   nome: string;
   valor: number;
   esconder?: boolean;
+  totalAutomatica?: number;
+  totalManual?: number;
 }

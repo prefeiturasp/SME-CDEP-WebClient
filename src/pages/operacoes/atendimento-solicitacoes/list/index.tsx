@@ -1,4 +1,4 @@
-import { Col, Form, Input, Row } from 'antd';
+import { Col, Form, Input, Row, Tooltip } from 'antd';
 import { useForm } from 'antd/es/form/Form';
 import { ColumnsType } from 'antd/es/table';
 import React, { useContext, useState } from 'react';
@@ -71,6 +71,14 @@ const columns: ColumnsType<SolicitacaoDTO> = [
     title: 'Título',
     dataIndex: 'titulo',
     align: 'center',
+    render: (titulo: string) => {
+      if (!titulo || titulo.length <= 100) return titulo;
+      return (
+        <Tooltip title={titulo} styles={{ root: { maxWidth: 600 } }}>
+          <span>{titulo.slice(0, 100)}...</span>
+        </Tooltip>
+      );
+    },
   },
   {
     title: 'Data da solicitação',
