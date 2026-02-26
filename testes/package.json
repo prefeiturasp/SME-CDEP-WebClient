@@ -15,11 +15,14 @@
     "@cypress/webpack-preprocessor": "^5.17.1",
     "@faker-js/faker": "^10.2.0",
     "@shelex/cypress-allure-plugin": "^2.41.2",
-    "cypress": "^13.6.0",
+    "@types/node": "^25.3.0",
+    "cypress": "^14.5.4",
     "cypress-cucumber-preprocessor": "^4.1.1",
     "cypress-file-upload": "^5.0.8",
     "cypress-postgresql": "^1.0.8",
     "dotenv": "^17.2.3",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.3",
     "webpack": "^5.105.0"
   },
   "dependencies": {
