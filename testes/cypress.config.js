@@ -1,5 +1,6 @@
 import { defineConfig } from 'cypress'
 import allureWriter from '@shelex/cypress-allure-plugin/writer.js'
+import { cloudPlugin } from 'cypress-cloud/plugin'
 import dotenv from 'dotenv'
 import cucumber from 'cypress-cucumber-preprocessor'
 import preprocessor from '@cypress/webpack-preprocessor'
@@ -20,7 +21,39 @@ const dbConfig = {
 
 export default defineConfig({
   e2e: {
+    watchForFileChanges: true,
+    baseUrl: 'https://hom-cdep.sme.prefeitura.sp.gov.br',
+
+    supportFile: 'cypress/support/e2e.js',
+
+    viewportWidth: 1600,
+    viewportHeight: 1050,
+    video: false,
+    retries: { runMode: 2, openMode: 0 },
+    screenshotOnRunFailure: false,
+    chromeWebSecurity: false,
+    experimentalRunAllSpecs: true,
+    failOnStatusCode: false,
+
+    specPattern: ['cypress/e2e/**/*.feature'],
+
+    defaultCommandTimeout: 60000,
+    requestTimeout: 60000,
+    execTimeout: 60000,
+    pageLoadTimeout: 60000,
+    waitForAnimations: true,
+    animationDistanceThreshold: 5,
+
     async setupNodeEvents(on, config) {
+
+      // =====================
+      // 1️⃣ Allure
+      // =====================
+      allureWriter(on, config)
+
+      // =====================
+      // 2️⃣ Cucumber + Webpack
+      // =====================
       const webpackConfig = {
         module: {
           rules: [
@@ -37,21 +70,21 @@ export default defineConfig({
         },
       }
 
-      // Allure
-      allureWriter(on, config)
-
-      // Cucumber + Webpack
       on('file:preprocessor', preprocessor({ webpackOptions: webpackConfig }))
       on('file:preprocessor', cucumber.default())
 
-      // PostgreSQL
+      // =====================
+      // 3️⃣ PostgreSQL
+      // =====================
       const pool = new pg.Pool(dbConfig)
       const dbTasks = postgreSQL.loadDBPlugin(pool)
 
       on('task', {
         ...dbTasks,
+
         async uploadFile({ method = 'POST', url, headers = {}, filePath }) {
           const form = new FormData()
+
           if (filePath && filePath.trim() !== '') {
             form.append('file', fs.createReadStream(filePath))
           }
@@ -69,8 +102,11 @@ export default defineConfig({
         },
       })
 
+      // =====================
+      // 4️⃣ ENV customizadas
+      // =====================
       const envKeys = [
-        'ACERVO_SOLICITACAO_ITEM_ID',            
+        'ACERVO_SOLICITACAO_ITEM_ID',
         'ANO_FINAL',
         'ANO_INICIAL',
         'ARQUIVO_ARMAZENAMENTO',
@@ -81,7 +117,7 @@ export default defineConfig({
         'CEP_INVALIDO',
         'CEP_VALIDO',
         'CODIGO_ACERVO',
-        'CODIGO_TOMBO',  
+        'CODIGO_TOMBO',
         'DATA_DEVOLUCAO',
         'DATA_DEVOLUCAO_INVALIDA',
         'IMPORTACAO_PLANILHA_ID',
@@ -101,31 +137,15 @@ export default defineConfig({
         envKeys.map((key) => [key, process.env[key] ?? ''])
       )
 
-      return {
-        ...config,
-        env: { ...config.env, ...customVariable },
-      }
-    },
+      config.env = { ...config.env, ...customVariable }
+      config.env.db = dbConfig
 
-    baseUrl: 'https://hom-cdep.sme.prefeitura.sp.gov.br',
-    usuario_homol_admin: process.env.USUARIO_HOMOL_ADMIN,
-    usuario_homol_externo: process.env.USUARIO_HOMOL_EXTERNO,   
-    senha_homol: process.env.SENHA_HOMOL,   
-    supportFile: 'cypress/support/e2e.js',
-    viewportWidth: 1600,
-    viewportHeight: 1050,
-    video: false,
-    retries: { runMode: 2, openMode: 0 },
-    screenshotOnRunFailure: false,
-    chromeWebSecurity: false,
-    experimentalRunAllSpecs: true,
-    failOnStatusCode: false,
-    specPattern: ['cypress/e2e/**/*.feature'],
-    defaultCommandTimeout: 60000,
-    requestTimeout: 60000,
-    execTimeout: 60000,
-    pageLoadTimeout: 60000,
-    waitForAnimations: true,
-    animationDistanceThreshold: 5,
+      // =====================
+      // 5️⃣ Cypress Cloud (SEMPRE POR ÚLTIMO)
+      // =====================
+      const enhancedConfig = await cloudPlugin(on, config)
+
+      return enhancedConfig
+    },
   },
 })
