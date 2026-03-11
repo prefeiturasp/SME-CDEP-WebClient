@@ -1,54 +1,42 @@
 # language: pt
 
-Funcionalidade: Solicitação de acervos através da tela Minhas solicitações
+Funcionalidade: Consulta de acervos através do menu Operações
 
   Contexto:
     Dado eu acesso o sistema com a visualização "<visualizacao>"
     E realizo login no sistema CDEP com perfil "Externo"
 
-  Esquema do Cenário: Validar cadastro ao: <caso>  
-    E clico no botão "Nova Solicitação" da tela "Minhas solicitações"
+  Esquema do Cenário: Validar consulta de acervos ao: <caso>  
+    E clico no botão "Nova Solicitação" em "Operações"
     Quando adiciono os acervos
     Então sistema apresenta a '<mensagem>' na tela
    
     Exemplos:
       | visualizacao | mensagem                           | caso               |
-      | web          | Solicitação realizada com sucesso. | Enviar solicitação |
+      | web          | Solicitação realizada com sucesso. | Criar solicitação |
 
-  Esquema do Cenário: Validar item retirado da solicitação: <caso>  
-    E clico no botão "Nova Solicitação" da tela "Minhas solicitações"
+  Esquema do Cenário: Validar item pesquisado ao: <caso>  
+    E clico no botão "Nova Solicitação" em "Operações"
     Quando tenho acervo adicionado
     E clico no botão de remover
     Então o item não é apresentado na listagem
    
     Exemplos:
-      | visualizacao | caso            |
-      | web          | Acervo removido |
+      | visualizacao | caso           |
+      | web          | Remover acervo |
   
-  Esquema do Cenário: Validar cancelamento de cadastro: <caso>  
-    E clico no botão "Nova Solicitação" da tela "Minhas solicitações"
+  Esquema do Cenário: Validar cancelamento após pesquisa de item: <caso>  
+    E clico no botão "Nova Solicitação" em "Operações"
     Quando tenho acervo adicionado
     E clico no botão de retornar ao lado de "Enviar solicitação"
     Então retorna a tela "Minhas solicitações"
    
     Exemplos:
       | visualizacao | caso                            |
-      | web          | Retornar a tela de solicitações |
+      | web          | Retornar a tela de solicitações | 
 
-  Esquema do Cenário: Validar modal do termo de compromisso: <caso>  
-    E clico no botão "Nova Solicitação" da tela "Minhas solicitações"
-    Quando clico em enviar a solicitação do acervo
-    E clico no "<botao>" do TERMO DE COMPROMISSO DO PESQUISADOR CDEP
-    Então o modal do pesquisador é fechado
-   
-    Exemplos:
-      | visualizacao | botao      | caso                          |
-      | web          | cancelar   | Clicar no botão de cancelar   |   
-      | web          | fechar     | Clicar no botão de fechar     |  
-      | web          | prosseguir | Clicar no botão de prosseguir |  
-
-  Esquema do Cenário: Validar acervo adicionado no cadastro: <caso>  
-    E clico no botão "Nova Solicitação" da tela "Minhas solicitações"
+  Esquema do Cenário: Validar consulta de acervo do tipo: <caso>  
+    E clico no botão "Nova Solicitação" em "Operações"
     Quando aciono o botão de adicionar acervos
     E clico no "<campo>" inserindo o "<valor>" na tela de consulta acervo
     Então realiza a busca do acervo

@@ -1,63 +1,187 @@
-import { Given, When, Then } from 'cypress-cucumber-preprocessor/steps'
+import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
 
-const Dado = Given
-const Quando = When
-const Entao = Then
+let token
 
-Dado('clico no botão "Nova Solicitação" da tela "Minhas solicitações"', function () {
-    cy.clicar_nova_solicitacao()
+Before(() => {
+  cy.gerar_token().then((token_valido) => {
+    token = token_valido
+  })
 })
 
-Quando('adiciono os acervos', function () {
-    cy.adicionar_acervo_solicitacao()
+Given('que possuo um token de acesso', function () {
+  expect(token, 'valido').to.exist
 })
 
-Entao('sistema apresenta a {string} na tela', function (mensagem_confirmacao_solicitacao) {
-    cy.validar_nova_acervo_solicitacao(mensagem_confirmacao_solicitacao)
+Given('que não possuo um token de acesso', function () { 
 })
 
-Quando('tenho acervo adicionado', function () {
-    cy.adicionar_item_acervo_solicitacao()
+// Retornar o acervo solicitação
+When('envio uma requisição GET com id do acervo', function () { 
+  return cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao?acervosIds=${Cypress.env('ASSUNTO_ID')}`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: `Bearer ${token}`
+    },          
+    failOnStatusCode: false  
+  }).as('response')
 })
 
-Quando('clico no botão de remover', function () {
-    cy.remover_item_acervo_solicitacao()
+Then('retorna o status 200 com o acervo solicitação', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(200)    
+  })
 })
 
-Entao('o item não é apresentado na listagem', function () {   
-    cy.validar_remocao_acervo_solicitacao() 
+// Não retornar sem acervo solicitação
+When('envio uma requisição GET sem id acervo', function () { 
+  return cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao?acervosIds=`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: `Bearer ${token}`
+    },          
+    failOnStatusCode: false  
+  }).as('response')
 })
 
-Quando('clico no botão de retornar ao lado de "Enviar solicitação"', function () { 
-    cy.retornar_acervo_solicitacao()
+Then('não retornar sem acervo solicitação', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(422)    
+  })
 })
 
-Entao('retorna a tela "Minhas solicitações"', function () {
-    cy.validar_retorno_tela_solicitacoes()    
+// Não retornar acervo solicitação sem autenticação
+When('tento a requisição GET das condições aceitas', function () { 
+  return cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao?acervosIds=${Cypress.env('ASSUNTO_ID')}`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: 'Bearer token_invalido'
+    },          
+    failOnStatusCode: false  
+  }).as('response')
 })
 
-Quando('clico em enviar a solicitação do acervo', function () {
-    cy.enviar_acervo_solicitacoes()  
+Then('retorna o status 401 sem o termo de compromisso', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(401)
+  })
 })
 
-Quando('clico no {string} do TERMO DE COMPROMISSO DO PESQUISADOR CDEP', function (botao) { 
-    cy.clicar_botao_modal_pesquisador(botao)
+// Retornar o acervo solicitação por id
+When('envio uma requisição GET com id do acervo solicitado', function () { 
+  return cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao/${Cypress.env('ASSUNTO_ID')}`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: `Bearer ${token}`
+    },          
+    failOnStatusCode: false  
+  }).as('response')
 })
 
-Entao('o modal do pesquisador é fechado', function () {
-    cy.validar_modal_fechado_tela_solicitacoes()    
+Then('retorna o status 200 com o acervo solicitação por id', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(200)    
+  })
 })
 
-Quando('aciono o botão de adicionar acervos', function () {
-    cy.adicionar_item_acervo_busca_solicitacao()
-
+// Não retornar sem acervo solicitação por id
+When('envio uma requisição GET sem id acervo solicitado', function () { 
+  cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao/`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: `Bearer ${token}`
+    },
+    failOnStatusCode: false  
+  }).as('response')
 })
 
-Quando('clico no {string} inserindo o {string} na tela de consulta acervo', function (campo, valor) { 
-    this.campo = campo
-    cy.informar_consulta_acervo_solicitacao(campo, valor)
+Then('não retornar sem acervo solicitação por id', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(601)
+  })
 })
 
-Entao('realiza a busca do acervo', function () {
-    cy.validar_consulta_acervo(this.campo)
+// Não retornar o acervo solicitação por id sem autenticação
+When('tento a requisição GET com id do acervo solicitado', function () { 
+  return cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao/${Cypress.env('ASSUNTO_ID')}`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: 'Bearer token_invalido'
+    },          
+    failOnStatusCode: false  
+  }).as('response')
+})
+
+Then('retorna o status 401 sem acervo solicitação por id', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(401)
+  })
+})
+
+// Retornar o acervo da minha solicitação
+When('envio uma requisição GET acervo solicitado', function () { 
+  return cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao/minha-solicitacao/${Cypress.env('ASSUNTO_ID')}`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: `Bearer ${token}`
+    },          
+    failOnStatusCode: false  
+  }).as('response')
+})
+
+Then('retorna o status 200 com o acervo da minha solicitação', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(200)    
+  })
+})
+
+// Não retornar sem acervo da minha solicitação
+When('envio uma requisição GET sem acervo solicitado', function () { 
+  cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao/minha-solicitacao/`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: `Bearer ${token}`
+    },
+    failOnStatusCode: false  
+  }).as('response')
+})
+
+Then('não retornar sem acervo da minha solicitação', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(422)
+  })
+})
+
+// Não retornar o acervo da minha solicitação sem autenticação
+When('tento a requisição GET acervo solicitado', function () { 
+  return cy.request({
+    method: 'GET',
+    url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao/minha-solicitacao/${Cypress.env('ASSUNTO_ID')}`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: 'Bearer token_invalido'
+    },          
+    failOnStatusCode: false  
+  }).as('response')
+})
+
+Then('retorna o status 401 sem acervo da minha solicitação', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(401)
+  })
 })

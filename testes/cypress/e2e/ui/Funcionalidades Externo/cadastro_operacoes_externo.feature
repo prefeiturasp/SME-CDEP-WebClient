@@ -1,13 +1,13 @@
 # language: pt
 
-Funcionalidade: Solicitação de acervos através da tela Minhas solicitações
+Funcionalidade: Solicitação de acervos através do menu Operações
 
   Contexto:
     Dado eu acesso o sistema com a visualização "<visualizacao>"
     E realizo login no sistema CDEP com perfil "Externo"
 
   Esquema do Cenário: Validar cadastro ao: <caso>  
-    E clico no botão "Nova Solicitação" da tela "Minhas solicitações"
+    E clico no botão "Nova Solicitação" em "Operações"
     Quando adiciono os acervos
     Então sistema apresenta a '<mensagem>' na tela
    
@@ -16,7 +16,7 @@ Funcionalidade: Solicitação de acervos através da tela Minhas solicitações
       | web          | Solicitação realizada com sucesso. | Enviar solicitação |
 
   Esquema do Cenário: Validar item retirado da solicitação: <caso>  
-    E clico no botão "Nova Solicitação" da tela "Minhas solicitações"
+    E clico no botão "Nova Solicitação" em "Operações"
     Quando tenho acervo adicionado
     E clico no botão de remover
     Então o item não é apresentado na listagem
@@ -26,7 +26,7 @@ Funcionalidade: Solicitação de acervos através da tela Minhas solicitações
       | web          | Acervo removido |
   
   Esquema do Cenário: Validar cancelamento de cadastro: <caso>  
-    E clico no botão "Nova Solicitação" da tela "Minhas solicitações"
+    E clico no botão "Nova Solicitação" em "Operações"
     Quando tenho acervo adicionado
     E clico no botão de retornar ao lado de "Enviar solicitação"
     Então retorna a tela "Minhas solicitações"
@@ -36,7 +36,7 @@ Funcionalidade: Solicitação de acervos através da tela Minhas solicitações
       | web          | Retornar a tela de solicitações |
 
   Esquema do Cenário: Validar modal do termo de compromisso: <caso>  
-    E clico no botão "Nova Solicitação" da tela "Minhas solicitações"
+    E clico no botão "Nova Solicitação" em "Operações"
     Quando clico em enviar a solicitação do acervo
     E clico no "<botao>" do TERMO DE COMPROMISSO DO PESQUISADOR CDEP
     Então o modal do pesquisador é fechado
@@ -47,8 +47,8 @@ Funcionalidade: Solicitação de acervos através da tela Minhas solicitações
       | web          | fechar     | Clicar no botão de fechar     |  
       | web          | prosseguir | Clicar no botão de prosseguir |  
 
-  Esquema do Cenário: Validar acervo adicionado no cadastro: <caso>  
-    E clico no botão "Nova Solicitação" da tela "Minhas solicitações"
+  Esquema do Cenário: Validar itens adicionados no cadastro: <caso>  
+    E clico no botão "Nova Solicitação" em "Operações"
     Quando aciono o botão de adicionar acervos
     E clico no "<campo>" inserindo o "<valor>" na tela de consulta acervo
     Então realiza a busca do acervo
