@@ -1,8 +1,21 @@
 import Solicitacao_CDEP_Localizadores from '../locators/solicitacao_locators'
+import Minhas_solicitacoes_CDEP_Localizadores from '../locators/minhas_solicitacoes_locators'
 
 const solicitacao_CDEP_Localizadores = new Solicitacao_CDEP_Localizadores
 
-Cypress.Commands.add('clicar_nova_solicitacao', () => {
+const minhas_solicitacoes_CDEP_Localizadores = new Minhas_solicitacoes_CDEP_Localizadores
+
+Cypress.Commands.add('clicar_nova_acervo_solicitacao', () => {
+  cy.get(solicitacao_CDEP_Localizadores.btn_nova_solicitacao())
+    .should('be.visible')
+    .click()
+})
+
+Cypress.Commands.add('clicar_nova_operacoes_acervo_solicitacao', () => {
+  cy.get(solicitacao_CDEP_Localizadores.btn_menu_operacoes())
+    .should('be.visible')
+    .eq(1).click()
+
   cy.get(solicitacao_CDEP_Localizadores.btn_nova_solicitacao())
     .should('be.visible')
     .click()
@@ -155,7 +168,7 @@ Cypress.Commands.add('informar_consulta_acervo_solicitacao', (campo, valor) => {
       cy.get(solicitacao_CDEP_Localizadores.btn_buscar_acervos()).click()
       break    
     case 'Limpar busca':
-      cy.get(solicitacao_CDEP_Localizadores.btn_campo_limpar_busca()).click()
+      cy.get(solicitacao_CDEP_Localizadores.btn_campo_limpar_busca()).eq(0).click()
       break
     default:
       throw new Error(`Campo não reconhecido: ${campo}`)
@@ -164,8 +177,27 @@ Cypress.Commands.add('informar_consulta_acervo_solicitacao', (campo, valor) => {
 
 Cypress.Commands.add('validar_consulta_acervo', (campo) => {
   if (campo === 'Limpar busca') { 
-    // O botão não deve existir na tela
     cy.get(solicitacao_CDEP_Localizadores.btn_enviar_selecao()).should('not.exist') 
   } else { 
-    // O botão deve estar visível 
   cy.get(solicitacao_CDEP_Localizadores.btn_enviar_selecao()).should('be.visible') } })
+
+Cypress.Commands.add('validar_consulta_minhas_solicitacoes', (campo) => {
+
+  const campoSeletores = {
+    'número': minhas_solicitacoes_CDEP_Localizadores.tbl_numero,
+    'tipo de item': minhas_solicitacoes_CDEP_Localizadores.tbl_tipo_de_item,
+    'título do item': minhas_solicitacoes_CDEP_Localizadores.tbl_titulo_do_item,
+    'dia da solicitação': minhas_solicitacoes_CDEP_Localizadores.tbl_dia_da_solicitacao,
+    'dia de visita': minhas_solicitacoes_CDEP_Localizadores.tbl_dia_de_visita,
+    'status': minhas_solicitacoes_CDEP_Localizadores.tbl_status,
+  }
+
+  const seletor = campoSeletores[campo]
+
+  expect(seletor, `Selector não encontrado para: ${campo}`).to.exist
+
+  cy.get(seletor())
+    .should('exist')
+    .and('be.visible')
+
+})

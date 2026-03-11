@@ -1,12 +1,12 @@
 # language: pt
 
-Funcionalidade: Solicitação de acervos através da tela Minhas solicitações
+Funcionalidade: Consulta de acervos através da tela Minhas solicitações
 
   Contexto:
     Dado eu acesso o sistema com a visualização "<visualizacao>"
     E realizo login no sistema CDEP com perfil "Externo"
 
-  Esquema do Cenário: Validar cadastro ao: <caso>  
+  Esquema do Cenário: Validar pesquisa de acervo ao: <caso>  
     E clico no botão "Nova Solicitação" da tela "Minhas solicitações"
     Quando adiciono os acervos
     Então sistema apresenta a '<mensagem>' na tela
@@ -15,7 +15,7 @@ Funcionalidade: Solicitação de acervos através da tela Minhas solicitações
       | visualizacao | mensagem                           | caso               |
       | web          | Solicitação realizada com sucesso. | Enviar solicitação |
 
-  Esquema do Cenário: Validar item retirado da solicitação: <caso>  
+  Esquema do Cenário: Validar item retirado na pesquisa: <caso>  
     E clico no botão "Nova Solicitação" da tela "Minhas solicitações"
     Quando tenho acervo adicionado
     E clico no botão de remover
@@ -25,7 +25,7 @@ Funcionalidade: Solicitação de acervos através da tela Minhas solicitações
       | visualizacao | caso            |
       | web          | Acervo removido |
   
-  Esquema do Cenário: Validar cancelamento de cadastro: <caso>  
+  Esquema do Cenário: Validar cancelamento de consulta ao: <caso>  
     E clico no botão "Nova Solicitação" da tela "Minhas solicitações"
     Quando tenho acervo adicionado
     E clico no botão de retornar ao lado de "Enviar solicitação"
@@ -47,7 +47,7 @@ Funcionalidade: Solicitação de acervos através da tela Minhas solicitações
       | web          | fechar     | Clicar no botão de fechar     |  
       | web          | prosseguir | Clicar no botão de prosseguir |  
 
-  Esquema do Cenário: Validar acervo adicionado no cadastro: <caso>  
+  Esquema do Cenário: Validar busca de acervo por tipo: <caso>  
     E clico no botão "Nova Solicitação" da tela "Minhas solicitações"
     Quando aciono o botão de adicionar acervos
     E clico no "<campo>" inserindo o "<valor>" na tela de consulta acervo
