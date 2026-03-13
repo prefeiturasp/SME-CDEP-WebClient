@@ -1,5 +1,6 @@
 class Solicitacao_CDEP_Localizadores {
 	btn_nova_solicitacao = () => { return '#CDEP_BUTTON_NOVA_SOLICITACAO' }
+	btn_menu_operacoes = () => { return 'div.sc-fhzFiK.gPPSGw' }
 	btn_adicionar_acervos = () => { return '#CDEP_BUTTON_ADICIONAR_ACERVOS' }
 	btn_buscar_acervos = () => { return 'div:nth-child(2) > button > span' }
 	check_acervos = () => { return 'label .ant-checkbox' }
