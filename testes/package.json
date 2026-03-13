@@ -16,7 +16,7 @@
     "@shelex/cypress-allure-plugin": "^2.41.2",
     "@types/node": "^25.3.0",
     "cypress": "^14.5.4",
-    "cypress-cloud": "^1.13.1",
+    "cypress-cloud": "^2.0.0-beta.1",
     "cypress-cucumber-preprocessor": "^4.1.1",
     "cypress-file-upload": "^5.0.8",
     "cypress-postgresql": "^1.0.8",
