@@ -1,5 +1,9 @@
 import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
 
+const Dado = Given
+const Quando = When
+const Então = Then
+
 let token
 
 Before(() => {
@@ -8,15 +12,15 @@ Before(() => {
   })
 })
 
-Given('que possuo um token de acesso', function () {
+Dado('que possuo um token de acesso', function () {
   expect(token, 'valido').to.exist
 })
 
-Given('que não possuo um token de acesso', function () { 
+Dado('que não possuo um token de acesso', function () { 
 })
 
 // Retornar situações de acervos de empréstimos
-When('envio uma requisição GET para acervos de empréstimos', function () { 
+Quando('envio uma requisição GET para acervos de empréstimos', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoEmprestimo/situacoes`,
@@ -28,7 +32,7 @@ When('envio uma requisição GET para acervos de empréstimos', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 com todas situações', function () {
+Então('retorna o status 200 com todas situações', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.be.an('array').and.to.have.length.greaterThan(0)
@@ -41,7 +45,7 @@ Then('retorna o status 200 com todas situações', function () {
 })
 
 // Não retorna situações de acervos de empréstimos sem autenticação
-When('tento a requisição GET para acervos de empréstimos', function () { 
+Quando('tento a requisição GET para acervos de empréstimos', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoEmprestimo/situacoes`,
@@ -53,14 +57,14 @@ When('tento a requisição GET para acervos de empréstimos', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem situações dos acervos', function () {
+Então('retorna o status 401 sem situações dos acervos', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Prorrogar empréstimo de acervo
-When('envio uma requisição PUT na solicitação', function () { 
+Quando('envio uma requisição PUT na solicitação', function () { 
   return cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoEmprestimo/prorrogar`,
@@ -76,14 +80,14 @@ When('envio uma requisição PUT na solicitação', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 prorrogando o empréstimo', function () {
+Então('retorna o status 200 prorrogando o empréstimo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)    
   })
 })
 
 // Prorrogar empréstimo somente com data posterior
-When('envio uma requisição PUT na solicitação informando data inferior', function () { 
+Quando('envio uma requisição PUT na solicitação informando data inferior', function () { 
   return cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoEmprestimo/prorrogar`,
@@ -99,14 +103,14 @@ When('envio uma requisição PUT na solicitação informando data inferior', fun
   }).as('response')
 })
 
-Then('retorna o status 601 que prorroga somente com data posterior', function () {
+Então('retorna o status 601 que prorroga somente com data posterior', function () {
 cy.get('@response').then((response) => {
   expect(response.status).to.equal(601)
   })
 })
 
 // Código da solicitação é obrigatório
-When('envio uma requisição PUT sem o ID', function () { 
+Quando('envio uma requisição PUT sem o ID', function () { 
   return cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoEmprestimo/prorrogar`,
@@ -122,14 +126,14 @@ When('envio uma requisição PUT sem o ID', function () {
   }).as('response')
 })
 
-Then('retorna o status 422 que o código da solicitação é obrigatório', function () {
+Então('retorna o status 422 que o código da solicitação é obrigatório', function () {
 cy.get('@response').then((response) => {
   expect(response.status).to.equal(422)
   })
 })
 
 // Código da solicitação inválido
-When('envio uma requisição PUT com o ID incorreto', function () { 
+Quando('envio uma requisição PUT com o ID incorreto', function () { 
   return cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoEmprestimo/prorrogar`,
@@ -145,14 +149,14 @@ When('envio uma requisição PUT com o ID incorreto', function () {
   }).as('response')
 })
 
-Then('retorna o status 422 que o código da solicitação inválido', function () {
+Então('retorna o status 422 que o código da solicitação inválido', function () {
 cy.get('@response').then((response) => {
   expect(response.status).to.equal(422)
   })
 })
 
 // Não prorrogar empréstimo de acervo sem autenticação
-When('tento a requisição PUT na solicitação', function () { 
+Quando('tento a requisição PUT na solicitação', function () { 
   return cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoEmprestimo/prorrogar`,
@@ -168,14 +172,14 @@ When('tento a requisição PUT na solicitação', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem prorrogar empréstimo de acervo', function () {
+Então('retorna o status 401 sem prorrogar empréstimo de acervo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Devolver empréstimo de acervo
-When('envio a requisição PUT na solicitação', function () { 
+Quando('envio a requisição PUT na solicitação', function () { 
   return cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoEmprestimo/${Cypress.env('ACERVO_SOLICITACAO_ITEM_ID')}/devolver`,
@@ -187,14 +191,14 @@ When('envio a requisição PUT na solicitação', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 devolvendo o empréstimo', function () {
+Então('retorna o status 200 devolvendo o empréstimo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)    
   })
 })
 
 // Código da solicitação inválido na devolução
-When('envio uma requisição PUT com ID incorreto', function () { 
+Quando('envio uma requisição PUT com ID incorreto', function () { 
   return cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoEmprestimo/${Cypress.env('ACERVO_SOLICITACAO_ITEM_INVALIDO')}/devolver`,
@@ -206,14 +210,14 @@ When('envio uma requisição PUT com ID incorreto', function () {
   }).as('response')
 })
 
-Then('retorna o status 422 que devolução é inválida', function () {
+Então('retorna o status 422 que devolução é inválida', function () {
 cy.get('@response').then((response) => {
   expect(response.status).to.equal(422)
   })
 })
 
 // Código da solicitação vazio na devolução
-When('envio uma requisição PUT com o ID vazio', function () { 
+Quando('envio uma requisição PUT com o ID vazio', function () { 
   return cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoEmprestimo//devolver`,
@@ -225,14 +229,14 @@ When('envio uma requisição PUT com o ID vazio', function () {
   }).as('response')
 })
 
-Then('retorna o status 404 que a devolução deve ser preenchido', function () {
+Então('retorna o status 404 que a devolução deve ser preenchido', function () {
 cy.get('@response').then((response) => {
   expect(response.status).to.equal(404)
   })
 })
 
 // Não devolver empréstimo de acervo sem autenticação
-When('tento a requisição PUT na solicitação de devolução', function () { 
+Quando('tento a requisição PUT na solicitação de devolução', function () { 
   return cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoEmprestimo/${Cypress.env('ACERVO_SOLICITACAO_ITEM_ID')}/devolver`,
@@ -244,7 +248,7 @@ When('tento a requisição PUT na solicitação de devolução', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem devolver empréstimo de acervo', function () {
+Então('retorna o status 401 sem devolver empréstimo de acervo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })

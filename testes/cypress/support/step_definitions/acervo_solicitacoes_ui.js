@@ -2,7 +2,7 @@ import { Given, When, Then } from 'cypress-cucumber-preprocessor/steps'
 
 const Dado = Given
 const Quando = When
-const Entao = Then
+const Então = Then
 
 Dado('clico no botão "Nova Solicitação" da tela "Minhas solicitações"', function () {
     cy.clicar_nova_acervo_solicitacao()
@@ -16,7 +16,7 @@ Quando('adiciono os acervos', function () {
     cy.adicionar_acervo_solicitacao()
 })
 
-Entao('sistema apresenta a {string} na tela', function (mensagem_confirmacao_solicitacao) {
+Então('sistema apresenta a {string} na tela', function (mensagem_confirmacao_solicitacao) {
     cy.validar_nova_acervo_solicitacao(mensagem_confirmacao_solicitacao)
 })
 
@@ -28,7 +28,7 @@ Quando('clico no botão de remover', function () {
     cy.remover_item_acervo_solicitacao()
 })
 
-Entao('o item não é apresentado na listagem', function () {   
+Então('o item não é apresentado na listagem', function () {   
     cy.validar_remocao_acervo_solicitacao() 
 })
 
@@ -36,7 +36,7 @@ Quando('clico no botão de retornar ao lado de "Enviar solicitação"', function
     cy.retornar_acervo_solicitacao()
 })
 
-Entao('retorna a tela "Minhas solicitações"', function () {
+Então('retorna a tela "Minhas solicitações"', function () {
     cy.validar_retorno_tela_solicitacoes()    
 })
 
@@ -48,7 +48,7 @@ Quando('clico no {string} do TERMO DE COMPROMISSO DO PESQUISADOR CDEP', function
     cy.clicar_botao_modal_pesquisador(botao)
 })
 
-Entao('o modal do pesquisador é fechado', function () {
+Então('o modal do pesquisador é fechado', function () {
     cy.validar_modal_fechado_tela_solicitacoes()    
 })
 
@@ -62,13 +62,25 @@ Quando('clico no {string} inserindo o {string} na tela de consulta acervo', func
     cy.informar_consulta_acervo_solicitacao(campo, valor)
 })
 
-Entao('realiza a busca do acervo', function () {
+Então('realiza a busca do acervo', function () {
     cy.validar_consulta_acervo(this.campo)
 })
 
 Quando('visualizo a tela "Minhas solicitações"', function () { 
 })
 
-Entao('exibe o {string} da solicitação', (campo) => {
+Então('exibe o {string} na tabela da minha solicitação', (campo) => {
   cy.validar_consulta_minhas_solicitacoes(campo)
+})
+
+Então('consulta a minha solicitação cadastrada', () => {
+  cy.validar_consulta_solicitacao()
+})
+
+Quando('clico na solicitação cadastrada', function () { 
+  cy.validar_consulta_solicitacao()
+})
+
+Então('exibe o {string} da minha solicitação', (campo) => {
+  cy.validar_campo_solicitacao(campo)
 })

@@ -1,5 +1,9 @@
 import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
 
+const Dado = Given
+const Quando = When
+const Então = Then
+
 const dataAtual = new Date()
 const nomeDinamico = `teste-automacao-${dataAtual.getFullYear()}-${String(dataAtual.getMonth() + 1).padStart(2, '0')}-${String(dataAtual.getDate()).padStart(2, '0')}_${String(dataAtual.getHours()).padStart(2, '0')}-${String(dataAtual.getMinutes()).padStart(2, '0')}-${String(dataAtual.getSeconds()).padStart(2, '0')}`
 
@@ -12,15 +16,15 @@ Before(() => {
   })
 })
 
-Given('que possuo um token de acesso', function () {
+Dado('que possuo um token de acesso', function () {
   expect(token, 'valido').to.exist
 })
 
-Given('que não possuo um token de acesso', function () { 
+Dado('que não possuo um token de acesso', function () { 
 })
 
 // Cria novo nome de acesso documento
-When('envio uma requisição POST com nome de acesso', function () {  
+Quando('envio uma requisição POST com nome de acesso', function () {  
   cy.request({
     method: 'POST',
     url: Cypress.config('baseUrl') + `/api/v1/AcessoDocumento`,
@@ -44,7 +48,7 @@ When('envio uma requisição POST com nome de acesso', function () {
   })
 })
 
-Then('retorna o status 200 criando novo nome de acesso documento', function () {
+Então('retorna o status 200 criando novo nome de acesso documento', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
@@ -55,7 +59,7 @@ Then('retorna o status 200 criando novo nome de acesso documento', function () {
 })
 
 // Nome do acesso deve ser informado
-When('envio uma requisição POST sem acesso', function () {
+Quando('envio uma requisição POST sem acesso', function () {
   cy.request({
       method: 'POST',
       url: Cypress.config('baseUrl') + `/api/v1/AcessoDocumento`,
@@ -71,7 +75,7 @@ When('envio uma requisição POST sem acesso', function () {
   }).as('response')
 })
 
-Then('retorna o status 601 o nome do acesso deve ser informado', function () {
+Então('retorna o status 601 o nome do acesso deve ser informado', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(601)
     expect(response.body).to.have.property('mensagens')
@@ -82,7 +86,7 @@ Then('retorna o status 601 o nome do acesso deve ser informado', function () {
 })
 
 // Não insere nome de acesso duplicado
-When('envio uma requisição POST com o mesmo nome', function () {
+Quando('envio uma requisição POST com o mesmo nome', function () {
   cy.request({
       method: 'POST',
       url: Cypress.config('baseUrl') + '/api/v1/AcessoDocumento',
@@ -98,7 +102,7 @@ When('envio uma requisição POST com o mesmo nome', function () {
   }).as('response')
 })
 
-Then('retorna o status 601 sem inserir nome de acesso duplicado', function () {
+Então('retorna o status 601 sem inserir nome de acesso duplicado', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(601)
     expect(response.body).to.have.property('mensagens')
@@ -109,7 +113,7 @@ Then('retorna o status 601 sem inserir nome de acesso duplicado', function () {
 })
 
 // Não cria novo nome de acesso documento sem autenticação
-When('tento uma requisição POST com nome de acesso', function () { 
+Quando('tento uma requisição POST com nome de acesso', function () { 
   return cy.request({
     method: 'POST',
     url: Cypress.config('baseUrl') + `/api/v1/AcessoDocumento`,
@@ -125,14 +129,14 @@ When('tento uma requisição POST com nome de acesso', function () {
   }).as('response')
 })
 
-Then('não cria novo nome de acesso documento sem autenticação', function () {
+Então('não cria novo nome de acesso documento sem autenticação', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Busca por todos acessos documentos
-When('envio uma requisição GET sem documentos específico', function () {
+Quando('envio uma requisição GET sem documentos específico', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + `/api/v1/AcessoDocumento`,
@@ -144,7 +148,7 @@ When('envio uma requisição GET sem documentos específico', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 com todos acessos documentos', function () {
+Então('retorna o status 200 com todos acessos documentos', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.be.an('array')
@@ -158,7 +162,7 @@ Then('retorna o status 200 com todos acessos documentos', function () {
 })
 
 // Não busca todos acessos documentos sem autenticação
-When('tento uma requisição GET sem documentos específico', function () { 
+Quando('tento uma requisição GET sem documentos específico', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/AcessoDocumento`,
@@ -170,14 +174,14 @@ When('tento uma requisição GET sem documentos específico', function () {
   }).as('response')
 })
 
-Then('não busca todos acessos documentos sem autenticação retornando o status 401', function () {
+Então('não busca todos acessos documentos sem autenticação retornando o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Busca por id do acesso documento
-When('envio uma requisição GET de id acesso documento', function () {
+Quando('envio uma requisição GET de id acesso documento', function () {
   const idAcessoDocumento = Cypress.env('ACESSO_DOCUMENTO_ID')
   cy.request({
     method: 'GET',
@@ -190,7 +194,7 @@ When('envio uma requisição GET de id acesso documento', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 os dados do acesso documento', function () {
+Então('retorna o status 200 os dados do acesso documento', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.have.property('nome')
@@ -199,7 +203,7 @@ Then('retorna o status 200 os dados do acesso documento', function () {
   })
 })
 
-Then('retorna o status 200 os dados do acesso documento', function () {
+Então('retorna o status 200 os dados do acesso documento', function () {
   cy.get('@response').then((response) => {
      expect(response.status).to.eq(200)
       expect(response.body).to.have.property('nome')
@@ -209,7 +213,7 @@ Then('retorna o status 200 os dados do acesso documento', function () {
 })
 
 // Busca por id do acesso documento inválido
-When('envio a requisição GET de id acesso inexistente', function () {
+Quando('envio a requisição GET de id acesso inexistente', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + `/api/v1/AcessoDocumento/${Cypress.env('ACESSO_DOCUMENTO_INVALIDO_ID')}`,
@@ -221,14 +225,14 @@ When('envio a requisição GET de id acesso inexistente', function () {
   }).as('response')
 })
 
-Then('retorna o status 422 que acesso documento inválido', function () {
+Então('retorna o status 422 que acesso documento inválido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422)
   })
 })
 
 // Não busca por id do acesso documento sem autenticação
-When('tento a requisição GET de id acesso documento', function () { 
+Quando('tento a requisição GET de id acesso documento', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/AcessoDocumento/${Cypress.env('ACESSO_DOCUMENTO_ID')}`,
@@ -240,14 +244,14 @@ When('tento a requisição GET de id acesso documento', function () {
   }).as('response')
 })
 
-Then('não busca por id do acesso documento sem autenticação retornando o status 401', function () {
+Então('não busca por id do acesso documento sem autenticação retornando o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Alterar o acesso documento
-When('envio uma requisição PUT com id e nome do acesso', function () {
+Quando('envio uma requisição PUT com id e nome do acesso', function () {
   const idAcessoDocumento = Cypress.env('ACESSO_DOCUMENTO_ID')
   cy.request({
     method: 'PUT',
@@ -265,14 +269,14 @@ When('envio uma requisição PUT com id e nome do acesso', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 alterando o acesso documento', function () {
+Então('retorna o status 200 alterando o acesso documento', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // ID deve ser informado para alterar o acesso documento
-When('envio uma requisição PUT sem id do acesso', function () {  
+Quando('envio uma requisição PUT sem id do acesso', function () {  
   cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/AcessoDocumento`,
@@ -289,14 +293,14 @@ When('envio uma requisição PUT sem id do acesso', function () {
   }).as('response')
 })
 
-Then('retorna o status 422 que ID deve ser informado para alterar o acesso documento', function () {
+Então('retorna o status 422 que ID deve ser informado para alterar o acesso documento', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422)
   })
 })
 
 // Não altera o acesso documento sem autenticação
-When('tento a requisição PUT com id e nome do acesso', function () {  
+Quando('tento a requisição PUT com id e nome do acesso', function () {  
   cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/AcessoDocumento`,
@@ -313,14 +317,14 @@ When('tento a requisição PUT com id e nome do acesso', function () {
   }).as('response')
 })
 
-Then('não altera o acesso documento sem autenticação retornando o status 401', function () {
+Então('não altera o acesso documento sem autenticação retornando o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Excluir o acesso documento
-When('envio uma requisição DELETE com id nome do acesso', function () {
+Quando('envio uma requisição DELETE com id nome do acesso', function () {
   const idAcessoDocumento = Cypress.env('ACESSO_DOCUMENTO_ID')
   cy.request({
     method: 'DELETE',
@@ -334,14 +338,14 @@ When('envio uma requisição DELETE com id nome do acesso', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 excluindo o acesso documento', function () {
+Então('retorna o status 200 excluindo o acesso documento', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Id deve ser informado para excluir o acesso documento
-When('envio uma requisição DELETE sem id nome do acesso', function () {  
+Quando('envio uma requisição DELETE sem id nome do acesso', function () {  
   cy.request({
     method: 'DELETE',
     url: Cypress.config('baseUrl') + `/api/v1/AcessoDocumento/${Cypress.env('ACESSO_DOCUMENTO_INVALIDO_ID')}`,
@@ -354,14 +358,14 @@ When('envio uma requisição DELETE sem id nome do acesso', function () {
   }).as('response')
 })
 
-Then('retorna o status 422 que id informado para excluir o acesso documento', function () {
+Então('retorna o status 422 que id informado para excluir o acesso documento', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422)
   })
 })
 
 // Não excluir o acesso documento sem autenticação
-When('tento uma requisição DELETE com id nome do acesso', function () {  
+Quando('tento uma requisição DELETE com id nome do acesso', function () {  
   cy.request({
     method: 'DELETE',
     url: Cypress.config('baseUrl') + `/api/v1/AcessoDocumento/${Cypress.env('ACESSO_DOCUMENTO_INVALIDO_ID')}`,
@@ -374,7 +378,7 @@ When('tento uma requisição DELETE com id nome do acesso', function () {
   }).as('response')
 })
 
-Then('não exclui o acesso documento sem autenticação retornando o status 401', function () {
+Então('não exclui o acesso documento sem autenticação retornando o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })

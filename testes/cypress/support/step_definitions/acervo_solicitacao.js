@@ -1,5 +1,9 @@
 import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
 
+const Dado = Given
+const Quando = When
+const Então = Then
+
 let token
 
 Before(() => {
@@ -8,15 +12,15 @@ Before(() => {
   })
 })
 
-Given('que possuo um token de acesso', function () {
+Dado('que possuo um token de acesso', function () {
   expect(token, 'valido').to.exist
 })
 
-Given('que não possuo um token de acesso', function () { 
+Dado('que não possuo um token de acesso', function () { 
 })
 
 // Retornar o acervo solicitação
-When('envio uma requisição GET com id do acervo', function () { 
+Quando('envio uma requisição GET com id do acervo', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao?acervosIds=${Cypress.env('ASSUNTO_ID')}`,
@@ -28,14 +32,14 @@ When('envio uma requisição GET com id do acervo', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 com o acervo solicitação', function () {
+Então('retorna o status 200 com o acervo solicitação', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)    
   })
 })
 
 // Não retornar sem acervo solicitação
-When('envio uma requisição GET sem id acervo', function () { 
+Quando('envio uma requisição GET sem id acervo', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao?acervosIds=`,
@@ -47,14 +51,14 @@ When('envio uma requisição GET sem id acervo', function () {
   }).as('response')
 })
 
-Then('não retornar sem acervo solicitação', function () {
+Então('não retornar sem acervo solicitação', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422)    
   })
 })
 
 // Não retornar acervo solicitação sem autenticação
-When('tento a requisição GET das condições aceitas', function () { 
+Quando('tento a requisição GET das condições aceitas', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao?acervosIds=${Cypress.env('ASSUNTO_ID')}`,
@@ -66,14 +70,14 @@ When('tento a requisição GET das condições aceitas', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem o termo de compromisso', function () {
+Então('retorna o status 401 sem o termo de compromisso', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Retornar o acervo solicitação por id
-When('envio uma requisição GET com id do acervo solicitado', function () { 
+Quando('envio uma requisição GET com id do acervo solicitado', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao/${Cypress.env('ASSUNTO_ID')}`,
@@ -85,14 +89,14 @@ When('envio uma requisição GET com id do acervo solicitado', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 com o acervo solicitação por id', function () {
+Então('retorna o status 200 com o acervo solicitação por id', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)    
   })
 })
 
 // Não retornar sem acervo solicitação por id
-When('envio uma requisição GET sem id acervo solicitado', function () { 
+Quando('envio uma requisição GET sem id acervo solicitado', function () { 
   cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao/`,
@@ -104,14 +108,14 @@ When('envio uma requisição GET sem id acervo solicitado', function () {
   }).as('response')
 })
 
-Then('não retornar sem acervo solicitação por id', function () {
+Então('não retornar sem acervo solicitação por id', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(601)
   })
 })
 
 // Não retornar o acervo solicitação por id sem autenticação
-When('tento a requisição GET com id do acervo solicitado', function () { 
+Quando('tento a requisição GET com id do acervo solicitado', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao/${Cypress.env('ASSUNTO_ID')}`,
@@ -123,14 +127,14 @@ When('tento a requisição GET com id do acervo solicitado', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem acervo solicitação por id', function () {
+Então('retorna o status 401 sem acervo solicitação por id', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Retornar o acervo da minha solicitação
-When('envio uma requisição GET acervo solicitado', function () { 
+Quando('envio uma requisição GET acervo solicitado', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao/minha-solicitacao/${Cypress.env('ASSUNTO_ID')}`,
@@ -142,14 +146,14 @@ When('envio uma requisição GET acervo solicitado', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 com o acervo da minha solicitação', function () {
+Então('retorna o status 200 com o acervo da minha solicitação', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)    
   })
 })
 
 // Não retornar sem acervo da minha solicitação
-When('envio uma requisição GET sem acervo solicitado', function () { 
+Quando('envio uma requisição GET sem acervo solicitado', function () { 
   cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao/minha-solicitacao/`,
@@ -161,14 +165,14 @@ When('envio uma requisição GET sem acervo solicitado', function () {
   }).as('response')
 })
 
-Then('não retornar sem acervo da minha solicitação', function () {
+Então('não retornar sem acervo da minha solicitação', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422)
   })
 })
 
 // Não retornar o acervo da minha solicitação sem autenticação
-When('tento a requisição GET acervo solicitado', function () { 
+Quando('tento a requisição GET acervo solicitado', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/AcervoSolicitacao/minha-solicitacao/${Cypress.env('ASSUNTO_ID')}`,
@@ -180,7 +184,7 @@ When('tento a requisição GET acervo solicitado', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem acervo da minha solicitação', function () {
+Então('retorna o status 401 sem acervo da minha solicitação', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })

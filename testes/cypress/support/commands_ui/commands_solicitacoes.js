@@ -201,3 +201,46 @@ Cypress.Commands.add('validar_consulta_minhas_solicitacoes', (campo) => {
     .and('be.visible')
 
 })
+
+Cypress.Commands.add('validar_consulta_solicitacao', () => {
+  cy.get(minhas_solicitacoes_CDEP_Localizadores.card_solicitacao(), { timeout: 3000 })
+    .should('have.length.greaterThan', 0)
+
+  cy.get(minhas_solicitacoes_CDEP_Localizadores.tbl_numero(), { timeout: 3000 })
+    .first()
+    .scrollIntoView()
+    .should('be.visible')
+
+  cy.get(minhas_solicitacoes_CDEP_Localizadores.tbl_numero())
+    .first()
+    .click()
+
+  cy.get(minhas_solicitacoes_CDEP_Localizadores.tbl_dados_solicitante(), { timeout: 3000 })
+    .should('be.visible')
+})
+
+Cypress.Commands.add('validar_campo_solicitacao', (campo) => {
+
+  const mapaCampos = {
+    'tipo de item': minhas_solicitacoes_CDEP_Localizadores.tbl_tipo_acervo_solicitacao,
+    'título do item': minhas_solicitacoes_CDEP_Localizadores.tbl_titulo_solicitacao,
+    'autor': minhas_solicitacoes_CDEP_Localizadores.tbl_autor_credito_solicitacao,
+    'status': minhas_solicitacoes_CDEP_Localizadores.tbl_situacao_solicitacao,
+    'atendimento': minhas_solicitacoes_CDEP_Localizadores.tbl_tipo_atendimento_solicitacao,
+    'visita': minhas_solicitacoes_CDEP_Localizadores.tbl_data_visita_solicitacao
+  }
+
+  const selectorFn = mapaCampos[campo]
+
+  if (!selectorFn) {
+    throw new Error(`Campo não mapeado: ${campo}`)
+  }
+
+  cy.get(minhas_solicitacoes_CDEP_Localizadores.card_solicitacao(), { timeout: 3000 })
+    .should('have.length.greaterThan', 0)
+
+  cy.get(selectorFn(), { timeout: 3000 })
+    .first()
+    .scrollIntoView()
+    .should('be.visible')
+})

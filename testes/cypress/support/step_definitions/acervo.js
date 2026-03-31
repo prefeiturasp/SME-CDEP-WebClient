@@ -1,5 +1,9 @@
 import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
 
+const Dado = Given
+const Quando = When
+const Então = Then
+
 let token
 
 Before(() => {
@@ -8,15 +12,15 @@ Before(() => {
   })
 })
 
-Given('que possuo um token de acesso', function () {
+Dado('que possuo um token de acesso', function () {
   expect(token, 'valido').to.exist
 })
 
-Given('que não possuo um token de acesso', function () { 
+Dado('que não possuo um token de acesso', function () { 
 })
 
 // Retornar os tipos de acervos
-When('envio uma requisição GET para acervos tipos', function () { 
+Quando('envio uma requisição GET para acervos tipos', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/tipos`,
@@ -29,7 +33,7 @@ When('envio uma requisição GET para acervos tipos', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 com os tipos de acervos cadastrados', function () {
+Então('retorna o status 200 com os tipos de acervos cadastrados', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.be.an('array').and.to.have.length.greaterThan(0)
@@ -42,7 +46,7 @@ Then('retorna o status 200 com os tipos de acervos cadastrados', function () {
 })
 
 // Retornar todos os acervos
-When('envio uma requisição GET para o cadastro de acervos', function () { 
+Quando('envio uma requisição GET para o cadastro de acervos', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo`,
@@ -55,7 +59,7 @@ When('envio uma requisição GET para o cadastro de acervos', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 com todos os acervos cadastrados', function () {
+Então('retorna o status 200 com todos os acervos cadastrados', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
 
@@ -86,7 +90,7 @@ Then('retorna o status 200 com todos os acervos cadastrados', function () {
 })
 
 // Busca por tipo, título e código
-When('envio uma requisição GET com os dados do acervos', function () { 
+Quando('envio uma requisição GET com os dados do acervos', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo?TipoAcervo=${Cypress.env('TIPO_ACERVO')}&Titulo=${Cypress.env('TITULO_ACERVO')}&Codigo=${Cypress.env('CODIGO_ACERVO')}`,
@@ -99,7 +103,7 @@ When('envio uma requisição GET com os dados do acervos', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 e tipo, título e código', function () {
+Então('retorna o status 200 e tipo, título e código', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
 
@@ -130,7 +134,7 @@ Then('retorna o status 200 e tipo, título e código', function () {
 })
 
 // Busca por tipo
-When('envio uma requisição GET com o id do tipo', function () { 
+Quando('envio uma requisição GET com o id do tipo', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo?TipoAcervo=${Cypress.env('TIPO_ACERVO')}`,
@@ -143,7 +147,7 @@ When('envio uma requisição GET com o id do tipo', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 mostrando os acervos do código', function () {
+Então('retorna o status 200 mostrando os acervos do código', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
 
@@ -174,7 +178,7 @@ Then('retorna o status 200 mostrando os acervos do código', function () {
 })
 
 // Busca por título
-When('envio uma requisição GET com a descrição do título', function () { 
+Quando('envio uma requisição GET com a descrição do título', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo?Titulo=${Cypress.env('TITULO_ACERVO')}`,
@@ -187,7 +191,7 @@ When('envio uma requisição GET com a descrição do título', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 mostrando os acervos da descrição', function () {
+Então('retorna o status 200 mostrando os acervos da descrição', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
 
@@ -218,7 +222,7 @@ Then('retorna o status 200 mostrando os acervos da descrição', function () {
 })
 
 // Busca por código
-When('envio uma requisição GET com o código do acervo', function () { 
+Quando('envio uma requisição GET com o código do acervo', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo?Codigo=${Cypress.env('CODIGO_ACERVO')}`,
@@ -231,7 +235,7 @@ When('envio uma requisição GET com o código do acervo', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 referente aos cadastrados', function () {
+Então('retorna o status 200 referente aos cadastrados', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
 
@@ -262,7 +266,7 @@ Then('retorna o status 200 referente aos cadastrados', function () {
 })
 
 // Não retornar os tipos de acervos sem autenticação
-When('tento a requisição GET para acervos tipos', function () { 
+Quando('tento a requisição GET para acervos tipos', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo`,
@@ -274,14 +278,14 @@ When('tento a requisição GET para acervos tipos', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem os tipos de acervos cadastrados', function () {
+Então('retorna o status 401 sem os tipos de acervos cadastrados', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Pesquisar acervos
-When('envio uma requisição GET para endpoint de pesquisar', function () { 
+Quando('envio uma requisição GET para endpoint de pesquisar', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/pesquisar-acervos`,
@@ -294,7 +298,7 @@ When('envio uma requisição GET para endpoint de pesquisar', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 pesquisando o acervo com sucesso', function () {
+Então('retorna o status 200 pesquisando o acervo com sucesso', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.have.property('items')
@@ -320,7 +324,7 @@ Then('retorna o status 200 pesquisando o acervo com sucesso', function () {
 })
 
 // Pesquisar por tipo de acervo
-When('envio uma requisição GET pesquisando pelo tipo', function () { 
+Quando('envio uma requisição GET pesquisando pelo tipo', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/pesquisar-acervos?TipoAcervo=${Cypress.env('TIPO_ACERVO')}`,
@@ -333,7 +337,7 @@ When('envio uma requisição GET pesquisando pelo tipo', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 através do tipo de acervo', function () {
+Então('retorna o status 200 através do tipo de acervo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.have.property('items')
@@ -359,7 +363,7 @@ Then('retorna o status 200 através do tipo de acervo', function () {
 })
 
 // Pesquisar por tipo e texto livre do acervo
-When('envio a requisição GET filtrando a pesquisa', function () { 
+Quando('envio a requisição GET filtrando a pesquisa', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/pesquisar-acervos?TipoAcervo=${Cypress.env('TIPO_ACERVO_CODIGO')}&TextoLivre=${Cypress.env('TEXTO_LIVRE')}`,
@@ -372,7 +376,7 @@ When('envio a requisição GET filtrando a pesquisa', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 através do tipo e texto livre do acervo', function () {
+Então('retorna o status 200 através do tipo e texto livre do acervo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.have.property('items')
@@ -398,7 +402,7 @@ Then('retorna o status 200 através do tipo e texto livre do acervo', function (
 })
 
 // Pesquisar por tipo, texto livre do acervo e ano inicial
-When('envio a requisição GET filtrando o pesquisar', function () { 
+Quando('envio a requisição GET filtrando o pesquisar', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/pesquisar-acervos?TipoAcervo=${Cypress.env('TIPO_ACERVO_CODIGO')}&TextoLivre=${Cypress.env('TEXTO_LIVRE')}`,
@@ -411,7 +415,7 @@ When('envio a requisição GET filtrando o pesquisar', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 através do tipo, texto livre do acervo e ano inicial do acervo', function () {
+Então('retorna o status 200 através do tipo, texto livre do acervo e ano inicial do acervo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.have.property('items')
@@ -437,7 +441,7 @@ Then('retorna o status 200 através do tipo, texto livre do acervo e ano inicial
 })
 
 // Pesquisar por tipo, texto livre do acervo e ano inicial/final
-When('envio a requisição GET filtrando todos os campos', function () { 
+Quando('envio a requisição GET filtrando todos os campos', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/pesquisar-acervos?TipoAcervo=${Cypress.env('TIPO_ACERVO_CODIGO')}&TextoLivre=${Cypress.env('TEXTO_LIVRE')}&AnoInicial=${Cypress.env('ANO_INICIAL')}&AnoFinal=${Cypress.env('ANO_FINAL')}`,
@@ -450,7 +454,7 @@ When('envio a requisição GET filtrando todos os campos', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 do tipo, texto livre do acervo e ano inicial e final do acervo', function () {
+Então('retorna o status 200 do tipo, texto livre do acervo e ano inicial e final do acervo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.have.property('items')
@@ -476,7 +480,7 @@ Then('retorna o status 200 do tipo, texto livre do acervo e ano inicial e final 
 })
 
 // Retornar o termo de compromisso
-When('envio uma requisição GET das condições aceitas', function () { 
+Quando('envio uma requisição GET das condições aceitas', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/termo-compromisso`,
@@ -489,14 +493,14 @@ When('envio uma requisição GET das condições aceitas', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 do termo de compromisso', function () {
+Então('retorna o status 200 do termo de compromisso', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Não retornar o termo de compromisso sem autenticação
-When('tento a requisição GET das condições aceitas', function () { 
+Quando('tento a requisição GET das condições aceitas', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/termo-compromisso`,
@@ -508,14 +512,14 @@ When('tento a requisição GET das condições aceitas', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem o termo de compromisso', function () {
+Então('retorna o status 401 sem o termo de compromisso', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Pesquisa por código tombo
-When('envio uma requisição GET de pesquisa', function () { 
+Quando('envio uma requisição GET de pesquisa', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/pesquisar?CodigoTombo=${Cypress.env('CODIGO_TOMBO')}`,
@@ -528,7 +532,7 @@ When('envio uma requisição GET de pesquisa', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 a pesquisa por código tombo', function () {
+Então('retorna o status 200 a pesquisa por código tombo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.have.property('id')
@@ -539,7 +543,7 @@ Then('retorna o status 200 a pesquisa por código tombo', function () {
 })
 
 // Código tombo é obrigatório na pesquisa
-When('envio uma requisição GET de pesquisar sem código tombo', function () { 
+Quando('envio uma requisição GET de pesquisar sem código tombo', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/pesquisar?CodigoTombo=`,
@@ -552,7 +556,7 @@ When('envio uma requisição GET de pesquisar sem código tombo', function () {
   }).as('response')
 })
 
-Then('retorna o status 422 informando que o código tombo é obrigatório', function () {
+Então('retorna o status 422 informando que o código tombo é obrigatório', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422)
     expect(response.body).to.have.property('existemErros', true)
@@ -561,7 +565,7 @@ Then('retorna o status 422 informando que o código tombo é obrigatório', func
 })
 
 // Não pesquisa por código tombo sem autenticação
-When('tento a requisição GET de pesquisa', function () { 
+Quando('tento a requisição GET de pesquisa', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/pesquisar?CodigoTombo=${Cypress.env('CODIGO_TOMBO')}`,
@@ -573,14 +577,14 @@ When('tento a requisição GET de pesquisa', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem a pesquisa por código tombo', function () {
+Então('retorna o status 401 sem a pesquisa por código tombo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Detalhar o acervo
-When('envio uma requisição GET de pesquisa com código e tipo', function () { 
+Quando('envio uma requisição GET de pesquisa com código e tipo', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/detalhar-acervo?Codigo=${Cypress.env('CODIGO_ACERVO')}&Tipo=${Cypress.env('TIPO_ACERVO')}`,
@@ -593,14 +597,14 @@ When('envio uma requisição GET de pesquisa com código e tipo', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 detalhando o acervo', function () {
+Então('retorna o status 200 detalhando o acervo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Código tombo é obrigatório para detalhar
-When('envio uma requisição GET de pesquisar sem código', function () { 
+Quando('envio uma requisição GET de pesquisar sem código', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/detalhar-acervo?Codigo=&Tipo=${Cypress.env('TIPO_ACERVO')}`,
@@ -613,7 +617,7 @@ When('envio uma requisição GET de pesquisar sem código', function () {
   }).as('response')
 })
 
-Then('retorna o status 422 informando sem código ao detalhar', function () {
+Então('retorna o status 422 informando sem código ao detalhar', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422)
     expect(response.body).to.have.property('existemErros', true)
@@ -623,7 +627,7 @@ Then('retorna o status 422 informando sem código ao detalhar', function () {
 })
 
 // Tipo é obrigatório para detalhar
-When('envio uma requisição GET de pesquisar sem o tipo', function () { 
+Quando('envio uma requisição GET de pesquisar sem o tipo', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/detalhar-acervo?Codigo=${Cypress.env('CODIGO_ACERVO')}&Tipo=`,
@@ -636,7 +640,7 @@ When('envio uma requisição GET de pesquisar sem o tipo', function () {
   }).as('response')
 })
 
-Then('retorna o status 422 informando que o código tombo é obrigatório', function () {
+Então('retorna o status 422 informando que o código tombo é obrigatório', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422)
     expect(response.body).to.have.property('existemErros', true)
@@ -646,7 +650,7 @@ Then('retorna o status 422 informando que o código tombo é obrigatório', func
 })
 
 // Autocompletar o termo pesquisado
-When('envio uma requisição GET de pesquisa com o texto', function () { 
+Quando('envio uma requisição GET de pesquisa com o texto', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/autocompletar-titulo?termoPesquisado=${Cypress.env('TERMO_PESQUISADO')}`,
@@ -659,14 +663,14 @@ When('envio uma requisição GET de pesquisa com o texto', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 autocompletando a pesquisa', function () {
+Então('retorna o status 200 autocompletando a pesquisa', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Termo é obrigatório para autocompletar
-When('envio uma requisição GET de pesquisa sem o texto', function () { 
+Quando('envio uma requisição GET de pesquisa sem o texto', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/autocompletar-titulo?termoPesquisado=`,
@@ -679,7 +683,7 @@ When('envio uma requisição GET de pesquisa sem o texto', function () {
   }).as('response')
 })
 
-Then('retorna o status 422 informando que o termo é obrigatório', function () {
+Então('retorna o status 422 informando que o termo é obrigatório', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422)
     expect(response.body).to.have.property('existemErros', true)
@@ -689,7 +693,7 @@ Then('retorna o status 422 informando que o termo é obrigatório', function () 
 })
 
 // Não autocompletar o termo sem autenticação
-When('tento a requisição GET de pesquisa com o texto', function () { 
+Quando('tento a requisição GET de pesquisa com o texto', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Acervo/autocompletar-titulo?termoPesquisado=${Cypress.env('TERMO_PESQUISADO')}`,
@@ -701,7 +705,7 @@ When('tento a requisição GET de pesquisa com o texto', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem autocompletar', function () {
+Então('retorna o status 401 sem autocompletar', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
