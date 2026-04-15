@@ -28,8 +28,8 @@ export default defineConfig({
     senha_homol: process.env.SENHA_HOMOL,
     supportFile: 'cypress/support/e2e.js',
 
-    viewportWidth: 1600,
-    viewportHeight: 1050,
+    viewportWidth: 1920,
+    viewportHeight: 1080,
     video: false,
     retries: { runMode: 2, openMode: 0 },
     screenshotOnRunFailure: false,
@@ -48,14 +48,8 @@ export default defineConfig({
 
     async setupNodeEvents(on, config) {
 
-      // =====================
-      // 1️⃣ Allure
-      // =====================
       allureWriter(on, config)
 
-      // =====================
-      // 2️⃣ Cucumber + Webpack
-      // =====================
       const webpackConfig = {
         module: {
           rules: [
@@ -75,9 +69,6 @@ export default defineConfig({
       on('file:preprocessor', preprocessor({ webpackOptions: webpackConfig }))
       on('file:preprocessor', cucumber.default())
 
-      // =====================
-      // 3️⃣ PostgreSQL
-      // =====================
       const pool = new pg.Pool(dbConfig)
       const dbTasks = postgreSQL.loadDBPlugin(pool)
 
@@ -104,9 +95,6 @@ export default defineConfig({
         },
       })
 
-      // =====================
-      // 4️⃣ ENV customizadas
-      // =====================
       const envKeys = [
         'ACERVO_SOLICITACAO_ITEM_ID',
         'ANO_FINAL',
@@ -118,6 +106,7 @@ export default defineConfig({
         'ASSUNTO_NOME',
         'CEP_INVALIDO',
         'CEP_VALIDO',
+        'CPF',
         'CODIGO_ACERVO',
         'CODIGO_TOMBO',
         'DATA_DEVOLUCAO',
@@ -128,6 +117,8 @@ export default defineConfig({
         'PERFIL_INVALIDO',
         'SENHA',
         'SENHA_INVALIDA',
+        'EMAIL',
+        'TELEFONE',
         'TERMO_PESQUISADO',
         'TEXTO_LIVRE',
         'TIPO_ACERVO',
@@ -142,9 +133,6 @@ export default defineConfig({
       config.env = { ...config.env, ...customVariable }
       config.env.db = dbConfig
 
-      // =====================
-      // 5️⃣ Cypress Cloud (SEMPRE POR ÚLTIMO)
-      // =====================
       const enhancedConfig = await cloudPlugin(on, config)
 
       return enhancedConfig
