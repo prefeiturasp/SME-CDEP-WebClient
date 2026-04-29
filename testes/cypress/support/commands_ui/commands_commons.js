@@ -8,3 +8,9 @@ Cypress.Commands.add('configurar_visualizacao', (device) => {
 			break
 	}
 })
+
+Cypress.Commands.add('acessar_cadastros', () => {
+  cy.get(':nth-child(2) > .ant-menu-submenu-title', { timeout: 10000 })
+    .should('be.visible')
+    .click()
+})
