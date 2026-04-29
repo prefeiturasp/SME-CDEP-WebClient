@@ -30,7 +30,7 @@ describe('acervo-documental-importacao-planilha-service', () => {
 
     expect(inserirRegistro).toHaveBeenCalledTimes(1);
 
-    const [url, formData, config] = (inserirRegistro as jest.Mock).mock.calls[0];
+    const [, formData, config] = (inserirRegistro as jest.Mock).mock.calls[0];
 
     expect(formData).toBeInstanceOf(FormData);
     expect(config.headers['content-type']).toBe('multipart/form-data');

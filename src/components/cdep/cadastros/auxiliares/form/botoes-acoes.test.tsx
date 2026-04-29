@@ -51,7 +51,7 @@ describe('FormCadastrosAuxiliaresBotoesAcoes', () => {
     id: 1,
     form: {
       isFieldsTouched: jest.fn(() => true),
-    },
+    } as any,
     onClickVoltar: jest.fn(),
     onClickExcluir: jest.fn(),
     onClickCancelar: jest.fn(),

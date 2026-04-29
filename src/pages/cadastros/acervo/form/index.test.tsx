@@ -53,7 +53,7 @@ describe('FormAcervo', () => {
     mockInserir.mockResolvedValue({ sucesso: true });
 
     render(
-      <PermissaoContext.Provider value={{ desabilitarCampos: false }}>
+      <PermissaoContext.Provider value={{ desabilitarCampos: false } as any}>
         <FormAcervo />
       </PermissaoContext.Provider>
     );

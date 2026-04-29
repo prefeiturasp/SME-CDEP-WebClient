@@ -44,13 +44,13 @@ describe('armazenamento-service', () => {
   it('downloadPorTipoAcervo chama obterRegistro com params', async () => {
     (obterRegistro as jest.Mock).mockResolvedValueOnce({ sucesso: true });
 
-    await armazenamentoService.downloadPorTipoAcervo(TipoAcervo.FISICO as any);
+    await armazenamentoService.downloadPorTipoAcervo(TipoAcervo.Fotografico as any);
 
     expect(obterRegistro).toHaveBeenCalledWith(
       'v1/Armazenamento/download/tipo-acervo',
       {
         responseType: 'blob',
-        params: { tipoAcervo: TipoAcervo.FISICO },
+        params: { tipoAcervo: TipoAcervo.Fotografico },
       },
     );
   });
