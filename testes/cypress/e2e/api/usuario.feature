@@ -127,7 +127,7 @@ Funcionalidade: API - Usuario
     Quando envio uma requisição GET existência sem documento solicitante
     Então retorna o status 422 não buscando documento do usuário existe
 
-  Cenário: Não buscar ddocumento do usuário existe sem autenticação
+  Cenário: Não buscar documento do usuário existe sem autenticação
     Dado que não possuo um token válido
     Quando tento a requisição GET existência de solicitante
     Então retorna o status 401 sem documento do usuário existe
