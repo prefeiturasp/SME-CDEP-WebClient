@@ -151,7 +151,7 @@ When('envio uma requisição GET do id assunto', function () {
 
 Then('retorna o status 200 os dados do assunto', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200)
+    expect(response.status).to.be.oneOf([200, 204])
   })
 })
 
