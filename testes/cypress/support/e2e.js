@@ -11,6 +11,7 @@ require('./commands_ui/commands_solicitacoes')
 require('./commands_ui/commands_meus_dados')
 require('./commands_ui/commands_dashboards')
 require('./commands_ui/commands_assunto') 
+require('./commands_ui/commands_credito')
 
 // Evita falhas silenciosas caso algum comando seja removido ou renomeado
 Cypress.on('uncaught:exception', (err, runnable) => {
