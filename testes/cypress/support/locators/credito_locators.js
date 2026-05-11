@@ -1,7 +1,7 @@
-class Assunto_Localizadores {
+class Credito_Localizadores {
 
   // criar
-  menu_assunto = () => 'span.ant-menu-title-content:contains("Assunto")'
+  menu_credito = () => 'span.ant-menu-title-content:contains("Crédito")'
   btn_novo = () => '#CDEP_BUTTON_NOVO'
   btn_cancelar = () => '#CDEP_BUTTON_CANCELAR'
   btn_confimar_modal = () => '.ant-modal-confirm-btns > .ant-btn-default'
@@ -11,7 +11,7 @@ class Assunto_Localizadores {
 
   // consultar
   input_nome = () => 'input[placeholder="Nome"]'
-  tbl_nome_assunto = () => '.ant-table-cell'
+  tbl_nome_credito = () => '.ant-table-cell'
   btn_voltar = () => '#CDEP_BUTTON_VOLTAR'
   tbl_linhas = () => '.ant-table-tbody tr'
   tbl_celulas = () => 'td'
@@ -25,4 +25,4 @@ class Assunto_Localizadores {
 
 }
 
-export default Assunto_Localizadores 
+export default Credito_Localizadores 
