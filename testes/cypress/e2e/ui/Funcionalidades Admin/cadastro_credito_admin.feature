@@ -1,6 +1,6 @@
 # language: pt
 
-Funcionalidade: Cadastro de crédito
+Funcionalidade: Cadastro de Crédito
 
   Contexto:
     Dado eu acesso o sistema com a visualização "web"
