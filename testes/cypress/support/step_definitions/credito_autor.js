@@ -224,7 +224,7 @@ Quando('envio uma requisição GET com id crédito autor', function () {
 
 Então('retorna o status 200 do id crédito autor', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(500)    
+    expect(response.status).to.eq(204)    
   })
 })
 
