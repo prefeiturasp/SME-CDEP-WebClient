@@ -15,6 +15,7 @@ require('./commands_ui/commands_credito')
 require('./commands_ui/commands_autor')
 require('./commands_ui/commands_editora')
 require('./commands_ui/commands_serie_colecao')
+require('./commands_ui/commands_relatorios')
 
 // Evita falhas silenciosas caso algum comando seja removido ou renomeado
 Cypress.on('uncaught:exception', (err, runnable) => {
