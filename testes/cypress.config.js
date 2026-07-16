@@ -123,7 +123,7 @@ export default defineConfig({
         'TEXTO_LIVRE',
         'TIPO_ACERVO',
         'TIPO_ACERVO_CODIGO',
-        'TITULO_ACERVO',
+        'TITULO_ACERVO'
       ]
 
       const customVariable = Object.fromEntries(
