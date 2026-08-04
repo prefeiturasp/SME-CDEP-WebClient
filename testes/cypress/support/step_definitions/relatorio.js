@@ -34,7 +34,7 @@ When('envio uma requisição POST no controle de acervo', function () {
 
 Then('gera o controle de acervo com status 200', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(204)
+    expect(response.status).to.eq(200)
   })
 })
 
@@ -243,7 +243,7 @@ When('envio uma requisição POST no controle de devolução de livros sem solic
 
 Then('gera relatório de controle de livros sem solicitante', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(204)
+    expect(response.status).to.eq(200)
   })
 })
 
@@ -540,7 +540,7 @@ When('envio uma requisição POST no controle de download', function () {
 
 Then('gera relatório de download acervo com status 200', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(204)
+    expect(response.status).to.eq(200)
   })
 })
 
@@ -593,7 +593,7 @@ When('envio uma requisição POST no relatório de histórico acervo', function 
 
 Then('gera relatório de histórico de solicitações acervo com status 200', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(204)
+    expect(response.status).to.eq(200)
   })
 })
 
