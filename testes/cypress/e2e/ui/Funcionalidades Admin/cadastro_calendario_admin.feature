@@ -12,8 +12,17 @@ Funcionalidade: Cadastro de Calendário de visitas
     Então o sistema salva o registro no calendário
 
     Exemplos:
-      | tipo      | caso                            |
-      | suspensão | Registro cadastrado com sucesso |
+      | tipo      | caso                             |
+      | suspensão | Cadastrado realizado com sucesso |
+
+  Esquema do Cenário: Validar: <caso>
+    E acesso a tela Calendário
+    Quando consulto o dia no calendário "<tipo>"
+    Então o sistema exibe o registro no calendário
+
+    Exemplos:
+      | tipo      | caso                             |
+      | suspensão | Consultar registro no calendário |
 
   Esquema do Cenário: Validar: <caso>
     E acesso a tela Calendário
@@ -41,22 +50,5 @@ Funcionalidade: Cadastro de Calendário de visitas
     Exemplos:
       | tipo      | caso                       |
       | suspensão | Cancelamento do cadastrado |
-  
-  Esquema do Cenário: Validar: <caso>
-    E acesso a tela Calendário
-    Quando cancelo a exclusão do cadastro no calendário "<tipo>"
-    Então o sistema retorna para o dia de registro do calendário
 
-    Exemplos:
-      | tipo      | caso                     |
-      | suspensão | Cancelamento da exclusão |
-
-  Esquema do Cenário: Validar: <caso>
-    E acesso a tela Calendário
-    Quando excluo cadastro no calendário "<tipo>"
-    Então o sistema retira o registro no calendário
-
-    Exemplos:
-      | tipo      | caso                          |
-      | suspensão | Registro excluído com sucesso |
 
