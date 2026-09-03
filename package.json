@@ -9,7 +9,12 @@
     "lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
     "prettier": "npx prettier src --check",
     "preview": "vite preview",
-    "test": "jest --coverage",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "test:coverage:file": "jest --coverage src/core/utils/perfil/index.test.tsx",
+    "test:coverage:folder": "jest --coverage --testPathPatterns=\"src/core/services/\"",
+    "test:pipeline": "tsc --noEmit",
     "testjenkins": "yarn tsc --noEmit"
   },
   "dependencies": {
@@ -45,7 +50,7 @@
     "@babel/preset-env": "^7.28.5",
     "@babel/preset-react": "^7.28.5",
     "@babel/preset-typescript": "^7.28.5",
-    "@testing-library/dom": "9",
+    "@testing-library/dom": "^10.0.0",
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^14.6.1",
