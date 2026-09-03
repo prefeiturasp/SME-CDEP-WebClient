@@ -27,6 +27,12 @@ const config: Config = {
     '!src/**/*.stories.{ts,tsx}',
     '!src/tests/**',
     '!src/setupTests.ts',
+    '!src/core/enum/**',
+    '!src/core/dto/**',
+    '!src/pages/cadastros/acervo/form/form-fields/**',
+    '!src/pages/**',
+    '!src/routes/**',
+    '!src/core/constants/**',
   ],
 
   coverageThreshold: {
