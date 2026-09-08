@@ -18,6 +18,7 @@ require('./commands_ui/commands_serie_colecao')
 require('./commands_ui/commands_relatorios')
 require('./commands_ui/commands_redefinir_senha')
 require('./commands_ui/commands_calendario')
+require('./commands_ui/commands_criar_conta')
 
 // Evita falhas silenciosas caso algum comando seja removido ou renomeado
 Cypress.on('uncaught:exception', (err, runnable) => {
