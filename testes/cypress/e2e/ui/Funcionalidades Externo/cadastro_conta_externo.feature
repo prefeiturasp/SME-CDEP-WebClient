@@ -14,3 +14,28 @@ Funcionalidade: Criar conta de usuário
     Exemplos:
       | visualizacao |  caso                          |
       | web          | Usuário cadastrado com sucesso |
+
+  Esquema do Cenário: Validar campo obrigatório: <caso>
+    E clico no botão "Crie a sua conta" da tela "Login"
+    Quando preencho o formulário de usuário sem informar o campo "<caso>"
+    E clico em "Cadastre-se"
+    Então o sistema exibe a mensagem de campo obrigatório de usuário
+
+    Exemplos:
+    | caso               |
+    | cpf                |
+    | nome               |
+    | telefone           |
+    | email              |
+    | confirmação email  |
+    | cep                |
+    | endereço           |
+    | número             |
+    | bairro             |
+    | cidade             |
+    | estado             |
+    | tipo               |
+    | instituição        |
+    | senha              |
+    | confirmação senha  |
+

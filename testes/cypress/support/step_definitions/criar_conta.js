@@ -18,3 +18,11 @@ Quando('clico em "Cadastre-se"', function () {
 Então('sistema cria o usuário com sucesso', function () { 
   cy.validar_cadastrar_usuario()   
 })
+
+When('preencho o formulário de usuário sem informar o campo {string}', (caso) => {
+  cy.campo_obrigatorio_formulario_usuario(caso)
+})
+
+Então('o sistema exibe a mensagem de campo obrigatório de usuário', function () { 
+  cy.validar_campo_obrigatorio_cadastrar_usuario()
+})
