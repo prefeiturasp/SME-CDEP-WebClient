@@ -1,4 +1,5 @@
 import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
+import { faker } from '@faker-js/faker'
 
 const Dado = Given
 const Quando = When
@@ -760,3 +761,87 @@ Então('retorna o status 422 sem recuperar a senha', function () {
   })
 })
 
+// Criar novo usuário
+Quando('envio uma requisição POST no endpoint usuario', function () {
+
+  this.usuario = {
+    cpf: faker.string.numeric(11),
+    email: faker.internet.email(),
+    nome: faker.person.fullName(),
+    telefone: faker.string.numeric(11),
+    endereco: faker.location.streetAddress(),
+    complemento: faker.location.secondaryAddress(),
+    numero: faker.string.numeric(4),
+    cidade: faker.location.city(),
+    estado: faker.location.state({ abbreviated: true }),
+    cep: faker.string.numeric(8),
+    senha: faker.internet.password({ length: 10 }),
+    tipo: 0,
+    bairro: faker.location.county(),
+    instituicao: faker.company.name()
+  }
+
+  return cy.request({
+    method: 'POST',
+    url: Cypress.config('baseUrl') + `/api/v1/Usuario`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: `Bearer ${token}`
+    },
+    body: {
+      ...this.usuario,
+      confirmarSenha: this.usuario.senha
+    },
+    timeout: 10000,
+    failOnStatusCode: false
+  }).as('response')
+})
+
+Então('retorna o status 200 criando usuário', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(200)
+    expect(response.body).to.eq(true)
+  })
+})
+
+// Não criar usuário sem dados obrigatórios
+Quando('envio a requisição POST no endpoint usuario', function () {
+
+  this.usuario = {
+    cpf: ' ',
+    email: faker.internet.email(),
+    nome: faker.person.fullName(),
+    telefone: faker.string.numeric(11),
+    endereco: faker.location.streetAddress(),
+    complemento: faker.location.secondaryAddress(),
+    numero: faker.string.numeric(4),
+    cidade: faker.location.city(),
+    estado: faker.location.state({ abbreviated: true }),
+    cep: faker.string.numeric(8),
+    senha: faker.internet.password({ length: 10 }),
+    tipo: 0,
+    bairro: faker.location.county(),
+    instituicao: faker.company.name()
+  }
+
+  return cy.request({
+    method: 'POST',
+    url: Cypress.config('baseUrl') + `/api/v1/Usuario`,
+    headers: {
+      accept: 'text/plain',
+      Authorization: `Bearer ${token}`
+    },
+    body: {
+      ...this.usuario,
+      confirmarSenha: this.usuario.senha
+    },
+    timeout: 10000,
+    failOnStatusCode: false
+  }).as('response')
+})
+
+Então('retorna o status 422 não criando usuário sem dados obrigatórios', function () {
+  cy.get('@response').then((response) => {
+    expect(response.status).to.eq(422)
+  })
+})

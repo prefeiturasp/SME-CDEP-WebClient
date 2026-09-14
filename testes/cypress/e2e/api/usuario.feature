@@ -176,3 +176,13 @@ Funcionalidade: API - Usuario
     Dado que possuo um token válido no endpoint Usuario
     Quando envio uma requisição PUT de recuperar sem a senha
     Então retorna o status 422 sem recuperar a senha
+  
+  Cenário: Criar novo usuário
+    Dado que possuo um token válido no endpoint Usuario
+    Quando envio uma requisição POST no endpoint usuario
+    Então retorna o status 200 criando usuário
+
+  Cenário: Não criar usuário sem dados obrigatórios
+    Dado que possuo um token válido no endpoint Usuario
+    Quando envio a requisição POST no endpoint usuario
+    Então retorna o status 422 não criando usuário sem dados obrigatórios
