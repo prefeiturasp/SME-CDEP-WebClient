@@ -29,7 +29,7 @@ pipeline {
         stage('Executar') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: 'jenkins_registry', url: 'https://registry.sme.prefeitura.sp.gov.br/repository/sme-registry/') {
+                    withDockerRegistry(credentialsId: 'svc_jenkins', url: 'registry.sme.prefeitura.sp.gov.br') {
                         withCredentials([file(credentialsId: "cypress_env_cdep", variable: 'env')]){   
                             sh '''
                                 touch testes/.env
@@ -95,7 +95,7 @@ pipeline {
     post {
         always {
             script {
-                withDockerRegistry(credentialsId: 'jenkins_registry', url: 'https://registry.sme.prefeitura.sp.gov.br/repository/sme-registry/') {
+                withDockerRegistry(credentialsId: 'svc_jenkins', url: 'registry.sme.prefeitura.sp.gov.br') {
                     sh '''
                         docker pull registry.sme.prefeitura.sp.gov.br/devops/cypress-agent:14.5.2
                         docker run \
