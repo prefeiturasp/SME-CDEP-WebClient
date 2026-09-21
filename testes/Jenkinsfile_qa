@@ -59,8 +59,7 @@ pipeline {
                                                 --headed true \
                                                 --record \
                                                 --key ${CYPRESS_RECORD_KEY} \
-                                                --reporter mocha-allure-reporter \
-                                                --reporter-options reportDir=allure-results \
+                                                --env allure=true \
                                                 --ci-build-id ${CI_BUILD_ID_PREFIX}_JENKINS-BUILD-${BUILD_NUMBER} && \
                                         chown 1001:1001 * -R && \
                                         chmod 777 * -R"
