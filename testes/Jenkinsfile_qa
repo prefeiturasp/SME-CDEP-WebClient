@@ -87,7 +87,7 @@ pipeline {
                             sh """
                                 export JAVA_HOME=\$(dirname \$(dirname \$(readlink -f \$(which java)))); \
                                 export PATH=\$JAVA_HOME/bin:/usr/local/bin:\$PATH; \
-                                allure generate ${ALLURE_RESULTS_PATH} --clean --output ${TESTES_DIR}; \
+                                allure generate ${ALLURE_RESULTS_PATH} --clean --output ${TESTES_DIR}/allure-report; \
                                 cd ${TESTES_DIR}; \
                                 zip -r allure-results-${BUILD_NUMBER}-\$(date +"%d-%m-%Y").zip allure-results
                             """
