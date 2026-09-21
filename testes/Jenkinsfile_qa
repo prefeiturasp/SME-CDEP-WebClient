@@ -17,8 +17,8 @@ pipeline {
     environment {
         ALLURE_PATH = 'testes/allure-results'
         DOCKER_REGISTRY_CREDENTIAL_ID = 'svc_jenkins'
-        DOCKER_REGISTRY_URL = 'registryEndpoint'
-        CYPRESS_AGENT_IMAGE = 'registry.sme.prefeitura.sp.gov.br/devops/cypress-agent:14.5.2'
+        DOCKER_REGISTRY_URL = credentials('registryEndpoint')
+        CYPRESS_AGENT_IMAGE = "${DOCKER_REGISTRY_URL}/devops/cypress-agent:14.5.2"
         CYPRESS_ENV_CREDENTIAL_ID = 'cypress_env_cdep'
         CYPRESS_RECORD_KEY = 'somekey'
         CI_BUILD_ID_PREFIX = 'SME-CDEP'
