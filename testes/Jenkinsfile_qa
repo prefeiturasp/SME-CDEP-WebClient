@@ -37,7 +37,7 @@ pipeline {
         stage('Executar') {
             steps {
                 script {
-                    withDockerRegistry(credentialsId: "${DOCKER_REGISTRY_CREDENTIAL_ID}", url: "${DOCKER_REGISTRY_URL}") {
+                    withDockerRegistry(credentialsId: "${DOCKER_REGISTRY_CREDENTIAL_ID}", url: "https://${DOCKER_REGISTRY_URL}") {
                         withCredentials([file(credentialsId: "${CYPRESS_ENV_CREDENTIAL_ID}", variable: 'env')]){
                             sh '''
                                 touch testes/.env
@@ -103,7 +103,7 @@ pipeline {
     post {
         always {
             script {
-                withDockerRegistry(credentialsId: "${DOCKER_REGISTRY_CREDENTIAL_ID}", url: "${DOCKER_REGISTRY_URL}") {
+                withDockerRegistry(credentialsId: "${DOCKER_REGISTRY_CREDENTIAL_ID}", url: "https://${DOCKER_REGISTRY_URL}") {
                     sh '''
                         docker pull ${CYPRESS_AGENT_IMAGE}
                         docker run \
