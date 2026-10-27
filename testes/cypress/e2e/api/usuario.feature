@@ -120,7 +120,7 @@ Funcionalidade: API - Usuario
   Cenário: Consulta se documento do usuário existe
     Dado que possuo um token válido no endpoint Usuario
     Quando envio uma requisição GET existência de solicitante
-    Então retorna o status 601 que documento do usuário existe
+    Então retorna o status 200 que documento do usuário existe
 
   Cenário: Não busca documento do usuário existe
     Dado que possuo um token válido no endpoint Usuario

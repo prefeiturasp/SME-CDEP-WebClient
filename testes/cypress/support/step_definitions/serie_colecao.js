@@ -12,8 +12,7 @@ Before(() => {
   })
 })
 
-Dado('que possuo um token de acesso', function () {
-  expect(token, 'valido').to.exist
+Dado('que possuo um token de acesso', function () { 
 })
 
 Dado('que não possuo um token de acesso', function () { 

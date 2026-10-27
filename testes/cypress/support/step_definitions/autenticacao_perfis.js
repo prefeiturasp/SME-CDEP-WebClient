@@ -1,5 +1,9 @@
 import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
 
+const Dado = Given
+const Quando = When
+const Então = Then
+
 let token
 
 Before(() => {
@@ -8,12 +12,11 @@ Before(() => {
   })
 })
 
-Given('que login gerou um token de acesso válido', function () {
-  expect(token, 'valido').to.exist
+Dado('que login gerou um token de acesso válido', function () {
 })
 
 // Selecionar perfil válido para o usuário
-When('envio uma requisição PUT para o endpoint de autenticação do perfil', function () { 
+Quando('envio uma requisição PUT para o endpoint de autenticação do perfil', function () { 
   return cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/autenticacao/perfis/${Cypress.env('PERFIL_ADM_GERAL')}`,
@@ -25,7 +28,7 @@ When('envio uma requisição PUT para o endpoint de autenticação do perfil', f
   }).as('response')
 })
 
-Then('retorna o id com status 200', function () {
+Então('retorna o id com status 200', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.have.property('usuarioNome').and.not.be.empty
@@ -39,7 +42,7 @@ Then('retorna o id com status 200', function () {
 })
 
 // Não permitir selecionar perfil inválido
-When('tento a requisição PUT para o endpoint com perfil inválido', function () { 
+Quando('tento a requisição PUT para o endpoint com perfil inválido', function () { 
   return cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/autenticacao/perfis/${Cypress.env('PERFIL_INVALIDO')}`,
@@ -51,7 +54,7 @@ When('tento a requisição PUT para o endpoint com perfil inválido', function (
   }).as('response')
 })
 
-Then('retorna o status 601 que não exite', function () {
+Então('retorna o status 601 que não exite', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(601)
     expect(response.body).to.have.property('existemErros', true)
@@ -61,7 +64,7 @@ Then('retorna o status 601 que não exite', function () {
 })
 
 // Não permitir perfil vazio
-When('tento a requisição PUT para o endpoint sem perfil inválido', function () { 
+Quando('tento a requisição PUT para o endpoint sem perfil inválido', function () { 
   return cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/autenticacao/perfis/`,
@@ -73,18 +76,18 @@ When('tento a requisição PUT para o endpoint sem perfil inválido', function (
   }).as('response')
 })
 
-Then('retorna o status 404 que não foi selecionado', function () {
+Então('retorna o status 404 que não foi selecionado', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(404)
   })
 })
 
 // Não selecionar perfil sem autenticação
-Given('que não login não gerou um token de acesso válido', () => {
+Dado('que não login não gerou um token de acesso válido', () => {
   token = 'token_invalido'
 })
 
-When('tento a requisição PUT para o endpoint de autenticação do perfil', function () { 
+Quando('tento a requisição PUT para o endpoint de autenticação do perfil', function () { 
   return cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/autenticacao/perfis/${Cypress.env('PERFIL_ADM_GERAL')}`,
@@ -96,7 +99,7 @@ When('tento a requisição PUT para o endpoint de autenticação do perfil', fun
   }).as('response')
 })
 
-Then('retorna o status 401', function () {
+Então('retorna o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })

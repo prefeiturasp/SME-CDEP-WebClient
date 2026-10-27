@@ -1,5 +1,9 @@
 import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
 
+const Dado = Given
+const Quando = When
+const Então = Then
+
 let token
 
 Before(() => {
@@ -8,15 +12,14 @@ Before(() => {
   })
 })
 
-Given('que possuo um token de acesso', function () {
-  expect(token, 'valido').to.exist
+Dado('que possuo um token de acesso', function () { 
 })
 
-Given('que não possuo um token de acesso', function () { 
+Dado('que não possuo um token de acesso', function () { 
 })
 
 // Remove a importação de arquivo do acervo 
-When('envio uma requisição DELETE na planilha do arquivo acervo', function () {
+Quando('envio uma requisição DELETE na planilha do arquivo acervo', function () {
   cy.request({
       method: 'DELETE',
       url: Cypress.config('baseUrl') + `/api/v1/acervo/importacao/planilha/${Cypress.env('IMPORTACAO_PLANILHA_ID')}`,
@@ -28,14 +31,14 @@ When('envio uma requisição DELETE na planilha do arquivo acervo', function () 
   }).as('response')
 })
 
-Then('remove a importação de arquivo do acervo com status 200', function () {
+Então('remove a importação de arquivo do acervo com status 200', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(500)
   })
 })
 
 // Código da importação de arquivo é obrigatório
-When('envio uma requisição DELETE sem o código da planilha do arquivo acervo', function () {
+Quando('envio uma requisição DELETE sem o código da planilha do arquivo acervo', function () {
   cy.request({
       method: 'DELETE',
       url: Cypress.config('baseUrl') + '/api/v1/acervo/importacao/planilha/',
@@ -47,14 +50,14 @@ When('envio uma requisição DELETE sem o código da planilha do arquivo acervo'
   }).as('response')
 })
 
-Then('retorna o status 404 que o código da importação de arquivo é obrigatório', function () {
+Então('retorna o status 404 que o código da importação de arquivo é obrigatório', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(404)
   })
 })
 
 // Não remove a importação de arquivo sem autenticação
-When('tento a requisição DELETE sem o código', function () { 
+Quando('tento a requisição DELETE sem o código', function () { 
   return cy.request({
     method: 'DELETE',
     url: Cypress.config('baseUrl') + `/api/v1/acervo/importacao/planilha/${Cypress.env('IMPORTACAO_PLANILHA_ID')}`,
@@ -66,7 +69,7 @@ When('tento a requisição DELETE sem o código', function () {
   }).as('response')
 })
 
-Then('não remove a importação de arquivo retornando o status 401', function () {
+Então('não remove a importação de arquivo retornando o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })

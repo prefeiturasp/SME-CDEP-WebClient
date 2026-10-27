@@ -3,7 +3,6 @@ import { When, Then } from 'cypress-cucumber-preprocessor/steps'
 const Quando = When
 const Então = Then
 
-
 Quando('acesso a tela Editora', function () {
   cy.acessar_editora() 
 })

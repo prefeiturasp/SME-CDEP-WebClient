@@ -15,8 +15,9 @@ Cypress.Commands.add('autenticar_login', (usuario, senha) => {
 
 Cypress.Commands.add('gerar_token', () => {
   const tokenExistente = Cypress.env('TOKEN')
+
   if (tokenExistente) {
-    return cy.wrap(tokenExistente)
+    return cy.then(() => tokenExistente)
   }
 
   return cy.request({
@@ -32,12 +33,13 @@ Cypress.Commands.add('gerar_token', () => {
     },
     timeout: 60000,
     failOnStatusCode: false,
+    log: false,
   }).then((response) => {
     if (response.status === 200) {
       const token = response.body.token
       Cypress.env('TOKEN', token)
+
       return token
     }
-    return response
   })
 })

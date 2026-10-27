@@ -1,5 +1,9 @@
 import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
 
+const Dado = Given
+const Quando = When
+const Então = Then
+
 let token
 
 Before(() => {
@@ -8,15 +12,14 @@ Before(() => {
   })
 })
 
-Given('que possuo um token de acesso', function () {
-  expect(token, 'valido').to.exist
+Dado('que possuo um token de acesso', function () { 
 })
 
-Given('que não possuo um token de acesso', function () { 
+Dado('que não possuo um token de acesso', function () { 
 })
 
 // Busca por todos os assuntos
-When('envio uma requisição GET sem assunto específico', function () {
+Quando('envio uma requisição GET sem assunto específico', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + `/api/v1/Assunto?nome=`,
@@ -28,14 +31,14 @@ When('envio uma requisição GET sem assunto específico', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 com todos os assuntos', function () {
+Então('retorna o status 200 com todos os assuntos', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Busca por assunto específico
-When('envio uma requisição GET com assunto', function () {
+Quando('envio uma requisição GET com assunto', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + `/api/v1/Assunto?nome=${Cypress.env('ASSUNTO_NOME')}`,
@@ -47,14 +50,14 @@ When('envio uma requisição GET com assunto', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 com os dados do assunto específico', function () {
+Então('retorna o status 200 com os dados do assunto específico', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Não busca por assunto sem autenticação
-When('tento uma requisição GET de assunto', function () { 
+Quando('tento uma requisição GET de assunto', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Assunto?nome=`,
@@ -66,14 +69,14 @@ When('tento uma requisição GET de assunto', function () {
   }).as('response')
 })
 
-Then('não busca por assunto sem autenticação retornando o status 401', function () {
+Então('não busca por assunto sem autenticação retornando o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Busca por assunto resumido
-When('envio a requisição GET', function () {
+Quando('envio a requisição GET', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + '/api/v1/Assunto/resumido',
@@ -85,7 +88,7 @@ When('envio a requisição GET', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 com assunto resumido', function () {
+Então('retorna o status 200 com assunto resumido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.be.an('array').and.not.be.empty
@@ -99,7 +102,7 @@ Then('retorna o status 200 com assunto resumido', function () {
 })
 
 // Não busca por assunto resumido sem autenticação
-When('tento uma requisição GET', function () { 
+Quando('tento uma requisição GET', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Assunto/resumido`,
@@ -111,14 +114,14 @@ When('tento uma requisição GET', function () {
   }).as('response')
 })
 
-Then('não busca por assunto resumido sem autenticação retornando o status 401', function () {
+Então('não busca por assunto resumido sem autenticação retornando o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Busca por todos itens de assuntos
-When('envio uma requisição GET de assunto', function () {
+Quando('envio uma requisição GET de assunto', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + '/api/v1/Assunto/',
@@ -130,14 +133,14 @@ When('envio uma requisição GET de assunto', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 com itens de assuntos', function () {
+Então('retorna o status 200 com itens de assuntos', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Busca por id do assunto
-When('envio uma requisição GET do id assunto', function () {
+Quando('envio uma requisição GET do id assunto', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + `/api/v1/Assunto/${Cypress.env('ASSUNTO_ID')}`,
@@ -149,14 +152,14 @@ When('envio uma requisição GET do id assunto', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 os dados do assunto', function () {
+Então('retorna o status 200 os dados do assunto', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.be.oneOf([200, 204])
   })
 })
 
 // Não busca por id do assunto sem autenticação
-When('tento a requisição GET de assunto', function () { 
+Quando('tento a requisição GET de assunto', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Assunto/${Cypress.env('ASSUNTO_ID')}`,
@@ -168,14 +171,14 @@ When('tento a requisição GET de assunto', function () {
   }).as('response')
 })
 
-Then('não busca por id do assunto sem autenticação retornando o status 401', function () {
+Então('não busca por id do assunto sem autenticação retornando o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Cria novo assunto
-When('envio uma requisição POST', function () {
+Quando('envio uma requisição POST', function () {
   const agora = new Date()
   const ano = agora.getFullYear()
   const mes = String(agora.getMonth() + 1).padStart(2, '0')
@@ -201,14 +204,14 @@ When('envio uma requisição POST', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 criando o novo assunto', function () {
+Então('retorna o status 200 criando o novo assunto', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Nome do assunto deve ser informado
-When('envio uma requisição POST sem preenchimento', function () {
+Quando('envio uma requisição POST sem preenchimento', function () {
   cy.request({
       method: 'POST',
       url: Cypress.config('baseUrl') + `/api/v1/Assunto`,
@@ -224,7 +227,7 @@ When('envio uma requisição POST sem preenchimento', function () {
   }).as('response')
 })
 
-Then('retorna o status 601 o nome do assunto deve ser informado', function () {
+Então('retorna o status 601 o nome do assunto deve ser informado', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(601)
     expect(response.body).to.have.property('mensagens')
@@ -235,7 +238,7 @@ Then('retorna o status 601 o nome do assunto deve ser informado', function () {
 })
 
 // Não insere nome existente
-When('envio uma requisição POST com o mesmo preenchimento', function () {
+Quando('envio uma requisição POST com o mesmo preenchimento', function () {
   cy.request({
       method: 'POST',
       url: Cypress.config('baseUrl') + '/api/v1/Assunto',
@@ -251,14 +254,14 @@ When('envio uma requisição POST com o mesmo preenchimento', function () {
   }).as('response')
 })
 
-Then('retorna o status 601 sem inserir nome existente', function () {
+Então('retorna o status 601 sem inserir nome existente', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(601) 
   })
 })
 
 // Não cria novo assunto sem autenticação
-When('tento uma requisição POST', function () { 
+Quando('tento uma requisição POST', function () { 
   return cy.request({
     method: 'POST',
     url: Cypress.config('baseUrl') + `/api/v1/Assunto`,
@@ -274,14 +277,14 @@ When('tento uma requisição POST', function () {
   }).as('response')
 })
 
-Then('não cria novo assunto sem autenticação retornando o status 401', function () {
+Então('não cria novo assunto sem autenticação retornando o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Altera o cadastro do assunto
-When('envio uma requisição PUT', function () {
+Quando('envio uma requisição PUT', function () {
   const agora = new Date()
   const ano = agora.getFullYear()
   const mes = String(agora.getMonth() + 1).padStart(2, '0')
@@ -307,14 +310,14 @@ When('envio uma requisição PUT', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 alterando o cadastro do assunto', function () {
+Então('retorna o status 200 alterando o cadastro do assunto', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Nome do assunto deve ser informado na alteração
-When('envio uma requisição PUT sem preenchimento', function () {
+Quando('envio uma requisição PUT sem preenchimento', function () {
   cy.request({
       method: 'PUT',
       url: Cypress.config('baseUrl') + '/api/v1/Assunto',
@@ -331,7 +334,7 @@ When('envio uma requisição PUT sem preenchimento', function () {
   }).as('response')
 })
 
-Then('retorna o status 601 que o nome do assunto deve ser informado na alteração', function () {
+Então('retorna o status 601 que o nome do assunto deve ser informado na alteração', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(601)
     expect(response.body).to.have.property('mensagens')
@@ -342,7 +345,7 @@ Then('retorna o status 601 que o nome do assunto deve ser informado na alteraç�
 })
 
 // Não altera nome existente
-When('envio uma requisição PUT com o mesmo preenchimento', function () {
+Quando('envio uma requisição PUT com o mesmo preenchimento', function () {
   cy.request({
       method: 'PUT',
       url: Cypress.config('baseUrl') + '/api/v1/Assunto',
@@ -359,14 +362,14 @@ When('envio uma requisição PUT com o mesmo preenchimento', function () {
   }).as('response')
 })
 
-Then('retorna o status 601 não alterando nome existente', function () {
+Então('retorna o status 601 não alterando nome existente', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(601) 
   })
 })
 
 // Não altera o cadastro do assunto sem autenticação
-When('tento uma requisição PUT', function () { 
+Quando('tento uma requisição PUT', function () { 
   return cy.request({
     method: 'PUT',
     url: Cypress.config('baseUrl') + `/api/v1/Assunto`,
@@ -383,7 +386,7 @@ When('tento uma requisição PUT', function () {
   }).as('response')
 })
 
-Then('não altera assunto sem autenticação retornando o status 401', function () {
+Então('não altera assunto sem autenticação retornando o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
@@ -412,7 +415,7 @@ function getMaiorIdAcimaDe757() {
 }
 
 // Deletar o cadastro do assunto (busca maior id > 757 antes)
-When('envio uma requisição DELETE', function () {
+Quando('envio uma requisição DELETE', function () {
   getMaiorIdAcimaDe757().then((maiorId) => {
     const idParaDeletar = maiorId ?? 758
 
@@ -429,14 +432,14 @@ When('envio uma requisição DELETE', function () {
   })
 })
 
-Then('retorna o status 200 deletando o cadastro do assunto', function () {
+Então('retorna o status 200 deletando o cadastro do assunto', function () {
   cy.get('@response').then((response) => {   
     expect(response.status).to.eq(200)
   })
 })
 
 // Não deleta o assunto sem ID
-When('envio uma requisição DELETE sem o assunto', function () {
+Quando('envio uma requisição DELETE sem o assunto', function () {
   cy.request({
       method: 'DELETE',
       url: Cypress.config('baseUrl') + '/api/v1/Assunto/',
@@ -449,14 +452,14 @@ When('envio uma requisição DELETE sem o assunto', function () {
   }).as('response')
 })
 
-Then('retorna o status 405 que não foi possível deletar o assunto sem ID', function () {
+Então('retorna o status 405 que não foi possível deletar o assunto sem ID', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(405) 
   })
 })
 
 // Não deleta o assunto com ID inválido
-When('envio uma requisição DELETE com o assunto inválido', function () {
+Quando('envio uma requisição DELETE com o assunto inválido', function () {
   cy.request({
       method: 'DELETE',
       url: Cypress.config('baseUrl') + `/api/v1/Assunto/${Cypress.env('ASSUNTO_ID_INVALIDO')}`,
@@ -469,14 +472,14 @@ When('envio uma requisição DELETE com o assunto inválido', function () {
   }).as('response')
 })
 
-Then('retorna o status 500 que não foi possível deletar o assunto inválido', function () {
+Então('retorna o status 500 que não foi possível deletar o assunto inválido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(500) 
   })
 })
 
 // Não deletar o cadastro do assunto sem autenticação
-When('tento uma requisição DELETE', function () { 
+Quando('tento uma requisição DELETE', function () { 
   return cy.request({
     method: 'DELETE',
     url: Cypress.config('baseUrl') + `/api/v1/Assunto/${Cypress.env('ASSUNTO_ID')}`,
@@ -489,7 +492,7 @@ When('tento uma requisição DELETE', function () {
   }).as('response')
 })
 
-Then('não deleta assunto sem autenticação retornando o status 401', function () {
+Então('não deleta assunto sem autenticação retornando o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })

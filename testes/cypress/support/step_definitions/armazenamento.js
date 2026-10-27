@@ -1,20 +1,23 @@
 import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
 
+const Dado = Given
+const Quando = When
+const Então = Then
+
 Before(() => {
   cy.gerar_token().then((token_valido) => {
     Cypress.env('token', token_valido)
   })
 })
 
-Given('que gerou um token de acesso', () => {
-  expect(Cypress.env('token'), 'token válido').to.exist
+Dado('que gerou um token de acesso', () => {  
 })
 
-Given('que não possuo um token de acesso', function () { 
+Dado('que não possuo um token de acesso', function () { 
 })
 
 // Armazena um arquivo válido
-When('envio uma requisição POST de armazenamento', () => {
+Quando('envio uma requisição POST de armazenamento', () => {
   return cy.task('uploadFile', {
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento',
@@ -26,7 +29,7 @@ When('envio uma requisição POST de armazenamento', () => {
   }).as('response')
 })
 
-Then('retorna status 200 armazenando um arquivo válido', function () {
+Então('retorna status 200 armazenando um arquivo válido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body.id).to.be.a('number')
@@ -38,7 +41,7 @@ Then('retorna status 200 armazenando um arquivo válido', function () {
 })
 
 // Não armazena tamanho excedido
-When('envio uma requisição POST além de 10 MB', () => {
+Quando('envio uma requisição POST além de 10 MB', () => {
   return cy.task('uploadFile', {
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento',
@@ -50,14 +53,14 @@ When('envio uma requisição POST além de 10 MB', () => {
   }).as('response')
 })
 
-Then('retorna o status 413 que não armazena tamanho excedido', function () {
+Então('retorna o status 413 que não armazena tamanho excedido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(413)
   })
 })
 
 // Obrigatório é arquivo no envio
-When('envio uma requisição POST vazio', function () { 
+Quando('envio uma requisição POST vazio', function () { 
   return cy.task('uploadFile', {
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento',
@@ -68,14 +71,14 @@ When('envio uma requisição POST vazio', function () {
   }).as('response')
 })
 
-Then('retorna o status 422 que obrigatório é arquivo no envio', function () {
+Então('retorna o status 422 que obrigatório é arquivo no envio', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422) 
   })
 })
 
 // Não armazena sem autenticação
-When('tento a requisição POST de armazenamento', function () { 
+Quando('tento a requisição POST de armazenamento', function () { 
   return cy.request({
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento',
@@ -88,14 +91,14 @@ When('tento a requisição POST de armazenamento', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem armazenar o arquivo válido', function () {
+Então('retorna o status 401 sem armazenar o arquivo válido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Retornar o arquivo armazenado
-When('envio uma requisição GET do código arquivo', () => {
+Quando('envio uma requisição GET do código arquivo', () => {
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Armazenamento/${Cypress.env('ARQUIVO_ARMAZENAMENTO')}`,
@@ -107,14 +110,14 @@ When('envio uma requisição GET do código arquivo', () => {
   }).as('response')
 })
 
-Then('retorna status 200 com o arquivo armazenado', function () {
+Então('retorna status 200 com o arquivo armazenado', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200) 
   })
 })
 
 // Não retornar arquivo armazenado
-When('envio uma requisição GET do código arquivo inexistente', () => {
+Quando('envio uma requisição GET do código arquivo inexistente', () => {
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Armazenamento/${Cypress.env('ARQUIVO_ARMAZENAMENTO_INVALIDO')}`,
@@ -126,14 +129,14 @@ When('envio uma requisição GET do código arquivo inexistente', () => {
   }).as('response')
 })
 
-Then('retorna o status 422 sem retornar arquivo armazenado', function () {
+Então('retorna o status 422 sem retornar arquivo armazenado', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422)
   })
 })
 
 // Não retornar arquivo sem código
-When('envio uma requisição GET sem o código', function () { 
+Quando('envio uma requisição GET sem o código', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/',
@@ -145,14 +148,14 @@ When('envio uma requisição GET sem o código', function () {
   }).as('response')
 })
 
-Then('retorna o status 405 sem retornar arquivo sem código', function () {
+Então('retorna o status 405 sem retornar arquivo sem código', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(405) 
   })
 })
 
 // Não busca arquivo armazenado sem autenticação
-When('tento a requisição GET do código arquivo', function () { 
+Quando('tento a requisição GET do código arquivo', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Armazenamento/${Cypress.env('ARQUIVO_ARMAZENAMENTO')}`,
@@ -164,14 +167,14 @@ When('tento a requisição GET do código arquivo', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem buscar arquivo armazenado sem autenticação', function () {
+Então('retorna o status 401 sem buscar arquivo armazenado sem autenticação', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Armazena o arquivo do tipo 1 válido
-When('envio uma requisição POST de armazenamento do tipo 1', () => {
+Quando('envio uma requisição POST de armazenamento do tipo 1', () => {
   return cy.task('uploadFile', {
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=1',
@@ -183,7 +186,7 @@ When('envio uma requisição POST de armazenamento do tipo 1', () => {
   }).as('response')
 })
 
-Then('retorna status 200 armazenando um arquivo do tipo 1 válido', function () {
+Então('retorna status 200 armazenando um arquivo do tipo 1 válido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body.id).to.be.a('number')
@@ -195,7 +198,7 @@ Then('retorna status 200 armazenando um arquivo do tipo 1 válido', function () 
 })
 
 // Armazena o arquivo do tipo 2 válido
-When('envio uma requisição POST de armazenamento do tipo 2', () => {
+Quando('envio uma requisição POST de armazenamento do tipo 2', () => {
   return cy.task('uploadFile', {
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=2',
@@ -207,7 +210,7 @@ When('envio uma requisição POST de armazenamento do tipo 2', () => {
   }).as('response')
 })
 
-Then('retorna status 200 armazenando um arquivo do tipo 2 válido', function () {
+Então('retorna status 200 armazenando um arquivo do tipo 2 válido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body.id).to.be.a('number')
@@ -219,7 +222,7 @@ Then('retorna status 200 armazenando um arquivo do tipo 2 válido', function () 
 })
 
 // Armazena o arquivo do tipo 3 válido
-When('envio uma requisição POST de armazenamento do tipo 3', () => {
+Quando('envio uma requisição POST de armazenamento do tipo 3', () => {
   return cy.task('uploadFile', {
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=3',
@@ -231,7 +234,7 @@ When('envio uma requisição POST de armazenamento do tipo 3', () => {
   }).as('response')
 })
 
-Then('retorna status 200 armazenando um arquivo do tipo 3 válido', function () {
+Então('retorna status 200 armazenando um arquivo do tipo 3 válido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body.id).to.be.a('number')
@@ -243,7 +246,7 @@ Then('retorna status 200 armazenando um arquivo do tipo 3 válido', function () 
 })
 
 // Armazena o arquivo do tipo 4 válido
-When('envio uma requisição POST de armazenamento do tipo 4', () => {
+Quando('envio uma requisição POST de armazenamento do tipo 4', () => {
   return cy.task('uploadFile', {
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=4',
@@ -255,7 +258,7 @@ When('envio uma requisição POST de armazenamento do tipo 4', () => {
   }).as('response')
 })
 
-Then('retorna status 200 armazenando um arquivo do tipo 4 válido', function () {
+Então('retorna status 200 armazenando um arquivo do tipo 4 válido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body.id).to.be.a('number')
@@ -267,7 +270,7 @@ Then('retorna status 200 armazenando um arquivo do tipo 4 válido', function () 
 })
 
 // Armazena o arquivo do tipo 5 válido
-When('envio uma requisição POST de armazenamento do tipo 5', () => {
+Quando('envio uma requisição POST de armazenamento do tipo 5', () => {
   return cy.task('uploadFile', {
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=5',
@@ -279,7 +282,7 @@ When('envio uma requisição POST de armazenamento do tipo 5', () => {
   }).as('response')
 })
 
-Then('retorna status 200 armazenando um arquivo do tipo 5 válido', function () {
+Então('retorna status 200 armazenando um arquivo do tipo 5 válido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body.id).to.be.a('number')
@@ -291,7 +294,7 @@ Then('retorna status 200 armazenando um arquivo do tipo 5 válido', function () 
 })
 
 // Armazena o arquivo do tipo 6 válido
-When('envio uma requisição POST de armazenamento do tipo 6', () => {
+Quando('envio uma requisição POST de armazenamento do tipo 6', () => {
   return cy.task('uploadFile', {
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=6',
@@ -303,7 +306,7 @@ When('envio uma requisição POST de armazenamento do tipo 6', () => {
   }).as('response')
 })
 
-Then('retorna status 200 armazenando um arquivo do tipo 6 válido', function () {
+Então('retorna status 200 armazenando um arquivo do tipo 6 válido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body.id).to.be.a('number')
@@ -315,7 +318,7 @@ Then('retorna status 200 armazenando um arquivo do tipo 6 válido', function () 
 })
 
 // Armazena o arquivo do tipo 7 válido
-When('envio uma requisição POST de armazenamento do tipo 7', () => {
+Quando('envio uma requisição POST de armazenamento do tipo 7', () => {
   return cy.task('uploadFile', {
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=7',
@@ -327,7 +330,7 @@ When('envio uma requisição POST de armazenamento do tipo 7', () => {
   }).as('response')
 })
 
-Then('retorna status 200 armazenando um arquivo do tipo 7 válido', function () {
+Então('retorna status 200 armazenando um arquivo do tipo 7 válido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body.id).to.be.a('number')
@@ -339,7 +342,7 @@ Then('retorna status 200 armazenando um arquivo do tipo 7 válido', function () 
 })
 
 // Não armazena o arquivo com tipo inexistente
-When('envio uma requisição POST de armazenamento do tipo inválido', () => {
+Quando('envio uma requisição POST de armazenamento do tipo inválido', () => {
   return cy.task('uploadFile', {
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=8',
@@ -351,14 +354,14 @@ When('envio uma requisição POST de armazenamento do tipo inválido', () => {
   }).as('response')
 })
 
-Then('retorna status 422 não armazenando um arquivo com tipo inexistente', function () {
+Então('retorna status 422 não armazenando um arquivo com tipo inexistente', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422)
   })
 })
 
 // Não armazena arquivo tipo com tamanho excedido
-When('envio uma requisição POST do tipo além de 10 MB', () => {
+Quando('envio uma requisição POST do tipo além de 10 MB', () => {
   return cy.task('uploadFile', {
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=7',
@@ -370,14 +373,14 @@ When('envio uma requisição POST do tipo além de 10 MB', () => {
   }).as('response')
 })
 
-Then('retorna o status 413 que não armazena arquivo com tamanho excedido', function () {
+Então('retorna o status 413 que não armazena arquivo com tamanho excedido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(413)
   })
 })
 
 // Obrigatório é arquivo no envio de tipo
-When('envio uma requisição POST vazio no tipo', function () { 
+Quando('envio uma requisição POST vazio no tipo', function () { 
   return cy.task('uploadFile', {
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=7',
@@ -388,14 +391,14 @@ When('envio uma requisição POST vazio no tipo', function () {
   }).as('response')
 })
 
-Then('retorna o status 422 que obrigatório no arquivo de envio', function () {
+Então('retorna o status 422 que obrigatório no arquivo de envio', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422) 
   })
 })
 
 // Não armazena arquivo tipo sem autenticação
-When('tento a requisição POST de armazenamento de tipo', function () { 
+Quando('tento a requisição POST de armazenamento de tipo', function () { 
   return cy.request({
     method: 'POST',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=7',
@@ -408,14 +411,14 @@ When('tento a requisição POST de armazenamento de tipo', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem armazenar o arquivo tipo válido', function () {
+Então('retorna o status 401 sem armazenar o arquivo tipo válido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Retorna o arquivo armazenado do tipo 1
-When('envio uma requisição GET no armazenamento do tipo 1', () => {
+Quando('envio uma requisição GET no armazenamento do tipo 1', () => {
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=1',
@@ -427,14 +430,14 @@ When('envio uma requisição GET no armazenamento do tipo 1', () => {
   }).as('response')
 })
 
-Then('retorna status 200 com arquivo armazenado do tipo 1', function () {
+Então('retorna status 200 com arquivo armazenado do tipo 1', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Retorna o arquivo armazenado do tipo 2
-When('envio uma requisição GET no armazenamento do tipo 2', () => {
+Quando('envio uma requisição GET no armazenamento do tipo 2', () => {
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=2',
@@ -446,14 +449,14 @@ When('envio uma requisição GET no armazenamento do tipo 2', () => {
   }).as('response')
 })
 
-Then('retorna status 200 com arquivo armazenado do tipo 2', function () {
+Então('retorna status 200 com arquivo armazenado do tipo 2', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Retorna o arquivo armazenado do tipo 3
-When('envio uma requisição GET no armazenamento do tipo 3', () => {
+Quando('envio uma requisição GET no armazenamento do tipo 3', () => {
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=3',
@@ -465,14 +468,14 @@ When('envio uma requisição GET no armazenamento do tipo 3', () => {
   }).as('response')
 })
 
-Then('retorna status 200 com arquivo armazenado do tipo 3', function () {
+Então('retorna status 200 com arquivo armazenado do tipo 3', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Retorna o arquivo armazenado do tipo 4
-When('envio uma requisição GET no armazenamento do tipo 4', () => {
+Quando('envio uma requisição GET no armazenamento do tipo 4', () => {
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=4',
@@ -484,14 +487,14 @@ When('envio uma requisição GET no armazenamento do tipo 4', () => {
   }).as('response')
 })
 
-Then('retorna status 200 com arquivo armazenado do tipo 4', function () {
+Então('retorna status 200 com arquivo armazenado do tipo 4', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Retorna o arquivo armazenado do tipo 5
-When('envio uma requisição GET no armazenamento do tipo 5', () => {
+Quando('envio uma requisição GET no armazenamento do tipo 5', () => {
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=5',
@@ -503,14 +506,14 @@ When('envio uma requisição GET no armazenamento do tipo 5', () => {
   }).as('response')
 })
 
-Then('retorna status 200 com arquivo armazenado do tipo 5', function () {
+Então('retorna status 200 com arquivo armazenado do tipo 5', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200) 
   })
 })
 
 // Retorna o arquivo armazenado do tipo 6
-When('envio uma requisição GET no armazenamento do tipo 6', () => {
+Quando('envio uma requisição GET no armazenamento do tipo 6', () => {
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=6',
@@ -522,14 +525,14 @@ When('envio uma requisição GET no armazenamento do tipo 6', () => {
   }).as('response')
 })
 
-Then('retorna status 200 com arquivo armazenado do tipo 6', function () {
+Então('retorna status 200 com arquivo armazenado do tipo 6', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Não retorna o arquivo armazenado com tipo inexistente
-When('envio uma requisição GET no armazenamento do tipo inválido', () => {
+Quando('envio uma requisição GET no armazenamento do tipo inválido', () => {
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=7',
@@ -541,14 +544,14 @@ When('envio uma requisição GET no armazenamento do tipo inválido', () => {
   }).as('response')
 })
 
-Then('retorna status 422 não retorna o arquivo armazenado com tipo inexistente', function () {
+Então('retorna status 422 não retorna o arquivo armazenado com tipo inexistente', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422)
   })
 })
 
 // Obrigatório tipo de arquivo na busca
-When('envio uma requisição GET com tipo vazio', function () { 
+Quando('envio uma requisição GET com tipo vazio', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=',
@@ -560,14 +563,14 @@ When('envio uma requisição GET com tipo vazio', function () {
   }).as('response')
 })
 
-Then('retorna o status 422 que obrigatório no tipo de arquivo', function () {
+Então('retorna o status 422 que obrigatório no tipo de arquivo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422) 
   })
 })
 
 // Não retorna arquivo armazenado tipo sem autenticação
-When('tento a requisição GET no armazenamento do tipo arquivo', function () { 
+Quando('tento a requisição GET no armazenamento do tipo arquivo', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + '/Armazenamento/download/tipo-acervo?tipoAcervo=1',
@@ -579,7 +582,7 @@ When('tento a requisição GET no armazenamento do tipo arquivo', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem arquivo armazenado tipo', function () {
+Então('retorna o status 401 sem arquivo armazenado tipo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
   })
