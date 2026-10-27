@@ -10,7 +10,8 @@ Before(() => {
   })
 })
 
-Dado('que gerou um token de acesso', () => {  
+Dado('que possuo um token de acesso', function () {
+  expect(Boolean(token), 'token de acesso foi informado').to.be.true
 })
 
 Dado('que não possuo um token de acesso', function () { 
