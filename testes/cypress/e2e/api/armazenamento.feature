@@ -3,7 +3,7 @@
 Funcionalidade: API - Armazenamento
 
   Cenário: Armazena um arquivo válido
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição POST de armazenamento
     Então retorna status 200 armazenando um arquivo válido
 
@@ -23,7 +23,7 @@ Funcionalidade: API - Armazenamento
     Então retorna o status 401 sem armazenar o arquivo válido
 
     Cenário: Retornar o arquivo armazenado
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição GET do código arquivo 
     Então retorna status 200 com o arquivo armazenado
 
@@ -43,42 +43,42 @@ Funcionalidade: API - Armazenamento
     Então retorna o status 401 sem buscar arquivo armazenado sem autenticação
 
   Cenário: Armazena o arquivo do tipo 1 válido
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição POST de armazenamento do tipo 1
     Então retorna status 200 armazenando um arquivo do tipo 1 válido
 
   Cenário: Armazena o arquivo do tipo 2 válido
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição POST de armazenamento do tipo 2
     Então retorna status 200 armazenando um arquivo do tipo 2 válido
 
   Cenário: Armazena o arquivo do tipo 3 válido
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição POST de armazenamento do tipo 3
     Então retorna status 200 armazenando um arquivo do tipo 3 válido
 
   Cenário: Armazena o arquivo do tipo 4 válido
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição POST de armazenamento do tipo 4
     Então retorna status 200 armazenando um arquivo do tipo 4 válido
 
   Cenário: Armazena o arquivo do tipo 5 válido
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição POST de armazenamento do tipo 5
     Então retorna status 200 armazenando um arquivo do tipo 5 válido
 
   Cenário: Armazena o arquivo do tipo 6 válido
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição POST de armazenamento do tipo 6
     Então retorna status 200 armazenando um arquivo do tipo 6 válido
 
   Cenário: Armazena o arquivo do tipo 7 válido
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição POST de armazenamento do tipo 7
     Então retorna status 200 armazenando um arquivo do tipo 7 válido
 
   Cenário: Não armazena o arquivo com tipo inexistente
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição POST de armazenamento do tipo inválido
     Então retorna status 422 não armazenando um arquivo com tipo inexistente
 
@@ -98,37 +98,37 @@ Funcionalidade: API - Armazenamento
     Então retorna o status 401 sem armazenar o arquivo tipo válido
 
   Cenário: Retorna o arquivo armazenado do tipo 1
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição GET no armazenamento do tipo 1
     Então retorna status 200 com arquivo armazenado do tipo 1
 
   Cenário: Retorna o arquivo armazenado do tipo 2
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição GET no armazenamento do tipo 2
     Então retorna status 200 com arquivo armazenado do tipo 2
 
   Cenário: Retorna o arquivo armazenado do tipo 3
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição GET no armazenamento do tipo 3
     Então retorna status 200 com arquivo armazenado do tipo 3
 
   Cenário: Retorna o arquivo armazenado do tipo 4
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição GET no armazenamento do tipo 4
     Então retorna status 200 com arquivo armazenado do tipo 4
 
   Cenário: Retorna o arquivo armazenado do tipo 5
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição GET no armazenamento do tipo 5
     Então retorna status 200 com arquivo armazenado do tipo 5
 
   Cenário: Retorna o arquivo armazenado do tipo 6
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição GET no armazenamento do tipo 6
     Então retorna status 200 com arquivo armazenado do tipo 6
 
   Cenário: Não retorna o arquivo armazenado com tipo inexistente
-    Dado que gerou um token de acesso
+    Dado que possuo um token de acesso
     Quando envio uma requisição GET no armazenamento do tipo inválido
     Então retorna status 422 não retorna o arquivo armazenado com tipo inexistente
 

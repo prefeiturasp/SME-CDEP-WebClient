@@ -1,5 +1,9 @@
 import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
 
+const Dado = Given
+const Quando = When
+const Então = Then
+
 let token
 
 Before(() => {
@@ -8,15 +12,15 @@ Before(() => {
   })
 })
 
-Given('que possuo um token de acesso', function () {
-  expect(token, 'valido').to.exist
+Dado('que possuo um token de acesso', function () {
+  expect(Boolean(token), 'token de acesso foi informado').to.be.true
 })
 
-Given('que não possuo um token de acesso', function () { 
+Dado('que não possuo um token de acesso', function () { 
 })
 
 // Criar evento no calendário
-When('envio uma requisição para criar um evento', function () {
+Quando('envio uma requisição para criar um evento', function () {
   const agora = new Date()
 
   cy.request({
@@ -45,7 +49,7 @@ When('envio uma requisição para criar um evento', function () {
   })
 })
 
-Then('retorna criação do evento com status 200', function () {
+Então('retorna criação do evento com status 200', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.be.a('number')
@@ -53,7 +57,7 @@ Then('retorna criação do evento com status 200', function () {
 })
 
 // Não cria evento sem envio de campos obrigatório
-When('envio uma requisição para criar um evento sem campos necesssários', function () {
+Quando('envio uma requisição para criar um evento sem campos necesssários', function () {
   const agora = new Date()
 
   cy.request({
@@ -78,14 +82,14 @@ When('envio uma requisição para criar um evento sem campos necesssários', fun
   })
 })
 
-Then('não cria evento sem envio de campos obrigatório com status 422', function () {
+Então('não cria evento sem envio de campos obrigatório com status 422', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422)
   })
 })
 
 // Não criar evento no calendário sem autenticação
-When('tento uma requisição para criar um evento', function () {
+Quando('tento uma requisição para criar um evento', function () {
   const agora = new Date()
 
   cy.request({
@@ -110,14 +114,14 @@ When('tento uma requisição para criar um evento', function () {
   })
 })
 
-Then('não retorna criação do evento com status 401', function () {
+Então('não retorna criação do evento com status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Deletar evento criado
-When('envio uma requisição DELETE do evento criado', function () {
+Quando('envio uma requisição DELETE do evento criado', function () {
   cy.get('@eventoId').then((eventoId) => {
     cy.request({
       method: 'DELETE',
@@ -130,14 +134,14 @@ When('envio uma requisição DELETE do evento criado', function () {
   })
 })
 
-Then('retorna exclusão do evento com status 200', function () {
+Então('retorna exclusão do evento com status 200', function () {
   cy.get('@responseDelete').then((response) => {
     expect(response.status).to.eq(200)
   })
 })
 
 // Não excluir evento sem o id
-When('envio uma requisição DELETE sem id evento', function () {  
+Quando('envio uma requisição DELETE sem id evento', function () {  
     cy.request({
       method: 'DELETE',
       url: Cypress.config('baseUrl') + `/api/v1/Evento/`,
@@ -149,14 +153,14 @@ When('envio uma requisição DELETE sem id evento', function () {
     }).as('responseDelete')
 })
 
-Then('não retorna exclusão do evento com status 405', function () {
+Então('não retorna exclusão do evento com status 405', function () {
   cy.get('@responseDelete').then((response) => {
     expect(response.status).to.eq(405)
   })
 })
 
 // Não excluir evento no calendário sem autenticação
-When('tento uma requisição DELETE do evento criado', function () {  
+Quando('tento uma requisição DELETE do evento criado', function () {  
     cy.request({
       method: 'DELETE',
       url: Cypress.config('baseUrl') + `/api/v1/Evento/0`,
@@ -168,14 +172,14 @@ When('tento uma requisição DELETE do evento criado', function () {
     }).as('responseDelete')
 })
 
-Then('não retorna exclusão do evento com status 401', function () {
+Então('não retorna exclusão do evento com status 401', function () {
   cy.get('@responseDelete').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Buscar com tag de dia e mês
-When('envio uma requisição GET com tag de evento', function () {
+Quando('envio uma requisição GET com tag de evento', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + '/api/v1/Evento/eventos-tag?Dia=28&Mes=01',
@@ -187,7 +191,7 @@ When('envio uma requisição GET com tag de evento', function () {
   }).as('response')
 })
 
-Then('retorna eventos de dia e mês com status 200', function () {
+Então('retorna eventos de dia e mês com status 200', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
 
@@ -202,7 +206,7 @@ Then('retorna eventos de dia e mês com status 200', function () {
 })
 
 // Dia e mês obrigatório na busca
-When('envio uma requisição GET de tag sem dia e mês', function () {
+Quando('envio uma requisição GET de tag sem dia e mês', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + '/api/v1/Evento/eventos-tag?Dia=&Mes=01',
@@ -214,7 +218,7 @@ When('envio uma requisição GET de tag sem dia e mês', function () {
   }).as('response')
 })
 
-Then('retorna obrigatório nos eventos de dia e mês com status 601', function () {
+Então('retorna obrigatório nos eventos de dia e mês com status 601', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(601)
 
@@ -230,7 +234,7 @@ Then('retorna obrigatório nos eventos de dia e mês com status 601', function (
 })
 
 // Não buscar com tag de dia e mês sem autenticação
-When('tento uma requisição GET com tag', function () { 
+Quando('tento uma requisição GET com tag', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Evento/eventos-tag?Dia=28&Mes=01`,
@@ -242,14 +246,14 @@ When('tento uma requisição GET com tag', function () {
   }).as('response')
 })
 
-Then('não retorna eventos de dia e mês com status 401', function () {
+Então('não retorna eventos de dia e mês com status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Buscar mês no calendário
-When('envio uma requisição GET com mês', function () {
+Quando('envio uma requisição GET com mês', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + '/api/v1/Evento/calendario/01',
@@ -261,7 +265,7 @@ When('envio uma requisição GET com mês', function () {
   }).as('response')
 })
 
-Then('retorna eventos do mês no calendário com status 200', function () {
+Então('retorna eventos do mês no calendário com status 200', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
 
@@ -299,7 +303,7 @@ Then('retorna eventos do mês no calendário com status 200', function () {
 })
 
 // Mês no calendário obrigatório na busca
-When('envio uma requisição GET sem mês do evento', function () {
+Quando('envio uma requisição GET sem mês do evento', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + '/api/v1/Evento/calendario/',
@@ -311,7 +315,7 @@ When('envio uma requisição GET sem mês do evento', function () {
   }).as('response')
 })
 
-Then('retorna obrigatório nos eventos o mês com status 422', function () {
+Então('retorna obrigatório nos eventos o mês com status 422', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(422)
 
@@ -327,7 +331,7 @@ Then('retorna obrigatório nos eventos o mês com status 422', function () {
 })
 
 // Não buscar mês no calendário sem autenticação
-When('tento uma requisição GET com mês', function () { 
+Quando('tento uma requisição GET com mês', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Evento/calendario/01`,
@@ -339,14 +343,14 @@ When('tento uma requisição GET com mês', function () {
   }).as('response')
 })
 
-Then('não retorna mês no calendário com status 401', function () {
+Então('não retorna mês no calendário com status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Buscar detalhes do evento do dia
-When('envio uma requisição GET no detalhes do evento', function () {
+Quando('envio uma requisição GET no detalhes do evento', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + '/api/v1/Evento/detalhes-dia?Dia=28&Mes=01',
@@ -358,7 +362,7 @@ When('envio uma requisição GET no detalhes do evento', function () {
   }).as('response')
 })
 
-Then('retorna detalhes do evento do dia com status 200', function () {
+Então('retorna detalhes do evento do dia com status 200', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
 
@@ -385,7 +389,7 @@ Then('retorna detalhes do evento do dia com status 200', function () {
 })
 
 // Dia e mês obrigatório no detalhes do evento
-When('envio uma requisição GET sem dia e mês no detalhes do evento', function () {
+Quando('envio uma requisição GET sem dia e mês no detalhes do evento', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + '/api/v1/Evento/detalhes-dia?Dia=&Mes=01',
@@ -397,7 +401,7 @@ When('envio uma requisição GET sem dia e mês no detalhes do evento', function
   }).as('response')
 })
 
-Then('retorna obrigatório nos detalhes de dia e mês com status 601', function () {
+Então('retorna obrigatório nos detalhes de dia e mês com status 601', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(601)
 
@@ -413,7 +417,7 @@ Then('retorna obrigatório nos detalhes de dia e mês com status 601', function 
 })
 
 // Não buscar detalhes do evento do dia sem autenticação
-When('tento uma requisição GET no detalhes do evento', function () { 
+Quando('tento uma requisição GET no detalhes do evento', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Evento/detalhes-dia?Dia=28&Mes=01`,
@@ -425,14 +429,14 @@ When('tento uma requisição GET no detalhes do evento', function () {
   }).as('response')
 })
 
-Then('não retorna detalhes de dia e mês com status 401', function () {
+Então('não retorna detalhes de dia e mês com status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Buscar por id do evento
-When('envio uma requisição GET com id de evento', function () {
+Quando('envio uma requisição GET com id de evento', function () {
    cy.get('@eventoId').then((eventoId) => {
     cy.request({
       method: 'GET',
@@ -444,7 +448,7 @@ When('envio uma requisição GET com id de evento', function () {
   })
 })
 
-Then('retorna eventos do id com status 200', function () {
+Então('retorna eventos do id com status 200', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
 
@@ -458,7 +462,7 @@ Then('retorna eventos do id com status 200', function () {
 })
 
 // Id do evento obrigatório na busca
-When('envio uma requisição GET sem id de evento', function () {
+Quando('envio uma requisição GET sem id de evento', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + '/api/v1/Evento/0',
@@ -470,7 +474,7 @@ When('envio uma requisição GET sem id de evento', function () {
   }).as('response')
 })
 
-Then('retorna obrigatório sem id evento com status 601', function () {
+Então('retorna obrigatório sem id evento com status 601', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(601)
 
@@ -486,7 +490,7 @@ Then('retorna obrigatório sem id evento com status 601', function () {
 })
 
 // Não buscar id do evento sem autenticação
-When('tento uma requisição GET com id de evento', function () { 
+Quando('tento uma requisição GET com id de evento', function () { 
    cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + '/api/v1/Evento/0',
@@ -498,7 +502,7 @@ When('tento uma requisição GET com id de evento', function () {
   }).as('response')
 })
 
-Then('não retorna eventos do id com status 401', function () {
+Então('não retorna eventos do id com status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
