@@ -129,7 +129,7 @@ describe('Login', () => {
         },
       });
       (validarAutenticacao as jest.Mock).mockReturnValueOnce({
-        perfil: TipoPerfil.SOLICITANTE,
+        perfil: TipoPerfil.EXTERNO,
       });
 
       render(<Login />);
@@ -179,7 +179,7 @@ describe('Login', () => {
         },
       });
       (validarAutenticacao as jest.Mock).mockReturnValueOnce({
-        perfil: TipoPerfil.SOLICITANTE,
+        perfil: TipoPerfil.EXTERNO,
       });
 
       render(<Login />);

@@ -81,7 +81,7 @@ describe('DetalhesEventoDia', () => {
 
     it('não deve renderizar "Incluir suspensão" quando evento for fornecido', () => {
       renderComponent({
-        evento: { id: 1 },
+        evento: { id: 1 } as any,
       });
 
       expect(screen.queryByRole('button', { name: /Incluir suspensão/i })).not.toBeInTheDocument();
@@ -89,7 +89,7 @@ describe('DetalhesEventoDia', () => {
   });
 
   describe('Visita Técnica (tipoVisita)', () => {
-    const eventoVisita: EventoDetalheDTO = {
+    const eventoVisita = {
       id: 10,
       tipoId: 1,
       situacaoSolicitacaoItemId: 2,
@@ -100,7 +100,7 @@ describe('DetalhesEventoDia', () => {
       codigoTombo: 'TB-9988',
       situacaoSolicitacaoItemDescricao: 'Confirmada',
       horario: '10:00 - 11:00',
-    };
+    } as EventoDetalheDTO;
 
     it('deve exibir os detalhes da visita e navegar para o atendimento ao clicar no botão do tipo', () => {
       renderComponent({
@@ -128,11 +128,11 @@ describe('DetalhesEventoDia', () => {
 
   describe('Feriado (tipoFeriado)', () => {
     it('deve exibir os dados do feriado', () => {
-      const eventoFeriado: EventoDetalheDTO = {
+      const eventoFeriado = {
         id: 5,
         tipoId: 2,
         descricao: 'Proclamação da República',
-      };
+      } as EventoDetalheDTO;
 
       renderComponent({
         evento: eventoFeriado,
@@ -145,11 +145,11 @@ describe('DetalhesEventoDia', () => {
   });
 
   describe('Suspensão (tipoSuspensao)', () => {
-    const eventoSuspensao: EventoDetalheDTO = {
+    const eventoSuspensao = {
       id: 42,
-      tipoId: 4,
+      tipoId: TipoEventoEnum.SUSPENSAO,
       justificativa: 'Dedetização anual do prédio',
-    };
+    } as EventoDetalheDTO;
 
     it('deve renderizar justificativa e botão de excluir quando usuário tiver permissão podeIncluir', async () => {
       (deletarSuspensao as jest.Mock).mockResolvedValueOnce({});
@@ -246,9 +246,9 @@ describe('DetalhesEventoDia', () => {
     });
 
     it('não deve chamar deletarSuspensao se item não possuir id', () => {
-      const eventoSemId: EventoDetalheDTO = {
+      const eventoSemId = {
         justificativa: 'Sem identificador',
-      };
+      } as unknown as EventoDetalheDTO;
 
       renderComponent(
         {

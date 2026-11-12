@@ -4,7 +4,7 @@ import { ROUTES } from '~/core/enum/routes';
 import { setAcervosSelecionados } from '~/core/redux/modules/solicitacao/actions';
 
 const mockNavigate = jest.fn();
-let mockPathname = ROUTES.CONSULTA_ACERVO;
+let mockPathname: string = ROUTES.CONSULTA_ACERVO;
 const mockDispatch = jest.fn();
 let mockDataSource: any[] = [];
 

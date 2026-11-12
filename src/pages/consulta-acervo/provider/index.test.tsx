@@ -5,7 +5,7 @@ import { ROUTES } from '~/core/enum/routes';
 import * as acervoService from '~/core/services/acervo-service';
 
 const mockNavigate = jest.fn();
-let mockPathname = ROUTES.CONSULTA_ACERVO;
+let mockPathname: string = ROUTES.CONSULTA_ACERVO;
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),

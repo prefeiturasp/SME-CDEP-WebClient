@@ -301,7 +301,7 @@ describe('CriarConta', () => {
         response: {
           data: 'Erro inesperado no servidor',
         },
-      } as AxiosError<RetornoBaseDTO>;
+      } as unknown as AxiosError<RetornoBaseDTO>;
 
       (usuarioService.cadastrarUsuarioExterno as jest.Mock).mockRejectedValue(axiosError);
 

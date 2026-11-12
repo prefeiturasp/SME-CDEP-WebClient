@@ -72,6 +72,7 @@ describe('Mes', () => {
           dia: 4,
           dayOfWeek: 3,
           desabilitado: true,
+          eventosTag: [],
         },
       ],
     },

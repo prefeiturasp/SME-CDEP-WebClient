@@ -36,7 +36,7 @@ let mockPerfilState: {
 } = {
   perfilSelecionado: {
     perfilNome: 'Pesquisador',
-    perfil: TipoPerfil.SOLICITANTE,
+    perfil: TipoPerfil.EXTERNO,
   },
 };
 
@@ -110,7 +110,7 @@ describe('MeusDados', () => {
     mockPerfilState = {
       perfilSelecionado: {
         perfilNome: 'Pesquisador',
-        perfil: TipoPerfil.SOLICITANTE,
+        perfil: TipoPerfil.EXTERNO,
       },
     };
     (usuarioService.obterMeusDados as jest.Mock).mockResolvedValue({
@@ -212,7 +212,7 @@ describe('MeusDados', () => {
       mockPerfilState = {
         perfilSelecionado: {
           perfilNome: 'Solicitante',
-          perfil: TipoPerfil.SOLICITANTE,
+          perfil: TipoPerfil.EXTERNO,
         },
       };
 
