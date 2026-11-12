@@ -1,6 +1,5 @@
 import { render, screen } from '~/tests/test-utils';
 import { fireEvent, waitFor } from '@testing-library/react';
-import React from 'react';
 import BtnCancelarSolicitacoes from './';
 import { AcervoSolicitacaoContext } from '../../provider';
 import { PermissaoContext } from '~/routes/config/guard/permissao/provider';
@@ -8,11 +7,12 @@ import acervoSolicitacaoService from '~/core/services/acervo-solicitacao-service
 import { notification } from '~/components/lib/notification';
 
 const mockNavigate = jest.fn();
+const mockUseParams = jest.fn(() => ({ id: '1' } as { id?: string }));
 
 jest.mock('react-router-dom', () => ({
   ...jest.requireActual('react-router-dom'),
   useNavigate: () => mockNavigate,
-  useParams: () => ({ id: '1' }),
+  useParams: () => mockUseParams(),
 }));
 
 jest.mock('~/core/services/acervo-solicitacao-service', () => ({
@@ -62,6 +62,7 @@ const renderComponent = (
 describe('BtnCancelarSolicitacoes', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockUseParams.mockReturnValue({ id: '1' });
   });
 
   test('renderiza o botão "Cancelar solicitação"', () => {
@@ -88,7 +89,9 @@ describe('BtnCancelarSolicitacoes', () => {
   });
 
   test('chama cancelarAtendimento com o id da rota ao clicar', async () => {
-    (acervoSolicitacaoService.cancelarAtendimento as jest.Mock).mockResolvedValue({ sucesso: false });
+    (acervoSolicitacaoService.cancelarAtendimento as jest.Mock).mockResolvedValue({
+      sucesso: false,
+    });
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /cancelar solicitação/i }));
     await waitFor(() => {
@@ -97,7 +100,9 @@ describe('BtnCancelarSolicitacoes', () => {
   });
 
   test('exibe notificação de sucesso e navega para a página principal após cancelamento', async () => {
-    (acervoSolicitacaoService.cancelarAtendimento as jest.Mock).mockResolvedValue({ sucesso: true });
+    (acervoSolicitacaoService.cancelarAtendimento as jest.Mock).mockResolvedValue({
+      sucesso: true,
+    });
     renderComponent();
     fireEvent.click(screen.getByRole('button', { name: /cancelar solicitação/i }));
     await waitFor(() => {
@@ -106,6 +111,18 @@ describe('BtnCancelarSolicitacoes', () => {
         description: 'Solicitação cancelada com sucesso',
       });
       expect(mockNavigate).toHaveBeenCalledWith('/');
+    });
+  });
+
+  test('C07: assume acervoSolicitacaoId = 0 quando o parâmetro id não está presente na rota', async () => {
+    mockUseParams.mockReturnValue({});
+    (acervoSolicitacaoService.cancelarAtendimento as jest.Mock).mockResolvedValue({
+      sucesso: false,
+    });
+    renderComponent();
+    fireEvent.click(screen.getByRole('button', { name: /cancelar solicitação/i }));
+    await waitFor(() => {
+      expect(acervoSolicitacaoService.cancelarAtendimento).toHaveBeenCalledWith(0);
     });
   });
 });
