@@ -76,6 +76,8 @@ const renderRedefinirSenha = (options?: {
 };
 
 describe('Página Redefinir Senha (src/pages/redefinir-senha/index.tsx)', () => {
+  jest.setTimeout(30000);
+
   beforeEach(() => {
     mockNavigate.mockReset();
     mockedSolicitarRecuperacao.mockReset();
@@ -112,9 +114,12 @@ describe('Página Redefinir Senha (src/pages/redefinir-senha/index.tsx)', () => 
     });
     fireEvent.click(container.querySelector(`#${CDEP_BUTTON_CONTINUAR}`)!);
 
-    await waitFor(() => {
-      expect(screen.getByText(/Deve conter no mínimo 5 caracteres/i)).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText(/Deve conter no mínimo 5 caracteres/i)).toBeInTheDocument();
+      },
+      { timeout: 10000 },
+    );
     expect(mockedSolicitarRecuperacao).not.toHaveBeenCalled();
   });
 

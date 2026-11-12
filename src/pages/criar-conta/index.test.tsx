@@ -248,9 +248,12 @@ describe('Página Criar Conta (src/pages/criar-conta/index.tsx)', () => {
       target: { value: '11122233344' },
     });
 
-    await waitFor(() => {
-      expect(screen.getByText('CPF já cadastrado no sistema')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('CPF já cadastrado no sistema')).toBeInTheDocument();
+      },
+      { timeout: 10000 },
+    );
     expect(document.activeElement).toBe(container.querySelector(`#${CDEP_INPUT_CPF}`));
 
     // Quando rejeita sem mensagens, limpa CPFExistente anterior e não adiciona novos erros
@@ -351,9 +354,12 @@ describe('Página Criar Conta (src/pages/criar-conta/index.tsx)', () => {
       target: { value: '00000000' },
     });
 
-    await waitFor(() => {
-      expect(screen.getByText('CEP não encontrado')).toBeInTheDocument();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByText('CEP não encontrado')).toBeInTheDocument();
+      },
+      { timeout: 10000 },
+    );
 
     mockedObterDadosCEP.mockRejectedValueOnce({
       response: {

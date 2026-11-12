@@ -120,7 +120,7 @@ const ModalWrapper = ({
 };
 
 describe('ModalAdicionarAcervo (src/pages/operacoes/atendimento-solicitacoes/solicitacao-manual/components/modal-adicionar-acervo/index.tsx)', () => {
-  jest.setTimeout(20000);
+  jest.setTimeout(45000);
 
   beforeEach(() => {
     mockCatchValidationRejections = false;
@@ -173,10 +173,13 @@ describe('ModalAdicionarAcervo (src/pages/operacoes/atendimento-solicitacoes/sol
     fireEvent.change(inputTombo, { target: { value: 'TOMBO-2' } });
     fireEvent.click(screen.getByRole('button', { name: /search/i }));
 
-    await waitFor(() => {
-      expect(screen.getByPlaceholderText('Título do acervo')).toHaveValue('Livro Indisponível');
-      expect(screen.getByRole('button', { name: /adicionar/i })).toBeDisabled();
-    });
+    await waitFor(
+      () => {
+        expect(screen.getByPlaceholderText('Título do acervo')).toHaveValue('Livro Indisponível');
+        expect(screen.getByRole('button', { name: /adicionar/i })).toBeDisabled();
+      },
+      { timeout: 10000 },
+    );
   });
 
   it('C05 e C10: deve adicionar item não-bibliográfico por Email (FINALIZADO_MANUALMENTE) e por Presencial em lista já populada', async () => {

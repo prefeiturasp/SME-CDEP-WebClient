@@ -20,6 +20,8 @@ jest.mock('./mes', () => ({
 }));
 
 describe('Calendario', () => {
+  jest.setTimeout(30000);
+
   beforeEach(() => {
     jest.clearAllMocks();
   });

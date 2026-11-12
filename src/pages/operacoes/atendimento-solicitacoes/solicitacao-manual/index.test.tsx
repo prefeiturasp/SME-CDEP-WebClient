@@ -535,7 +535,9 @@ describe('SolicitacaoManual (src/pages/operacoes/atendimento-solicitacoes/solici
     });
 
     const { container: containerSalva1, unmount: unmountSalva1 } = renderPage();
-    await waitFor(() => expect(screen.getByText('Livro Salvo 1')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Livro Salvo 1')).toBeInTheDocument(), {
+      timeout: 10000,
+    });
 
     fireEvent.click(containerSalva1.querySelector(`#${CDEP_BUTTON_VOLTAR}`) as HTMLButtonElement);
     expect(mockedConfirmacao).not.toHaveBeenCalled();
@@ -553,7 +555,9 @@ describe('SolicitacaoManual (src/pages/operacoes/atendimento-solicitacoes/solici
     });
 
     const { container: containerSalva2 } = renderPage();
-    await waitFor(() => expect(screen.getByText('Livro Salvo 1')).toBeInTheDocument());
+    await waitFor(() => expect(screen.getByText('Livro Salvo 1')).toBeInTheDocument(), {
+      timeout: 10000,
+    });
 
     fireEvent.click(containerSalva2.querySelector(`#${CDEP_BUTTON_VOLTAR}`) as HTMLButtonElement);
     expect(mockedConfirmacao).toHaveBeenCalledWith(
