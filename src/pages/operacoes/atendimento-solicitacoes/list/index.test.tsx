@@ -337,7 +337,7 @@ describe('ListAtendimentoSolicitacoes', () => {
     });
 
     it('deve navegar para ROUTES.PRINCIPAL quando perfil não for admin', () => {
-      mockPerfilState = { perfilSelecionado: { perfil: TipoPerfil.ATENDIMENTO } };
+      mockPerfilState = { perfilSelecionado: { perfil: TipoPerfil.BASICO } };
       renderComponent();
 
       fireEvent.click(document.getElementById(CDEP_BUTTON_VOLTAR)!);

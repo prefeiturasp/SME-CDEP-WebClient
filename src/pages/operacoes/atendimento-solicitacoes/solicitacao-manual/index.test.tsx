@@ -170,7 +170,7 @@ jest.mock('./components/modal-adicionar-acervo', () => ({
                 tipoAcervoId: 1, // TipoAcervo.Bibliografico
                 titulo: 'Novo Livro Manual',
                 codigo: 'TOMBO-99',
-                situacaoId: 1, // SituacaoSolicitacaoItemEnum.PENDENTE
+                situacaoId: 1, // SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO
                 tipoAtendimento: 1, // TipoAtendimentoEnum.Presencial
                 dataVisita: '2026-06-01 10:00',
                 dataEmprestimo: '2026-06-01',
@@ -195,7 +195,7 @@ describe('SolicitacaoManual', () => {
       dataSolicitacao: '2026-05-10T10:00:00',
       dadosSolicitante: {
         id: 10,
-        tipoId: TipoUsuario.CIDADAO,
+        tipoId: TipoUsuario.POPULACAO_GERAL,
         nome: 'Maria da Silva',
         login: '12345678901',
         telefone: '11987654321',
@@ -209,7 +209,7 @@ describe('SolicitacaoManual', () => {
           codigo: 'TOMBO-1',
           titulo: 'Livro de História',
           tipoAcervoId: TipoAcervo.Bibliografico,
-          situacaoId: SituacaoSolicitacaoItemEnum.PENDENTE,
+          situacaoId: SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO,
           tipoAtendimento: TipoAtendimentoEnum.Presencial,
           dataVisita: '2026-05-15 14:00',
           dataVisitaFormatada: '15/05/2026 14:00',
@@ -333,7 +333,7 @@ describe('SolicitacaoManual', () => {
             id: 1,
             acervoId: 100,
             tipoAcervoId: TipoAcervo.Bibliografico,
-            situacaoId: SituacaoSolicitacaoItemEnum.PENDENTE,
+            situacaoId: SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO,
             tipoAtendimento: TipoAtendimentoEnum.Presencial,
             dataVisita: '2026-05-15 14:00',
             dataVisitaFormatada: null,
@@ -364,7 +364,7 @@ describe('SolicitacaoManual', () => {
           login: '98765432100',
           telefone: '11999998888',
           email: 'carlos@email.com',
-          tipoId: TipoUsuario.CIDADAO,
+          tipoId: TipoUsuario.POPULACAO_GERAL,
         },
       });
 
@@ -415,7 +415,7 @@ describe('SolicitacaoManual', () => {
           id: 25,
           nome: 'Carlos Santos',
           login: '98765432100',
-          tipoId: TipoUsuario.CIDADAO,
+          tipoId: TipoUsuario.POPULACAO_GERAL,
         },
       });
 
@@ -464,7 +464,7 @@ describe('SolicitacaoManual', () => {
           id: 25,
           nome: 'Carlos Santos',
           login: '98765432100',
-          tipoId: TipoUsuario.CIDADAO,
+          tipoId: TipoUsuario.POPULACAO_GERAL,
         },
       });
 
@@ -624,7 +624,7 @@ describe('SolicitacaoManual', () => {
               id: 1,
               acervoId: 100,
               tipoAcervoId: TipoAcervo.Bibliografico,
-              situacaoId: SituacaoSolicitacaoItemEnum.PENDENTE,
+              situacaoId: SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO,
               tipoAtendimento: TipoAtendimentoEnum.Presencial,
               dataVisita: '2026-05-15 14:00',
               dataVisitaFormatada: '15/05/2026 14:00',
@@ -667,7 +667,7 @@ describe('SolicitacaoManual', () => {
               id: 1,
               acervoId: 100,
               tipoAcervoId: TipoAcervo.Bibliografico,
-              situacaoId: SituacaoSolicitacaoItemEnum.PENDENTE,
+              situacaoId: SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO,
               tipoAtendimento: TipoAtendimentoEnum.Presencial,
               dataVisita: null,
             },

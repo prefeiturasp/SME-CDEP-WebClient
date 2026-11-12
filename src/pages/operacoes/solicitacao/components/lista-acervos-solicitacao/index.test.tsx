@@ -161,7 +161,7 @@ describe('ListaAcervosSolicitacao', () => {
     titulo: 'Livro de História do Brasil',
     autoresCreditos: ['Autor 1', 'Autor 2'],
     situacao: 'Pendente',
-    situacaoId: SituacaoSolicitacaoItemEnum.PENDENTE,
+    situacaoId: SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO,
     tipoAtendimento: 'Presencial',
     estaDisponivel: true,
     situacaoDisponibilidade: 'Disponível',
@@ -177,7 +177,7 @@ describe('ListaAcervosSolicitacao', () => {
     titulo: 'Livro Raro Indisponível',
     autoresCreditos: [],
     situacao: 'Em atendimento',
-    situacaoId: SituacaoSolicitacaoItemEnum.EM_ATENDIMENTO,
+    situacaoId: SituacaoSolicitacaoItemEnum.AGUARDANDO_ATENDIMENTO,
     tipoAtendimento: 'Presencial',
     estaDisponivel: false,
     situacaoDisponibilidade: 'Emprestado',
@@ -558,7 +558,7 @@ describe('ListaAcervosSolicitacao', () => {
         <AcervoSolicitacaoContext.Provider
           value={{
             ...defaultAcervoContext,
-            dataSource: undefined,
+            dataSource: undefined as any,
           }}
         >
           <PermissaoContext.Provider value={defaultPermissaoContext}>

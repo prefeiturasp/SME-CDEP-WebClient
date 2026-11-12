@@ -129,7 +129,7 @@ describe('FormAtendimentoSolicitacoes', () => {
       situacao: 'Em atendimento',
       dataSolicitacao: '2026-05-10T10:00:00',
       dadosSolicitante: {
-        tipoId: TipoUsuario.CIDADAO,
+        tipoId: TipoUsuario.POPULACAO_GERAL,
         nome: 'João da Silva',
         login: '12345678901',
         telefone: '11987654321',
