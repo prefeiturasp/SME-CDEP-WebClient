@@ -1,7 +1,7 @@
 import { Col, Row } from 'antd';
 
 import cdepLogo from '~/assets/cdep-logo-horizontal.svg';
-import prefeituraLogo from '~/assets/prefeitura-sp-logo.svg';
+import prefeituraLogo from '~/assets/prefeitura-sp-logo.png';
 
 import { Outlet } from 'react-router-dom';
 import { BackgroundHome } from './style';
@@ -22,9 +22,9 @@ const Home = () => {
           <Outlet />
         </Row>
         <Row justify='center' style={{ marginTop: '80px' }}>
-          <Col span={24}>
+          <Col span={24} style={{ display: 'flex', justifyContent: 'center', padding: 0 }}>
             <img
-              style={{ width: '100%', height: '62px' }}
+              style={{ height: '62px', opacity: 0.8 }}
               src={prefeituraLogo}
               alt='PREFEITURA SP LOGO'
             />
