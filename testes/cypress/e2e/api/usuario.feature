@@ -131,9 +131,9 @@ Funcionalidade: API - Usuario
     Dado que não possuo um token válido
     Quando tento a requisição GET existência de solicitante
     Então retorna o status 401 sem documento do usuário existe
-
+ 
   Cenário: Solicitar recuperação de senha
-    Dado que possuo um token válido no endpoint Usuario
+    Dado que não possuo um token válido
     Quando envio uma requisição POST com login do usuário
     Então retorna o status 200 solicitando recuperação de senha
 
@@ -176,7 +176,7 @@ Funcionalidade: API - Usuario
     Dado que possuo um token válido no endpoint Usuario
     Quando envio uma requisição PUT de recuperar sem a senha
     Então retorna o status 422 sem recuperar a senha
-  
+
   Cenário: Criar novo usuário
     Dado que possuo um token válido no endpoint Usuario
     Quando envio uma requisição POST no endpoint usuario

@@ -1,5 +1,9 @@
 import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
 
+const Dado = Given
+const Quando = When
+const Então = Then
+
 let token
 
 Before(() => {
@@ -8,15 +12,15 @@ Before(() => {
   })
 })
 
-Given('que possuo um token de acesso', function () {
-  expect(token, 'valido').to.exist
+Dado('que possuo um token de acesso', function () {
+  expect(Boolean(token), 'token de acesso foi informado').to.be.true
 })
 
-Given('que não possuo um token de acesso', function () { 
+Dado('que não possuo um token de acesso', function () { 
 })
 
 // Retornar os tipos de acervos cadastrados
-When('envio uma requisição GET para o painel gerencial', function () { 
+Quando('envio uma requisição GET para o painel gerencial', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/PainelGerencial/acervos-cadastrados`,
@@ -29,7 +33,7 @@ When('envio uma requisição GET para o painel gerencial', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 com os tipos de acervos cadastrados', function () {
+Então('retorna o status 200 com os tipos de acervos cadastrados', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.be.an('array').and.to.have.length.greaterThan(0)
@@ -43,7 +47,7 @@ Then('retorna o status 200 com os tipos de acervos cadastrados', function () {
 })
 
 // Não retornar os tipos de acervos cadastrados sem autenticação
-When('tento a requisição GET para o painel gerencial', function () { 
+Quando('tento a requisição GET para o painel gerencial', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/PainelGerencial/acervos-cadastrados`,
@@ -55,14 +59,14 @@ When('tento a requisição GET para o painel gerencial', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem os tipos de acervos cadastrados', function () {
+Então('retorna o status 401 sem os tipos de acervos cadastrados', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Retornar quantidade de pesquisas mensais
-When('envio a requisição GET para o painel gerencial', function () { 
+Quando('envio a requisição GET para o painel gerencial', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/PainelGerencial/quantidade-pesquisas-mensais`,
@@ -75,7 +79,7 @@ When('envio a requisição GET para o painel gerencial', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 com a quantidade pesquisas mensais', function () {
+Então('retorna o status 200 com a quantidade pesquisas mensais', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.be.an('array').and.to.have.length.greaterThan(0)
@@ -89,7 +93,7 @@ Then('retorna o status 200 com a quantidade pesquisas mensais', function () {
 })
 
 // Não retornar quantidade de pesquisas mensais sem autenticação
-When('tento uma requisição GET para o painel gerencial', function () { 
+Quando('tento uma requisição GET para o painel gerencial', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/PainelGerencial/quantidade-pesquisas-mensais`,
@@ -101,14 +105,14 @@ When('tento uma requisição GET para o painel gerencial', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem quantidade pesquisas mensais', function () {
+Então('retorna o status 401 sem quantidade pesquisas mensais', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Retornar quantidade de solicitações mensais
-When('envio o GET para o painel gerencial', function () { 
+Quando('envio o GET para o painel gerencial', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/PainelGerencial/quantidade-solicitacoes-mensais`,
@@ -121,7 +125,7 @@ When('envio o GET para o painel gerencial', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 com a quantidade solicitações mensais', function () {
+Então('retorna o status 200 com a quantidade solicitações mensais', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     response.body.forEach((item) => {
@@ -133,7 +137,7 @@ Then('retorna o status 200 com a quantidade solicitações mensais', function ()
 })
 
 // Não retornar quantidade de solicitações mensais sem autenticação
-When('tento enviar GET para o painel gerencial', function () { 
+Quando('tento enviar GET para o painel gerencial', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/PainelGerencial/quantidade-solicitacoes-mensais`,
@@ -145,14 +149,14 @@ When('tento enviar GET para o painel gerencial', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem quantidade solicitações mensais', function () {
+Então('retorna o status 401 sem quantidade solicitações mensais', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Buscar as solicitações por tipos de acervo
-When('envio o GET para as solicitações no painel gerencial', function () { 
+Quando('envio o GET para as solicitações no painel gerencial', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/PainelGerencial/solicitacoes-tipo-acervo`,
@@ -165,7 +169,7 @@ When('envio o GET para as solicitações no painel gerencial', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 buscando as solicitações por tipos de acervo', function () {
+Então('retorna o status 200 buscando as solicitações por tipos de acervo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.be.an('array').and.to.have.length.greaterThan(0)
@@ -179,7 +183,7 @@ Then('retorna o status 200 buscando as solicitações por tipos de acervo', func
 })
 
 // Não busca as solicitações por tipos de acervo sem autenticação
-When('tento enviar o GET para as solicitações no painel gerencial', function () { 
+Quando('tento enviar o GET para as solicitações no painel gerencial', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/PainelGerencial/solicitacoes-tipo-acervo`,
@@ -191,14 +195,14 @@ When('tento enviar o GET para as solicitações no painel gerencial', function (
   }).as('response')
 })
 
-Then('retorna o status 401 sem as solicitações por tipos de acervo', function () {
+Então('retorna o status 401 sem as solicitações por tipos de acervo', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Buscar os livros emprestados
-When('envio o GET para livros emprestados no painel gerencial', function () { 
+Quando('envio o GET para livros emprestados no painel gerencial', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/PainelGerencial/controle-livros-emprestados`,
@@ -211,7 +215,7 @@ When('envio o GET para livros emprestados no painel gerencial', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 buscando os livros emprestados', function () {
+Então('retorna o status 200 buscando os livros emprestados', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.be.an('array').and.to.have.length.greaterThan(0)
@@ -225,7 +229,7 @@ Then('retorna o status 200 buscando os livros emprestados', function () {
 })
 
 // Não busca os livros emprestados sem autenticação
-When('tento enviar o GET para livros emprestados no painel gerencial', function () { 
+Quando('tento enviar o GET para livros emprestados no painel gerencial', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/PainelGerencial/controle-livros-emprestados`,
@@ -237,14 +241,14 @@ When('tento enviar o GET para livros emprestados no painel gerencial', function 
   }).as('response')
 })
 
-Then('retorna o status 401 sem os livros emprestados', function () {
+Então('retorna o status 401 sem os livros emprestados', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })
 })
 
 // Buscar solicitações por situação
-When('envio o GET para solicitações no painel gerencial', function () { 
+Quando('envio o GET para solicitações no painel gerencial', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/PainelGerencial/solicitacoes-por-situacao`,
@@ -257,7 +261,7 @@ When('envio o GET para solicitações no painel gerencial', function () {
   }).as('response')
 })
 
-Then('retorna o status 200 buscando por situação', function () {
+Então('retorna o status 200 buscando por situação', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.be.an('array').and.to.have.length.greaterThan(0)
@@ -271,7 +275,7 @@ Then('retorna o status 200 buscando por situação', function () {
 })
 
 // Não busca solicitações por situação sem autenticação
-When('tento enviar o GET para solicitações no painel gerencial', function () { 
+Quando('tento enviar o GET para solicitações no painel gerencial', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/PainelGerencial/solicitacoes-por-situacao`,
@@ -283,7 +287,7 @@ When('tento enviar o GET para solicitações no painel gerencial', function () {
   }).as('response')
 })
 
-Then('retorna o status 401 sem buscar por situação', function () {
+Então('retorna o status 401 sem buscar por situação', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })

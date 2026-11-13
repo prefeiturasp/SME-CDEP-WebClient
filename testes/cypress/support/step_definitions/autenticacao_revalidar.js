@@ -1,11 +1,14 @@
 import { Given, When, Then } from 'cypress-cucumber-preprocessor/steps'
 
+const Dado = Given
+const Quando = When
+const Então = Then
 
-Given('que possuo um token de acesso válido', function () {
+Dado('que possuo um token de acesso válido', function () {
 })
 
 // Deve revalidar o token do usuário
-When('envio uma requisição POST para revalidar o token', function () {
+Quando('envio uma requisição POST para revalidar o token', function () {
   cy.gerar_token().then((token) => {
     cy.request({
       method: 'POST',
@@ -22,7 +25,7 @@ When('envio uma requisição POST para revalidar o token', function () {
   })
 })
 
-Then('retorna a expiração com status 200', function () {
+Então('retorna a expiração com status 200', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(200)
     expect(response.body).to.have.property('dataHoraExpiracao')
@@ -31,7 +34,7 @@ Then('retorna a expiração com status 200', function () {
 })
 
 // Não revalidar token inválido
-When('tento a requisição POST para revalidar o token', function () { 
+Quando('tento a requisição POST para revalidar o token', function () { 
   return cy.request({
     method: 'POST',
     url: Cypress.config('baseUrl') + `/api/v1/autenticacao/revalidar`,
@@ -46,7 +49,7 @@ When('tento a requisição POST para revalidar o token', function () {
   }).as('response')
 })
 
-Then('não revalida retornando o status 601 de inválido', function () {
+Então('não revalida retornando o status 601 de inválido', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(601)
     expect(response.body).to.have.property('existemErros', true)

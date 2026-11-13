@@ -1,10 +1,14 @@
 import { Given, When, Then } from 'cypress-cucumber-preprocessor/steps'
 
+const Dado = Given
+const Quando = When
+const Então = Then
+
 // Realiza a autenticação com sucesso
-Given('que acesso o endpoint de autenticação', function () {  
+Dado('que acesso o endpoint de autenticação', function () {  
 })
 
-When('envio os dados de acesso', function () { 
+Quando('envio os dados de acesso', function () { 
   return cy.request({
     method: 'POST',
     url: Cypress.config('baseUrl') + `/api/v1/autenticacao`,
@@ -20,7 +24,7 @@ When('envio os dados de acesso', function () {
   }).as('response')
 })
 
-Then('retorna status 200 com o token válido', function () {
+Então('retorna status 200 com o token válido', function () {
   cy.get('@response').then((response) => {
     expect([200]).to.include(response.status)
     expect(response.body).to.have.property('usuarioNome')
@@ -34,7 +38,7 @@ Then('retorna status 200 com o token válido', function () {
 })
 
 // Login deve ser obrigatório
-When('envio os dados sem o login', function () { 
+Quando('envio os dados sem o login', function () { 
   return cy.request({
     method: 'POST',
     url: Cypress.config('baseUrl') + `/api/v1/autenticacao`,
@@ -50,7 +54,7 @@ When('envio os dados sem o login', function () {
   }).as('response')
 })
 
-Then('retorna status 422 que acesso foi inválido', function () {
+Então('retorna status 422 que acesso foi inválido', function () {
   cy.get('@response').then((response) => {
     expect([422]).to.include(response.status)
     expect(response.body).to.have.property('mensagens')
@@ -61,7 +65,7 @@ Then('retorna status 422 que acesso foi inválido', function () {
 })
 
 // Senha deve ser obrigatória
-When('envio os dados sem a senha', function () { 
+Quando('envio os dados sem a senha', function () { 
   return cy.request({
     method: 'POST',
     url: Cypress.config('baseUrl') + `/api/v1/autenticacao`,
@@ -77,7 +81,7 @@ When('envio os dados sem a senha', function () {
   }).as('response')
 })
 
-Then('retorna status 422 que é necessário ser informada', function () {
+Então('retorna status 422 que é necessário ser informada', function () {
   cy.get('@response').then((response) => {
     expect([422]).to.include(response.status)
     expect(response.body).to.have.property('mensagens')
@@ -89,7 +93,7 @@ Then('retorna status 422 que é necessário ser informada', function () {
 })
 
 // Não autenticar com senha inválida
-When('envio os dados com senha inválida', function () { 
+Quando('envio os dados com senha inválida', function () { 
   return cy.request({
     method: 'POST',
     url: Cypress.config('baseUrl') + `/api/v1/autenticacao`,
@@ -105,7 +109,7 @@ When('envio os dados com senha inválida', function () {
   }).as('response')
 })
 
-Then('retorna status 601 retorna a mensagem que está incorreta', function () {
+Então('retorna status 601 retorna a mensagem que está incorreta', function () {
   cy.get('@response').then((response) => {
     expect([601]).to.include(response.status)
     expect(response.body).to.have.property('mensagens')

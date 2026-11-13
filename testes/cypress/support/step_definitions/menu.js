@@ -1,5 +1,9 @@
 import { Given, When, Then, Before } from 'cypress-cucumber-preprocessor/steps'
 
+const Dado = Given
+const Quando = When
+const Então = Then
+
 let token
 
 Before(() => {
@@ -8,15 +12,15 @@ Before(() => {
   })
 })
 
-Given('que possuo um token de acesso', function () {
-  expect(token, 'valido').to.exist
+Dado('que possuo um token de acesso', function () {
+  expect(Boolean(token), 'token de acesso foi informado').to.be.true
 })
 
-Given('que não possuo um token de acesso', function () { 
+Dado('que não possuo um token de acesso', function () { 
 })
 
 // Acessar o menu do sistema
-When('envio uma requisição GET', function () {
+Quando('envio uma requisição GET', function () {
   cy.request({
       method: 'GET',
       url: Cypress.config('baseUrl') + '/api/v1/Menu',
@@ -28,14 +32,14 @@ When('envio uma requisição GET', function () {
   }).as('response')
 })
 
-Then('retorna o menu com status 200', function () {
+Então('retorna o menu com status 200', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(500)
   })
 })
 
 // Não acessar o menu sem autenticação
-When('tento uma requisição GET', function () { 
+Quando('tento uma requisição GET', function () { 
   return cy.request({
     method: 'GET',
     url: Cypress.config('baseUrl') + `/api/v1/Menu`,
@@ -47,7 +51,7 @@ When('tento uma requisição GET', function () {
   }).as('response')
 })
 
-Then('não carrega o menu retornando o status 401', function () {
+Então('não carrega o menu retornando o status 401', function () {
   cy.get('@response').then((response) => {
     expect(response.status).to.eq(401)
   })

@@ -5,7 +5,8 @@ Cypress.Commands.add('autenticar_login', (usuario, senha) => {
     body: { login: usuario, senha: senha },
     timeout: 60000,
     failOnStatusCode: false,
-  }).then((response) => {
+    log: false,
+  }).then({ log: false }, (response) => {
     if (response.status === 200) {
       globalThis.token = response.body.token
     }
@@ -15,8 +16,9 @@ Cypress.Commands.add('autenticar_login', (usuario, senha) => {
 
 Cypress.Commands.add('gerar_token', () => {
   const tokenExistente = Cypress.env('TOKEN')
+
   if (tokenExistente) {
-    return cy.wrap(tokenExistente)
+    return cy.then({ log: false }, () => tokenExistente)
   }
 
   return cy.request({
@@ -32,12 +34,14 @@ Cypress.Commands.add('gerar_token', () => {
     },
     timeout: 60000,
     failOnStatusCode: false,
-  }).then((response) => {
+    log: false,
+  }).then({ log: false }, (response) => {
     if (response.status === 200) {
       const token = response.body.token
       Cypress.env('TOKEN', token)
       return token
     }
-    return response
+
+    throw new Error(`Falha na autenticação. Status: ${response.status}`)
   })
 })

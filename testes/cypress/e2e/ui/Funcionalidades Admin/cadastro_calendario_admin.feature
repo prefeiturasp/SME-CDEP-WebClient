@@ -48,7 +48,7 @@ Funcionalidade: Cadastro de Calendário de visitas
     Então o sistema retorna todos os dias no calendário
 
     Exemplos:
-      | tipo      | caso                       |
-      | suspensão | Cancelamento do cadastrado |
+      | tipo      | caso                     |
+      | suspensão | Cancelamento do cadastro |
 
 
