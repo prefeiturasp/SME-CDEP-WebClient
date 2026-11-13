@@ -4,9 +4,8 @@ Cypress.Commands.add('autenticar_login', (usuario, senha) => {
     url: Cypress.config('baseUrl') + '/api/v1/autenticacao',
     body: { login: usuario, senha: senha },
     timeout: 60000,
-    failOnStatusCode: false,
-    log: false,
-  }).then({ log: false }, (response) => {
+    failOnStatusCode: false,    
+  }).then((response) => {
     if (response.status === 200) {
       globalThis.token = response.body.token
     }
@@ -18,7 +17,7 @@ Cypress.Commands.add('gerar_token', () => {
   const tokenExistente = Cypress.env('TOKEN')
 
   if (tokenExistente) {
-    return cy.then({ log: false }, () => tokenExistente)
+    return cy.then(() => tokenExistente)
   }
 
   return cy.request({
@@ -34,8 +33,7 @@ Cypress.Commands.add('gerar_token', () => {
     },
     timeout: 60000,
     failOnStatusCode: false,
-    log: false,
-  }).then({ log: false }, (response) => {
+  }).then((response) => {
     if (response.status === 200) {
       const token = response.body.token
       Cypress.env('TOKEN', token)

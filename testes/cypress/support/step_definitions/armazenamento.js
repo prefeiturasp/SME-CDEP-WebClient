@@ -4,14 +4,16 @@ const Dado = Given
 const Quando = When
 const Então = Then
 
+let token
+
 Before(() => {
   cy.gerar_token().then((token_valido) => {
-    Cypress.env('token', token_valido)
+    token = token_valido
   })
 })
 
-Dado('que gerou um token de acesso', () => {
-  expect(Cypress.env('token'), 'token válido').to.exist
+Dado('que possuo um token válido no endpoint Armazenamento', function () {
+  expect(Boolean(token), 'token de acesso foi informado').to.be.true
 })
 
 Dado('que não possuo um token de acesso', function () { 
@@ -24,7 +26,7 @@ Quando('envio uma requisição POST de armazenamento', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },
     filePath: 'cypress/fixtures/teste.pdf',
   }).as('response')
@@ -48,7 +50,7 @@ Quando('envio uma requisição POST além de 10 MB', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },
     filePath: 'cypress/fixtures/teste.txt',
   }).as('response')
@@ -67,7 +69,7 @@ Quando('envio uma requisição POST vazio', function () {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },    
   }).as('response')
 })
@@ -105,7 +107,7 @@ Quando('envio uma requisição GET do código arquivo', () => {
     url: Cypress.config('baseUrl') + `/api/v1/Armazenamento/${Cypress.env('ARQUIVO_ARMAZENAMENTO')}`,
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },        
     failOnStatusCode: false
   }).as('response')
@@ -124,7 +126,7 @@ Quando('envio uma requisição GET do código arquivo inexistente', () => {
     url: Cypress.config('baseUrl') + `/api/v1/Armazenamento/${Cypress.env('ARQUIVO_ARMAZENAMENTO_INVALIDO')}`,
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },        
     failOnStatusCode: false
   }).as('response')
@@ -143,7 +145,7 @@ Quando('envio uma requisição GET sem o código', function () {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },        
     failOnStatusCode: false
   }).as('response')
@@ -181,7 +183,7 @@ Quando('envio uma requisição POST de armazenamento do tipo 1', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=1',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },
     filePath: 'cypress/fixtures/teste.pdf',
   }).as('response')
@@ -205,7 +207,7 @@ Quando('envio uma requisição POST de armazenamento do tipo 2', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=2',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },
     filePath: 'cypress/fixtures/teste.pdf',
   }).as('response')
@@ -229,7 +231,7 @@ Quando('envio uma requisição POST de armazenamento do tipo 3', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=3',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },
     filePath: 'cypress/fixtures/teste.pdf',
   }).as('response')
@@ -253,7 +255,7 @@ Quando('envio uma requisição POST de armazenamento do tipo 4', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=4',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },
     filePath: 'cypress/fixtures/teste.pdf',
   }).as('response')
@@ -277,7 +279,7 @@ Quando('envio uma requisição POST de armazenamento do tipo 5', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=5',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },
     filePath: 'cypress/fixtures/teste.pdf',
   }).as('response')
@@ -301,7 +303,7 @@ Quando('envio uma requisição POST de armazenamento do tipo 6', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=6',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },
     filePath: 'cypress/fixtures/teste.pdf',
   }).as('response')
@@ -325,7 +327,7 @@ Quando('envio uma requisição POST de armazenamento do tipo 7', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=7',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },
     filePath: 'cypress/fixtures/teste.pdf',
   }).as('response')
@@ -349,7 +351,7 @@ Quando('envio uma requisição POST de armazenamento do tipo inválido', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=8',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },
     filePath: 'cypress/fixtures/teste.pdf',
   }).as('response')
@@ -368,7 +370,7 @@ Quando('envio uma requisição POST do tipo além de 10 MB', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=7',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },
     filePath: 'cypress/fixtures/teste.txt',
   }).as('response')
@@ -387,7 +389,7 @@ Quando('envio uma requisição POST vazio no tipo', function () {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/upload/tipo-arquivo?tipoArquivo=7',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },    
   }).as('response')
 })
@@ -425,7 +427,7 @@ Quando('envio uma requisição GET no armazenamento do tipo 1', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=1',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },        
     failOnStatusCode: false
   }).as('response')
@@ -444,7 +446,7 @@ Quando('envio uma requisição GET no armazenamento do tipo 2', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=2',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },        
     failOnStatusCode: false
   }).as('response')
@@ -463,7 +465,7 @@ Quando('envio uma requisição GET no armazenamento do tipo 3', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=3',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },        
     failOnStatusCode: false
   }).as('response')
@@ -482,7 +484,7 @@ Quando('envio uma requisição GET no armazenamento do tipo 4', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=4',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },        
     failOnStatusCode: false
   }).as('response')
@@ -501,7 +503,7 @@ Quando('envio uma requisição GET no armazenamento do tipo 5', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=5',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },        
     failOnStatusCode: false
   }).as('response')
@@ -520,7 +522,7 @@ Quando('envio uma requisição GET no armazenamento do tipo 6', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=6',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },        
     failOnStatusCode: false
   }).as('response')
@@ -539,7 +541,7 @@ Quando('envio uma requisição GET no armazenamento do tipo inválido', () => {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=7',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },        
     failOnStatusCode: false
   }).as('response')
@@ -558,7 +560,7 @@ Quando('envio uma requisição GET com tipo vazio', function () {
     url: Cypress.config('baseUrl') + '/api/v1/Armazenamento/download/tipo-acervo?tipoAcervo=',
     headers: {
       accept: '*/*',
-      Authorization: `Bearer ${Cypress.env('token')}`,
+      Authorization: `Bearer ${token}`
     },        
     failOnStatusCode: false
   }).as('response')
