@@ -3,7 +3,7 @@ import allureWriter from '@shelex/cypress-allure-plugin/writer.js'
 import { cloudPlugin } from 'cypress-cloud/plugin'
 import dotenv from 'dotenv'
 import cucumber from 'cypress-cucumber-preprocessor'
-import preprocessor from '@cypress/webpack-preprocessor'
+import babelify from 'babelify'
 import postgreSQL from 'cypress-postgresql'
 import pg from 'pg'
 import fs from 'fs'
@@ -50,24 +50,14 @@ export default defineConfig({
 
       allureWriter(on, config)
 
-      const webpackConfig = {
-        module: {
-          rules: [
-            {
-              test: /\.js$/,
-              use: {
-                loader: 'babel-loader',
-                options: {
-                  plugins: ['@babel/plugin-transform-modules-commonjs'],
-                },
-              },
-            },
-          ],
+      on('file:preprocessor', cucumber.default({
+        browserifyOptions: {
+          transform: [[babelify.configure({
+            sourceType: 'module',
+            plugins: ['@babel/plugin-transform-modules-commonjs'],
+          }), { global: true }]],
         },
-      }
-
-      on('file:preprocessor', preprocessor({ webpackOptions: webpackConfig }))
-      on('file:preprocessor', cucumber.default())
+      }))
 
       const pool = new pg.Pool(dbConfig)
       const dbTasks = postgreSQL.loadDBPlugin(pool)

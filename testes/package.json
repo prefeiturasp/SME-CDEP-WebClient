@@ -21,6 +21,7 @@
     "@shelex/cypress-allure-plugin": "^2.41.2",
     "@types/node": "^25.3.0",
     "babel-loader": "^9.2.1",
+    "babelify": "^10.0.0",
     "cypress": "^14.5.4",
     "cypress-cloud": "^1.13.1",
     "cypress-cucumber-preprocessor": "^4.3.1",

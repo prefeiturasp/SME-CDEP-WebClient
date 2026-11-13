@@ -33,10 +33,12 @@ Cypress.Commands.add('gerar_token', () => {
     },
     timeout: 60000,
     failOnStatusCode: false,
+    log: false,
   }).then((response) => {
     if (response.status === 200) {
       const token = response.body.token
       Cypress.env('TOKEN', token)
+
       return token
     }
 
