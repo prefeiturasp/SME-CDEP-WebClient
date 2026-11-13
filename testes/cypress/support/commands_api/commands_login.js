@@ -4,7 +4,7 @@ Cypress.Commands.add('autenticar_login', (usuario, senha) => {
     url: Cypress.config('baseUrl') + '/api/v1/autenticacao',
     body: { login: usuario, senha: senha },
     timeout: 60000,
-    failOnStatusCode: false,
+    failOnStatusCode: false,    
   }).then((response) => {
     if (response.status === 200) {
       globalThis.token = response.body.token
@@ -41,5 +41,7 @@ Cypress.Commands.add('gerar_token', () => {
 
       return token
     }
+
+    throw new Error(`Falha na autenticação. Status: ${response.status}`)
   })
 })

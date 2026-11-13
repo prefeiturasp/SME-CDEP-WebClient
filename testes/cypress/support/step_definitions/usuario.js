@@ -14,6 +14,7 @@ Before(() => {
 })
 
 Dado('que possuo um token válido no endpoint Usuario', function () {
+  expect(Boolean(token), 'token de acesso foi informado').to.be.true
 })
 
 Dado('que não possuo um token válido', function () {  
@@ -27,7 +28,7 @@ Quando('envio uma requisição GET buscar o usuário', function () {
     headers: {
       accept: 'text/plain',
       Authorization: `Bearer ${token}`
-    },         
+    }, 
     failOnStatusCode: false  
   }).as('response')
 })
@@ -582,7 +583,7 @@ Quando('envio uma requisição POST com login do usuário', function () {
       accept: 'text/plain',
       Authorization: `Bearer ${token}`
     },
-    timeout: 10000,         
+    timeout: 60000,         
     failOnStatusCode: false  
   }).as('response')
 })

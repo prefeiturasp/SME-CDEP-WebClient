@@ -15,7 +15,7 @@ class Calendario_Localizadores {
   texto_input_justificativa = () => '.ant-typography-ellipsis'
 
   // excluir
-  btn_excluir = () => '.ant-row-middle > :nth-child(1) > .ant-btn > span'
+  btn_excluir = () => 'button:contains("Excluir suspensão")'
   btn_confirmar_exclusao = () => '.ant-modal-confirm-btns > .ant-btn-default'
 }
 

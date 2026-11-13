@@ -13,6 +13,7 @@ Before(() => {
 })
 
 Dado('que login gerou um token de acesso válido', function () {
+  expect(Boolean(token), 'token de acesso foi informado').to.be.true
 })
 
 // Selecionar perfil válido para o usuário
