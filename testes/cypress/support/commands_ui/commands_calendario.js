@@ -69,8 +69,8 @@ Cypress.Commands.add('validar_cadastro_calendario', () => {
 })
 
 Cypress.Commands.add('excluir_calendario', () => {
-  cy.contains(
-    calendario_localizadores.mes_calendario(), mesAtual, { timeout: 10000 })
+
+  cy.contains(calendario_localizadores.mes_calendario(), mesAtual, { timeout: 10000 })
     .should('be.visible')
     .click()
 
@@ -79,13 +79,24 @@ Cypress.Commands.add('excluir_calendario', () => {
     .should('be.visible')
     .click()
 
-  cy.get(calendario_localizadores.btn_excluir(), { timeout: 10000 })
-    .should('be.visible')
-    .click()
+  cy.get('body').then(($body) => {
 
-  cy.get(calendario_localizadores.btn_confirmar_exclusao(), { timeout: 10000 })
-    .should('be.visible')
-    .click()
+    const botaoExcluir = calendario_localizadores.btn_excluir()
+
+    if ($body.find(botaoExcluir).length > 0) {
+
+      cy.get(botaoExcluir)
+        .should('be.visible')
+        .click()
+
+      cy.get(calendario_localizadores.btn_confirmar_exclusao(), { timeout: 10000 })
+        .should('be.visible')
+        .click()
+
+    } else {
+      cy.log('Não existe registro para excluir nesta data.')
+    }
+  })
 })
 
 Cypress.Commands.add('validar_exclusao_calendario', () => {

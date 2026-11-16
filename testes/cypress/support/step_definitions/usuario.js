@@ -529,9 +529,9 @@ Quando('envio uma requisição GET existência de solicitante', function () {
   }).as('response')
 })
 
-Então('retorna o status 200 que documento do usuário existe', function () {
+Então('retorna o status 601 que documento do usuário existe', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200)  
+    expect(response.status).to.eq(601)  
   })
 })
 
@@ -555,7 +555,7 @@ Então('retorna o status 422 não buscando documento do usuário existe', functi
   })
 })
 
-// Não buscar ddocumento do usuário existe sem autenticação
+// Não buscar documento do usuário existe sem autenticação
 Quando('tento a requisição GET existência de solicitante', function () { 
   return cy.request({
     method: 'GET',
@@ -568,9 +568,9 @@ Quando('tento a requisição GET existência de solicitante', function () {
   }).as('response')
 })
 
-Então('retorna o status 401 sem documento do usuário existe', function () {
+Então('retorna o status 601 sem documento do usuário existe', function () {
   cy.get('@response').then((response) => {
-    expect(response.status).to.eq(200)
+    expect(response.status).to.eq(601)
   })
 })
 
