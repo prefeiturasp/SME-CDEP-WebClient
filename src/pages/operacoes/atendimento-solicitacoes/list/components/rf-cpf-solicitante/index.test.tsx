@@ -1,8 +1,10 @@
 import { render, screen, fireEvent, waitFor } from '~/tests/test-utils';
-import React from 'react';
 import { Form } from 'antd';
 import { InputRfCpfSolicitante } from './';
 import usuarioService from '~/core/services/usuario-service';
+
+const mockSetFieldValue = jest.fn();
+const mockGetFieldValue = jest.fn();
 
 jest.mock('~/core/services/usuario-service', () => ({
   __esModule: true,
@@ -14,8 +16,8 @@ jest.mock('~/core/services/usuario-service', () => ({
 jest.mock('antd/es/form/hooks/useFormInstance', () => ({
   __esModule: true,
   default: jest.fn(() => ({
-    setFieldValue: jest.fn(),
-    getFieldValue: jest.fn(),
+    setFieldValue: mockSetFieldValue,
+    getFieldValue: mockGetFieldValue,
   })),
 }));
 
@@ -24,7 +26,7 @@ jest.mock('antd/es/form/Form', () => ({
   useWatch: jest.fn(() => ''),
 }));
 
-const WrapperWithForm: React.FC<{ obterFiltros?: () => void }> = ({ obterFiltros }) => (
+const WrapperWithForm = ({ obterFiltros }: { obterFiltros?: () => void }) => (
   <Form>
     <InputRfCpfSolicitante obterFiltros={obterFiltros} />
   </Form>
@@ -33,6 +35,8 @@ const WrapperWithForm: React.FC<{ obterFiltros?: () => void }> = ({ obterFiltros
 describe('InputRfCpfSolicitante', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    mockSetFieldValue.mockReset();
+    mockGetFieldValue.mockReset();
   });
 
   test('renderiza o label "RF ou CPF do Solicitante"', () => {
@@ -42,9 +46,7 @@ describe('InputRfCpfSolicitante', () => {
 
   test('renderiza o input com o placeholder correto', () => {
     render(<WrapperWithForm />);
-    expect(
-      screen.getByPlaceholderText('Informe o RF ou CPF do Solicitante'),
-    ).toBeInTheDocument();
+    expect(screen.getByPlaceholderText('Informe o RF ou CPF do Solicitante')).toBeInTheDocument();
   });
 
   test('input possui limite máximo de 11 caracteres', () => {
@@ -84,5 +86,30 @@ describe('InputRfCpfSolicitante', () => {
       expect(usuarioService.obterRfCpf).toHaveBeenCalled();
     });
     expect(mockObterFiltros).not.toHaveBeenCalled();
+  });
+
+  test('C01: limpa o campo nomeSolicitante no form quando input é esvaziado e não limpa quando há texto', () => {
+    render(<WrapperWithForm />);
+    const input = screen.getByPlaceholderText('Informe o RF ou CPF do Solicitante');
+
+    fireEvent.change(input, { target: { value: '1234567' } });
+    expect(mockSetFieldValue).not.toHaveBeenCalledWith('nomeSolicitante', []);
+
+    fireEvent.change(input, { target: { value: '' } });
+    expect(mockSetFieldValue).toHaveBeenCalledWith('nomeSolicitante', []);
+  });
+
+  test('C02: atualiza nomeSolicitante sem lançar erro quando obterFiltros não é fornecido e busca retorna sucesso', async () => {
+    (usuarioService.obterRfCpf as jest.Mock).mockResolvedValue({
+      sucesso: true,
+      dados: { nome: 'Maria Servidora' },
+    });
+
+    render(<WrapperWithForm />);
+    fireEvent.click(screen.getByRole('button', { name: /search/i }));
+
+    await waitFor(() => {
+      expect(mockSetFieldValue).toHaveBeenCalledWith('nomeSolicitante', 'Maria Servidora');
+    });
   });
 });
